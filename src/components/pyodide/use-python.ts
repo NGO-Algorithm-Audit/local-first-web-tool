@@ -7,8 +7,7 @@ export interface PythonWorkerMessage {
 }
 
 export const usePython = () => {
-    const [result, setResult] = useState<string[]>([]);
-    const [resultIndex, setResultIndex] = useState<number>(0);
+    const [result, setResult] = useState<string>('');
     const [loading, setLoading] = useState<Boolean>(false);
     const [initialised, setInitialised] = useState<Boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
@@ -26,17 +25,14 @@ export const usePython = () => {
                 outputResult.forEach((result) => {
                     output += result + "\n\r";
                 });
-                setResult((result) => {
-                    setResultIndex(result.length);
-                    return [...result, output];
-                });
 
+                setResult(output)
                 setLoading(false);
             } else {
                 setError("Unknown message type");
             }
         },
-        [result, resultIndex]
+        [result]
     );
 
     const runPython = useCallback((message: { type: 'start', params: { iter: number, clusters: number } }) => {

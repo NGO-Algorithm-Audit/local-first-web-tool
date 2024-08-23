@@ -120,8 +120,7 @@ function App() {
         </span>
       </div> */}
       <div className="whitespace-pre-wrap font-mono mt-4">
-        <h1>New results</h1>
-        {result?.[0]}
+        {result}
       </div>
     </div>
   );
