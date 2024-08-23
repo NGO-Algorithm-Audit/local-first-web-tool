@@ -1,32 +1,130 @@
-import { useEffect } from 'react'
-import CodeEditor from './components/CodeEditor'
-import { PythonProvider } from 'react-py'
-import { demoCode } from './assets/demoExample'
+import { useEffect, useRef, useState } from 'react'
+import { usePython } from './components/pyodide/use-python';
+import { demoCode } from './assets/demoExample';
 
 function App() {
-  const packages = {
-    official: ['numpy', 'pandas', 'scikit-learn'],
-    micropip: ['kmodes', 'requests', 'unsupervised-bias-detection']
-  }
+  const [iter, setIter] = useState<number>(10);
+  const [clusters, setClusters] = useState<number>(20);
+  const { initialised, loading, result, initialise, runPython, error } = usePython();
+  const isRunning = useRef(false);
 
   useEffect(() => {
-    navigator.serviceWorker
-      .register('/react-py-sw.js')
-      .then((registration) =>
-        console.log(
-          'Service Worker registration successful with scope: ',
-          registration.scope
-        )
-      )
-      .catch((err) => console.log('Service Worker registration failed: ', err))
-  }, [])
+    const fetchData = async () => {
+      const data = await fetch("/test_pred_BERT.csv").then((response) => response.text());
+      initialise({ code: demoCode, data: data });
+    }
+
+    // Don't like this but I need this for now to prevent multiple webworkers from being created. 
+    // Multiple web workers also makes the browser crash, which is interesting in itself.
+    if (!isRunning.current) {
+      isRunning.current = true;
+      fetchData();
+    }
+  }, []);
+
+  const buttonClickHandler = () => {
+    runPython({
+      type: "start",
+      params: {
+        iter: iter,
+        clusters: clusters,
+      },
+    });
+  };
 
   return (
-    <PythonProvider packages={packages}>
-      <h3 className='text-3xl mb-8'>Algorithm Audit AI Tooling</h3>
-      <CodeEditor code={demoCode} />
-    </PythonProvider>
-  )
+    <div className="p-4 md:max-w-[50%] max-w-full mx-auto">
+      <h1 className="text-xl font-bold">Bias detection tool</h1>
+      <div className={`md:max-w-[50%] max-w-full py-4 `}>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="iter">Iterations</label>
+          <input
+            id="iter"
+            name="iter"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            title={iter.toString()}
+            disabled={!initialised}
+            value={iter}
+            onChange={(e) => {
+              setIter(parseInt(e.target.value) ?? 0);
+            }}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="clusters">Clusters</label>
+          <input
+            id="clusters"
+            name="clusters"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            title={clusters.toString()}
+            disabled={!initialised}
+            value={clusters}
+            onChange={(e) => {
+              setClusters(parseInt(e.target.value) ?? 0);
+            }}
+          />
+        </div>
+      </div>
+      <div className="flex gap-4 mb-4 items-center">
+        <button
+          disabled={!initialised}
+          className={` text-white font-bold py-2 px-4 rounded ${initialised
+            ? "bg-blue-500 hover:bg-blue-700"
+            : "bg-blue-300"
+            }`}
+          onClick={buttonClickHandler}
+        >
+          start
+        </button>
+        <div className={`loader ${!initialised && !loading && 'hidden'} max-h-[20px] max-w-[20px]`}></div>
+      </div>
+      {/* <div className="flex flex-row gap-4">
+        <button
+          type="button"
+          className={`${initialised
+            ? "cursor-pointer"
+            : "text-gray-400"
+            }`}
+          disabled={!initialised}
+          onClick={() => {
+            if (resultIndex > 0) {
+              setResultIndex((resultIndex) => resultIndex - 1);
+            }
+          }}
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          className={`${showAndEnableControls && resultIndex < result.length - 1
+            ? "cursor-pointer"
+            : "text-gray-400"
+            }`}
+          disabled={!showAndEnableControls || resultIndex >= result.length - 1}
+          onClick={() => {
+            if (resultIndex < result.length - 1) {
+              setResultIndex((resultIndex) => resultIndex + 1);
+            }
+          }}
+        >
+          Next
+        </button>
+        <span>
+          {result.length == 0 ? 0 : resultIndex + 1} / {result.length}
+        </span>
+      </div> */}
+      <div className="whitespace-pre-wrap font-mono mt-4">
+        <h1>New results</h1>
+        {result?.[0]}
+      </div>
+    </div>
+  );
 }
 
 export default App
