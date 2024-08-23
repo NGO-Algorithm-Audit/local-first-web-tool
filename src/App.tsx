@@ -1,25 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
-import { usePython } from './components/pyodide/use-python';
-import { demoCode } from './assets/demoExample';
+import { useEffect, useRef, useState } from "react";
+import { usePython } from "./components/pyodide/use-python";
+import { demoCode } from "./assets/demoExample";
 
 function App() {
   const [iter, setIter] = useState<number>(10);
   const [clusters, setClusters] = useState<number>(20);
-  const { initialised, loading, result, initialise, runPython, error } = usePython();
-  const isRunning = useRef(false);
+  const { initialised, loading, result, initialise, runPython, error } =
+    usePython();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch("/test_pred_BERT.csv").then((response) => response.text());
+      const data = await fetch("/test_pred_BERT.csv").then((response) =>
+        response.text()
+      );
       initialise({ code: demoCode, data: data });
-    }
+    };
 
-    // Don't like this but I need this for now to prevent multiple webworkers from being created. 
-    // Multiple web workers also makes the browser crash, which is interesting in itself.
-    if (!isRunning.current) {
-      isRunning.current = true;
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   const buttonClickHandler = () => {
@@ -74,15 +71,18 @@ function App() {
       <div className="flex gap-4 mb-4 items-center">
         <button
           disabled={!initialised}
-          className={` text-white font-bold py-2 px-4 rounded ${initialised
-            ? "bg-blue-500 hover:bg-blue-700"
-            : "bg-blue-300"
-            }`}
+          className={` text-white font-bold py-2 px-4 rounded ${
+            initialised ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-300"
+          }`}
           onClick={buttonClickHandler}
         >
           start
         </button>
-        <div className={`loader ${!initialised && !loading && 'hidden'} max-h-[20px] max-w-[20px]`}></div>
+        <div
+          className={`loader ${
+            !initialised && !loading && "hidden"
+          } max-h-[20px] max-w-[20px]`}
+        ></div>
       </div>
       {/* <div className="flex flex-row gap-4">
         <button
@@ -119,11 +119,9 @@ function App() {
           {result.length == 0 ? 0 : resultIndex + 1} / {result.length}
         </span>
       </div> */}
-      <div className="whitespace-pre-wrap font-mono mt-4">
-        {result}
-      </div>
+      <div className="whitespace-pre-wrap font-mono mt-4">{result}</div>
     </div>
   );
 }
 
-export default App
+export default App;
