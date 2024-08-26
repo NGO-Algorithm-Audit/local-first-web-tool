@@ -1,9 +1,10 @@
 import { loadPyodide, PyodideInterface } from "pyodide";
+import { PythonWorkerMessage } from "./use-python";
 
 interface CustomWorker extends Omit<Worker, 'postMessage'> {
     code: string;
     data: string;
-    postMessage: (message: { type: string, result?: string[] }) => void;
+    postMessage: (message: PythonWorkerMessage) => void;
     setResult: (result: string) => void;
     pyodide: PyodideInterface | undefined;
     iter: number;
@@ -31,6 +32,9 @@ self.onmessage = async (e: MessageEvent<any>) => {
         await runPytonCode().then((_result) => {
             console.timeEnd("pyodide-python");
             postMessage({ type: "result", result: resultList });
+        }, (error) => {
+            console.timeEnd("pyodide-python");
+            postMessage({ type: "error", message: error.message });
         });
     }
 
