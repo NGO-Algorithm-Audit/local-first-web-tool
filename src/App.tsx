@@ -1,23 +1,28 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePython } from "./components/pyodide/use-python";
 import { demoCode } from "./assets/demoExample";
+import CSVReader from "./components/CSVReader";
 
 function App() {
   const [iter, setIter] = useState<number>(10);
   const [clusters, setClusters] = useState<number>(20);
+  const [data, setData] = useState<string>("");
   const { initialised, loading, result, initialise, runPython, error } =
     usePython();
 
+  const onFileLoad = (data: string) => {
+    setData(data);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetch("/test_pred_BERT.csv").then((response) =>
-        response.text()
-      );
-      initialise({ code: demoCode, data: data });
+      if (demoCode && data.length) {
+        initialise({ code: demoCode, data: data });
+      }
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
   const buttonClickHandler = () => {
     runPython({
@@ -32,6 +37,7 @@ function App() {
   return (
     <div className="p-4 md:max-w-[50%] max-w-full mx-auto">
       <h1 className="text-xl font-bold">Bias detection tool</h1>
+      <CSVReader onChange={onFileLoad} />
       <div className={`md:max-w-[50%] max-w-full py-4 `}>
         <div className="flex flex-col mb-4">
           <label htmlFor="iter">Iterations</label>
@@ -82,41 +88,7 @@ function App() {
             } max-h-[20px] max-w-[20px]`}
         ></div>
       </div>
-      {/* <div className="flex flex-row gap-4">
-        <button
-          type="button"
-          className={`${initialised
-            ? "cursor-pointer"
-            : "text-gray-400"
-            }`}
-          disabled={!initialised}
-          onClick={() => {
-            if (resultIndex > 0) {
-              setResultIndex((resultIndex) => resultIndex - 1);
-            }
-          }}
-        >
-          Previous
-        </button>
-        <button
-          type="button"
-          className={`${showAndEnableControls && resultIndex < result.length - 1
-            ? "cursor-pointer"
-            : "text-gray-400"
-            }`}
-          disabled={!showAndEnableControls || resultIndex >= result.length - 1}
-          onClick={() => {
-            if (resultIndex < result.length - 1) {
-              setResultIndex((resultIndex) => resultIndex + 1);
-            }
-          }}
-        >
-          Next
-        </button>
-        <span>
-          {result.length == 0 ? 0 : resultIndex + 1} / {result.length}
-        </span>
-      </div> */}
+      
       <div className="whitespace-pre-wrap font-mono mt-4">{result}</div>
       {error &&
         <div className="whitespace-pre-wrap font-mono mt-4 text-red-500">{error}</div>
