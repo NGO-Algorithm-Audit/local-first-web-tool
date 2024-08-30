@@ -7,17 +7,30 @@ function App() {
   const [iter, setIter] = useState<number>(10);
   const [clusters, setClusters] = useState<number>(20);
   const [data, setData] = useState<string>("");
-  const { initialised, loading, result, initialise, runPython, error } =
-    usePython();
+  const {
+    initialised,
+    loading,
+    result,
+    initialise,
+    runPython,
+    error,
+    sendData,
+  } = usePython();
 
   const onFileLoad = (data: string) => {
     setData(data);
-  }
+  };
+
+  useEffect(() => {
+    if (demoCode) {
+      initialise({ code: demoCode, data: "" });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (demoCode && data.length) {
-        initialise({ code: demoCode, data: data });
+      if (data.length) {
+        sendData(data);
       }
     };
 
@@ -77,22 +90,26 @@ function App() {
       <div className="flex gap-4 mb-4 items-center">
         <button
           disabled={!initialised}
-          className={` text-white font-bold py-2 px-4 rounded ${initialised ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-300"
-            }`}
+          className={` text-white font-bold py-2 px-4 rounded ${
+            initialised ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-300"
+          }`}
           onClick={buttonClickHandler}
         >
           start
         </button>
         <div
-          className={`loader ${!initialised && !loading && "hidden"
-            } max-h-[20px] max-w-[20px]`}
+          className={`loader ${
+            !initialised && !loading && "hidden"
+          } max-h-[20px] max-w-[20px]`}
         ></div>
       </div>
-      
+
       <div className="whitespace-pre-wrap font-mono mt-4">{result}</div>
-      {error &&
-        <div className="whitespace-pre-wrap font-mono mt-4 text-red-500">{error}</div>
-      }
+      {error && (
+        <div className="whitespace-pre-wrap font-mono mt-4 text-red-500">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
