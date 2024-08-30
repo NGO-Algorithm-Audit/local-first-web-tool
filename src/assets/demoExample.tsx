@@ -13,7 +13,7 @@ from js import setResult
 from js import iter
 from js import clusters
 
-if data != 'INIT':
+def run():
 	setResult('Parameters:')
 	setResult('Iterations:', iter)
 	setResult('Clusters:', clusters)
@@ -59,4 +59,7 @@ if data != 'INIT':
 	setResult(full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack())
 
 	setResult('It took', time.time()-start, 'seconds.')
+
+if data != 'INIT':
+	run()
 `;
