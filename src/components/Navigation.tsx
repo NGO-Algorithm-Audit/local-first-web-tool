@@ -6,12 +6,12 @@ export default function Navigation() {
     return (
         <aside className="inset-y min-w-64 z-20 flex md:h-full flex-col border-r">
             <div className="border-b border-gray-300 p-2">
-                <Link
-                    to="https://algorithmaudit.eu/"
+                <a
+                    href="https://algorithmaudit.eu/"
                     className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaLight"
                 >
                     <Logo className="h-16 p-1" />
-                </Link>
+                </a>
             </div>
 
             <nav className="flex flex-row md:flex-col gap-4 p-3">
@@ -23,6 +23,7 @@ export default function Navigation() {
                     Bias detection tool
                 </Link>
                 <Link
+                    disabled
                     to="/synthetic-data"
                     className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                 >
