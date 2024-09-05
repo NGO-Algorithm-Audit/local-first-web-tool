@@ -1,5 +1,5 @@
-import { useRef, useCallback, useState } from "react";
-import PythonWorker from "./worker?worker";
+import { useRef, useCallback, useState } from 'react';
+import PythonWorker from './worker?worker';
 
 export interface PythonWorkerMessage {
     type: string;
@@ -8,32 +8,27 @@ export interface PythonWorkerMessage {
 }
 
 export const usePython = () => {
-    const [result, setResult] = useState<string>("");
-    const [loading, setLoading] = useState<Boolean>(false);
-    const [initialised, setInitialised] = useState<Boolean>(false);
+    const [result, setResult] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [initialised, setInitialised] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
 
     const workerRef = useRef<Worker | undefined>(undefined);
 
     const onWorkerMessage = useCallback(
         (event: MessageEvent<PythonWorkerMessage>) => {
-            console.log("Worker message", event.data);
-            if (event.data.type && event.data.type === "initialised") {
+            console.log('Worker message', event.data);
+            if (event.data.type && event.data.type === 'initialised') {
                 setInitialised(true);
-            } else if (event.data.type && event.data.type === "result") {
-                const outputResult: string[] = event.data.result ?? [''];
-                let output = "";
-                outputResult.forEach((result) => {
-                    output += result + "\n\r";
-                });
-
-                setResult(output);
                 setLoading(false);
-            } else if (event.data.type && event.data.type === "error") {
+            } else if (event.data.type && event.data.type === 'result') {
+                setResult(event.data.result ?? ['']);
+                setLoading(false);
+            } else if (event.data.type && event.data.type === 'error') {
                 setError(event.data.message ?? '');
                 setLoading(false);
             } else {
-                setError("Unknown message type");
+                setError('Unknown message type');
                 setLoading(false);
             }
         },
@@ -42,9 +37,10 @@ export const usePython = () => {
 
     const runPython = useCallback(
         (message: {
-            type: "start";
-            params: { iter: number; clusters: number };
+            type: 'start';
+            params: { iter: number; clusters: number; targetColumn: string };
         }) => {
+            setResult([]);
             setLoading(true);
             workerRef.current?.postMessage(message), [];
         },
@@ -53,16 +49,17 @@ export const usePython = () => {
 
     const initialise = useCallback(
         ({ code, data }: { code: string; data: string }) => {
+            setLoading(true);
             workerRef.current?.terminate();
-            workerRef.current?.removeEventListener("message", onWorkerMessage);
+            workerRef.current?.removeEventListener('message', onWorkerMessage);
             workerRef.current = new PythonWorker();
 
-            workerRef.current.onerror = (e) => console.error(e);
+            workerRef.current.onerror = e => console.error(e);
             workerRef.current.postMessage({
-                type: "init",
+                type: 'init',
                 params: { code: code, data: data },
             });
-            workerRef.current.addEventListener("message", onWorkerMessage);
+            workerRef.current.addEventListener('message', onWorkerMessage);
         },
         []
     );

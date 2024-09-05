@@ -1,32 +1,40 @@
 export const demoCode = `
 import random
+import json
 import pandas as pd
 from io import StringIO
 from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKModes
 import time
 start = time.time()
 
-
 from js import data
 from js import setResult
 from js import iter
 from js import clusters
-
-setResult('Parameters:')
-setResult('Iterations:', iter)
-setResult('Clusters:', clusters)
-setResult('')
+from js import targetColumn
 
 csv_data = StringIO(data)
 
 df = pd.read_csv(csv_data)
-setResult(df.head())
 
-X = df[['length', '#URLs', '#mentions', '#hashs', 'verified', '#followers', 'user_engagement', 'sentiment_score']]
-y = df['pred_label']
+X = df.drop(columns=[targetColumn])
+y = df[targetColumn]
+
 hbac = BiasAwareHierarchicalKModes(n_iter=iter, min_cluster_size=clusters).fit(X, y)
-setResult(hbac.n_clusters_)
-setResult(hbac.scores_)
+cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters, with the following scores:'}
+))
+
+
+setResult(json.dumps(
+    {'type': 'table', 'data': cluster_df.to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'text', 'data': 'By adapting the "Minimal cluster size" parameter, you can control the number of clusters.'}
+))
 
 df_cluster0 = df[hbac.labels_ == 0]
 df_cluster1 = df[hbac.labels_ == 1]
@@ -43,18 +51,71 @@ df_cluster4['Cluster'] = '4'
 full_df = pd.concat([df_cluster0, df_cluster1, df_cluster2, df_cluster3, df_cluster4], ignore_index=True)
 full_df.head()
 
+## setResult(json.dumps(
+##     {'type': 'table', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().to_json(orient='records')}
+## ))
 
-setResult('')
-setResult('graphs, but no graphs')
-setResult('')
-setResult(full_df.groupby('Cluster')['length'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['#URLs'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['#mentions'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['#hashs'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['verified'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['#followers'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['user_engagement'].value_counts().unstack())
-setResult(full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack())
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "length" variable distribution across the different clusters:'}
+))
 
-setResult('It took', time.time()-start, 'seconds.')
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Length', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().fillna(0).to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "URLs" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'URLs', 'data': full_df.groupby('Cluster')['#URLs'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "mention" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Mentions', 'data': full_df.groupby('Cluster')['#mentions'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "hashs" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Hashs', 'data': full_df.groupby('Cluster')['#hashs'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "verified" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Verified', 'data': full_df.groupby('Cluster')['verified'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "followers" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Followers', 'data': full_df.groupby('Cluster')['#followers'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "user_engagement" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'User engagement', 'data': full_df.groupby('Cluster')['user_engagement'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "sentiment-score" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Sentiment score', 'data': full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack().to_json(orient='records')}
+))
 `;
