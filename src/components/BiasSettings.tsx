@@ -56,7 +56,11 @@ export default function BiasSettings({
         data: Record<string, string>[],
         stringified: string
     ) => {
-        form.setValue('file', stringified);
+        if (stringified.length === 0) {
+            form.reset();
+        } else {
+            form.setValue('file', stringified);
+        }
         setData({ data, stringified });
     };
 
@@ -198,7 +202,7 @@ export default function BiasSettings({
                 <Card className="hidden xl:flex">
                     <div className="flex flex-row w-full items-center justify-between">
                         <CardHeader>
-                            <CardTitle className="text-aaDark">
+                            <CardTitle className="text-aaDark text-md">
                                 Try it out!
                             </CardTitle>
                             <CardDescription>

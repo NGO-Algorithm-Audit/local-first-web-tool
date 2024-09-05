@@ -65,7 +65,7 @@ function BiasDetection() {
                 </h1>
             </header>
             <main className="flex flex-col flex-1 gap-4 p-4 xl:flex-row overflow-x-hidden">
-                <div className="relative flex-col items-start">
+                <div className="relative flex-1 flex-col items-start">
                     <BiasSettings
                         onRun={onRun}
                         onDataLoad={onFileLoad}
@@ -74,7 +74,7 @@ function BiasDetection() {
                 </div>
                 <div
                     className={cn(
-                        'relative flex flex-1 h-full min-h-[50vh] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                        'relative flex flex-2 w-full h-full min-h-[50vh] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
                         loading && 'overflow-hidden'
                     )}
                 >
