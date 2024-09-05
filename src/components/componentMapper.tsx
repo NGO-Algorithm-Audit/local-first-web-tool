@@ -1,7 +1,7 @@
 import GroupedBarChart from './graphs/GroupedBarChart';
 import SimpleTable from './SimpleTable';
 
-export default function ({ items }: { items: string[] }) {
+export default function ComponentMapper({ items }: { items: string[] }) {
     const components = items
         .map(r => {
             try {
@@ -28,7 +28,7 @@ export default function ({ items }: { items: string[] }) {
                             </h5>
                         );
                     case 'histogram':
-                        const createArrayFromDict = (
+                        const createArrayFromPythonDictionary = (
                             dict: Record<string, number>
                         ) => {
                             const resultArray = [];
@@ -47,7 +47,7 @@ export default function ({ items }: { items: string[] }) {
                             (x: Record<string, number>, index: number) => {
                                 return {
                                     name: 'cluster ' + (index + 1),
-                                    values: createArrayFromDict(x),
+                                    values: createArrayFromPythonDictionary(x),
                                 };
                             }
                         );

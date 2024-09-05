@@ -7,9 +7,9 @@ import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import SimpleTable from '@/components/SimpleTable';
-import ComponentMapper from '@/components/componentMapper';
 import LoadingIndicator from '@/components/ui/loadingIndicator';
 import { cn } from '@/lib/utils';
+import ComponentMapper from '@/components/componentMapper';
 
 export const Route = createFileRoute('/bias-detection')({
     component: BiasDetection,
