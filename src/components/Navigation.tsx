@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router';
 
 export default function Navigation() {
     return (
-        <aside className="inset-y min-w-64 z-20 flex md:h-full flex-col border-r">
+        <aside className="inset-y min-w-64 z-20 flex lg:h-full flex-col border-r">
             <div className="border-b border-gray-300 p-2">
                 <a
                     href="https://algorithmaudit.eu/"
