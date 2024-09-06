@@ -23,6 +23,7 @@ export const usePython = () => {
                     type: 'init-run',
                 });
             } else if (event.data.type && event.data.type === 'initialised') {
+                console.log('Worker initialised');
                 setInitialised(true);
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'result') {
