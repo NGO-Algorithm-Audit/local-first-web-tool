@@ -75,7 +75,7 @@ function BiasDetection() {
                     <BiasSettings
                         onRun={onRun}
                         onDataLoad={onFileLoad}
-                        isLoading={loading}
+                        isLoading={loading || !initialised}
                     />
                 </div>
                 <div
