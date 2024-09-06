@@ -35,14 +35,11 @@ function BiasDetection() {
     }, []);
 
     // Initialise the Python worker with the demo code and the data
-    useEffect(() => {
-        if (demoCode && data.stringified.length) {
-            sendData(data.stringified);
-        }
-    }, [data]);
-
     // Run the demo code when the worker is initialised with a demo dataset
     useEffect(() => {
+        if (demoCode && data.stringified.length && initialised) {
+            sendData(data.stringified);
+        }
         if (data.demo) {
             onRun(3, 10, 'FP');
         }
