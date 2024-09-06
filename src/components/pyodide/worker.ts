@@ -20,16 +20,17 @@ self.onmessage = async (e: MessageEvent<any>) => {
         resultList.push(result.join(' '));
     };
 
-    if (
-        e.data &&
-        e.data.type === 'init' &&
-        e.data.params.code &&
-        e.data.params.data
-    ) {
+    if (e.data && e.data.type === 'data' && e.data.params.data) {
         self.data = e.data.params.data;
+
+        postMessage({ type: 'data-set' });
+    }
+    if (e.data && e.data.type === 'init' && e.data.params.code) {
+        self.data = 'INIT';
         self.code = e.data.params.code;
+        self.targetColumn = '';
         await initPython();
-        postMessage({ type: 'initialised' });
+        postMessage({ type: 'pre-initialised' });
     }
     if (e.data && e.data.type === 'start') {
         self.iter = e.data.params.iter ?? 0;
@@ -40,6 +41,23 @@ self.onmessage = async (e: MessageEvent<any>) => {
             _result => {
                 console.timeEnd('pyodide-python');
                 postMessage({ type: 'result', result: resultList });
+            },
+            error => {
+                console.timeEnd('pyodide-python');
+                postMessage({ type: 'error', message: error.message });
+            }
+        );
+    }
+
+    if (e.data && e.data.type === 'init-run') {
+        self.data = 'INIT';
+        self.iter = 0;
+        self.clusters = 0;
+
+        await runPytonCode().then(
+            _result => {
+                console.timeEnd('pyodide-python');
+                postMessage({ type: 'initialised' });
             },
             error => {
                 console.timeEnd('pyodide-python');

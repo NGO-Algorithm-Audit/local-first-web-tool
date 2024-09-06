@@ -18,7 +18,11 @@ export const usePython = () => {
     const onWorkerMessage = useCallback(
         (event: MessageEvent<PythonWorkerMessage>) => {
             console.log('Worker message', event.data);
-            if (event.data.type && event.data.type === 'initialised') {
+            if (event.data.type && event.data.type === 'pre-initialised') {
+                workerRef.current?.postMessage({
+                    type: 'init-run',
+                });
+            } else if (event.data.type && event.data.type === 'initialised') {
                 setInitialised(true);
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'result') {
@@ -26,6 +30,8 @@ export const usePython = () => {
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'error') {
                 setError(event.data.message ?? '');
+                setLoading(false);
+            } else if (event.data.type && event.data.type === 'data-set') {
                 setLoading(false);
             } else {
                 setError('Unknown message type');
@@ -63,6 +69,14 @@ export const usePython = () => {
         },
         []
     );
+    const sendData = useCallback((data: string) => {
+        workerRef.current?.postMessage({
+            type: 'data',
+            params: {
+                data: data,
+            },
+        });
+    }, []);
     return {
         initialised,
         loading,
@@ -70,5 +84,6 @@ export const usePython = () => {
         initialise,
         runPython,
         error,
+        sendData,
     };
 };

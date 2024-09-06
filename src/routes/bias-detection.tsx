@@ -7,7 +7,6 @@ import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import SimpleTable from '@/components/SimpleTable';
-import LoadingIndicator from '@/components/ui/loadingIndicator';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 
@@ -22,22 +21,29 @@ function BiasDetection() {
         demo?: boolean;
     }>({ data: [], stringified: '', demo: false });
 
-    const { loading, initialised, result, initialise, runPython } = usePython();
+    const { loading, initialised, result, initialise, runPython, sendData } =
+        usePython();
 
     const onFileLoad: csvReader['onChange'] = (data, stringified, demo) => {
         setData({ data, stringified, demo });
     };
 
+    useEffect(() => {
+        if (demoCode) {
+            initialise({ code: demoCode, data: '' });
+        }
+    }, []);
+
     // Initialise the Python worker with the demo code and the data
     useEffect(() => {
         if (demoCode && data.stringified.length) {
-            initialise({ code: demoCode, data: data.stringified });
+            sendData(data.stringified);
         }
     }, [data]);
 
     // Run the demo code when the worker is initialised with a demo dataset
     useEffect(() => {
-        if (data.demo && initialised) {
+        if (data.demo) {
             onRun(3, 10, 'FP');
         }
     }, [initialised, data]);
@@ -96,7 +102,7 @@ function BiasDetection() {
 
                     {result.length > 0 ? (
                         <ComponentMapper items={result} />
-                    ) : (
+                    ) : data.data.length > 0 ? null : (
                         <>
                             <div className="flex-1" />
                             <img
@@ -110,13 +116,13 @@ function BiasDetection() {
                         </>
                     )}
 
-                    {loading && (
+                    {/* {loading && (
                         <div className="absolute top-0 left-0 right-0 bottom-0 bg-opacity-20 bg-black">
                             <div className="flex w-full h-full items-center justify-center">
                                 <LoadingIndicator className={''} />
                             </div>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </main>
         </>

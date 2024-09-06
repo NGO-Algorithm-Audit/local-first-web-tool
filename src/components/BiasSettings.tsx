@@ -184,7 +184,7 @@ export default function BiasSettings({
                             className="gap-1.5 xl:hidden"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Loading...'}
+                            {!isLoading ? 'Try it out' : 'Initialising...'}
                         </Button>
                         <Button
                             type="submit"
@@ -192,7 +192,7 @@ export default function BiasSettings({
                             className="gap-1.5"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Run Analysis' : 'Loading...'}
+                            {!isLoading ? 'Run Analysis' : 'Initialising...'}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>
@@ -217,7 +217,7 @@ export default function BiasSettings({
                             className="gap-1.5 mr-4"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Loading...'}
+                            {!isLoading ? 'Try it out' : 'Initializing...'}
                         </Button>
                     </div>
                 </Card>
