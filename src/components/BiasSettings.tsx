@@ -126,18 +126,14 @@ export default function BiasSettings({
                                                         .filter(
                                                             column => column
                                                         )
-                                                        .map(
-                                                            (column, index) => (
-                                                                <SelectItem
-                                                                    key={column}
-                                                                    value={
-                                                                        column
-                                                                    }
-                                                                >
-                                                                    {column}
-                                                                </SelectItem>
-                                                            )
-                                                        )
+                                                        .map(column => (
+                                                            <SelectItem
+                                                                key={column}
+                                                                value={column}
+                                                            >
+                                                                {column}
+                                                            </SelectItem>
+                                                        ))
                                                 ) : (
                                                     <SelectItem
                                                         value="noData"
