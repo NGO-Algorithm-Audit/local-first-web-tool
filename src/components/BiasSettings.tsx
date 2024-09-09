@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight, Columns } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -122,14 +122,22 @@ export default function BiasSettings({
                                                 {data.data?.[0] ? (
                                                     Object.keys(
                                                         data.data?.[0] ?? {}
-                                                    ).map(column => (
-                                                        <SelectItem
-                                                            key={column}
-                                                            value={column}
-                                                        >
-                                                            {column}
-                                                        </SelectItem>
-                                                    ))
+                                                    )
+                                                        .filter(
+                                                            column => column
+                                                        )
+                                                        .map(
+                                                            (column, index) => (
+                                                                <SelectItem
+                                                                    key={column}
+                                                                    value={
+                                                                        column
+                                                                    }
+                                                                >
+                                                                    {column}
+                                                                </SelectItem>
+                                                            )
+                                                        )
                                                 ) : (
                                                     <SelectItem
                                                         value="noData"
