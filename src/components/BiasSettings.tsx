@@ -33,6 +33,7 @@ export default function BiasSettings({
     onRun,
     onDataLoad,
     isLoading,
+    isErrorDuringAnalysis,
 }: {
     onRun: (
         clusterSize: number,
@@ -41,6 +42,7 @@ export default function BiasSettings({
     ) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
+    isErrorDuringAnalysis: boolean;
 }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -179,6 +181,14 @@ export default function BiasSettings({
                             />
                         </div>
                     </fieldset>
+
+                    <div className="flex flex-row ml-auto gap-2">
+                        {isErrorDuringAnalysis && (
+                            <div className="text-red-500">
+                                {'Error while analysing'}
+                            </div>
+                        )}
+                    </div>
 
                     <div className="flex flex-row ml-auto gap-2">
                         <Button

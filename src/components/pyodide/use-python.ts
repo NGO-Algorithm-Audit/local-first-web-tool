@@ -33,6 +33,7 @@ export const usePython = () => {
                 setError(event.data.message ?? '');
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'data-set') {
+                setError(undefined);
                 setLoading(false);
             } else {
                 setError('Unknown message type');
@@ -48,6 +49,7 @@ export const usePython = () => {
             params: { iter: number; clusters: number; targetColumn: string };
         }) => {
             setResult([]);
+            setError(undefined);
             setLoading(true);
             workerRef.current?.postMessage(message), [];
         },

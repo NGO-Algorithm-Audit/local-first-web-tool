@@ -21,8 +21,15 @@ function BiasDetection() {
         demo?: boolean;
     }>({ data: [], stringified: '', demo: false });
 
-    const { loading, initialised, result, initialise, runPython, sendData } =
-        usePython();
+    const {
+        loading,
+        initialised,
+        result,
+        initialise,
+        runPython,
+        sendData,
+        error,
+    } = usePython();
 
     const onFileLoad: csvReader['onChange'] = (data, stringified, demo) => {
         setData({ data, stringified, demo });
@@ -73,8 +80,10 @@ function BiasDetection() {
                         onRun={onRun}
                         onDataLoad={onFileLoad}
                         isLoading={loading || !initialised}
+                        isErrorDuringAnalysis={Boolean(error && initialised)}
                     />
                 </div>
+
                 <div
                     className={cn(
                         'relative flex flex-2 w-full h-full min-h-[50vh] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
