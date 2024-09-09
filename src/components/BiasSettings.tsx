@@ -49,6 +49,7 @@ export default function BiasSettings({
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([30]);
+    const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
@@ -64,6 +65,7 @@ export default function BiasSettings({
             form.setValue('file', stringified);
         }
         setData({ data, stringified });
+        setDataKey(new Date().toISOString());
     };
 
     useEffect(() => {
@@ -114,7 +116,10 @@ export default function BiasSettings({
                                         <FormLabel>
                                             Performance metric column
                                         </FormLabel>
-                                        <Select onValueChange={field.onChange}>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            key={`${dataKey}_select`}
+                                        >
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select a column" />
@@ -130,7 +135,7 @@ export default function BiasSettings({
                                                         )
                                                         .map(column => (
                                                             <SelectItem
-                                                                key={column}
+                                                                key={`${dataKey}${column}`}
                                                                 value={column}
                                                             >
                                                                 {column}

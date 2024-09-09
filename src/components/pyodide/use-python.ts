@@ -73,6 +73,7 @@ export const usePython = () => {
         []
     );
     const sendData = useCallback((data: string) => {
+        setResult([]);
         workerRef.current?.postMessage({
             type: 'data',
             params: {
