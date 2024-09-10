@@ -10,6 +10,7 @@ interface CustomWorker extends Omit<Worker, 'postMessage'> {
     iter: number;
     clusters: number;
     targetColumn: string;
+    dataType: string;
 }
 declare var self: CustomWorker;
 
@@ -29,6 +30,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         self.data = 'INIT';
         self.code = e.data.params.code;
         self.targetColumn = '';
+        self.dataType = 'numeric';
         await initPython();
         postMessage({ type: 'pre-initialised' });
     }
@@ -36,6 +38,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         self.iter = e.data.params.iter ?? 0;
         self.clusters = e.data.params.clusters ?? 0;
         self.targetColumn = e.data.params.targetColumn ?? '';
+        self.dataType = e.data.params.dataType ?? 'numeric';
 
         await runPytonCode().then(
             _result => {
@@ -53,6 +56,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         self.data = 'INIT';
         self.iter = 0;
         self.clusters = 0;
+        self.dataType = 'numeric';
 
         await runPytonCode().then(
             _result => {

@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from io import StringIO
 from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKModes
+from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKMeans
 import time
 start = time.time()
 
@@ -12,6 +13,7 @@ from js import setResult
 from js import iter
 from js import clusters
 from js import targetColumn
+from js import dataType
 
 def run():
     csv_data = StringIO(data)
@@ -21,7 +23,11 @@ def run():
     X = df.drop(columns=[targetColumn])
     y = df[targetColumn]
 
-    hbac = BiasAwareHierarchicalKModes(n_iter=iter, min_cluster_size=clusters).fit(X, y)
+    if dataType == 'numeric':
+        hbac = BiasAwareHierarchicalKMeans(n_iter=iter, min_cluster_size=clusters).fit(X, y)
+    else:
+        hbac = BiasAwareHierarchicalKModes(n_iter=iter, min_cluster_size=clusters).fit(X, y)
+
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
     setResult(json.dumps(

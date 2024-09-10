@@ -46,7 +46,12 @@ export const usePython = () => {
     const runPython = useCallback(
         (message: {
             type: 'start';
-            params: { iter: number; clusters: number; targetColumn: string };
+            params: {
+                iter: number;
+                clusters: number;
+                targetColumn: string;
+                dataType: string;
+            };
         }) => {
             setResult([]);
             setError(undefined);

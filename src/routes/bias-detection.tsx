@@ -48,14 +48,15 @@ function BiasDetection() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP');
+            onRun(3, 10, 'FP', 'numeric');
         }
     }, [initialised, data]);
 
     const onRun = (
         clusterSize: number,
         iterations: number,
-        targetColumn: string
+        targetColumn: string,
+        dataType: string
     ) => {
         runPython({
             type: 'start',
@@ -63,6 +64,7 @@ function BiasDetection() {
                 iter: iterations,
                 clusters: clusterSize,
                 targetColumn: targetColumn,
+                dataType: dataType,
             },
         });
     };

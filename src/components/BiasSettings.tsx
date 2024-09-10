@@ -27,6 +27,11 @@ const FormSchema = z.object({
             required_error: 'Please select a target column.',
         })
         .nonempty(),
+    dataType: z
+        .string({
+            required_error: 'Please select a data type.',
+        })
+        .nonempty(),
 });
 
 export default function BiasSettings({
@@ -38,7 +43,8 @@ export default function BiasSettings({
     onRun: (
         clusterSize: number,
         iterations: number,
-        targetColumn: string
+        targetColumn: string,
+        dataType: string
     ) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
@@ -48,7 +54,7 @@ export default function BiasSettings({
         resolver: zodResolver(FormSchema),
     });
     const [iter, setIter] = useState([10]);
-    const [clusters, setClusters] = useState([30]);
+    const [clusters, setClusters] = useState([15]);
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
@@ -84,7 +90,7 @@ export default function BiasSettings({
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        onRun(clusters[0], iter[0], data.targetColumn);
+        onRun(clusters[0], iter[0], data.targetColumn, data.dataType);
     };
 
     return (
@@ -149,6 +155,41 @@ export default function BiasSettings({
                                                         No data loaded
                                                     </SelectItem>
                                                 )}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <FormField
+                                control={form.control}
+                                name="dataType"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Data type</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            key={`${dataKey}_dataType`}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select dataType" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem
+                                                    key="numeric"
+                                                    value="numeric"
+                                                >
+                                                    Numeric
+                                                </SelectItem>
+                                                <SelectItem
+                                                    key="cathegorical"
+                                                    value="cathegorical"
+                                                >
+                                                    Cathegorical
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormItem>
