@@ -185,10 +185,10 @@ export default function BiasSettings({
                                                     Numeric
                                                 </SelectItem>
                                                 <SelectItem
-                                                    key="cathegorical"
-                                                    value="cathegorical"
+                                                    key="categorical"
+                                                    value="categorical"
                                                 >
-                                                    Cathegorical
+                                                    Categorical
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
