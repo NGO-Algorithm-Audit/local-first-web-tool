@@ -58,74 +58,92 @@ def run():
     full_df = pd.concat([df_cluster0, df_cluster1, df_cluster2, df_cluster3, df_cluster4], ignore_index=True)
     full_df.head()
 
-    ## setResult(json.dumps(
-    ##     {'type': 'table', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().to_json(orient='records')}
-    ## ))
+    for col in full_df.columns:
+        if col != targetColumn and col != 'Cluster' and col != "":
+            setResult(json.dumps(
+                {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
+            ))
 
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "length" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Length', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().fillna(0).to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "URLs" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'URLs', 'data': full_df.groupby('Cluster')['#URLs'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "mention" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Mentions', 'data': full_df.groupby('Cluster')['#mentions'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "hashs" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Hashs', 'data': full_df.groupby('Cluster')['#hashs'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "verified" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Verified', 'data': full_df.groupby('Cluster')['verified'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "followers" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Followers', 'data': full_df.groupby('Cluster')['#followers'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "user_engagement" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'User engagement', 'data': full_df.groupby('Cluster')['user_engagement'].value_counts().unstack().to_json(orient='records')}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'The "sentiment-score" variable distribution across the different clusters:'}
-    ))
-
-    setResult(json.dumps(
-        {'type': 'histogram', 'title': 'Sentiment score', 'data': full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack().to_json(orient='records')}
-    ))
+            setResult(json.dumps(
+                {'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')}
+            ))
+    
 
 if data != 'INIT':
 	run()
 `;
+
+/*
+
+## setResult(json.dumps(
+##     {'type': 'table', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().to_json(orient='records')}
+## ))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+{'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().fillna(0).to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "URLs" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'URLs', 'data': full_df.groupby('Cluster')['#URLs'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "mention" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Mentions', 'data': full_df.groupby('Cluster')['#mentions'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "hashs" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Hashs', 'data': full_df.groupby('Cluster')['#hashs'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "verified" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Verified', 'data': full_df.groupby('Cluster')['verified'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "followers" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Followers', 'data': full_df.groupby('Cluster')['#followers'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "user_engagement" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'User engagement', 'data': full_df.groupby('Cluster')['user_engagement'].value_counts().unstack().to_json(orient='records')}
+))
+
+setResult(json.dumps(
+    {'type': 'heading', 'data': f'The "sentiment-score" variable distribution across the different clusters:'}
+))
+
+setResult(json.dumps(
+    {'type': 'histogram', 'title': 'Sentiment score', 'data': full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack().to_json(orient='records')}
+))
+*/

@@ -52,6 +52,9 @@ export default function BiasSettings({
 }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
+        defaultValues: {
+            dataType: 'numeric',
+        },
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([15]);
@@ -169,6 +172,7 @@ export default function BiasSettings({
                                     <FormItem>
                                         <FormLabel>Data type</FormLabel>
                                         <Select
+                                            defaultValue="numeric"
                                             onValueChange={field.onChange}
                                             key={`${dataKey}_dataType`}
                                         >
