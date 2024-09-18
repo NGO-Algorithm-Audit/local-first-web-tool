@@ -77,8 +77,8 @@ function BiasDetection() {
                 </h1>
             </header>
             <main
-                className={`flex flex-col flex-1 gap-4 p-4 xl:flex-row overflow-x-hidden
-                grid grid-cols-[1fr_2fr] gap-4
+                className={`gap-4 p-4 overflow-x-hidden
+                grid xl:grid-cols-[1fr_2fr] grid-cols-1
             `}
             >
                 <div className="relative flex-1 flex-col items-start">
