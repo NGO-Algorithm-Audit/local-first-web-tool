@@ -39,6 +39,7 @@ export default function BiasSettings({
     onDataLoad,
     isLoading,
     isErrorDuringAnalysis,
+    isInitialised,
 }: {
     onRun: (
         clusterSize: number,
@@ -49,6 +50,7 @@ export default function BiasSettings({
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
+    isInitialised: boolean;
 }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -256,7 +258,11 @@ export default function BiasSettings({
                             className="gap-1.5"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Run Analysis' : 'Initialising...'}
+                            {!isLoading
+                                ? 'Run Analysis'
+                                : isInitialised
+                                  ? 'Analyzing...'
+                                  : 'Initialising...'}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>

@@ -2,6 +2,11 @@ export const demoCode = `
 import random
 import json
 import pandas as pd
+import numpy as np
+import warnings
+
+warnings.filterwarnings('ignore')
+
 from io import StringIO
 from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKModes
 from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKMeans
@@ -20,7 +25,16 @@ def run():
 
     df = pd.read_csv(csv_data)
 
-    X = df.drop(columns=[targetColumn])
+    
+    emptycols = df.columns[df.isnull().any()].tolist()
+    features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
+    
+    ## for feature in features:
+    ##    setResult(json.dumps(
+    ##        {'type': 'heading', 'data': f'feature {feature}'}
+    ##    ))
+
+    X = df[features]
     y = df[targetColumn]
 
     if dataType == 'numeric':
@@ -33,8 +47,7 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters, with the following scores:'}
     ))
-
-
+        
     setResult(json.dumps(
         {'type': 'table', 'data': cluster_df.to_json(orient='records')}
     ))
@@ -42,6 +55,44 @@ def run():
     setResult(json.dumps(
         {'type': 'text', 'data': 'By adapting the "Minimal cluster size" parameter, you can control the number of clusters.'}
     ))
+
+    clusters_array = []
+    
+    full_df = pd.DataFrame()
+    for i in range(hbac.n_clusters_):
+        labels = df[hbac.labels_ == i]
+        labels['Cluster'] = f'{i}'
+        clusters_array.append(labels)
+    full_df = pd.concat(clusters_array, ignore_index=True)
+    full_df.head()
+
+    if dataType == 'numeric':
+        for col in full_df.columns:
+            if col != targetColumn and col != 'Cluster' and col != "":
+                setResult(json.dumps(
+                    {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
+                ))
+
+                setResult(json.dumps(
+                    {'type': 'barchart', 'title': col, 'data': full_df.groupby('Cluster')[col].mean().to_json(orient='records')}
+                ))
+    else:
+        for col in full_df.columns:
+            if col != targetColumn and col != 'Cluster' and col != "" and col in features:
+                setResult(json.dumps(
+                    {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
+                ))
+
+                setResult(json.dumps(
+                    {'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')}
+                ))
+
+if data != 'INIT':
+	run()
+`;
+
+/*
+
 
     df_cluster0 = df[hbac.labels_ == 0]
     df_cluster1 = df[hbac.labels_ == 1]
@@ -58,22 +109,7 @@ def run():
     full_df = pd.concat([df_cluster0, df_cluster1, df_cluster2, df_cluster3, df_cluster4], ignore_index=True)
     full_df.head()
 
-    for col in full_df.columns:
-        if col != targetColumn and col != 'Cluster' and col != "":
-            setResult(json.dumps(
-                {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
-            ))
-
-            setResult(json.dumps(
-                {'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')}
-            ))
-    
-
-if data != 'INIT':
-	run()
-`;
-
-/*
+## for kmeans, instead of value_counts().unstack() do:  mean()    .plot.barh()
 
 ## setResult(json.dumps(
 ##     {'type': 'table', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().to_json(orient='records')}

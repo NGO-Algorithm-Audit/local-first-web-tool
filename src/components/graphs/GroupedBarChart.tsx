@@ -20,6 +20,7 @@ const GroupedBarChart = ({ title, data }: GroupedBarChartProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
 
+    console.log('GroupedBarChart', title, data);
     const { groups, buckets, formattedData, flattenedData } = useMemo(() => {
         // Extract groups
         const groups = data.map(d => d.name);
@@ -29,7 +30,7 @@ const GroupedBarChart = ({ title, data }: GroupedBarChartProps) => {
         const uniqueNumbers = [...new Set(allValues)];
         const minValue = Math.min(...allValues);
         const maxValue = Math.max(...allValues);
-        let buckets = [];
+        let buckets: any[] = [];
 
         if (uniqueNumbers.length <= maxBuckets) {
             // If there are fewer unique numbers than the maximum number of buckets,

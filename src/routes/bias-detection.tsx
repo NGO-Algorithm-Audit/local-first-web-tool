@@ -76,19 +76,24 @@ function BiasDetection() {
                     Unsupervised bias detection tool
                 </h1>
             </header>
-            <main className="flex flex-col flex-1 gap-4 p-4 xl:flex-row overflow-x-hidden">
+            <main
+                className={`flex flex-col flex-1 gap-4 p-4 xl:flex-row overflow-x-hidden
+                grid grid-cols-[1fr_2fr] gap-4
+            `}
+            >
                 <div className="relative flex-1 flex-col items-start">
                     <BiasSettings
                         onRun={onRun}
                         onDataLoad={onFileLoad}
                         isLoading={loading || !initialised}
                         isErrorDuringAnalysis={Boolean(error && initialised)}
+                        isInitialised={initialised}
                     />
                 </div>
 
                 <div
                     className={cn(
-                        'relative flex flex-2 w-full h-full min-h-[50vh] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                        'flex flex-2 w-full h-full min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
                         loading && 'overflow-hidden'
                     )}
                 >
