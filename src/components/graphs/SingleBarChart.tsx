@@ -64,7 +64,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         const xAxisFirstColumnLabel = xAxis.select('text');
         xAxisFirstColumnLabel.style('text-decoration', 'underline');
 
-        svg.append('g').call(d3.axisLeft(y));
+        svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
 
         // Draw bars
         svg.selectAll('rect')

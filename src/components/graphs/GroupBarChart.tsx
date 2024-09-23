@@ -74,7 +74,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         xAxisFirstColumnLabel.style('text-decoration', 'underline');
 
         // Append y-axis
-        svg.append('g').call(d3.axisLeft(y));
+        svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
 
         // Draw bars
         svg.selectAll('rect')
