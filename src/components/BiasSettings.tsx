@@ -226,7 +226,7 @@ export default function BiasSettings({
                             </Label>
                             <Slider
                                 defaultValue={clusters}
-                                max={100}
+                                max={(data?.data?.length ?? 1000) / 10}
                                 step={1}
                                 onValueChange={value => setClusters(value)}
                                 className="cursor-pointer"
