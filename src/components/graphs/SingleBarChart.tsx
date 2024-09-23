@@ -58,13 +58,12 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         const xAxis = svg
             .append('g')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x0).tickSize(0))
-            .selectAll('text')
-            .style('text-anchor', 'middle');
-        const xAxisNodes = xAxis.nodes();
-        if (xAxisNodes.length > 0) {
-            d3.select(xAxisNodes[0]).style('text-decoration', 'underline');
-        }
+            .call(d3.axisBottom(x0).tickSize(0));
+        xAxis.selectAll('text').style('text-anchor', 'middle');
+
+        const xAxisFirstColumnLabel = xAxis.select('text');
+        xAxisFirstColumnLabel.style('text-decoration', 'underline');
+
         svg.append('g').call(d3.axisLeft(y));
 
         // Draw bars
