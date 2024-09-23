@@ -65,9 +65,14 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
         // Append x-axis
-        svg.append('g')
+        const xAxis = svg
+            .append('g')
             .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(fx).tickSizeOuter(0));
+        const xAxisNodes = xAxis.selectAll('text').nodes();
+        if (xAxisNodes.length > 0) {
+            d3.select(xAxisNodes[0]).style('text-decoration', 'underline');
+        }
 
         // Append y-axis
         svg.append('g').call(d3.axisLeft(y));
