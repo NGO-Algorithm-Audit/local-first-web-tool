@@ -45,11 +45,26 @@ def run():
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters, with the following scores:'}
+        {'type': 'text', 'data': 'Parameters selected'}
     ))
-        
     setResult(json.dumps(
-        {'type': 'table', 'data': cluster_df.to_json(orient='records')}
+        {'type': 'text', 'data': f'Number of iterations: {iter}'}
+    ))
+    setResult(json.dumps(
+        {'type': 'text', 'data': f'Minimal cluster size: {clusters}'}
+    ))
+    setResult(json.dumps(
+        {'type': 'text', 'data': f'Performance metric column: {targetColumn}'}
+    ))
+    setResult(json.dumps(
+        {'type': 'text', 'data': f'Data type: {dataType}'}
+    ))
+    setResult(json.dumps(
+        {'type': 'text', 'data': ''}
+    ))
+
+    setResult(json.dumps(
+        {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters'}
     ))
 
     setResult(json.dumps(
@@ -92,6 +107,14 @@ if data != 'INIT':
 `;
 
 /*
+
+    setResult(json.dumps(
+        {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters, with the following scores:'}
+    ))
+        
+    setResult(json.dumps(
+        {'type': 'table', 'data': cluster_df.to_json(orient='records')}
+    ))
 
 
     df_cluster0 = df[hbac.labels_ == 0]
