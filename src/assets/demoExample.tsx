@@ -63,9 +63,14 @@ def run():
         {'type': 'text', 'data': ''}
     ))
 
+
+    df_most_biased_cluster = df[hbac.labels_ == 0]
+    df_other = df[hbac.labels_ != 0]
+
     setResult(json.dumps(
-        {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters'}
+        {'type': 'heading', 'data': f'We found {hbac.n_clusters_} clusters. Cluster with most bias consists of {len(df_most_biased_cluster)} datapoints. The uploaded dataset consists of {df.shape[0]} datapoints.'}
     ))
+
 
     setResult(json.dumps(
         {'type': 'text', 'data': 'By adapting the "Minimal cluster size" parameter, you can control the number of clusters.'}
