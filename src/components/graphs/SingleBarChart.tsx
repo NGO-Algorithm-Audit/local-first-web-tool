@@ -74,7 +74,9 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .attr('y', d => height - y(d.values))
             .attr('width', x0.bandwidth())
             .attr('height', d => y(d.values))
-            .attr('fill', 'steelblue');
+            .attr('fill', (_d, index) =>
+                index === 0 ? '#fdf3d0' : 'steelblue'
+            );
     }, [data, x0, y, title]);
 
     useEffect(() => {
