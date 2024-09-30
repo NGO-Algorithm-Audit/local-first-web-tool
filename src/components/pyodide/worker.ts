@@ -12,11 +12,25 @@ interface CustomWorker extends Omit<Worker, 'postMessage'> {
     targetColumn: string;
     dataType: string;
 }
-declare var self: CustomWorker;
+declare let self: CustomWorker;
 
-self.onmessage = async (e: MessageEvent<any>) => {
+interface MessageData {
+    data: {
+        type: string;
+        params: {
+            data: string;
+            code: string;
+            iter: number;
+            clusters: number;
+            dataType: string;
+            targetColumn: string;
+        };
+    };
+}
+
+self.onmessage = async (e: MessageData) => {
     console.log('Worker got message', e.data);
-    let resultList: string[] = [];
+    const resultList: string[] = [];
     self.setResult = (...result) => {
         resultList.push(result.join(' '));
     };
@@ -41,7 +55,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         self.dataType = e.data.params.dataType ?? 'numeric';
 
         await runPytonCode().then(
-            _result => {
+            () => {
                 console.timeEnd('pyodide-python');
                 postMessage({ type: 'result', result: resultList });
             },
@@ -59,7 +73,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         self.dataType = 'numeric';
 
         await runPytonCode().then(
-            _result => {
+            () => {
                 console.timeEnd('pyodide-python');
                 postMessage({ type: 'initialised' });
             },
@@ -82,6 +96,7 @@ self.onmessage = async (e: MessageEvent<any>) => {
         const micropip = self.pyodide.pyimport('micropip');
         await micropip.install('unsupervised-bias-detection');
         await micropip.install('kmodes');
+        await micropip.install('scipy');
 
         return true;
     }
