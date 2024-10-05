@@ -90,6 +90,30 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('height', d => y(0) - y(d.value))
             .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
+        // Calculate the mean of all bar values
+        const meanValue = d3.mean(flattenData, d => d.value) ?? 0;
+
+        // Draw a dotted line representing the mean value
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('x2', containerWidth - margin.right)
+            .attr('y1', y(meanValue))
+            .attr('y2', y(meanValue))
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '4 4')
+            .attr('opacity', 0.8)
+            .attr('class', 'mean-line');
+
+        // Add a label for the mean line
+        svg.append('text')
+            .attr('x', containerWidth - margin.right - 10)
+            .attr('y', y(meanValue) - 5)
+            .attr('text-anchor', 'end')
+            .attr('fill', 'black')
+            .style('font-size', '12px')
+            .text(`Mean: ${y.tickFormat(10, 's')(meanValue)}`);
+
         // Append legend
         const legend = svg
             .append('g')
@@ -125,7 +149,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('x', 20)
             .attr('y', 12)
             .text(d => d);
-    }, [data, x0, y, color, title]);
+    }, [data, x0, y, color, title, containerWidth]);
 
     useEffect(() => {
         // Set up the ResizeObserver to track changes in the container's size
