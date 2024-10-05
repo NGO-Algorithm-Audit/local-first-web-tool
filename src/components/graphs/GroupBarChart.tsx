@@ -112,7 +112,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
             .style('font-size', '12px')
-            .text(`Mean: ${y.tickFormat(10, 's')(meanValue)}`);
+            .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
 
         // Append legend
         const legend = svg

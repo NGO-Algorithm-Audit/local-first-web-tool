@@ -109,7 +109,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
             .style('font-size', '12px')
-            .text(`Mean: ${y.tickFormat(10, 's')(meanValue)}`);
+            .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
 
         // Add a legend label for the mean line
     }, [data, x0, y, title, containerWidth]);
