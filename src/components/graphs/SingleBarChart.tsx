@@ -11,14 +11,19 @@ interface SingleBarChartProps {
     data: Data[];
 }
 
+// Define margins for the chart
 const margin = { top: 20, right: 250, bottom: 40, left: 50 };
+// Define height for the chart, adjusting for margins
 const height = 500 - margin.top - margin.bottom;
 
 const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
-    const svgRef = useRef<SVGSVGElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [containerWidth, setContainerWidth] = useState(800); // Default width
+    const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
+    const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
+    const [containerWidth, setContainerWidth] = useState(800); // Default container width
+
     console.log('SingleBarChart', title, data);
+
+    // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
     const x0 = useMemo(
         () =>
             d3
@@ -29,24 +34,25 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         [data, containerWidth]
     );
 
+    // Create y-axis scale using d3.scaleLinear, with a range from the height to 0
     const y = useMemo(
         () =>
             d3
                 .scaleLinear()
                 .domain([
-                    d3.min(data, d => d.values) ?? 0,
-                    d3.max(data, d => d.values) ?? 0,
+                    d3.min(data, d => d.values) ?? 0, // Minimum value in the dataset (or 0 if undefined)
+                    d3.max(data, d => d.values) ?? 0, // Maximum value in the dataset (or 0 if undefined)
                 ])
-                .nice()
+                .nice() // Rounds the domain to nice round values
                 .range([height, 0]),
         [data]
     );
 
     useEffect(() => {
-        // Clear any previous SVG content
+        // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
 
-        // Create the SVG container
+        // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
             .attr('width', containerWidth)
@@ -54,30 +60,59 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        // Append x-axis
+        // Append x-axis to the SVG container
         const xAxis = svg
             .append('g')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x0).tickSize(0));
-        xAxis.selectAll('text').style('text-anchor', 'middle');
+            .call(d3.axisBottom(x0).tickSize(0)); // Create the x-axis using the x0 scale
+        xAxis.selectAll('text').style('text-anchor', 'middle'); // Center-align the x-axis labels
 
+        // Highlight the first column label by underlining it
         const xAxisFirstColumnLabel = xAxis.select('text');
         xAxisFirstColumnLabel.style('text-decoration', 'underline');
 
-        svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
+        // Append y-axis to the SVG container
+        svg.append('g').call(d3.axisLeft(y).ticks(10, 's')); // Create the y-axis using the y scale
 
-        // Draw bars
+        // Draw bars for the chart using the data provided
         svg.selectAll('rect')
             .data(data)
             .join('rect')
-            .attr('x', d => x0(d.name) ?? 0)
-            .attr('y', d => height - y(d.values))
-            .attr('width', x0.bandwidth())
-            .attr('height', d => y(d.values))
-            .attr('fill', (_d, index) =>
-                index === 0 ? '#fdf3d0' : 'steelblue'
+            .attr('x', d => x0(d.name) ?? 0) // Set the x position of each bar
+            .attr('y', d => height - y(d.values)) // Set the y position based on the value
+            .attr('width', x0.bandwidth()) // Set the width of each bar
+            .attr('height', d => y(d.values)) // Set the height of each bar based on the value
+            .attr(
+                'fill',
+                (_d, index) => (index === 0 ? '#fdf3d0' : 'steelblue') // Fill the first bar with a different color
             );
-    }, [data, x0, y, title]);
+
+        // Calculate the mean of all bar values
+        const meanValue = d3.mean(data, d => d.values) ?? 0;
+
+        // Draw a dotted line representing the mean value
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('x2', containerWidth - margin.right)
+            .attr('y1', y(meanValue))
+            .attr('y2', y(meanValue))
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '4 4') // Make the line dotted
+            .attr('opacity', 0.8)
+            .attr('class', 'mean-line');
+
+        // Add a label for the mean line
+        svg.append('text')
+            .attr('x', containerWidth - margin.right - 10)
+            .attr('y', y(meanValue) - 5)
+            .attr('text-anchor', 'end')
+            .attr('fill', 'black')
+            .style('font-size', '12px')
+            .text(`Mean: ${y.tickFormat(10, 's')(meanValue)}`);
+
+        // Add a legend label for the mean line
+    }, [data, x0, y, title, containerWidth]);
 
     useEffect(() => {
         // Set up the ResizeObserver to track changes in the container's size
@@ -97,6 +132,8 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             }
         };
     }, []);
+
+    // Render the chart container and SVG element
     return (
         <div ref={containerRef} style={{ width: '100%', display: 'flex' }}>
             <svg ref={svgRef}></svg>
