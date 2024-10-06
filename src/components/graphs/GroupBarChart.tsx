@@ -13,25 +13,28 @@ interface GroupBarChartProps {
 
 const margin = { top: 20, right: 250, bottom: 40, left: 50 };
 const height = 500 - margin.top - margin.bottom;
+const barWidth = 100;
 
 const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
-    console.log('SingleBarChart', title, data);
     const fx = useMemo(
         () =>
             d3
                 .scaleBand()
                 .domain(new Set(data.map(d => d.name)))
-                .range([0, containerWidth - margin.right])
+                .range([
+                    0,
+                    Math.max(containerWidth, data.length * barWidth) -
+                        margin.right,
+                ])
                 .padding(0.2),
         [data, containerWidth]
     );
     const flattenData = data.flatMap(d => d.values);
 
     const groupbarNames = new Set(flattenData.map(d => d.name));
-    console.log('groupbarNames', groupbarNames);
     const x0 = d3
         .scaleBand()
         .domain(groupbarNames)
@@ -59,7 +62,8 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
 
         const svg = d3
             .select(svgRef.current)
-            .attr('width', containerWidth)
+            .attr('class', 'min-h-[500px]')
+            .attr('width', Math.max(containerWidth, data.length * barWidth))
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -96,7 +100,10 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         // Draw a dotted line representing the mean value
         svg.append('line')
             .attr('x1', 0)
-            .attr('x2', containerWidth - margin.right)
+            .attr(
+                'x2',
+                Math.max(containerWidth, data.length * barWidth) - margin.right
+            )
             .attr('y1', y(meanValue))
             .attr('y2', y(meanValue))
             .attr('stroke', 'black')
@@ -107,7 +114,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
 
         // Add a label for the mean line
         svg.append('text')
-            .attr('x', containerWidth - margin.right - 10)
+            .attr('x', margin.left + 30)
             .attr('y', y(meanValue) - 5)
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
@@ -119,14 +126,14 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .append('g')
             .attr(
                 'transform',
-                `translate(${containerWidth - margin.left - margin.right + 20}, 0)`
+                `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right + 20}, 0)`
             );
 
         // Append title to the legend
         legend
             .append('text')
             .attr('x', 0)
-            .attr('y', 0) // Position title above the legend items
+            .attr('y', 0)
             .style('font-weight', 'bold')
             .text(title);
 
@@ -170,7 +177,11 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         };
     }, []);
     return (
-        <div ref={containerRef} style={{ width: '100%', display: 'flex' }}>
+        <div
+            ref={containerRef}
+            style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
+            className="min-h-[fit-content] flex-col"
+        >
             <svg ref={svgRef}></svg>
         </div>
     );
