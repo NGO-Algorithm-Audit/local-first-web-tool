@@ -16,12 +16,13 @@ const margin = { top: 20, right: 250, bottom: 40, left: 50 };
 // Define height for the chart, adjusting for margins
 const height = 500 - margin.top - margin.bottom;
 
+const barWidth = 80;
+const barGap = 5;
+
 const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
-
-    console.log('SingleBarChart', title, data);
 
     // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
     const x0 = useMemo(
@@ -29,7 +30,13 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             d3
                 .scaleBand()
                 .domain(data.map(d => d.name))
-                .range([0, containerWidth - margin.right])
+                .range([
+                    0,
+                    Math.max(
+                        containerWidth - margin.right,
+                        data.length * (barWidth + barGap)
+                    ),
+                ])
                 .padding(0.2),
         [data, containerWidth]
     );
@@ -55,24 +62,15 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
-            .attr('width', containerWidth)
+            .attr('class', 'min-h-[500px]')
+            .attr(
+                'width',
+                Math.max(containerWidth, data.length * (barWidth + barGap)) +
+                    margin.left
+            )
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
-
-        // Append x-axis to the SVG container
-        const xAxis = svg
-            .append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x0).tickSize(0)); // Create the x-axis using the x0 scale
-        xAxis.selectAll('text').style('text-anchor', 'middle'); // Center-align the x-axis labels
-
-        // Highlight the first column label by underlining it
-        const xAxisFirstColumnLabel = xAxis.select('text');
-        xAxisFirstColumnLabel.style('text-decoration', 'underline');
-
-        // Append y-axis to the SVG container
-        svg.append('g').call(d3.axisLeft(y).ticks(10, 's')); // Create the y-axis using the y scale
 
         // Draw bars for the chart using the data provided
         svg.selectAll('rect')
@@ -80,7 +78,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .join('rect')
             .attr('x', d => x0(d.name) ?? 0) // Set the x position of each bar
             .attr('y', d => height - y(d.values)) // Set the y position based on the value
-            .attr('width', x0.bandwidth()) // Set the width of each bar
+            .attr('width', Math.max(x0.bandwidth(), barWidth) - barGap) // Set the width of each bar
             .attr('height', d => y(d.values)) // Set the height of each bar based on the value
             .attr(
                 'fill',
@@ -93,7 +91,13 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         // Draw a dotted line representing the mean value
         svg.append('line')
             .attr('x1', 0)
-            .attr('x2', containerWidth - margin.right)
+            .attr(
+                'x2',
+                Math.max(
+                    containerWidth - margin.right,
+                    data.length * (barWidth + barGap)
+                )
+            )
             .attr('y1', y(meanValue))
             .attr('y2', y(meanValue))
             .attr('stroke', 'black')
@@ -104,12 +108,24 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
 
         // Add a label for the mean line
         svg.append('text')
-            .attr('x', containerWidth - margin.right - 10)
+            .attr('x', margin.left + 30)
             .attr('y', y(meanValue) - 5)
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
             .style('font-size', '12px')
             .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+        // Append x-axis to the SVG container
+        const xAxis = svg
+            .append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x0).tickSize(0)); // Create the x-axis using the x0 scale
+        xAxis.selectAll('text').style('text-anchor', 'middle'); // Center-align the x-axis labels
+        // Highlight the first column label by underlining it
+        const xAxisFirstColumnLabel = xAxis.select('text');
+        xAxisFirstColumnLabel.style('text-decoration', 'underline');
+
+        // Append y-axis to the SVG container
+        svg.append('g').call(d3.axisLeft(y).ticks(10, 's')); // Create the y-axis using the y scale
 
         // Add a legend label for the mean line
     }, [data, x0, y, title, containerWidth]);
@@ -133,9 +149,13 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         };
     }, []);
 
-    // Render the chart container and SVG element
+    // Render the chart container and SVG element with horizontal scroll if needed
     return (
-        <div ref={containerRef} style={{ width: '100%', display: 'flex' }}>
+        <div
+            ref={containerRef}
+            style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
+            className="min-h-[fit-content] flex-col"
+        >
             <svg ref={svgRef}></svg>
         </div>
     );
