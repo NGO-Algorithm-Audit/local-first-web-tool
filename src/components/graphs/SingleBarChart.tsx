@@ -65,8 +65,10 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .attr('class', 'min-h-[500px]')
             .attr(
                 'width',
-                Math.max(containerWidth, data.length * (barWidth + barGap)) +
-                    margin.left
+                Math.max(
+                    containerWidth,
+                    margin.left + data.length * (barWidth + barGap)
+                )
             )
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
@@ -154,7 +156,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className="min-h-[500px] flex-col"
+            className="min-h-[530px] flex-col"
         >
             <svg ref={svgRef}></svg>
         </div>
