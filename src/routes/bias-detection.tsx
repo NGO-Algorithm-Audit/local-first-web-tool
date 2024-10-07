@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { demoCode } from '@/assets/demoExample';
+import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
@@ -36,15 +36,15 @@ function BiasDetection() {
     };
 
     useEffect(() => {
-        if (demoCode) {
-            initialise({ code: demoCode, data: '' });
+        if (pythonCode) {
+            initialise({ code: pythonCode, data: '' });
         }
     }, []);
 
     // Initialise the Python worker with the demo code and the data
     // Run the demo code when the worker is initialised with a demo dataset
     useEffect(() => {
-        if (demoCode && data.stringified.length >= 0 && initialised) {
+        if (pythonCode && data.stringified.length >= 0 && initialised) {
             sendData(data.stringified);
         }
         if (data.demo) {
