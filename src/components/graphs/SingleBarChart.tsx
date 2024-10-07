@@ -154,7 +154,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className="min-h-[fit-content] flex-col"
+            className="min-h-[500px] flex-col"
         >
             <svg ref={svgRef}></svg>
         </div>
