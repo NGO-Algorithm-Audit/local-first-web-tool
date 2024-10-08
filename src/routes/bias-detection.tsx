@@ -78,7 +78,8 @@ function BiasDetection() {
             </header>
             <main
                 className={`gap-4 p-4 overflow-x-hidden
-                grid xl:grid-cols-[1fr_2fr] grid-cols-1
+                md:grid xl:grid-cols-[1fr_2fr] grid-cols-1
+                flex flex-col
             `}
             >
                 <div className="relative flex-1 flex-col items-start">
@@ -93,18 +94,20 @@ function BiasDetection() {
 
                 <div
                     className={cn(
-                        'flex flex-2 w-full h-full min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                        'flex flex-2 w-full h-auto md:h-full md:min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
                         loading && 'overflow-hidden'
                     )}
                 >
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="ml-auto p-4 text-sm"
-                    >
-                        <Share className="size-3.5 mr-2" />
-                        Share
-                    </Button>
+                    {initialised && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="ml-auto p-4 text-sm"
+                        >
+                            <Share className="size-3.5 mr-2" />
+                            Share
+                        </Button>
+                    )}
 
                     {data.data.length > 0 && (
                         <SimpleTable

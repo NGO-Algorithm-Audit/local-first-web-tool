@@ -100,7 +100,7 @@ export default function BiasSettings({
 
     return (
         <Form {...form}>
-            <div className="h-full flex flex-col justify-between">
+            <div className="h-auto md:h-full flex flex-col justify-between">
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="grid w-full items-start gap-6 -mt-2"
