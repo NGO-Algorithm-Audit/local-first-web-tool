@@ -131,14 +131,6 @@ function BiasDetection() {
                             <div className="flex-1" />
                         </>
                     )}
-
-                    {/* {loading && (
-                        <div className="absolute top-0 left-0 right-0 bottom-0 bg-opacity-20 bg-black">
-                            <div className="flex w-full h-full items-center justify-center">
-                                <LoadingIndicator className={''} />
-                            </div>
-                        </div>
-                    )} */}
                 </div>
             </main>
         </>

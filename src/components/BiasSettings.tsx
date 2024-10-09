@@ -59,7 +59,7 @@ export default function BiasSettings({
         },
     });
     const [iter, setIter] = useState([10]);
-    const [clusters, setClusters] = useState([15]);
+    const [clusters, setClusters] = useState([25]);
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
@@ -76,6 +76,9 @@ export default function BiasSettings({
             form.setValue('file', stringified);
         }
         setData({ data, stringified });
+
+        const dataLength = (data?.length || 1000) / 10;
+        setClusters([Math.round(dataLength / 4)]);
         setDataKey(new Date().toISOString());
     };
 
@@ -226,7 +229,10 @@ export default function BiasSettings({
                             </Label>
                             <Slider
                                 defaultValue={clusters}
-                                max={(data?.data?.length ?? 1000) / 10}
+                                key={`${dataKey}_clusters`}
+                                max={Math.floor(
+                                    (data?.data?.length || 1000) / 10
+                                )}
                                 step={1}
                                 onValueChange={value => setClusters(value)}
                                 className="cursor-pointer"
