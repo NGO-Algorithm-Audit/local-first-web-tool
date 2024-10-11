@@ -5,6 +5,17 @@ export interface PythonWorkerMessage {
     type: string;
     result?: string[];
     message?: string;
+    clusterInfo?: ClusterInfo;
+}
+
+export interface ClusterInfo {
+    mostBiasedCluster: object;
+    otherClusters: object;
+    date: Date;
+    iter: number;
+    clusters: number;
+    targetColumn: string;
+    dataType: string;
 }
 
 export const usePython = () => {
@@ -12,6 +23,9 @@ export const usePython = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [initialised, setInitialised] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
+    const [clusterInfo, setClusterInfo] = useState<ClusterInfo | undefined>(
+        undefined
+    );
 
     const workerRef = useRef<Worker | undefined>(undefined);
 
@@ -28,6 +42,7 @@ export const usePython = () => {
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'result') {
                 setResult(event.data.result ?? ['']);
+                setClusterInfo(event.data.clusterInfo);
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'error') {
                 setError(event.data.message ?? '');
@@ -53,6 +68,7 @@ export const usePython = () => {
                 dataType: string;
             };
         }) => {
+            setClusterInfo(undefined);
             setResult([]);
             setError(undefined);
             setLoading(true);
@@ -79,6 +95,7 @@ export const usePython = () => {
     );
     const sendData = useCallback((data: string) => {
         setResult([]);
+        setClusterInfo(undefined);
         workerRef.current?.postMessage({
             type: 'data',
             params: {
@@ -94,5 +111,6 @@ export const usePython = () => {
         runPython,
         error,
         sendData,
+        clusterInfo,
     };
 };

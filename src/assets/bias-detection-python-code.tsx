@@ -16,6 +16,8 @@ start = time.time()
 
 from js import data
 from js import setResult
+from js import setMostBiasedCluster
+from js import setOtherClusters
 from js import iter
 from js import clusters
 from js import targetColumn
@@ -198,6 +200,10 @@ def run():
         clusters_array.append(labels)
     full_df = pd.concat(clusters_array, ignore_index=True)
     full_df.head()
+
+    setMostBiasedCluster(df_most_biased_cluster.to_json(orient='records'))
+    setOtherClusters(df_other.to_json(orient='records'))
+
 
     setResult(json.dumps(
         {'type': 'heading', 'data': 'In the most biased cluster datapoints have:'}

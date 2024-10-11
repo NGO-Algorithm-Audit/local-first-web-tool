@@ -3,6 +3,19 @@ import SingleBarChart from './graphs/SingleBarChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
 
+const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
+    const resultArray = [];
+    for (const [key, value] of Object.entries(dict)) {
+        if (typeof value === 'number') {
+            resultArray.push({
+                value: value,
+                name: key,
+            });
+        }
+    }
+    return resultArray;
+};
+
 export default function ComponentMapper({ items }: { items: string[] }) {
     const components = items
         .map((r, index) => {
@@ -33,33 +46,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                                 {resultItem.data}
                             </h5>
                         );
-                    case 'histogram':
-                        const createArrayFromPythonDictionary = (
-                            dict: Record<string, number>
-                        ) => {
-                            const resultArray = [];
-
-                            // Iterate over each key-value pair in the dictionary
-                            for (const [key, value] of Object.entries(dict)) {
-                                // Convert key to a number and repeat it 'value' times
-                                // for (let i = 0; i < value; i++) {
-                                //     resultArray.push(Number(key));
-                                // }
-                                if (typeof value === 'number') {
-                                    resultArray.push({
-                                        value: value,
-                                        name: key,
-                                    });
-                                }
-                            }
-
-                            return resultArray;
-                        };
-                        console.log(
-                            'data returned from python',
-                            resultItem.title,
-                            resultItem.data
-                        );
+                    case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
@@ -70,15 +57,15 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         );
 
                         return (
-                            <ErrorBoundary>
+                            <ErrorBoundary key={index}>
                                 <GroupBarChart
-                                    key={index}
                                     data={histogramData}
                                     title={resultItem.title ?? ''}
                                 />
                             </ErrorBoundary>
                         );
-                    case 'barchart':
+                    }
+                    case 'barchart': {
                         const barchartData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
@@ -95,7 +82,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                                 title={resultItem.title ?? ''}
                             />
                         );
-
+                    }
                     default:
                         return <h6 key={index}>Unknown result type</h6>;
                 }
