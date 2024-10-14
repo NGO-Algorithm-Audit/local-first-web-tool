@@ -21,10 +21,15 @@ const PAGE_STYLE = `
         /* Remove browser default header (title) and footer (url) */
         margin: 0;
     }
-    
+
     @media print {
         .hideonprint { 
             display: none !important; 
+        }
+
+        @page { 
+            size: landscape; 
+            margin: 30px 20px;
         }
 
         body {

@@ -12,11 +12,12 @@ interface SingleBarChartProps {
 }
 
 // Define margins for the chart
-const margin = { top: 20, right: 250, bottom: 40, left: 50 };
+const margin = { top: 10, right: 50, bottom: 40, left: 50 };
 // Define height for the chart, adjusting for margins
-const height = 500 - margin.top - margin.bottom;
+const height = 300 - margin.top - margin.bottom;
 
-const barWidth = 80;
+// Define width of bars and adjust for screenwidth
+const barWidth = 0.05 * window.innerWidth < 25 ? 25 : 0.05 * window.innerWidth;
 const barGap = 5;
 
 const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
@@ -62,7 +63,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
-            .attr('class', 'min-h-[500px]')
+            .attr('class', `min-h-[${height}px]`)
             .attr(
                 'width',
                 Math.max(
@@ -156,7 +157,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className="min-h-[530px] flex-col"
+            className={`min-h-[${height}px] flex-col`}
         >
             <svg ref={svgRef}></svg>
         </div>

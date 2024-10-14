@@ -11,9 +11,9 @@ interface GroupBarChartProps {
     data: Data[];
 }
 
-const margin = { top: 20, right: 250, bottom: 40, left: 50 };
-const height = 500 - margin.top - margin.bottom;
-const barWidth = 100;
+const margin = { top: 10, right: 10, bottom: 40, left: 10 };
+const height = 300 - margin.top - margin.bottom;
+const barWidth = 0.05 * window.innerWidth < 25 ? 25 : 0.05 * window.innerWidth;
 
 const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -62,7 +62,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
 
         const svg = d3
             .select(svgRef.current)
-            .attr('class', 'min-h-[500px]')
+            .attr('class', `min-h-[${height}px]`)
             .attr('width', Math.max(containerWidth, data.length * barWidth))
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
@@ -180,7 +180,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className="min-h-[530px] flex-col"
+            className={`min-h-[${height}px] flex-col`}
         >
             <svg ref={svgRef}></svg>
         </div>
