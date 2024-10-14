@@ -248,7 +248,7 @@ export default function BiasSettings({
                         )}
                     </div>
 
-                    <div className="flex flex-row ml-auto gap-2">
+                    <div className="flex flex-row ml-auto gap-2 hideonprint">
                         <Button
                             onClick={() => onDemoRun()}
                             size="sm"
@@ -275,7 +275,7 @@ export default function BiasSettings({
                     </div>
                 </form>
 
-                <Card className="hidden xl:flex">
+                <Card className="hidden xl:flex hideonprint">
                     <div className="flex flex-row w-full items-center justify-between">
                         <CardHeader>
                             <CardTitle className="text-aaDark text-md">

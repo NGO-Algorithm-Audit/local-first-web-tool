@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
@@ -10,10 +10,31 @@ import SimpleTable from '@/components/SimpleTable';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
+import { useReactToPrint } from 'react-to-print';
 
 export const Route = createFileRoute('/bias-detection')({
     component: BiasDetection,
 });
+
+const PAGE_STYLE = `
+    @page {
+        /* Remove browser default header (title) and footer (url) */
+        margin: 0;
+    }
+    
+    @media print {
+        .hideonprint { 
+            display: none !important; 
+        }
+
+        body {
+            /* Tell browsers to print background colors */
+            color-adjust: exact; /* Firefox. This is an older version of "print-color-adjust" */
+            print-color-adjust: exact; /* Firefox/Safari */
+            -webkit-print-color-adjust: exact; /* Chrome/Safari/Edge/Opera */
+        }
+    }
+`;
 
 function BiasDetection() {
     const [data, setData] = useState<{
@@ -21,6 +42,13 @@ function BiasDetection() {
         stringified: string;
         demo?: boolean;
     }>({ data: [], stringified: '', demo: false });
+    // Select the content to print
+
+    let contentRef = useRef<HTMLDivElement | null>(null);
+    const reactToPrintFn = useReactToPrint({
+        contentRef: contentRef,
+        pageStyle: PAGE_STYLE,
+    });
 
     const {
         loading,
@@ -54,6 +82,13 @@ function BiasDetection() {
         }
     }, [initialised, data]);
 
+    // Set the contentRef to the printroot div
+    useEffect(() => {
+        contentRef.current = document.getElementById(
+            'printroot'
+        ) as HTMLDivElement;
+    }, []);
+
     const onRun = (
         clusterSize: number,
         iterations: number,
@@ -79,10 +114,10 @@ function BiasDetection() {
                 </h1>
             </header>
             <main
-                className={`gap-4 p-4 overflow-x-hidden
+                className="gap-4 p-4
                 md:grid xl:grid-cols-[1fr_2fr] grid-cols-1
                 flex flex-col
-            `}
+            "
             >
                 <div className="relative flex-1 flex-col items-start">
                     <BiasSettings
@@ -96,18 +131,19 @@ function BiasDetection() {
 
                 <div
                     className={cn(
-                        'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                        'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] flex-col rounded-xl gap-6 bg-slate-50 p-4',
                         loading && 'overflow-hidden'
                     )}
                 >
                     {initialised &&
                         data.data.length > 0 &&
                         result.length > 0 && (
-                            <div className="ml-auto flex flex-row gap-2">
+                            <div className="ml-auto flex flex-row gap-2 hideonprint">
                                 <Button
                                     variant="outline"
                                     size="sm"
                                     className="p-4 text-sm"
+                                    onClick={() => reactToPrintFn()}
                                 >
                                     <Share className="size-3.5 mr-2" />
                                     Share
