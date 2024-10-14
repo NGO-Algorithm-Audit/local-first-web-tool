@@ -118,12 +118,7 @@ function BiasDetection() {
     };
 
     return (
-        <main
-            className="gap-4 p-4
-                md:grid xl:grid-cols-[1fr_2fr] grid-cols-1
-                flex flex-col
-            "
-        >
+        <main className="gap-4 p-4 flex flex-col">
             <div className="relative flex-1 flex-col items-start">
                 <BiasSettings
                     onRun={onRun}
