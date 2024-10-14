@@ -40,11 +40,12 @@ function BiasDetection() {
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
+        fileName: string;
         demo?: boolean;
-    }>({ data: [], stringified: '', demo: false });
+    }>({ data: [], stringified: '', fileName: '', demo: false });
     // Select the content to print
 
-    let contentRef = useRef<HTMLDivElement | null>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
     const reactToPrintFn = useReactToPrint({
         contentRef: contentRef,
         pageStyle: PAGE_STYLE,
@@ -61,8 +62,13 @@ function BiasDetection() {
         clusterInfo,
     } = usePython();
 
-    const onFileLoad: csvReader['onChange'] = (data, stringified, demo) => {
-        setData({ data, stringified, demo });
+    const onFileLoad: csvReader['onChange'] = (
+        data,
+        stringified,
+        fileName,
+        demo
+    ) => {
+        setData({ data, stringified, fileName, demo });
     };
 
     useEffect(() => {
@@ -155,14 +161,18 @@ function BiasDetection() {
                                         className="p-4 text-sm"
                                         onClick={() => {
                                             downloadFile(
-                                                JSON.stringify(clusterInfo),
-                                                'cluster-info.json',
+                                                JSON.stringify(
+                                                    clusterInfo,
+                                                    null,
+                                                    2
+                                                ),
+                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
                                                 'application/json'
                                             );
                                         }}
                                     >
                                         <Share className="size-3.5 mr-2" />
-                                        Export cluster info
+                                        Export to .json
                                     </Button>
                                 )}
                             </div>

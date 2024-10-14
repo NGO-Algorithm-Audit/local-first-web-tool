@@ -83,7 +83,7 @@ export default function BiasSettings({
     };
 
     useEffect(() => {
-        onDataLoad(data.data, data.stringified);
+        onDataLoad(data.data, data.stringified, '');
     }, [data]);
 
     const onDemoRun = async () => {
@@ -93,6 +93,7 @@ export default function BiasSettings({
         onDataLoad(
             file.data as Record<string, string>[],
             Papa.unparse(file.data),
+            'demo',
             true
         );
     };
