@@ -26,7 +26,6 @@ jobs:
 
       - name: Build and deploy Vue.js front-end application
         run: |
-          cd frontend
           npm install
           npm run build
           aws s3 sync dist/ s3://${{ secrets.YOUR_S3_BUCKET_NAME }}
