@@ -6,6 +6,8 @@ interface CustomWorker extends Omit<Worker, 'postMessage'> {
     data: string;
     postMessage: (message: PythonWorkerMessage) => void;
     setResult: (result: string) => void;
+    setMostBiasedCluster: (cluster: string) => void;
+    setOtherClusters: (clusters: string) => void;
     pyodide: PyodideInterface | undefined;
     iter: number;
     clusters: number;
@@ -31,8 +33,18 @@ interface MessageData {
 self.onmessage = async (e: MessageData) => {
     console.log('Worker got message', e.data);
     const resultList: string[] = [];
+    let mostBiasedCluster: string = '';
+    let otherClusters: string = '';
     self.setResult = (...result) => {
         resultList.push(result.join(' '));
+    };
+
+    self.setMostBiasedCluster = (cluster: string) => {
+        mostBiasedCluster = cluster;
+    };
+
+    self.setOtherClusters = (clusters: string) => {
+        otherClusters = clusters;
     };
 
     if (e.data && e.data.type === 'data' && e.data.params.data) {
@@ -57,7 +69,19 @@ self.onmessage = async (e: MessageData) => {
         await runPytonCode().then(
             () => {
                 console.timeEnd('pyodide-python');
-                postMessage({ type: 'result', result: resultList });
+                postMessage({
+                    type: 'result',
+                    result: resultList,
+                    clusterInfo: {
+                        date: new Date(),
+                        iter: self.iter,
+                        clusters: self.clusters,
+                        targetColumn: self.targetColumn,
+                        dataType: self.dataType,
+                        mostBiasedCluster: JSON.parse(mostBiasedCluster),
+                        otherClusters: JSON.parse(otherClusters),
+                    },
+                });
             },
             error => {
                 console.timeEnd('pyodide-python');

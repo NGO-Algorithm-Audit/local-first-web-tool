@@ -1,4 +1,4 @@
-export const demoCode = `
+export const pythonCode = `
 import random
 import json
 import pandas as pd
@@ -16,6 +16,8 @@ start = time.time()
 
 from js import data
 from js import setResult
+from js import setMostBiasedCluster
+from js import setOtherClusters
 from js import iter
 from js import clusters
 from js import targetColumn
@@ -138,11 +140,6 @@ def run():
     
     emptycols = df.columns[df.isnull().any()].tolist()
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
-    
-    ## for feature in features:
-    ##    setResult(json.dumps(
-    ##        {'type': 'heading', 'data': f'feature {feature}'}
-    ##    ))
 
     X = df[features]
     y = df[targetColumn]
@@ -203,6 +200,10 @@ def run():
         clusters_array.append(labels)
     full_df = pd.concat(clusters_array, ignore_index=True)
     full_df.head()
+
+    setMostBiasedCluster(df_most_biased_cluster.to_json(orient='records'))
+    setOtherClusters(df_other.to_json(orient='records'))
+
 
     setResult(json.dumps(
         {'type': 'heading', 'data': 'In the most biased cluster datapoints have:'}
@@ -271,154 +272,3 @@ def run():
 if data != 'INIT':
 	run()
 `;
-
-/*
-
-                setResult(json.dumps(
-                    {'type': 'text', 'data': f'DIFF: {type(diff)} {diff} '}
-                ))  
-
-            if (isinstance(diff, int)):
-                if diff < 0:
-                    setResult(json.dumps(
-                        {'type': 'text', 'data': f'{abs(diff)} less {value} than in the rest of the dataset.'}
-                    ))
-                elif diff > 0:
-                    setResult(json.dumps(
-                        {'type': 'text', 'data': f'{diff} more {value} than in the rest of the dataset.'}
-                    ))
-                elif diff == 0:
-                    setResult(json.dumps(
-                        {'type': 'text', 'data': f'equal {value} as in the rest of the dataset.'}
-                    ))
-
-"Traceback (most recent call last):
-  File "/lib/python312.zip/_pyodide/_base.py", line 574, in eval_code_async
-    await CodeRunner(
-  File "/lib/python312.zip/_pyodide/_base.py", line 394, in run_async
-    coroutine = eval(self.code, globals, locals)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<exec>", line 266, in <module>
-  File "<exec>", line 230, in run
-  File "/lib/python3.12/site-packages/pandas/core/generic.py", line 1576, in __nonzero__
-    raise ValueError(
-ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
-"
-
-for feat in features:
-    values = df[feat].unique().tolist()
-    for value in values:
-        diff = diff_df.loc[value,"Difference"].round(2)
-        if diff < 0:
-            setResult(json.dumps(
-                {'type': 'text', 'data': f'{abs(diff)} less {value} than in the rest of the dataset.'}
-            ))
-        elif diff > 0:
-            setResult(json.dumps(
-                {'type': 'text', 'data': f'{diff} more {value} than in the rest of the dataset.'}
-            ))
-        elif diff == 0:
-            setResult(json.dumps(
-                {'type': 'text', 'data': f'equal {value} as in the rest of the dataset.'}
-            ))
-
-
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': f'We found {len(hbac.scores_)} clusters, with the following scores:'}
-    ))
-        
-    setResult(json.dumps(
-        {'type': 'table', 'data': cluster_df.to_json(orient='records')}
-    ))
-
-
-    df_cluster0 = df[hbac.labels_ == 0]
-    df_cluster1 = df[hbac.labels_ == 1]
-    df_cluster2 = df[hbac.labels_ == 2]
-    df_cluster3 = df[hbac.labels_ == 3]
-    df_cluster4 = df[hbac.labels_ == 4]
-
-    df_cluster0['Cluster'] = '0'
-    df_cluster1['Cluster'] = '1'
-    df_cluster2['Cluster'] = '2'
-    df_cluster3['Cluster'] = '3'
-    df_cluster4['Cluster'] = '4'
-
-    full_df = pd.concat([df_cluster0, df_cluster1, df_cluster2, df_cluster3, df_cluster4], ignore_index=True)
-    full_df.head()
-
-## for kmeans, instead of value_counts().unstack() do:  mean()    .plot.barh()
-
-## setResult(json.dumps(
-##     {'type': 'table', 'data': full_df.groupby('Cluster')['length'].value_counts().unstack().to_json(orient='records')}
-## ))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "{col}" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-{'type': 'histogram', 'title': col, 'data': full_df.groupby('Cluster')[col].value_counts().unstack().fillna(0).to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "URLs" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'URLs', 'data': full_df.groupby('Cluster')['#URLs'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "mention" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'Mentions', 'data': full_df.groupby('Cluster')['#mentions'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "hashs" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'Hashs', 'data': full_df.groupby('Cluster')['#hashs'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "verified" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'Verified', 'data': full_df.groupby('Cluster')['verified'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "followers" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'Followers', 'data': full_df.groupby('Cluster')['#followers'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "user_engagement" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'User engagement', 'data': full_df.groupby('Cluster')['user_engagement'].value_counts().unstack().to_json(orient='records')}
-))
-
-setResult(json.dumps(
-    {'type': 'heading', 'data': f'The "sentiment-score" variable distribution across the different clusters:'}
-))
-
-setResult(json.dumps(
-    {'type': 'histogram', 'title': 'Sentiment score', 'data': full_df.groupby('Cluster')['sentiment_score'].value_counts().unstack().to_json(orient='records')}
-))
-*/

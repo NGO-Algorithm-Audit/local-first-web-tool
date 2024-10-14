@@ -180,7 +180,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className="min-h-[500px] flex-col"
+            className="min-h-[530px] flex-col"
         >
             <svg ref={svgRef}></svg>
         </div>

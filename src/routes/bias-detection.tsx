@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { demoCode } from '@/assets/demoExample';
+import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
@@ -9,6 +9,7 @@ import { csvReader } from '@/components/CSVReader';
 import SimpleTable from '@/components/SimpleTable';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
+import { downloadFile } from '@/lib/download-file';
 
 export const Route = createFileRoute('/bias-detection')({
     component: BiasDetection,
@@ -29,6 +30,7 @@ function BiasDetection() {
         runPython,
         sendData,
         error,
+        clusterInfo,
     } = usePython();
 
     const onFileLoad: csvReader['onChange'] = (data, stringified, demo) => {
@@ -36,15 +38,15 @@ function BiasDetection() {
     };
 
     useEffect(() => {
-        if (demoCode) {
-            initialise({ code: demoCode, data: '' });
+        if (pythonCode) {
+            initialise({ code: pythonCode, data: '' });
         }
     }, []);
 
     // Initialise the Python worker with the demo code and the data
     // Run the demo code when the worker is initialised with a demo dataset
     useEffect(() => {
-        if (demoCode && data.stringified.length >= 0 && initialised) {
+        if (pythonCode && data.stringified.length >= 0 && initialised) {
             sendData(data.stringified);
         }
         if (data.demo) {
@@ -78,7 +80,8 @@ function BiasDetection() {
             </header>
             <main
                 className={`gap-4 p-4 overflow-x-hidden
-                grid xl:grid-cols-[1fr_2fr] grid-cols-1
+                md:grid xl:grid-cols-[1fr_2fr] grid-cols-1
+                flex flex-col
             `}
             >
                 <div className="relative flex-1 flex-col items-start">
@@ -93,18 +96,41 @@ function BiasDetection() {
 
                 <div
                     className={cn(
-                        'flex flex-2 w-full h-full min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                        'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] xl:overflow-x-hidden flex-col rounded-xl gap-6 bg-slate-50 p-4',
                         loading && 'overflow-hidden'
                     )}
                 >
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="ml-auto p-4 text-sm"
-                    >
-                        <Share className="size-3.5 mr-2" />
-                        Share
-                    </Button>
+                    {initialised &&
+                        data.data.length > 0 &&
+                        result.length > 0 && (
+                            <div className="ml-auto flex flex-row gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="p-4 text-sm"
+                                >
+                                    <Share className="size-3.5 mr-2" />
+                                    Share
+                                </Button>
+                                {clusterInfo && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="p-4 text-sm"
+                                        onClick={() => {
+                                            downloadFile(
+                                                JSON.stringify(clusterInfo),
+                                                'cluster-info.json',
+                                                'application/json'
+                                            );
+                                        }}
+                                    >
+                                        <Share className="size-3.5 mr-2" />
+                                        Export cluster info
+                                    </Button>
+                                )}
+                            </div>
+                        )}
 
                     {data.data.length > 0 && (
                         <SimpleTable
@@ -128,14 +154,6 @@ function BiasDetection() {
                             <div className="flex-1" />
                         </>
                     )}
-
-                    {/* {loading && (
-                        <div className="absolute top-0 left-0 right-0 bottom-0 bg-opacity-20 bg-black">
-                            <div className="flex w-full h-full items-center justify-center">
-                                <LoadingIndicator className={''} />
-                            </div>
-                        </div>
-                    )} */}
                 </div>
             </main>
         </>
