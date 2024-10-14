@@ -1,5 +1,6 @@
 import Navigation from '@/components/Navigation';
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export const Route = createRootRoute({
     component: () => (
@@ -10,4 +11,14 @@ export const Route = createRootRoute({
             </div>
         </div>
     ),
+    notFoundComponent: () => {
+        const navigate = useNavigate();
+
+        useEffect(() => {
+            // Redirect to the desired path, e.g., home page
+            navigate({ to: '/bias-detection' });
+        }, [navigate]);
+
+        return null;
+    },
 });
