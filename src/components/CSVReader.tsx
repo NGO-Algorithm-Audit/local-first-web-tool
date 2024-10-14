@@ -9,6 +9,7 @@ export interface csvReader {
     onChange: (
         data: Record<string, string>[],
         stringified: string,
+        fileName: string,
         demo?: boolean
     ) => void;
 }
@@ -29,7 +30,8 @@ export default function CSVReader({ onChange }: csvReader) {
                 complete: function (results) {
                     onChange(
                         results.data as Record<string, string>[],
-                        Papa.unparse(results.data)
+                        Papa.unparse(results.data),
+                        file.name
                     );
                 },
                 error: function (error) {
@@ -63,7 +65,7 @@ export default function CSVReader({ onChange }: csvReader) {
                                         acceptedFiles.indexOf(file),
                                         1
                                     );
-                                    onChange([], '');
+                                    onChange([], '', '');
                                 }}
                                 variant="outline"
                                 size="sm"

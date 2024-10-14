@@ -64,18 +64,20 @@ export default function BiasSettings({
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
-    }>({ data: [], stringified: '' });
+        fileName: string;
+    }>({ data: [], stringified: '', fileName: '' });
 
     const onFileLoad = (
         data: Record<string, string>[],
-        stringified: string
+        stringified: string,
+        fileName: string
     ) => {
         if (stringified.length === 0) {
             form.reset();
         } else {
             form.setValue('file', stringified);
         }
-        setData({ data, stringified });
+        setData({ data, stringified, fileName });
 
         const dataLength = (data?.length || 1000) / 10;
         setClusters([Math.round(dataLength / 4)]);
@@ -83,7 +85,7 @@ export default function BiasSettings({
     };
 
     useEffect(() => {
-        onDataLoad(data.data, data.stringified);
+        onDataLoad(data.data, data.stringified, data.fileName);
     }, [data]);
 
     const onDemoRun = async () => {
@@ -93,6 +95,7 @@ export default function BiasSettings({
         onDataLoad(
             file.data as Record<string, string>[],
             Papa.unparse(file.data),
+            'demo',
             true
         );
     };
