@@ -162,7 +162,10 @@ function BiasDetection() {
                                         onClick={() => {
                                             downloadFile(
                                                 JSON.stringify(
-                                                    clusterInfo,
+                                                    {
+                                                        fileName: data.fileName,
+                                                        ...clusterInfo,
+                                                    },
                                                     null,
                                                     2
                                                 ),
