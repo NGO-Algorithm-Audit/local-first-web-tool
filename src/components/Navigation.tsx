@@ -1,4 +1,4 @@
-import { Divide, Search, Sheet } from 'lucide-react';
+import { Search, Sheet } from 'lucide-react';
 import Logo from '@/components/icons/aa-logo.svg?react';
 import { Link } from '@tanstack/react-router';
 
