@@ -1,10 +1,5 @@
 import Navigation from '@/components/Navigation';
-import {
-    createRootRoute,
-    Outlet,
-    redirect,
-    useNavigate,
-} from '@tanstack/react-router';
+import { createRootRoute, Outlet, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 export const Route = createRootRoute({
