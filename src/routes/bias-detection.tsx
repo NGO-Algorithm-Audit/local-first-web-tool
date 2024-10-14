@@ -118,98 +118,89 @@ function BiasDetection() {
     };
 
     return (
-        <>
-            <header className="sticky top-0 z-10 flex h-[57px] bg-white items-center border-b bg-background p-4">
-                <h1 className="text-xl font-semibold ">
-                    Unsupervised bias detection tool
-                </h1>
-            </header>
-            <main
-                className="gap-4 p-4
+        <main
+            className="gap-4 p-4
                 md:grid xl:grid-cols-[1fr_2fr] grid-cols-1
                 flex flex-col
             "
+        >
+            <div className="relative flex-1 flex-col items-start">
+                <BiasSettings
+                    onRun={onRun}
+                    onDataLoad={onFileLoad}
+                    isLoading={loading || !initialised}
+                    isErrorDuringAnalysis={Boolean(error && initialised)}
+                    isInitialised={initialised}
+                />
+            </div>
+
+            <div
+                className={cn(
+                    'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                    loading && 'overflow-hidden'
+                )}
             >
-                <div className="relative flex-1 flex-col items-start">
-                    <BiasSettings
-                        onRun={onRun}
-                        onDataLoad={onFileLoad}
-                        isLoading={loading || !initialised}
-                        isErrorDuringAnalysis={Boolean(error && initialised)}
-                        isInitialised={initialised}
-                    />
-                </div>
-
-                <div
-                    className={cn(
-                        'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] flex-col rounded-xl gap-6 bg-slate-50 p-4',
-                        loading && 'overflow-hidden'
-                    )}
-                >
-                    {initialised &&
-                        data.data.length > 0 &&
-                        result.length > 0 && (
-                            <div className="ml-auto flex flex-row gap-2 hideonprint">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="p-4 text-sm"
-                                    onClick={() => reactToPrintFn()}
-                                >
-                                    <Share className="size-3.5 mr-2" />
-                                    Share
-                                </Button>
-                                {clusterInfo && (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="p-4 text-sm"
-                                        onClick={() => {
-                                            downloadFile(
-                                                JSON.stringify(
-                                                    {
-                                                        fileName: data.fileName,
-                                                        ...clusterInfo,
-                                                    },
-                                                    null,
-                                                    2
-                                                ),
-                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                                'application/json'
-                                            );
-                                        }}
-                                    >
-                                        <Share className="size-3.5 mr-2" />
-                                        Export to .json
-                                    </Button>
-                                )}
-                            </div>
+                {initialised && data.data.length > 0 && result.length > 0 && (
+                    <div className="ml-auto flex flex-row gap-2 hideonprint">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="p-4 text-sm"
+                            onClick={() => reactToPrintFn()}
+                        >
+                            <Share className="size-3.5 mr-2" />
+                            Share
+                        </Button>
+                        {clusterInfo && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="p-4 text-sm"
+                                onClick={() => {
+                                    downloadFile(
+                                        JSON.stringify(
+                                            {
+                                                fileName: data.fileName,
+                                                ...clusterInfo,
+                                            },
+                                            null,
+                                            2
+                                        ),
+                                        `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
+                                        'application/json'
+                                    );
+                                }}
+                            >
+                                <Share className="size-3.5 mr-2" />
+                                Export to .json
+                            </Button>
                         )}
+                    </div>
+                )}
 
-                    {data.data.length > 0 && (
-                        <SimpleTable
-                            data={data.data.slice(0, 5)}
-                            title="Dataset preview showing the first 5 rows."
+                {data.data.length > 0 && (
+                    <SimpleTable
+                        data={data.data.slice(0, 5)}
+                        title="Dataset preview showing the first 5 rows."
+                    />
+                )}
+
+                {result.length > 0 ? (
+                    <ComponentMapper items={result} />
+                ) : data.data.length > 0 ? null : (
+                    <>
+                        <div className="flex-1" />
+                        <img
+                            className="max-w-96 m-auto 2xl:max-w-full"
+                            src="/empty-scene.png"
                         />
-                    )}
-
-                    {result.length > 0 ? (
-                        <ComponentMapper items={result} />
-                    ) : data.data.length > 0 ? null : (
-                        <>
-                            <div className="flex-1" />
-                            <img
-                                className="max-w-96 m-auto 2xl:max-w-full"
-                                src="/empty-scene.png"
-                            />
-                            <h1 className="text-xl font-semibold text-center text-gray-400">
-                                Let's get started! Fill out the form.
-                            </h1>
-                            <div className="flex-1" />
-                        </>
-                    )}
-                </div>
-            </main>
-        </>
+                        <h1 className="text-xl font-semibold text-center text-gray-400">
+                            Let's get started! Fill out the form.
+                        </h1>
+                        <div className="flex-1" />
+                    </>
+                )}
+            </div>
+        </main>
     );
 }
