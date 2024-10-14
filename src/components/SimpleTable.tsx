@@ -16,8 +16,8 @@ export default function SimpleTable({
     data: Record<string, string | number>[];
 }) {
     return (
-        <div className={`bg-white border border-gray-200 ${title && 'pb-4'}`}>
-            <Table className="text-xs">
+        <div className={`bg-white border border-gray-200 ${title && 'mb-4'}`}>
+            <Table className={`text-xs ${title && 'mb-4'}`}>
                 {title && <TableCaption>{title}</TableCaption>}
                 <TableHeader>
                     <TableRow className="bg-aaLight">

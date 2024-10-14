@@ -14,7 +14,7 @@ export default function Navigation() {
                 </a>
             </div>
 
-            <nav className="flex flex-row md:flex-col gap-4 p-3">
+            <nav className="flex flex-row md:flex-col gap-4 p-3 hideonprint">
                 <Link
                     to="/bias-detection"
                     className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
