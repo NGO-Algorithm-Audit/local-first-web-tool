@@ -22,7 +22,6 @@
         "@radix-ui/react-slider": "^1.2.0",
         "@radix-ui/react-slot": "^1.1.0",
         "@radix-ui/react-tooltip": "^1.1.2",
-        "@tanstack/react-router": "^1.52.3",
         "@types/d3": "^7.4.3",
         "@types/papaparse": "^5.3.14",
         "ace-builds": "^1.35.4",
@@ -43,7 +42,6 @@
         "zod": "^3.23.8"
     },
     "devDependencies": {
-        "@tanstack/router-plugin": "^1.52.0",
         "@types/node": "^22.5.1",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",

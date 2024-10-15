@@ -1,6 +1,5 @@
 import { Search, Sheet } from 'lucide-react';
 import Logo from '@/components/icons/aa-logo.svg?react';
-import { Link } from '@tanstack/react-router';
 
 export default function Navigation() {
     return (
@@ -16,22 +15,22 @@ export default function Navigation() {
 
             <div className="flex-1 flex flex-col items-center">
                 <nav className="flex flex-row md:flex-col gap-4 p-4 rounded-2xl bg-white">
-                    <Link
-                        to="/bias-detection"
+                    <a
+                        href="/bias-detection"
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Search className="size-4 mr-2" />
                         Bias detection tool
-                    </Link>
+                    </a>
                     <hr />
-                    <Link
-                        disabled
-                        to="/synthetic-data"
+                    <a
+                        aria-disabled
+                        href="/synthetic-data"
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Sheet className="size-5 mr-2" />
                         Synthetic data generation
-                    </Link>
+                    </a>
                 </nav>
             </div>
         </div>

@@ -1,28 +1,24 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
 import './index.css';
-
-// Import the generated route tree
-import { routeTree } from './routeTree.gen';
-
-// Create a new router instance
-const router = createRouter({ routeTree });
-
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
-    interface Register {
-        router: typeof router;
-    }
-}
+import Navigation from './routes/Index';
+import BiasDetection from './routes/BiasDetection';
 
 // Render the app
 const rootElement = document.getElementById('root')!;
-if (!rootElement.innerHTML) {
+const routeName = rootElement?.getAttribute('data-route');
+
+if (!rootElement?.innerHTML) {
     const root = ReactDOM.createRoot(rootElement);
-    root.render(
-        <StrictMode>
-            <RouterProvider router={router} />
-        </StrictMode>
-    );
+
+    const dynamicRoutes = () => {
+        switch (routeName) {
+            case 'bias-detection':
+                return <BiasDetection />;
+            default:
+                return <Navigation />;
+        }
+    };
+
+    root.render(<StrictMode>{dynamicRoutes()}</StrictMode>);
 }

@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/bias-detection-python-code';
@@ -11,10 +10,6 @@ import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
-
-export const Route = createFileRoute('/bias-detection')({
-    component: BiasDetection,
-});
 
 const PAGE_STYLE = `
     @page {
@@ -41,7 +36,7 @@ const PAGE_STYLE = `
     }
 `;
 
-function BiasDetection() {
+export default function BiasDetection() {
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
@@ -93,13 +88,6 @@ function BiasDetection() {
         }
     }, [initialised, data]);
 
-    // Set the contentRef to the printroot div
-    useEffect(() => {
-        contentRef.current = document.getElementById(
-            'printroot'
-        ) as HTMLDivElement;
-    }, []);
-
     const onRun = (
         clusterSize: number,
         iterations: number,
@@ -118,7 +106,7 @@ function BiasDetection() {
     };
 
     return (
-        <main className="gap-4 p-4 flex flex-col">
+        <main ref={contentRef} className="gap-4 p-4 flex flex-col">
             <div className="relative flex-1 flex-col items-start">
                 <BiasSettings
                     onRun={onRun}
