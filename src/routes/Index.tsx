@@ -16,7 +16,7 @@ export default function Navigation() {
             <div className="flex-1 flex flex-col items-center">
                 <nav className="flex flex-row md:flex-col gap-4 p-4 rounded-2xl bg-white">
                     <a
-                        href="/bias-detection"
+                        href="/bias-detection.html"
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Search className="size-4 mr-2" />
@@ -25,7 +25,7 @@ export default function Navigation() {
                     <hr />
                     <a
                         aria-disabled
-                        href="/synthetic-data"
+                        href="/synthetic-data.html"
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Sheet className="size-5 mr-2" />
