@@ -109,7 +109,7 @@ export default function BiasSettings({
             <div className="h-auto md:h-full flex flex-col justify-between">
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="grid w-full items-start gap-6 -mt-2"
+                    className="grid w-full items-start gap-2 -mt-2 grid-cols-1 sm:gap-4 sm:grid-cols-2"
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
