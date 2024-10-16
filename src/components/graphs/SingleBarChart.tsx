@@ -17,7 +17,7 @@ const margin = { top: 10, right: 50, bottom: 40, left: 50 };
 const height = 300 - margin.top - margin.bottom;
 
 // Define width of bars and adjust for screenwidth
-const barWidth = 0.05 * window.innerWidth < 25 ? 25 : 0.05 * window.innerWidth;
+const barWidth = 0.05 * window.innerWidth < 30 ? 30 : 0.05 * window.innerWidth;
 const barGap = 5;
 
 const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
