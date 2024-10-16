@@ -13,6 +13,7 @@ interface CustomWorker extends Omit<Worker, 'postMessage'> {
     clusters: number;
     targetColumn: string;
     dataType: string;
+    lowerIsBetter: boolean;
 }
 declare let self: CustomWorker;
 
@@ -26,6 +27,7 @@ interface MessageData {
             clusters: number;
             dataType: string;
             targetColumn: string;
+            lowerIsBetter: boolean;
         };
     };
 }
@@ -46,6 +48,7 @@ self.onmessage = async (e: MessageData) => {
     self.setOtherClusters = (clusters: string) => {
         otherClusters = clusters;
     };
+    self.lowerIsBetter = false;
 
     if (e.data && e.data.type === 'data' && e.data.params.data) {
         self.data = e.data.params.data;
@@ -57,6 +60,7 @@ self.onmessage = async (e: MessageData) => {
         self.code = e.data.params.code;
         self.targetColumn = '';
         self.dataType = 'numeric';
+        self.lowerIsBetter = false;
         await initPython();
         postMessage({ type: 'pre-initialised' });
     }
@@ -65,7 +69,7 @@ self.onmessage = async (e: MessageData) => {
         self.clusters = e.data.params.clusters ?? 0;
         self.targetColumn = e.data.params.targetColumn ?? '';
         self.dataType = e.data.params.dataType ?? 'numeric';
-
+        self.lowerIsBetter = e.data.params.lowerIsBetter ?? false;
         await runPytonCode().then(
             () => {
                 console.timeEnd('pyodide-python');
@@ -78,6 +82,7 @@ self.onmessage = async (e: MessageData) => {
                         clusters: self.clusters,
                         targetColumn: self.targetColumn,
                         dataType: self.dataType,
+                        lowerIsBetter: self.lowerIsBetter,
                         mostBiasedCluster: JSON.parse(mostBiasedCluster),
                         otherClusters: JSON.parse(otherClusters),
                     },
@@ -95,6 +100,7 @@ self.onmessage = async (e: MessageData) => {
         self.iter = 0;
         self.clusters = 0;
         self.dataType = 'numeric';
+        self.lowerIsBetter = false;
 
         await runPytonCode().then(
             () => {

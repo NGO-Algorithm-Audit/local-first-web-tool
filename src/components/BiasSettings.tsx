@@ -7,6 +7,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
@@ -22,6 +23,7 @@ const FormSchema = z.object({
     file: z.string({
         required_error: 'Please upload a CSV file.',
     }),
+    lowerIsBetter: z.boolean(),
     targetColumn: z
         .string({
             required_error: 'Please select a target column.',
@@ -45,7 +47,8 @@ export default function BiasSettings({
         clusterSize: number,
         iterations: number,
         targetColumn: string,
-        dataType: string
+        dataType: string,
+        lowerIsBetter: boolean
     ) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
@@ -56,10 +59,12 @@ export default function BiasSettings({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             dataType: 'numeric',
+            lowerIsBetter: false,
         },
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
+
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
@@ -101,7 +106,13 @@ export default function BiasSettings({
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        onRun(clusters[0], iter[0], data.targetColumn, data.dataType);
+        onRun(
+            clusters[0],
+            iter[0],
+            data.targetColumn,
+            data.dataType,
+            data.lowerIsBetter ?? false
+        );
     };
 
     return (
@@ -215,10 +226,11 @@ export default function BiasSettings({
                             Parameters
                         </legend>
                         <div className="grid gap-3">
-                            <Label htmlFor="temperature">
+                            <Label htmlFor="iterations">
                                 Iterations ({iter})
                             </Label>
                             <Slider
+                                id="iterations"
                                 defaultValue={iter}
                                 max={100}
                                 step={1}
@@ -227,10 +239,11 @@ export default function BiasSettings({
                             />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="temperature">
+                            <Label htmlFor="min-cluster-size">
                                 Minimal cluster size ({clusters})
                             </Label>
                             <Slider
+                                id="min-cluster-size"
                                 defaultValue={clusters}
                                 key={`${dataKey}_clusters`}
                                 max={Math.floor(
@@ -240,6 +253,26 @@ export default function BiasSettings({
                                 onValueChange={value => setClusters(value)}
                                 className="cursor-pointer"
                             />
+                        </div>
+                        <div className="flex flex-row gap-3">
+                            <FormField
+                                control={form.control}
+                                name="lowerIsBetter"
+                                render={({ field }) => (
+                                    <>
+                                        <Checkbox
+                                            checked={field.value}
+                                            id="lower-is-better"
+                                            key={`${dataKey}_lowerIsBetter`}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                        <Label htmlFor="lower-is-better">
+                                            Lower Performance of metric is
+                                            better
+                                        </Label>
+                                    </>
+                                )}
+                            ></FormField>
                         </div>
                     </fieldset>
 

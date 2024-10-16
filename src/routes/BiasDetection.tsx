@@ -84,7 +84,7 @@ export default function BiasDetection() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP', 'numeric');
+            onRun(3, 10, 'FP', 'numeric', false);
         }
     }, [initialised, data]);
 
@@ -92,7 +92,8 @@ export default function BiasDetection() {
         clusterSize: number,
         iterations: number,
         targetColumn: string,
-        dataType: string
+        dataType: string,
+        lowerIsBetter: boolean
     ) => {
         runPython({
             type: 'start',
@@ -101,6 +102,7 @@ export default function BiasDetection() {
                 clusters: clusterSize,
                 targetColumn: targetColumn,
                 dataType: dataType,
+                lowerIsBetter: lowerIsBetter,
             },
         });
     };
