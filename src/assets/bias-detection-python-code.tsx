@@ -22,7 +22,7 @@ from js import iter
 from js import clusters
 from js import targetColumn
 from js import dataType
-
+from js import lowerIsBetter
 
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
     '''
@@ -141,8 +141,12 @@ def run():
     emptycols = df.columns[df.isnull().any()].tolist()
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
 
+    scaleY = 1
+    if lowerIsBetter == 1:
+        scaleY = -1;
+
     X = df[features]
-    y = df[targetColumn]
+    y = scaleY * df[targetColumn]
 
     if dataType == 'numeric':
         hbac = BiasAwareHierarchicalKMeans(n_iter=iter, min_cluster_size=clusters).fit(X, y)
