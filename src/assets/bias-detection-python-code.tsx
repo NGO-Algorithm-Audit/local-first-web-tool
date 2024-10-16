@@ -22,7 +22,7 @@ from js import iter
 from js import clusters
 from js import targetColumn
 from js import dataType
-from js import lowerIsBetter
+from js import higherIsBetter
 
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
     '''
@@ -142,7 +142,7 @@ def run():
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
 
     scaleY = 1
-    if lowerIsBetter == 1:
+    if higherIsBetter == 1:
         scaleY = -1;
 
     X = df[features]

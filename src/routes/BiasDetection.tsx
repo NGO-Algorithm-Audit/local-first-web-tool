@@ -93,7 +93,7 @@ export default function BiasDetection() {
         iterations: number,
         targetColumn: string,
         dataType: string,
-        lowerIsBetter: boolean
+        higherIsBetter: boolean
     ) => {
         runPython({
             type: 'start',
@@ -102,7 +102,7 @@ export default function BiasDetection() {
                 clusters: clusterSize,
                 targetColumn: targetColumn,
                 dataType: dataType,
-                lowerIsBetter: lowerIsBetter,
+                higherIsBetter: higherIsBetter,
             },
         });
     };

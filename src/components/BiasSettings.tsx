@@ -7,7 +7,8 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
@@ -23,7 +24,7 @@ const FormSchema = z.object({
     file: z.string({
         required_error: 'Please upload a CSV file.',
     }),
-    lowerIsBetter: z.boolean(),
+    whichPerformanceMetricValueIsBetter: z.string(),
     targetColumn: z
         .string({
             required_error: 'Please select a target column.',
@@ -48,7 +49,7 @@ export default function BiasSettings({
         iterations: number,
         targetColumn: string,
         dataType: string,
-        lowerIsBetter: boolean
+        higherIsBetter: boolean
     ) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
@@ -59,7 +60,7 @@ export default function BiasSettings({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             dataType: 'numeric',
-            lowerIsBetter: false,
+            whichPerformanceMetricValueIsBetter: 'lower',
         },
     });
     const [iter, setIter] = useState([10]);
@@ -101,7 +102,7 @@ export default function BiasSettings({
             file.data as Record<string, string>[],
             Papa.unparse(file.data),
             'demo',
-            true
+            false
         );
     };
 
@@ -111,7 +112,7 @@ export default function BiasSettings({
             iter[0],
             data.targetColumn,
             data.dataType,
-            data.lowerIsBetter ?? false
+            data.whichPerformanceMetricValueIsBetter === 'higher'
         );
     };
 
@@ -257,20 +258,34 @@ export default function BiasSettings({
                         <div className="flex flex-row gap-3">
                             <FormField
                                 control={form.control}
-                                name="lowerIsBetter"
+                                name="whichPerformanceMetricValueIsBetter"
                                 render={({ field }) => (
-                                    <>
-                                        <Checkbox
-                                            checked={field.value}
-                                            id="lower-is-better"
-                                            key={`${dataKey}_lowerIsBetter`}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <Label htmlFor="lower-is-better">
-                                            Lower Performance of metric is
-                                            better
-                                        </Label>
-                                    </>
+                                    <RadioGroup
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        key={`${dataKey}_whichPerformanceMetricValueIsBetter`}
+                                        className="flex flex-col space-y-1"
+                                    >
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                            <FormControl>
+                                                <RadioGroupItem value="lower" />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                                Lower value of performance
+                                                metric is better, e.g., error
+                                                rate
+                                            </FormLabel>
+                                        </FormItem>
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                            <FormControl>
+                                                <RadioGroupItem value="higher" />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                                Higher value of performance
+                                                metric is better, e.g., accuracy
+                                            </FormLabel>
+                                        </FormItem>
+                                    </RadioGroup>
                                 )}
                             ></FormField>
                         </div>
