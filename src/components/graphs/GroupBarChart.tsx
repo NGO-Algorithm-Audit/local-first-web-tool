@@ -13,7 +13,7 @@ interface GroupBarChartProps {
 
 const margin = { top: 10, right: 10, bottom: 40, left: 10 };
 const height = 300 - margin.top - margin.bottom;
-const barWidth = 0.05 * window.innerWidth < 35 ? 35 : 0.05 * window.innerWidth;
+const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
 
 const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
