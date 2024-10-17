@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
+import Measuring from '@/components/icons/measuring.svg?react';
 
 const PAGE_STYLE = `
     @page {
@@ -175,10 +176,7 @@ export default function BiasDetection() {
                 ) : data.data.length > 0 ? null : (
                     <>
                         <div className="flex-1" />
-                        <img
-                            className="max-w-96 m-auto 2xl:max-w-full"
-                            src="/empty-scene.png"
-                        />
+                        <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
                         <h1 className="text-xl font-semibold text-center text-gray-400">
                             Let's get started! Fill out the form.
                         </h1>
