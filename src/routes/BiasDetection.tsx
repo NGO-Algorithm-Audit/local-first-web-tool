@@ -175,9 +175,8 @@ export default function BiasDetection() {
                     <ComponentMapper items={result} />
                 ) : data.data.length > 0 ? null : (
                     <>
-                        <div className="flex-1" />
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
-                        <h1 className="text-xl font-semibold text-center text-gray-400">
+                        <h1 className="text-md text-center text-aaDark">
                             Let's get started! Fill out the form.
                         </h1>
                         <div className="flex-1" />
