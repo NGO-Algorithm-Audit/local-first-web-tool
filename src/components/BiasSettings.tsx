@@ -102,7 +102,7 @@ export default function BiasSettings({
             file.data as Record<string, string>[],
             Papa.unparse(file.data),
             'demo',
-            false
+            true
         );
     };
 
