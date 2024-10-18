@@ -301,7 +301,11 @@ export default function BiasSettings({
 
                     <div className="flex flex-row ml-auto gap-2 hideonprint">
                         <Button
-                            onClick={() => onDemoRun()}
+                            onClick={event => {
+                                event.preventDefault();
+                                onDemoRun();
+                                return false;
+                            }}
                             size="sm"
                             variant={'outline'}
                             className="gap-1.5 xl:hidden"
