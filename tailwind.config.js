@@ -17,6 +17,9 @@ module.exports = {
             },
         },
         extend: {
+            fontFamily: {
+                sans: ['avenir', 'sans-serif'],
+            },
             colors: {
                 aaLight: '#deecf7',
                 aaRegular: '#005aa7',

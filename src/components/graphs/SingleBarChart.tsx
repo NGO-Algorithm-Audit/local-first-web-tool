@@ -75,6 +75,13 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
+        svg.append('defs')
+            .append('style')
+            .attr('type', 'text/css')
+            .text(
+                "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
+            );
+
         // Draw bars for the chart using the data provided
         svg.selectAll('rect')
             .data(data)
