@@ -1,4 +1,5 @@
 import { Label } from '@/components/ui/label';
+
 import {
     Select,
     SelectContent,
@@ -6,7 +7,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+
 import { Slider } from '@/components/ui/slider';
+
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 import CSVReader, { csvReader } from './CSVReader';
@@ -65,6 +68,12 @@ export default function BiasSettings({
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
+    const [defaultDataType, setDefaultDataType] = useState<
+        'numeric' | 'categorical'
+    >('numeric');
+
+    const [performanceMetricColumnError, setPerformanceMetricColumnError] =
+        useState<string | null>(null);
 
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
@@ -78,8 +87,10 @@ export default function BiasSettings({
         stringified: string,
         fileName: string
     ) => {
-        if (stringified.length === 0) {
+        const isReset = stringified.length === 0;
+        if (isReset) {
             form.reset();
+            setDefaultDataType('numeric');
         } else {
             form.setValue('file', stringified);
         }
@@ -87,6 +98,38 @@ export default function BiasSettings({
 
         const dataLength = (data?.length || 1000) / 10;
         setClusters([Math.round(dataLength / 4)]);
+
+        setPerformanceMetricColumnError(null);
+        if (!isReset) {
+            // Find numeric columns
+            const numericColumns = Object.keys(data[0] || {})
+                .filter(column => column)
+                .filter(column =>
+                    data.every(row => {
+                        return !isNaN(parseFloat(row[column]));
+                    })
+                );
+            console.log(
+                'numericColumns',
+                numericColumns,
+                numericColumns.length,
+                Object.keys(data[0] || {}).length
+            );
+            if (numericColumns.length === 0) {
+                setPerformanceMetricColumnError(
+                    'No numeric columns found. Please upload a valid data set.'
+                );
+            }
+
+            if (numericColumns.length === Object.keys(data[0] || {}).length) {
+                form.setValue('dataType', 'numeric');
+                setDefaultDataType('numeric');
+            } else {
+                form.setValue('dataType', 'categorical');
+                setDefaultDataType('categorical');
+            }
+        }
+
         setDataKey(new Date().toISOString());
     };
 
@@ -141,7 +184,7 @@ export default function BiasSettings({
                                 }}
                                 className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium"
                             >
-                                Dataset
+                                Data set
                             </label>
                             <FormField
                                 control={form.control}
@@ -151,6 +194,11 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
+                        {performanceMetricColumnError && (
+                            <div className="text-red-500">
+                                {performanceMetricColumnError}
+                            </div>
+                        )}
                         <div className="grid gap-3">
                             <FormField
                                 control={form.control}
@@ -176,6 +224,19 @@ export default function BiasSettings({
                                                     )
                                                         .filter(
                                                             column => column
+                                                        )
+                                                        .filter(column =>
+                                                            data.data.every(
+                                                                row => {
+                                                                    return !isNaN(
+                                                                        parseFloat(
+                                                                            row[
+                                                                                column
+                                                                            ]
+                                                                        )
+                                                                    );
+                                                                }
+                                                            )
                                                         )
                                                         .map(column => (
                                                             <SelectItem
@@ -207,7 +268,7 @@ export default function BiasSettings({
                                     <FormItem>
                                         <FormLabel>Data type</FormLabel>
                                         <Select
-                                            defaultValue="numeric"
+                                            defaultValue={defaultDataType}
                                             onValueChange={field.onChange}
                                             key={`${dataKey}_dataType`}
                                         >
