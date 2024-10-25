@@ -270,7 +270,10 @@ export default function BiasSettings({
                                 className="cursor-pointer"
                             />
                         </div>
-                        <div className="flex flex-row gap-3">
+                        <div className="flex flex-col gap-3">
+                            <label className="text-sm font-medium">
+                                Performance metric interpretation
+                            </label>
                             <FormField
                                 control={form.control}
                                 name="whichPerformanceMetricValueIsBetter"
