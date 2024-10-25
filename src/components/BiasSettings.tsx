@@ -125,9 +125,24 @@ export default function BiasSettings({
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
-                            Dataset
+                            Data
                         </legend>
-                        <div className="grid gap-3">
+                        <div className="relative grid gap-3">
+                            <label
+                                onClick={event => {
+                                    event.preventDefault();
+                                    // dirty hack to trigger file upload .. htmlFor doesn't work in this case for this label
+                                    (
+                                        document.querySelector(
+                                            '#data-upload ~ label'
+                                        ) as HTMLElement
+                                    )?.click();
+                                    return false;
+                                }}
+                                className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium"
+                            >
+                                Dataset
+                            </label>
                             <FormField
                                 control={form.control}
                                 name="file"
