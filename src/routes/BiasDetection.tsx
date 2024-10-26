@@ -73,6 +73,11 @@ export default function BiasDetection() {
     };
 
     useEffect(() => {
+        console.log(
+            'document.referrer and is nl',
+            document.referrer,
+            document.referrer?.includes('/nl/')
+        );
         if (pythonCode) {
             initialise({ code: pythonCode, data: '' });
         }
@@ -85,7 +90,7 @@ export default function BiasDetection() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP', 'numeric', false);
+            onRun(3, 10, 'FP', 'numeric', false, true);
         }
     }, [initialised, data]);
 
@@ -94,7 +99,8 @@ export default function BiasDetection() {
         iterations: number,
         targetColumn: string,
         dataType: string,
-        higherIsBetter: boolean
+        higherIsBetter: boolean,
+        isDemo: boolean
     ) => {
         runPython({
             type: 'start',
@@ -104,6 +110,7 @@ export default function BiasDetection() {
                 targetColumn: targetColumn,
                 dataType: dataType,
                 higherIsBetter: higherIsBetter,
+                isDemo: isDemo,
             },
         });
     };

@@ -17,6 +17,7 @@ export interface ClusterInfo {
     targetColumn: string;
     dataType: string;
     higherIsBetter: boolean;
+    isDemo: boolean;
 }
 
 export const usePython = () => {
@@ -68,6 +69,7 @@ export const usePython = () => {
                 targetColumn: string;
                 dataType: string;
                 higherIsBetter: boolean;
+                isDemo: boolean;
             };
         }) => {
             setClusterInfo(undefined);

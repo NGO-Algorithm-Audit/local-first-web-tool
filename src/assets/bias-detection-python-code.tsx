@@ -23,6 +23,7 @@ from js import clusters
 from js import targetColumn
 from js import dataType
 from js import higherIsBetter
+from js import isDemo
 
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
     '''
@@ -160,6 +161,12 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Parameters selected'}
     ))
+        
+    if isDemo:
+        setResult(json.dumps(
+            {'type': 'text', 'data': 'This is a demo run.'}
+        ))
+
     setResult(json.dumps(
         {'type': 'text', 'data': f'Number of iterations: {iter}'}
     ))

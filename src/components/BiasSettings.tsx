@@ -52,7 +52,8 @@ export default function BiasSettings({
         iterations: number,
         targetColumn: string,
         dataType: string,
-        higherIsBetter: boolean
+        higherIsBetter: boolean,
+        isDemo: boolean
     ) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
@@ -155,7 +156,8 @@ export default function BiasSettings({
             iter[0],
             data.targetColumn,
             data.dataType,
-            data.whichPerformanceMetricValueIsBetter === 'higher'
+            data.whichPerformanceMetricValueIsBetter === 'higher',
+            false
         );
     };
 

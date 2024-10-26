@@ -14,6 +14,7 @@ interface CustomWorker extends Omit<Worker, 'postMessage'> {
     targetColumn: string;
     dataType: string;
     higherIsBetter: boolean;
+    isDemo: boolean;
 }
 declare let self: CustomWorker;
 
@@ -28,6 +29,7 @@ interface MessageData {
             dataType: string;
             targetColumn: string;
             higherIsBetter: boolean;
+            isDemo: boolean;
         };
     };
 }
@@ -49,6 +51,7 @@ self.onmessage = async (e: MessageData) => {
         otherClusters = clusters;
     };
     self.higherIsBetter = false;
+    self.isDemo = false;
 
     if (e.data && e.data.type === 'data' && e.data.params.data) {
         self.data = e.data.params.data;
@@ -61,6 +64,7 @@ self.onmessage = async (e: MessageData) => {
         self.targetColumn = '';
         self.dataType = 'numeric';
         self.higherIsBetter = false;
+        self.isDemo = false;
         await initPython();
         postMessage({ type: 'pre-initialised' });
     }
@@ -70,6 +74,7 @@ self.onmessage = async (e: MessageData) => {
         self.targetColumn = e.data.params.targetColumn ?? '';
         self.dataType = e.data.params.dataType ?? 'numeric';
         self.higherIsBetter = e.data.params.higherIsBetter ?? false;
+        self.isDemo = e.data.params.isDemo ?? false;
         await runPytonCode().then(
             () => {
                 console.timeEnd('pyodide-python');
@@ -79,6 +84,7 @@ self.onmessage = async (e: MessageData) => {
                     clusterInfo: {
                         date: new Date(),
                         iter: self.iter,
+                        isDemo: self.isDemo,
                         clusters: self.clusters,
                         targetColumn: self.targetColumn,
                         dataType: self.dataType,
@@ -101,6 +107,7 @@ self.onmessage = async (e: MessageData) => {
         self.clusters = 0;
         self.dataType = 'numeric';
         self.higherIsBetter = false;
+        self.isDemo = false;
 
         await runPytonCode().then(
             () => {
