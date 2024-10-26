@@ -2,6 +2,7 @@ import SimpleTable from './SimpleTable';
 import SingleBarChart from './graphs/SingleBarChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
+import Markdown from 'react-markdown';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -33,15 +34,18 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         );
                     case 'text':
                         return (
-                            <p className="-mt-2 text-gray-800" key={index}>
+                            <Markdown
+                                key={index}
+                                className="-mt-2 text-gray-800"
+                            >
                                 {resultItem.data}
-                            </p>
+                            </Markdown>
                         );
                     case 'heading':
                         return (
                             <h5
-                                className="text-gray-800 font-semibold"
                                 key={index}
+                                className="text-gray-800 font-semibold"
                             >
                                 {resultItem.data}
                             </h5>

@@ -161,10 +161,10 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Parameters selected'}
     ))
-        
+
     if isDemo:
         setResult(json.dumps(
-            {'type': 'text', 'data': 'This is a demo run.'}
+            {'type': 'text', 'data': 'This is a **demo** run.'}
         ))
 
     setResult(json.dumps(
