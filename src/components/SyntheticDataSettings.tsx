@@ -24,17 +24,6 @@ const FormSchema = z.object({
     file: z.string({
         required_error: 'Please upload a CSV file.',
     }),
-    whichPerformanceMetricValueIsBetter: z.string(),
-    targetColumn: z
-        .string({
-            required_error: 'Please select a target column.',
-        })
-        .nonempty(),
-    dataType: z
-        .string({
-            required_error: 'Please select a data type.',
-        })
-        .nonempty(),
 });
 
 export default function BiasSettings({
@@ -58,10 +47,6 @@ export default function BiasSettings({
 }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
-        defaultValues: {
-            dataType: 'numeric',
-            whichPerformanceMetricValueIsBetter: 'lower',
-        },
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
@@ -121,7 +106,7 @@ export default function BiasSettings({
             <div className="h-auto md:h-full flex flex-col justify-between">
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="grid w-full items-start gap-2 -mt-2 grid-cols-1 sm:gap-4 sm:grid-cols-2"
+                    className="grid w-full items-start gap-2 -mt-2 grid-cols-1"
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
@@ -136,160 +121,7 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="targetColumn"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Performance metric column
-                                        </FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            key={`${dataKey}_select`}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a column" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {data.data?.[0] ? (
-                                                    Object.keys(
-                                                        data.data?.[0] ?? {}
-                                                    )
-                                                        .filter(
-                                                            column => column
-                                                        )
-                                                        .map(column => (
-                                                            <SelectItem
-                                                                key={`${dataKey}${column}`}
-                                                                value={column}
-                                                            >
-                                                                {column}
-                                                            </SelectItem>
-                                                        ))
-                                                ) : (
-                                                    <SelectItem
-                                                        value="noData"
-                                                        disabled
-                                                    >
-                                                        No data loaded
-                                                    </SelectItem>
-                                                )}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="dataType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Data type</FormLabel>
-                                        <Select
-                                            defaultValue="numeric"
-                                            onValueChange={field.onChange}
-                                            key={`${dataKey}_dataType`}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select dataType" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem
-                                                    key="numeric"
-                                                    value="numeric"
-                                                >
-                                                    Numeric
-                                                </SelectItem>
-                                                <SelectItem
-                                                    key="categorical"
-                                                    value="categorical"
-                                                >
-                                                    Categorical
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
                     </fieldset>
-
-                    {/* <fieldset className="grid gap-6 rounded-lg border p-4">
-                        <legend className="-ml-1 px-1 text-sm font-medium">
-                            Parameters
-                        </legend>
-                        <div className="grid gap-3">
-                            <Label htmlFor="iterations">
-                                Iterations ({iter})
-                            </Label>
-                            <Slider
-                                id="iterations"
-                                defaultValue={iter}
-                                max={100}
-                                step={1}
-                                onValueChange={value => setIter(value)}
-                                className="cursor-pointer"
-                            />
-                        </div>
-                        <div className="grid gap-3">
-                            <Label htmlFor="min-cluster-size">
-                                Minimal cluster size ({clusters})
-                            </Label>
-                            <Slider
-                                id="min-cluster-size"
-                                defaultValue={clusters}
-                                key={`${dataKey}_clusters`}
-                                max={Math.floor(
-                                    (data?.data?.length || 1000) / 10
-                                )}
-                                step={1}
-                                onValueChange={value => setClusters(value)}
-                                className="cursor-pointer"
-                            />
-                        </div>
-                        <div className="flex flex-row gap-3">
-                            <FormField
-                                control={form.control}
-                                name="whichPerformanceMetricValueIsBetter"
-                                render={({ field }) => (
-                                    <RadioGroup
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                        key={`${dataKey}_whichPerformanceMetricValueIsBetter`}
-                                        className="flex flex-col space-y-1"
-                                    >
-                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                            <FormControl>
-                                                <RadioGroupItem value="lower" />
-                                            </FormControl>
-                                            <FormLabel className="font-normal">
-                                                Lower value of performance
-                                                metric is better, e.g., error
-                                                rate
-                                            </FormLabel>
-                                        </FormItem>
-                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                            <FormControl>
-                                                <RadioGroupItem value="higher" />
-                                            </FormControl>
-                                            <FormLabel className="font-normal">
-                                                Higher value of performance
-                                                metric is better, e.g., accuracy
-                                            </FormLabel>
-                                        </FormItem>
-                                    </RadioGroup>
-                                )}
-                            ></FormField>
-                        </div>
-                    </fieldset> */}
 
                     <div className="flex flex-row ml-auto gap-2">
                         {isErrorDuringAnalysis && (

@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
-import { pythonCode } from '@/assets/bias-detection-python-code';
+import { pythonCode } from '@/assets/synthetic-data';
 import { usePython } from '@/components/pyodide/use-python';
-import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import SimpleTable from '@/components/SimpleTable';
