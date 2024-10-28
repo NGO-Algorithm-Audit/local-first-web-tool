@@ -110,12 +110,7 @@ export default function BiasSettings({
                         return !isNaN(parseFloat(row[column]));
                     })
                 );
-            console.log(
-                'numericColumns',
-                numericColumns,
-                numericColumns.length,
-                Object.keys(data[0] || {}).length
-            );
+
             if (numericColumns.length === 0) {
                 setPerformanceMetricColumnError(
                     'No numeric columns found. Please upload a valid data set.'
@@ -173,19 +168,7 @@ export default function BiasSettings({
                             Data
                         </legend>
                         <div className="relative grid gap-3">
-                            <label
-                                onClick={event => {
-                                    event.preventDefault();
-                                    // dirty hack to trigger file upload .. htmlFor doesn't work in this case for this label
-                                    (
-                                        document.querySelector(
-                                            '#data-upload ~ label'
-                                        ) as HTMLElement
-                                    )?.click();
-                                    return false;
-                                }}
-                                className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium"
-                            >
+                            <label className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
                                 Data set
                             </label>
                             <FormField
