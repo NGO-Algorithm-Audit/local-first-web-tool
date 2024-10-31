@@ -22,6 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
+import { BiasDetectionParameters } from './bias-detection-interfaces/BiasDetectionParameters';
 
 const FormSchema = z.object({
     file: z.string({
@@ -47,14 +48,7 @@ export default function BiasSettings({
     isErrorDuringAnalysis,
     isInitialised,
 }: {
-    onRun: (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean,
-        isDemo: boolean
-    ) => void;
+    onRun: (params: BiasDetectionParameters) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
@@ -146,14 +140,15 @@ export default function BiasSettings({
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        onRun(
-            clusters[0],
-            iter[0],
-            data.targetColumn,
-            data.dataType,
-            data.whichPerformanceMetricValueIsBetter === 'higher',
-            false
-        );
+        onRun({
+            clusterSize: clusters[0],
+            iterations: iter[0],
+            targetColumn: data.targetColumn,
+            dataType: data.dataType,
+            higherIsBetter:
+                data.whichPerformanceMetricValueIsBetter === 'higher',
+            isDemo: false,
+        });
     };
 
     return (

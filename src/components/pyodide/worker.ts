@@ -1,20 +1,14 @@
 import { loadPyodide, PyodideInterface } from 'pyodide';
-import { PythonWorkerMessage } from './use-python';
+import { PythonWorkerMessage } from './PythonWorkerMessage';
 
 interface CustomWorker extends Omit<Worker, 'postMessage'> {
     code: string;
     data: string;
-    postMessage: (message: PythonWorkerMessage) => void;
+    postMessage: (message: PythonWorkerMessage<unknown>) => void;
     setResult: (result: string) => void;
-    setMostBiasedCluster: (cluster: string) => void;
-    setOtherClusters: (clusters: string) => void;
+    setOutputData: (propertyName: string, data: string) => void;
     pyodide: PyodideInterface | undefined;
-    iter: number;
-    clusters: number;
-    targetColumn: string;
-    dataType: string;
-    higherIsBetter: boolean;
-    isDemo: boolean;
+    parameters: Record<string, number | string | boolean>;
 }
 declare let self: CustomWorker;
 
@@ -24,12 +18,7 @@ interface MessageData {
         params: {
             data: string;
             code: string;
-            iter: number;
-            clusters: number;
-            dataType: string;
-            targetColumn: string;
-            higherIsBetter: boolean;
-            isDemo: boolean;
+            parameters: Record<string, number | string | boolean>;
         };
     };
 }
@@ -37,21 +26,14 @@ interface MessageData {
 self.onmessage = async (e: MessageData) => {
     console.log('Worker got message', e.data);
     const resultList: string[] = [];
-    let mostBiasedCluster: string = '';
-    let otherClusters: string = '';
     self.setResult = (...result) => {
         resultList.push(result.join(' '));
     };
+    let outputData: Record<string, string> = {};
 
-    self.setMostBiasedCluster = (cluster: string) => {
-        mostBiasedCluster = cluster;
+    self.setOutputData = (propertyName: string, data: string) => {
+        outputData[propertyName] = data;
     };
-
-    self.setOtherClusters = (clusters: string) => {
-        otherClusters = clusters;
-    };
-    self.higherIsBetter = false;
-    self.isDemo = false;
 
     if (e.data && e.data.type === 'data' && e.data.params.data) {
         self.data = e.data.params.data;
@@ -61,36 +43,34 @@ self.onmessage = async (e: MessageData) => {
     if (e.data && e.data.type === 'init' && e.data.params.code) {
         self.data = 'INIT';
         self.code = e.data.params.code;
-        self.targetColumn = '';
-        self.dataType = 'numeric';
-        self.higherIsBetter = false;
-        self.isDemo = false;
         await initPython();
         postMessage({ type: 'pre-initialised' });
     }
     if (e.data && e.data.type === 'start') {
-        self.iter = e.data.params.iter ?? 0;
-        self.clusters = e.data.params.clusters ?? 0;
-        self.targetColumn = e.data.params.targetColumn ?? '';
-        self.dataType = e.data.params.dataType ?? 'numeric';
-        self.higherIsBetter = e.data.params.higherIsBetter ?? false;
-        self.isDemo = e.data.params.isDemo ?? false;
+        outputData = {};
+        self.parameters = e.data.params.parameters;
+        Object.entries(e.data.params?.parameters).forEach(key => {
+            if (key[0]) {
+                const keyName = key[0] as keyof CustomWorker;
+                (self as unknown as Record<string, number | string | boolean>)[
+                    keyName
+                ] = key[1];
+            }
+        });
         await runPytonCode().then(
             () => {
                 console.timeEnd('pyodide-python');
+                const outputDataAsJson: Record<string, object> = {};
+                Object.entries(outputData).map(key => {
+                    outputDataAsJson[key[0]] = JSON.parse(key[1]);
+                });
                 postMessage({
                     type: 'result',
                     result: resultList,
-                    clusterInfo: {
+                    export: {
                         date: new Date(),
-                        iter: self.iter,
-                        isDemo: self.isDemo,
-                        clusters: self.clusters,
-                        targetColumn: self.targetColumn,
-                        dataType: self.dataType,
-                        higherIsBetter: self.higherIsBetter,
-                        mostBiasedCluster: JSON.parse(mostBiasedCluster),
-                        otherClusters: JSON.parse(otherClusters),
+                        ...self.parameters,
+                        ...outputDataAsJson,
                     },
                 });
             },
@@ -103,11 +83,15 @@ self.onmessage = async (e: MessageData) => {
 
     if (e.data && e.data.type === 'init-run') {
         self.data = 'INIT';
-        self.iter = 0;
-        self.clusters = 0;
-        self.dataType = 'numeric';
-        self.higherIsBetter = false;
-        self.isDemo = false;
+        self.parameters = e.data.params.parameters;
+        Object.entries(e.data.params?.parameters).forEach(key => {
+            if (key[0]) {
+                const keyName = key[0] as keyof CustomWorker;
+                (self as unknown as Record<string, number | string | boolean>)[
+                    keyName
+                ] = key[1];
+            }
+        });
 
         await runPytonCode().then(
             () => {

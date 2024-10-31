@@ -16,10 +16,9 @@ start = time.time()
 
 from js import data
 from js import setResult
-from js import setMostBiasedCluster
-from js import setOtherClusters
-from js import iter
-from js import clusters
+from js import setOutputData
+from js import iterations
+from js import clusterSize
 from js import targetColumn
 from js import dataType
 from js import higherIsBetter
@@ -150,9 +149,9 @@ def run():
     y = scaleY * df[targetColumn]
 
     if dataType == 'numeric':
-        hbac = BiasAwareHierarchicalKMeans(n_iter=iter, min_cluster_size=clusters).fit(X, y)
+        hbac = BiasAwareHierarchicalKMeans(n_iter=iterations, min_cluster_size=clusterSize).fit(X, y)
     else:
-        hbac = BiasAwareHierarchicalKModes(n_iter=iter, min_cluster_size=clusters).fit(X, y)
+        hbac = BiasAwareHierarchicalKModes(n_iter=iterations, min_cluster_size=clusterSize).fit(X, y)
 
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
@@ -164,14 +163,14 @@ def run():
 
     if isDemo:
         setResult(json.dumps(
-            {'type': 'text', 'data': 'This is a **demo** run.'}
+            {'type': 'text', 'data': '''This is a **demo** run.'''}
         ))
 
     setResult(json.dumps(
-        {'type': 'text', 'data': f'Number of iterations: {iter}'}
+        {'type': 'text', 'data': f'Number of iterations: {iterations}'}
     ))
     setResult(json.dumps(
-        {'type': 'text', 'data': f'Minimal cluster size: {clusters}'}
+        {'type': 'text', 'data': f'Minimal cluster size: {clusterSize}'}
     ))
     setResult(json.dumps(
         {'type': 'text', 'data': f'Performance metric column: {targetColumn}'}
@@ -212,8 +211,8 @@ def run():
     full_df = pd.concat(clusters_array, ignore_index=True)
     full_df.head()
 
-    setMostBiasedCluster(df_most_biased_cluster.to_json(orient='records'))
-    setOtherClusters(df_other.to_json(orient='records'))
+    setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
+    setOutputData("otherClusters", df_other.to_json(orient='records'))
 
 
     setResult(json.dumps(

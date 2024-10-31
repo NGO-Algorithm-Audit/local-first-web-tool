@@ -11,6 +11,8 @@ import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
+import { ClusterInfo } from '@/components/bias-detection-interfaces/cluster-export';
+import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/BiasDetectionParameters';
 
 const PAGE_STYLE = `
     @page {
@@ -61,7 +63,14 @@ export default function BiasDetection() {
         sendData,
         error,
         clusterInfo,
-    } = usePython();
+    } = usePython<BiasDetectionParameters, ClusterInfo>({
+        iterations: 0,
+        clusterSize: 0,
+        targetColumn: '',
+        dataType: 'numeric',
+        higherIsBetter: false,
+        isDemo: false,
+    });
 
     const onFileLoad: csvReader['onChange'] = (
         data,
@@ -90,27 +99,29 @@ export default function BiasDetection() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP', 'numeric', false, true);
+            onRun({
+                iterations: 3,
+                clusterSize: 3,
+                targetColumn: 'FP',
+                dataType: 'numeric',
+                higherIsBetter: false,
+                isDemo: true,
+            });
         }
     }, [initialised, data]);
 
-    const onRun = (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean,
-        isDemo: boolean
-    ) => {
+    const onRun = (params: BiasDetectionParameters) => {
         runPython({
             type: 'start',
             params: {
-                iter: iterations,
-                clusters: clusterSize,
-                targetColumn: targetColumn,
-                dataType: dataType,
-                higherIsBetter: higherIsBetter,
-                isDemo: isDemo,
+                parameters: {
+                    iterations: params.iterations,
+                    clusterSize: params.clusterSize,
+                    targetColumn: params.targetColumn,
+                    dataType: params.dataType,
+                    higherIsBetter: params.higherIsBetter,
+                    isDemo: params.isDemo,
+                },
             },
         });
     };
