@@ -63,9 +63,9 @@ export default function BiasSettings({
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
-    const [defaultDataType, setDefaultDataType] = useState<
-        'numeric' | 'categorical'
-    >('numeric');
+    // const [defaultDataType, setDefaultDataType] = useState<
+    //     'numeric' | 'categorical'
+    // >('numeric');
 
     const [performanceMetricColumnError, setPerformanceMetricColumnError] =
         useState<string | null>(null);
@@ -85,7 +85,7 @@ export default function BiasSettings({
         const isReset = stringified.length === 0;
         if (isReset) {
             form.reset();
-            setDefaultDataType('numeric');
+            //setDefaultDataType('numeric');
         } else {
             form.setValue('file', stringified);
         }
@@ -113,10 +113,10 @@ export default function BiasSettings({
 
             if (numericColumns.length === Object.keys(data[0] || {}).length) {
                 form.setValue('dataType', 'numeric');
-                setDefaultDataType('numeric');
+                //setDefaultDataType('numeric');
             } else {
                 form.setValue('dataType', 'categorical');
-                setDefaultDataType('categorical');
+                //setDefaultDataType('categorical');
             }
         }
 
@@ -240,7 +240,7 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
-                        <div className="grid gap-3">
+                        {/* <div className="grid gap-3">
                             <FormField
                                 control={form.control}
                                 name="dataType"
@@ -275,7 +275,7 @@ export default function BiasSettings({
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
                     </fieldset>
 
                     <fieldset className="grid gap-6 rounded-lg border p-4">
