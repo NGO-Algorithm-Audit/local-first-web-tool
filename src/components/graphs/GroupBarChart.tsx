@@ -11,9 +11,10 @@ interface GroupBarChartProps {
     data: Data[];
 }
 
-const margin = { top: 10, right: 10, bottom: 40, left: 10 };
+const margin = { top: 10, right: 10, bottom: 40, left: 50 };
 const height = 300 - margin.top - margin.bottom;
 const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
+const barGap = 5;
 
 const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -26,8 +27,12 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
                 .domain(new Set(data.map(d => d.name)))
                 .range([
                     0,
-                    Math.max(containerWidth, data.length * barWidth) -
-                        margin.right,
+                    Math.max(
+                        containerWidth - margin.right - margin.left,
+                        data.length * (barWidth + barGap) -
+                            margin.right -
+                            margin.left
+                    ),
                 ])
                 .padding(0.2),
         [data, containerWidth]
@@ -40,9 +45,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         .domain(groupbarNames)
         .rangeRound([0, fx.bandwidth()])
         .padding(0.05);
-    groupbarNames.forEach((name, i) => {
-        console.log('groupbarNames', name, i);
-    });
+
     const color = d3
         .scaleOrdinal()
         .domain(groupbarNames)
@@ -65,7 +68,10 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         const svg = d3
             .select(svgRef.current)
             .attr('class', `min-h-[${height}px]`)
-            .attr('width', Math.max(containerWidth, data.length * barWidth))
+            .attr(
+                'width',
+                Math.max(containerWidth, margin.left + data.length * barWidth)
+            )
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -122,7 +128,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
 
         // Add a label for the mean line
         svg.append('text')
-            .attr('x', margin.left + 30)
+            .attr('x', margin.left + 30 + 50)
             .attr('y', y(meanValue) - 5)
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
@@ -164,6 +170,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('x', 20)
             .attr('y', 12)
             .text(d => d);
+
         if (legend) {
             const legendBBox = legend.node()?.getBBox();
             if (legendBBox) {
@@ -173,6 +180,44 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
                 );
             }
         }
+
+        xAxis.selectAll('.tick text').call((text, width) => {
+            text.each(function () {
+                let word: string | undefined = '';
+                const text = d3.select(this),
+                    words = text.text().split(/\n+/).reverse(),
+                    lineHeight = 1.1, // ems
+                    y = text.attr('y'),
+                    dy = parseFloat(text.attr('dy'));
+                let lineNumber = 0;
+                let line: string[] = [];
+                let tspan = text
+                    .text(null)
+                    .append('tspan')
+                    .attr('x', 0)
+                    .attr('y', y)
+                    .attr('dy', dy + 'em');
+                // eslint-disable-next-line no-cond-assign
+                while ((word = words.pop())) {
+                    line.push(word);
+                    tspan.text(line.join(' '));
+                    if (
+                        tspan?.node?.()?.getComputedTextLength?.() ??
+                        0 > width
+                    ) {
+                        line.pop();
+                        tspan.text(line.join(' '));
+                        line = [word];
+                        tspan = text
+                            .append('tspan')
+                            .attr('x', 0)
+                            .attr('y', y)
+                            .attr('dy', ++lineNumber * lineHeight + dy + 'em')
+                            .text(word);
+                    }
+                }
+            });
+        }, barWidth);
     }, [data, x0, y, color, title, containerWidth]);
 
     useEffect(() => {

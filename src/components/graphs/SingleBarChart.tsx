@@ -137,6 +137,43 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         // Append y-axis to the SVG container
         svg.append('g').call(d3.axisLeft(y).ticks(10, 's')); // Create the y-axis using the y scale
 
+        xAxis.selectAll('.tick text').call((text, width) => {
+            text.each(function () {
+                let word: string | undefined = '';
+                const text = d3.select(this),
+                    words = text.text().split(/\n+/).reverse(),
+                    lineHeight = 1.1, // ems
+                    y = text.attr('y'),
+                    dy = parseFloat(text.attr('dy'));
+                let lineNumber = 0;
+                let line: string[] = [];
+                let tspan = text
+                    .text(null)
+                    .append('tspan')
+                    .attr('x', 0)
+                    .attr('y', y)
+                    .attr('dy', dy + 'em');
+                // eslint-disable-next-line no-cond-assign
+                while ((word = words.pop())) {
+                    line.push(word);
+                    tspan.text(line.join(' '));
+                    if (
+                        tspan?.node?.()?.getComputedTextLength?.() ??
+                        0 > width
+                    ) {
+                        line.pop();
+                        tspan.text(line.join(' '));
+                        line = [word];
+                        tspan = text
+                            .append('tspan')
+                            .attr('x', 0)
+                            .attr('y', y)
+                            .attr('dy', ++lineNumber * lineHeight + dy + 'em')
+                            .text(word);
+                    }
+                }
+            });
+        }, barWidth);
         // Add a legend label for the mean line
     }, [data, x0, y, title, containerWidth]);
 
