@@ -159,7 +159,7 @@ def run():
 
     if isDemo:
         setResult(json.dumps(
-            {'type': 'text', 'data': '''This is a **demo** run.'''}
+            {'type': 'text', 'data': '''A demo dataset is loaded below. Using a subset of the [Twitter15](https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?e=1&file_subpath=%2Frumor_detection_acl2017%2FREADME.txt&st=mvtnttvx&dl=0) dataset, a BERT-based classifier has predicted, based on tweet characteristics, whether a message is fake news or not. False positive classifications are marked in the FP colomn and will be used as performance metric in this example.'''}
         ))
 
     setResult(json.dumps(

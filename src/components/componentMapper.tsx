@@ -57,7 +57,7 @@ export default function ComponentMapper({
                         return (
                             <Markdown
                                 key={index}
-                                className="-mt-2 text-gray-800"
+                                className="-mt-2 text-gray-800 markdown"
                             >
                                 {resultItem.data}
                             </Markdown>
