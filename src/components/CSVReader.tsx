@@ -85,7 +85,7 @@ export default function CSVReader({ onChange }: csvReader) {
             {...getRootProps()}
             className="border-aaDark border-dashed border-2 cursor-pointer rounded-xl text-center p-10 lg:min-w-[400px]"
         >
-            <input id="data-upload" {...getInputProps()} multiple={false} />
+            <input {...getInputProps()} multiple={false} id="data-upload" />
 
             <FormLabel htmlFor="data-upload">
                 Drag 'n' drop a CSV file here, or click to select one

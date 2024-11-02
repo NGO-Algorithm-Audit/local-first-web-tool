@@ -162,10 +162,10 @@ export default function BiasSettings({
                         <legend className="-ml-1 px-1 text-sm font-medium">
                             Data
                         </legend>
-                        <div className="relative grid gap-3">
-                            <label className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
+                        <div className="relative grid gap-3 select-none">
+                            <div className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
                                 Data set
-                            </label>
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="file"
