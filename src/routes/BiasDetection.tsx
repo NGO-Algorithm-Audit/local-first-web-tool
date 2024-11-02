@@ -5,7 +5,6 @@ import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
-import SimpleTable from '@/components/SimpleTable';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
@@ -13,6 +12,7 @@ import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
 import { ClusterInfo } from '@/components/bias-detection-interfaces/cluster-export';
 import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/BiasDetectionParameters';
+import { CSVData } from '@/components/bias-detection-interfaces/csv-data';
 
 const PAGE_STYLE = `
     @page {
@@ -40,12 +40,12 @@ const PAGE_STYLE = `
 `;
 
 export default function BiasDetection() {
-    const [data, setData] = useState<{
-        data: Record<string, string>[];
-        stringified: string;
-        fileName: string;
-        demo?: boolean;
-    }>({ data: [], stringified: '', fileName: '', demo: false });
+    const [data, setData] = useState<CSVData>({
+        data: [],
+        stringified: '',
+        fileName: '',
+        demo: false,
+    });
     // Select the content to print
 
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -182,15 +182,8 @@ export default function BiasDetection() {
                     </div>
                 )}
 
-                {data.data.length > 0 && (
-                    <SimpleTable
-                        data={data.data.slice(0, 5)}
-                        title="Dataset preview showing the first 5 rows."
-                    />
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} />
+                    <ComponentMapper items={result} data={data} />
                 ) : data.data.length > 0 ? null : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />

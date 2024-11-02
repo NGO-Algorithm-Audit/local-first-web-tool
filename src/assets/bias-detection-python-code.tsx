@@ -157,14 +157,20 @@ def run():
 
     df['Cluster'] = hbac.labels_
 
-    setResult(json.dumps(
-        {'type': 'heading', 'data': 'Parameters selected'}
-    ))
-
     if isDemo:
         setResult(json.dumps(
             {'type': 'text', 'data': '''This is a **demo** run.'''}
         ))
+
+    setResult(json.dumps(
+        {'type': 'data-set-preview', 'data': ''}
+    ))
+
+    setResult(json.dumps(
+        {'type': 'heading', 'data': 'Parameters selected'}
+    ))
+
+   
 
     setResult(json.dumps(
         {'type': 'text', 'data': f'Number of iterations: {iterations}'}

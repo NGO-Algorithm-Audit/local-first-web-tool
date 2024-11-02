@@ -4,6 +4,8 @@ import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
 import Markdown from 'react-markdown';
 import { getLabel } from './graphs/get-label';
+import { CSVData } from './bias-detection-interfaces/csv-data';
+import { Fragment } from 'react/jsx-runtime';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -18,13 +20,31 @@ const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     return resultArray;
 };
 
-export default function ComponentMapper({ items }: { items: string[] }) {
+export default function ComponentMapper({
+    items,
+    data,
+}: {
+    items: string[];
+    data: CSVData;
+}) {
     const components = items
         .map((r, index) => {
             try {
                 const resultItem = JSON.parse(r);
 
                 switch (resultItem.type) {
+                    case 'data-set-preview':
+                        return (
+                            <Fragment key={index}>
+                                {data.data.length > 0 && (
+                                    <SimpleTable
+                                        data={data.data.slice(0, 5)}
+                                        title="Dataset preview showing the first 5 rows."
+                                    />
+                                )}
+                            </Fragment>
+                        );
+
                     case 'table':
                         return (
                             <SimpleTable
