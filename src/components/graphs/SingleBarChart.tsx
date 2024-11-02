@@ -1,8 +1,8 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import * as d3 from 'd3';
+import { DataLabel } from './DataLabel';
 
-interface Data {
-    name: string;
+interface Data extends DataLabel {
     values: number;
 }
 

@@ -3,6 +3,7 @@ import SingleBarChart from './graphs/SingleBarChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
 import Markdown from 'react-markdown';
+import { getLabel } from './graphs/get-label';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -54,7 +55,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
-                                    name: 'cluster ' + (index + 1),
+                                    name: getLabel(index),
                                     values: createArrayFromPythonDictionary(x),
                                 };
                             }
@@ -73,7 +74,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         const barchartData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
-                                    name: 'cluster ' + (index + 1),
+                                    name: getLabel(index),
                                     values: x,
                                 };
                             }

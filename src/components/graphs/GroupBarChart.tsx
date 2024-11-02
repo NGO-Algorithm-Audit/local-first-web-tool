@@ -1,8 +1,8 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import * as d3 from 'd3';
+import { DataLabel } from './DataLabel';
 
-interface Data {
-    name: string;
+interface Data extends DataLabel {
     values: { value: number; name: string }[];
 }
 
@@ -40,7 +40,9 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
         .domain(groupbarNames)
         .rangeRound([0, fx.bandwidth()])
         .padding(0.05);
-
+    groupbarNames.forEach((name, i) => {
+        console.log('groupbarNames', name, i);
+    });
     const color = d3
         .scaleOrdinal()
         .domain(groupbarNames)
@@ -162,6 +164,15 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .attr('x', 20)
             .attr('y', 12)
             .text(d => d);
+        if (legend) {
+            const legendBBox = legend.node()?.getBBox();
+            if (legendBBox) {
+                legend.attr(
+                    'transform',
+                    `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right - legendBBox.width}, 10)`
+                );
+            }
+        }
     }, [data, x0, y, color, title, containerWidth]);
 
     useEffect(() => {
