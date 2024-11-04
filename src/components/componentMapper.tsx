@@ -2,6 +2,10 @@ import SimpleTable from './SimpleTable';
 import SingleBarChart from './graphs/SingleBarChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
+import Markdown from 'react-markdown';
+import { getLabel } from './graphs/get-label';
+import { CSVData } from './bias-detection-interfaces/csv-data';
+import { Fragment } from 'react/jsx-runtime';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -16,13 +20,31 @@ const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     return resultArray;
 };
 
-export default function ComponentMapper({ items }: { items: string[] }) {
+export default function ComponentMapper({
+    items,
+    data,
+}: {
+    items: string[];
+    data: CSVData;
+}) {
     const components = items
         .map((r, index) => {
             try {
                 const resultItem = JSON.parse(r);
 
                 switch (resultItem.type) {
+                    case 'data-set-preview':
+                        return (
+                            <Fragment key={index}>
+                                {data.data.length > 0 && (
+                                    <SimpleTable
+                                        data={data.data.slice(0, 5)}
+                                        title="Dataset preview showing the first 5 rows."
+                                    />
+                                )}
+                            </Fragment>
+                        );
+
                     case 'table':
                         return (
                             <SimpleTable
@@ -33,15 +55,18 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         );
                     case 'text':
                         return (
-                            <p className="-mt-2 text-gray-800" key={index}>
+                            <Markdown
+                                key={index}
+                                className="-mt-2 text-gray-800 markdown"
+                            >
                                 {resultItem.data}
-                            </p>
+                            </Markdown>
                         );
                     case 'heading':
                         return (
                             <h5
-                                className="text-gray-800 font-semibold"
                                 key={index}
+                                className="text-gray-800 font-semibold"
                             >
                                 {resultItem.data}
                             </h5>
@@ -50,7 +75,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
-                                    name: 'cluster ' + (index + 1),
+                                    name: getLabel(index),
                                     values: createArrayFromPythonDictionary(x),
                                 };
                             }
@@ -69,7 +94,7 @@ export default function ComponentMapper({ items }: { items: string[] }) {
                         const barchartData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 return {
-                                    name: 'cluster ' + (index + 1),
+                                    name: getLabel(index),
                                     values: x,
                                 };
                             }

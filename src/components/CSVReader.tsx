@@ -85,7 +85,7 @@ export default function CSVReader({ onChange }: csvReader) {
             {...getRootProps()}
             className="border-aaDark border-dashed border-2 cursor-pointer rounded-xl text-center p-10 lg:min-w-[400px]"
         >
-            <input {...getInputProps()} />
+            <input {...getInputProps()} multiple={false} />
 
             <FormLabel>
                 Drag 'n' drop a CSV file here, or click to select one

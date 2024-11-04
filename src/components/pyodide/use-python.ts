@@ -1,41 +1,27 @@
 import { useRef, useCallback, useState } from 'react';
 import PythonWorker from './worker?worker';
+import { PythonWorkerMessage } from './PythonWorkerMessage';
 
-export interface PythonWorkerMessage {
-    type: string;
-    result?: string[];
-    message?: string;
-    clusterInfo?: ClusterInfo;
-}
-
-export interface ClusterInfo {
-    mostBiasedCluster: object;
-    otherClusters: object;
-    date: Date;
-    iter: number;
-    clusters: number;
-    targetColumn: string;
-    dataType: string;
-    higherIsBetter: boolean;
-}
-
-export const usePython = () => {
+export const usePython = <T, TExport>(emptyParams: T) => {
     const [result, setResult] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [initialised, setInitialised] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
-    const [clusterInfo, setClusterInfo] = useState<ClusterInfo | undefined>(
+    const [clusterInfo, setClusterInfo] = useState<TExport | undefined>(
         undefined
     );
 
     const workerRef = useRef<Worker | undefined>(undefined);
 
     const onWorkerMessage = useCallback(
-        (event: MessageEvent<PythonWorkerMessage>) => {
+        (event: MessageEvent<PythonWorkerMessage<TExport>>) => {
             console.log('Worker message', event.data);
             if (event.data.type && event.data.type === 'pre-initialised') {
                 workerRef.current?.postMessage({
                     type: 'init-run',
+                    params: {
+                        parameters: emptyParams,
+                    },
                 });
             } else if (event.data.type && event.data.type === 'initialised') {
                 console.log('Worker initialised');
@@ -43,7 +29,7 @@ export const usePython = () => {
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'result') {
                 setResult(event.data.result ?? ['']);
-                setClusterInfo(event.data.clusterInfo);
+                setClusterInfo(event.data.export);
                 setLoading(false);
             } else if (event.data.type && event.data.type === 'error') {
                 setError(event.data.message ?? '');
@@ -60,16 +46,7 @@ export const usePython = () => {
     );
 
     const runPython = useCallback(
-        (message: {
-            type: 'start';
-            params: {
-                iter: number;
-                clusters: number;
-                targetColumn: string;
-                dataType: string;
-                higherIsBetter: boolean;
-            };
-        }) => {
+        (message: { type: 'start'; params: { parameters: T } }) => {
             setClusterInfo(undefined);
             setResult([]);
             setError(undefined);
@@ -89,7 +66,7 @@ export const usePython = () => {
             workerRef.current.onerror = e => console.error(e);
             workerRef.current.postMessage({
                 type: 'init',
-                params: { code: code, data: data },
+                params: { code: code, data: data, parameters: emptyParams },
             });
             workerRef.current.addEventListener('message', onWorkerMessage);
         },

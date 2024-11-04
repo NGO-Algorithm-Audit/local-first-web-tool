@@ -5,12 +5,14 @@ import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
-import SimpleTable from '@/components/SimpleTable';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
+import { ClusterInfo } from '@/components/bias-detection-interfaces/cluster-export';
+import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/BiasDetectionParameters';
+import { CSVData } from '@/components/bias-detection-interfaces/csv-data';
 
 const PAGE_STYLE = `
     @page {
@@ -38,12 +40,12 @@ const PAGE_STYLE = `
 `;
 
 export default function BiasDetection() {
-    const [data, setData] = useState<{
-        data: Record<string, string>[];
-        stringified: string;
-        fileName: string;
-        demo?: boolean;
-    }>({ data: [], stringified: '', fileName: '', demo: false });
+    const [data, setData] = useState<CSVData>({
+        data: [],
+        stringified: '',
+        fileName: '',
+        demo: false,
+    });
     // Select the content to print
 
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -61,7 +63,14 @@ export default function BiasDetection() {
         sendData,
         error,
         clusterInfo,
-    } = usePython();
+    } = usePython<BiasDetectionParameters, ClusterInfo>({
+        iterations: 0,
+        clusterSize: 0,
+        targetColumn: '',
+        dataType: 'numeric',
+        higherIsBetter: false,
+        isDemo: false,
+    });
 
     const onFileLoad: csvReader['onChange'] = (
         data,
@@ -73,6 +82,11 @@ export default function BiasDetection() {
     };
 
     useEffect(() => {
+        console.log(
+            'document.referrer and is nl',
+            document.referrer,
+            document.referrer?.includes('/nl/')
+        );
         if (pythonCode) {
             initialise({ code: pythonCode, data: '' });
         }
@@ -85,25 +99,29 @@ export default function BiasDetection() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP', 'numeric', false);
+            onRun({
+                iterations: 3,
+                clusterSize: 3,
+                targetColumn: 'FP',
+                dataType: 'numeric',
+                higherIsBetter: false,
+                isDemo: true,
+            });
         }
     }, [initialised, data]);
 
-    const onRun = (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean
-    ) => {
+    const onRun = (params: BiasDetectionParameters) => {
         runPython({
             type: 'start',
             params: {
-                iter: iterations,
-                clusters: clusterSize,
-                targetColumn: targetColumn,
-                dataType: dataType,
-                higherIsBetter: higherIsBetter,
+                parameters: {
+                    iterations: params.iterations,
+                    clusterSize: params.clusterSize,
+                    targetColumn: params.targetColumn,
+                    dataType: params.dataType,
+                    higherIsBetter: params.higherIsBetter,
+                    isDemo: params.isDemo,
+                },
             },
         });
     };
@@ -164,15 +182,8 @@ export default function BiasDetection() {
                     </div>
                 )}
 
-                {data.data.length > 0 && (
-                    <SimpleTable
-                        data={data.data.slice(0, 5)}
-                        title="Dataset preview showing the first 5 rows."
-                    />
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} />
+                    <ComponentMapper items={result} data={data} />
                 ) : data.data.length > 0 ? null : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />

@@ -1,4 +1,5 @@
 import { Label } from '@/components/ui/label';
+
 import {
     Select,
     SelectContent,
@@ -6,7 +7,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+
 import { Slider } from '@/components/ui/slider';
+
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 import CSVReader, { csvReader } from './CSVReader';
@@ -19,6 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
+import { BiasDetectionParameters } from './bias-detection-interfaces/BiasDetectionParameters';
 
 const FormSchema = z.object({
     file: z.string({
@@ -44,13 +48,7 @@ export default function BiasSettings({
     isErrorDuringAnalysis,
     isInitialised,
 }: {
-    onRun: (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean
-    ) => void;
+    onRun: (params: BiasDetectionParameters) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
@@ -65,6 +63,12 @@ export default function BiasSettings({
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
+    // const [defaultDataType, setDefaultDataType] = useState<
+    //     'numeric' | 'categorical'
+    // >('numeric');
+
+    const [performanceMetricColumnError, setPerformanceMetricColumnError] =
+        useState<string | null>(null);
 
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
@@ -78,8 +82,10 @@ export default function BiasSettings({
         stringified: string,
         fileName: string
     ) => {
-        if (stringified.length === 0) {
+        const isReset = stringified.length === 0;
+        if (isReset) {
             form.reset();
+            //setDefaultDataType('numeric');
         } else {
             form.setValue('file', stringified);
         }
@@ -87,6 +93,33 @@ export default function BiasSettings({
 
         const dataLength = (data?.length || 1000) / 10;
         setClusters([Math.round(dataLength / 4)]);
+
+        setPerformanceMetricColumnError(null);
+        if (!isReset) {
+            // Find numeric columns
+            const numericColumns = Object.keys(data[0] || {})
+                .filter(column => column)
+                .filter(column =>
+                    data.every(row => {
+                        return !isNaN(parseFloat(row[column]));
+                    })
+                );
+
+            if (numericColumns.length === 0) {
+                setPerformanceMetricColumnError(
+                    'No numeric columns found. Please upload a valid data set.'
+                );
+            }
+
+            if (numericColumns.length === Object.keys(data[0] || {}).length) {
+                form.setValue('dataType', 'numeric');
+                //setDefaultDataType('numeric');
+            } else {
+                form.setValue('dataType', 'categorical');
+                //setDefaultDataType('categorical');
+            }
+        }
+
         setDataKey(new Date().toISOString());
     };
 
@@ -107,13 +140,15 @@ export default function BiasSettings({
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        onRun(
-            clusters[0],
-            iter[0],
-            data.targetColumn,
-            data.dataType,
-            data.whichPerformanceMetricValueIsBetter === 'higher'
-        );
+        onRun({
+            clusterSize: clusters[0],
+            iterations: iter[0],
+            targetColumn: data.targetColumn,
+            dataType: data.dataType,
+            higherIsBetter:
+                data.whichPerformanceMetricValueIsBetter === 'higher',
+            isDemo: false,
+        });
     };
 
     return (
@@ -125,9 +160,12 @@ export default function BiasSettings({
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
-                            Dataset
+                            Data
                         </legend>
-                        <div className="grid gap-3">
+                        <div className="relative grid gap-3 select-none">
+                            <div className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
+                                Data set
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="file"
@@ -136,6 +174,11 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
+                        {performanceMetricColumnError && (
+                            <div className="text-red-500">
+                                {performanceMetricColumnError}
+                            </div>
+                        )}
                         <div className="grid gap-3">
                             <FormField
                                 control={form.control}
@@ -162,6 +205,19 @@ export default function BiasSettings({
                                                         .filter(
                                                             column => column
                                                         )
+                                                        .filter(column =>
+                                                            data.data.every(
+                                                                row => {
+                                                                    return !isNaN(
+                                                                        parseFloat(
+                                                                            row[
+                                                                                column
+                                                                            ]
+                                                                        )
+                                                                    );
+                                                                }
+                                                            )
+                                                        )
                                                         .map(column => (
                                                             <SelectItem
                                                                 key={`${dataKey}${column}`}
@@ -184,7 +240,7 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
-                        <div className="grid gap-3">
+                        {/* <div className="grid gap-3">
                             <FormField
                                 control={form.control}
                                 name="dataType"
@@ -192,7 +248,7 @@ export default function BiasSettings({
                                     <FormItem>
                                         <FormLabel>Data type</FormLabel>
                                         <Select
-                                            defaultValue="numeric"
+                                            defaultValue={defaultDataType}
                                             onValueChange={field.onChange}
                                             key={`${dataKey}_dataType`}
                                         >
@@ -219,7 +275,7 @@ export default function BiasSettings({
                                     </FormItem>
                                 )}
                             />
-                        </div>
+                        </div> */}
                     </fieldset>
 
                     <fieldset className="grid gap-6 rounded-lg border p-4">
@@ -255,7 +311,10 @@ export default function BiasSettings({
                                 className="cursor-pointer"
                             />
                         </div>
-                        <div className="flex flex-row gap-3">
+                        <div className="flex flex-col gap-3">
+                            <label className="text-sm font-medium">
+                                Performance metric interpretation
+                            </label>
                             <FormField
                                 control={form.control}
                                 name="whichPerformanceMetricValueIsBetter"
