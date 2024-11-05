@@ -17,13 +17,9 @@ start = time.time()
 
 from js import data
 from js import setResult
-from js import setMostBiasedCluster
-from js import setOtherClusters
-from js import iter
-from js import clusters
-from js import targetColumn
 from js import dataType
-from js import higherIsBetter
+from js import isDemo
+
 
 class GaussianCopulaSynthesizer:
     def __init__(self):
@@ -124,7 +120,17 @@ def run():
     admissions_sub = admissions_df[['sex', 'race', 'gpa']]
     real_data = admissions_sub.dropna()
 
-    print(real_data.head())
+    if isDemo:
+        setResult(json.dumps(
+            {'type': 'heading', 'data': '''Demo'''}
+        ))
+        setResult(json.dumps(
+            {'type': 'text', 'data': '''A demo dataset is loaded below. We will now generate synthetic data on the columns: 'sex', 'gpa', 'race'. We will be using the Gaussian Copula method and evaluate the distribution and correlation differences between the real and synthetic data.'''}
+        ))
+
+    setResult(json.dumps(
+        {'type': 'data-set-preview', 'data': ''}
+    ))
 
     # Initialize synthesizer and fit it to the data
     synthesizer = GaussianCopulaSynthesizer()
@@ -139,16 +145,26 @@ def run():
 
     results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     print('Results:', results)
+    setResult(json.dumps(
+        {'type': 'heading', 'data': 'Diagnostic Results:'}
+    ))
+    setResult(json.dumps({'type': 'table', 'data': json.dumps([
+        {
+            'attribute': key,
+            'ks_stat': values['ks_stat'],
+            'p_value': values['p_value']
+        }
+        for key, values in results['distribution_results'].items()
+    ])}))
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': 'Parameters selected'}
+        {'type': 'heading', 'data': 'Correlation difference: ' + str(results['correlation_diff']) }
     ))
-
-    print('table output', json.dumps({'type': 'table', 'data': json.loads(synthetic_data.to_json(orient="records"))}))
 
     setResult(json.dumps(
-        {'type': 'table', 'data': json.dumps({'type': 'table', 'data': json.loads(synthetic_data.to_json(orient="records"))})}
+        {'type': 'heading', 'data': 'Output file:'}
     ))
+    setResult(json.dumps({'type': 'table', 'data': synthetic_data.to_json(orient="records")}))
     return 
     
 

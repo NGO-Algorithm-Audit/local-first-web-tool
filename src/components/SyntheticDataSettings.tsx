@@ -1,14 +1,3 @@
-import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
@@ -16,9 +5,10 @@ import { ArrowDown, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
+import { Form, FormField } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
+import { SyntheticDataParameters } from './synthetic-data-interfaces/BiasDetectionParameters';
 
 const FormSchema = z.object({
     file: z.string({
@@ -33,13 +23,7 @@ export default function BiasSettings({
     isErrorDuringAnalysis,
     isInitialised,
 }: {
-    onRun: (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean
-    ) => void;
+    onRun: (params: SyntheticDataParameters) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
@@ -48,10 +32,6 @@ export default function BiasSettings({
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
-    const [iter, setIter] = useState([10]);
-    const [clusters, setClusters] = useState([25]);
-
-    const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
@@ -69,10 +49,6 @@ export default function BiasSettings({
             form.setValue('file', stringified);
         }
         setData({ data, stringified, fileName });
-
-        const dataLength = (data?.length || 1000) / 10;
-        setClusters([Math.round(dataLength / 4)]);
-        setDataKey(new Date().toISOString());
     };
 
     useEffect(() => {
@@ -80,7 +56,7 @@ export default function BiasSettings({
     }, [data]);
 
     const onDemoRun = async () => {
-        const file = await fetch('/FP-test-set.csv')
+        const file = await fetch('/Bar-Pass-Prediction.csv')
             .then(response => response.text())
             .then(data => Papa.parse(data, { header: true }));
         onDataLoad(
@@ -91,14 +67,8 @@ export default function BiasSettings({
         );
     };
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        onRun(
-            clusters[0],
-            iter[0],
-            data.targetColumn,
-            data.dataType,
-            data.whichPerformanceMetricValueIsBetter === 'higher'
-        );
+    const onSubmit = () => {
+        onRun({ dataType: 'numeric', isDemo: false });
     };
 
     return (

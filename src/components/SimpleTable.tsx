@@ -15,6 +15,9 @@ export default function SimpleTable({
     title?: string;
     data: Record<string, string | number>[];
 }) {
+    // limit data to the first 100 rows.
+    data = data.slice(0, 100);
+
     return (
         <div className={`bg-white border border-gray-200 ${title && 'mb-4'}`}>
             <Table className={`text-xs ${title && 'mb-4'}`}>

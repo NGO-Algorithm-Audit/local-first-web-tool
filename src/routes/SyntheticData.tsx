@@ -4,13 +4,12 @@ import { pythonCode } from '@/assets/synthetic-data';
 import { usePython } from '@/components/pyodide/use-python';
 import { Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
-import SimpleTable from '@/components/SimpleTable';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
-import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
 import SyntheticDataSettings from '@/components/SyntheticDataSettings';
+import { SyntheticDataInfo } from '@/components/synthetic-data-interfaces/cluster-export';
 
 const PAGE_STYLE = `
     @page {
@@ -60,8 +59,10 @@ export default function SyntheticDataGeneration() {
         runPython,
         sendData,
         error,
-        clusterInfo,
-    } = usePython();
+    } = usePython<SyntheticDataInfo, SyntheticDataInfo>({
+        dataType: 'numeric',
+        isDemo: false,
+    });
 
     const onFileLoad: csvReader['onChange'] = (
         data,
@@ -85,25 +86,18 @@ export default function SyntheticDataGeneration() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun(3, 10, 'FP', 'numeric', false);
+            onRun({ dataType: 'numeric', isDemo: true });
         }
     }, [initialised, data]);
 
-    const onRun = (
-        clusterSize: number,
-        iterations: number,
-        targetColumn: string,
-        dataType: string,
-        higherIsBetter: boolean
-    ) => {
+    const onRun = (props: { dataType: string; isDemo: boolean }) => {
         runPython({
             type: 'start',
             params: {
-                iter: iterations,
-                clusters: clusterSize,
-                targetColumn: targetColumn,
-                dataType: dataType,
-                higherIsBetter: higherIsBetter,
+                parameters: {
+                    dataType: props.dataType,
+                    isDemo: props.isDemo,
+                },
             },
         });
     };
@@ -137,42 +131,11 @@ export default function SyntheticDataGeneration() {
                             <Share className="size-3.5 mr-2" />
                             Share
                         </Button>
-                        {clusterInfo && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="p-4 text-sm"
-                                onClick={() => {
-                                    downloadFile(
-                                        JSON.stringify(
-                                            {
-                                                fileName: data.fileName,
-                                                ...clusterInfo,
-                                            },
-                                            null,
-                                            2
-                                        ),
-                                        `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                        'application/json'
-                                    );
-                                }}
-                            >
-                                <Share className="size-3.5 mr-2" />
-                                Export to .json
-                            </Button>
-                        )}
                     </div>
                 )}
 
-                {data.data.length > 0 && (
-                    <SimpleTable
-                        data={data.data.slice(0, 5)}
-                        title="Dataset preview showing the first 5 rows."
-                    />
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} />
+                    <ComponentMapper items={result} data={data} />
                 ) : data.data.length > 0 ? null : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
