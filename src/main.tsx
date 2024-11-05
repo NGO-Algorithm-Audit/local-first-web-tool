@@ -12,8 +12,6 @@ const routeName = rootElement?.getAttribute('data-route');
 if (!rootElement?.innerHTML) {
     const root = ReactDOM.createRoot(rootElement);
 
-    console.log(routeName);
-
     const dynamicRoutes = () => {
         switch (routeName) {
             case 'bias-detection':
