@@ -27,6 +27,7 @@ export default defineConfig({
             input: {
                 main: resolve(root, 'index.html'),
                 biasDetection: resolve(root, 'bias-detection.html'),
+                syntheticData: resolve(root, 'synthetic-data.html'),
             },
         },
     },
