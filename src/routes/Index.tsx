@@ -24,7 +24,6 @@ export default function Navigation() {
                     </a>
                     <hr />
                     <a
-                        aria-disabled
                         href="/synthetic-data.html"
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
