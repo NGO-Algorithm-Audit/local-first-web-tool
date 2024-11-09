@@ -6,6 +6,12 @@ import Markdown from 'react-markdown';
 import { getLabel } from './graphs/get-label';
 import { CSVData } from './bias-detection-interfaces/csv-data';
 import { Fragment } from 'react/jsx-runtime';
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from './ui/accordion';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -70,6 +76,21 @@ export default function ComponentMapper({
                             >
                                 {resultItem.data}
                             </h5>
+                        );
+                    case 'accordion':
+                        return (
+                            <Accordion key={index} type="single" collapsible>
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>
+                                        {resultItem.title}
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                        <Markdown className="mt-2 text-gray-800 markdown">
+                                            {resultItem.content}
+                                        </Markdown>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         );
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(

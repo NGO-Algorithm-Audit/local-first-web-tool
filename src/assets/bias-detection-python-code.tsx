@@ -230,23 +230,30 @@ def run():
 
     if dataType == 'numeric':
         diff_df = diffDataframe(df, features, type='Numerical')
+        
+        overview = "";
+
         for feat in features:
             diff = diff_df.loc[feat,"Difference"].round(2)
                 
             if diff < 0:
-                setResult(json.dumps(
-                    {'type': 'text', 'data': f'{abs(diff)} less {feat} than in the rest of the dataset.'}
-                ))
+                overview += f'{abs(diff)} less {feat} than in the rest of the dataset. '
+               
             elif diff > 0:
-                setResult(json.dumps(
-                    {'type': 'text', 'data': f'{diff} more {feat} than in the rest of the dataset.'}
-                ))
+                overview += f'{diff} more {feat} than in the rest of the dataset. '
+                
             elif diff == 0:
-                setResult(json.dumps(
-                    {'type': 'text', 'data': f'equal {feat} as in the rest of the dataset.'}
-                ))
+                overview += f'equal {feat} as in the rest of the dataset. '
+               
+            overview += '''  
+'''
+
+        setResult(json.dumps(
+            {'type': 'accordion', 'title': 'Open details to view feature comparisons to the rest of the dataset','content': overview}
+        ))
     else:
         diff_df = diffDataframe(df, features, type='Categorical')
+        overview = "";
         for feat in features:
             values = df[feat].unique().tolist()
             for value in values:
@@ -254,18 +261,16 @@ def run():
                          
                 if (isinstance(diff, float)):
                     if diff < 0:
-                        setResult(json.dumps(
-                            {'type': 'text', 'data': f'{abs(diff)} less {value} than in the rest of the dataset.'}
-                        ))
+                        overview += f'{abs(diff)} less {value} than in the rest of the dataset. '
                     elif diff > 0:
-                        setResult(json.dumps(
-                            {'type': 'text', 'data': f'{diff} more {value} than in the rest of the dataset.'}
-                        ))
+                        overview += f'{diff} more {value} than in the rest of the dataset. '
                     elif diff == 0:
-                        setResult(json.dumps(
-                            {'type': 'text', 'data': f'equal {value} as in the rest of the dataset.'}
-                        ))
-        
+                        overview += f'equal {value} as in the rest of the dataset. '
+                    overview += '''  
+'''
+        setResult(json.dumps(
+            {'type': 'accordion', 'title': 'Open details to view feature comparisons to the rest of the dataset','content': overview}
+        ))
 
     if dataType == 'numeric':
         for col in full_df.columns:
