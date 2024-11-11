@@ -27,7 +27,7 @@ const AccordionTrigger = React.forwardRef<
         <AccordionPrimitive.Trigger
             ref={ref}
             className={cn(
-                'flex flex-1 items-center justify-start p-2 rounded-lg text-md bg-neutral-400 text-white transition-all text-left [&[data-state=open]>svg]:rotate-180',
+                'flex flex-1 items-center justify-start p-2 rounded-lg text-md bg-aaLight text-black transition-all text-left [&[data-state=open]>svg]:rotate-180',
                 className
             )}
             {...props}
@@ -68,7 +68,7 @@ export const Accordion = (props: AccordionProps) => (
                 <AccordionItem value="item-1">
                     <AccordionTrigger>{props.title}</AccordionTrigger>
                     <AccordionContent>
-                        <Markdown className="mt-2 text-gray-800 markdown">
+                        <Markdown className="mt-2 text-gray-800 markdown px-3">
                             {props.content}
                         </Markdown>
                     </AccordionContent>
