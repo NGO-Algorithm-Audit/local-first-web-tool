@@ -25,6 +25,10 @@ const PAGE_STYLE = `
             display: none !important; 
         }
 
+        .showonprint {
+            display: block !important;
+        }
+
         @page { 
             size: landscape; 
             margin: 30px 20px;

@@ -5,8 +5,7 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-
-const Accordion = AccordionPrimitive.Root;
+import Markdown from 'react-markdown';
 
 const AccordionItem = React.forwardRef<
     React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -28,7 +27,7 @@ const AccordionTrigger = React.forwardRef<
         <AccordionPrimitive.Trigger
             ref={ref}
             className={cn(
-                'flex flex-1 items-center justify-between pb-4 text-md font-semibold transition-all hover:underline text-left [&[data-state=open]>svg]:rotate-180',
+                'flex flex-1 items-center justify-between p-2 rounded-lg text-md bg-neutral-500 text-white transition-all hover:underline text-left [&[data-state=open]>svg]:rotate-180',
                 className
             )}
             {...props}
@@ -54,4 +53,29 @@ const AccordionContent = React.forwardRef<
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export interface AccordionProps {
+    title: string;
+    content: string;
+}
+
+export const Accordion = (props: AccordionProps) => (
+    <>
+        <div className="hideonprint">
+            <AccordionPrimitive.Root type="single" collapsible>
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>{props.title}</AccordionTrigger>
+                    <AccordionContent>
+                        <Markdown className="mt-2 text-gray-800 markdown">
+                            {props.content}
+                        </Markdown>
+                    </AccordionContent>
+                </AccordionItem>
+            </AccordionPrimitive.Root>
+        </div>
+        <div className="hidden showonprint">
+            <Markdown className="text-gray-800 markdown">
+                {props.content}
+            </Markdown>
+        </div>
+    </>
+);
