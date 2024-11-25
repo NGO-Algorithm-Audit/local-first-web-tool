@@ -1,0 +1,103 @@
+{
+    "Let's get started! Fill out the form.": "Bienvenue à React et react-i18next",
+    "shareButton": "Share",
+    "exportButton": "Export to .json",
+    "getStarted": "Let's get started! Fill out the form.",
+    "fileUploadError": "Please upload a valid CSV file.",
+    "removeButton": "Remove",
+    "dropzoneLabel": "Drag and drop your CSV file here, or click to select a file",
+    "datasetPreview": "Dataset preview showing the first 5 rows.",
+    "error": "Sorry, something went wrong.",
+    "loadingMessage": "Setting up environment...",
+    "mostBiasedCluster": "Most biased\n cluster",
+    "cluster": "Cluster",
+    "biasSettings": {
+        "form": {
+            "fieldsets": {
+                "data": {
+                    "title": "Data",
+                    "dataSet": "Data set",
+                    "performanceMetric": "Performance metric column"
+                },
+                "parameters": {
+                    "title": "Parameters",
+                    "iterations": "Iterations",
+                    "minClusterSize": "Minimal cluster size",
+                    "performanceInterpretation": {
+                        "title": "Performance metric interpretation",
+                        "lower": "Lower value of performance metric is better, e.g., error rate",
+                        "higher": "Higher value of performance metric is better, e.g., accuracy"
+                    }
+                }
+            },
+            "errors": {
+                "csvRequired": "Please upload a CSV file.",
+                "targetColumnRequired": "Please select a target column.",
+                "dataTypeRequired": "Please select a data type.",
+                "noNumericColumns": "No numeric columns found. Please upload a valid data set.",
+                "analysisError": "Error while analysing",
+                "noData": "No data loaded"
+            },
+            "actions": {
+                "tryItOut": "Try it out",
+                "runAnalysis": "Run Analysis",
+                "analyzing": "Analyzing...",
+                "initializing": "Initialising..."
+            }
+        },
+        "demoCard": {
+            "title": "Try it out!",
+            "description": "Do you not have a dataset at hand? No worries use our demo data set."
+        }
+    },
+    "syntheticData": {
+        "form": {
+            "errors": {
+                "csvRequired": "Please upload a CSV file.",
+                "analysisError": "Error while analysing"
+            },
+            "fieldset": {
+                "sourceDataset": "Source Dataset"
+            },
+            "actions": {
+                "tryItOut": "Try it out",
+                "runGeneration": "Run Synthetic Data Generation",
+                "analyzing": "Analyzing...",
+                "initializing": "Initialising..."
+            }
+        },
+        "demoCard": {
+            "title": "Try it out!",
+            "description": "Do you not have a dataset at hand? No worries use our demo data set."
+        }
+    },
+    "biasAnalysis": {
+        "demo": {
+            "heading": "Information about demo dataset",
+            "description": "A demo dataset is loaded below. Using a subset of the [Twitter15] dataset..."
+        },
+        "parameters": {
+            "heading": "Parameters selected",
+            "iterations": "Number of iterations: {{value}}",
+            "minClusterSize": "Minimal cluster size: {{value}}",
+            "performanceMetric": "Performance metric column: {{value}}",
+            "dataType": "Data type: {{value}}"
+        },
+        "clusters": {
+            "summary": "We found {{clusterCount}} clusters. Cluster with most bias consists of {{biasedCount}} datapoints. The uploaded dataset consists of {{totalCount}} datapoints.",
+            "sizeHint": "By adapting the \"Minimal cluster size\" parameter, you can control the number of clusters."
+        },
+        "biasedCluster": {
+            "heading": "In the most biased cluster datapoints have:",
+            "accordionTitle": "Open details to view feature comparisons to the rest of the dataset",
+            "comparison": {
+                "less": "{{value}} less {{feature}} than in the rest of the dataset.",
+                "more": "{{value}} more {{feature}} than in the rest of the dataset.",
+                "equal": "equal {{feature}} as in the rest of the dataset."
+            }
+        },
+        "distribution": {
+            "heading": "The \"{{variable}}\" variable distribution across the different clusters:"
+        }
+    }
+}

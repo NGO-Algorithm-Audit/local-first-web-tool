@@ -4,6 +4,7 @@ import './index.css';
 import Navigation from './routes/Index';
 import BiasDetection from './routes/BiasDetection';
 import SyntheticDataGeneration from './routes/SyntheticData';
+import './i18n';
 
 // Render the app
 const rootElement = document.getElementById('root')!;

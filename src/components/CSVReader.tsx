@@ -4,6 +4,7 @@ import Papa from 'papaparse';
 import { File } from 'lucide-react';
 import { Button } from './ui/button';
 import { FormItem, FormLabel } from './ui/form';
+import { useTranslation } from 'react-i18next';
 
 export interface csvReader {
     onChange: (
@@ -15,6 +16,7 @@ export interface csvReader {
 }
 
 export default function CSVReader({ onChange }: csvReader) {
+    const { t } = useTranslation();
     const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
         // Ensure there's only one file and it's a CSV
         if (acceptedFiles.length == 1 && acceptedFiles[0].type === 'text/csv') {
@@ -39,7 +41,7 @@ export default function CSVReader({ onChange }: csvReader) {
                 },
             });
         } else {
-            alert('Please upload a valid CSV file.');
+            alert(t('fileUploadError'));
         }
     }, []);
 
@@ -71,7 +73,7 @@ export default function CSVReader({ onChange }: csvReader) {
                                 size="sm"
                                 className="ml-auto gap-1.5"
                             >
-                                Remove
+                                {t('removeButton')}
                             </Button>
                         </li>
                     ))}
@@ -87,9 +89,7 @@ export default function CSVReader({ onChange }: csvReader) {
         >
             <input {...getInputProps()} multiple={false} />
 
-            <FormLabel>
-                Drag 'n' drop a CSV file here, or click to select one
-            </FormLabel>
+            <FormLabel>{t('dropzoneLabel')}</FormLabel>
         </FormItem>
     );
 }

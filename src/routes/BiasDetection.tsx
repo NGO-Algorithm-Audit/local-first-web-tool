@@ -13,6 +13,8 @@ import Measuring from '@/components/icons/measuring.svg?react';
 import { ClusterInfo } from '@/components/bias-detection-interfaces/cluster-export';
 import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/BiasDetectionParameters';
 import { CSVData } from '@/components/bias-detection-interfaces/csv-data';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/ui/languageSwitcher';
 
 const PAGE_STYLE = `
     @page {
@@ -50,6 +52,7 @@ export default function BiasDetection() {
         fileName: '',
         demo: false,
     });
+    const { t } = useTranslation();
     // Select the content to print
 
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -132,6 +135,7 @@ export default function BiasDetection() {
 
     return (
         <main ref={contentRef} className="gap-4 p-4 flex flex-col">
+            <LanguageSwitcher />
             <div className="relative flex-1 flex-col items-start">
                 <BiasSettings
                     onRun={onRun}
@@ -157,7 +161,7 @@ export default function BiasDetection() {
                             onClick={() => reactToPrintFn()}
                         >
                             <Share className="size-3.5 mr-2" />
-                            Share
+                            {t('shareButton')}
                         </Button>
                         {clusterInfo && (
                             <Button
@@ -180,7 +184,7 @@ export default function BiasDetection() {
                                 }}
                             >
                                 <Share className="size-3.5 mr-2" />
-                                Export to .json
+                                {t('exportButton')}
                             </Button>
                         )}
                     </div>
@@ -192,7 +196,7 @@ export default function BiasDetection() {
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
                         <h1 className="text-md text-center text-aaDark">
-                            Let's get started! Fill out the form.
+                            {t('getStarted')}
                         </h1>
                         <div className="flex-1" />
                     </>

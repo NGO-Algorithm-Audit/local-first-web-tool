@@ -9,12 +9,14 @@ import { Form, FormField } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
 import { SyntheticDataParameters } from './synthetic-data-interfaces/BiasDetectionParameters';
+import { useTranslation } from 'react-i18next';
 
-const FormSchema = z.object({
-    file: z.string({
-        required_error: 'Please upload a CSV file.',
-    }),
-});
+const createFormSchema = (t: (key: string) => string) =>
+    z.object({
+        file: z.string({
+            required_error: t('syntheticData.form.errors.csvRequired'),
+        }),
+    });
 
 export default function BiasSettings({
     onRun,
@@ -29,9 +31,13 @@ export default function BiasSettings({
     isErrorDuringAnalysis: boolean;
     isInitialised: boolean;
 }) {
+    const { t } = useTranslation();
+    const FormSchema = createFormSchema(t);
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
+
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
@@ -80,7 +86,7 @@ export default function BiasSettings({
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
-                            Source Dataset
+                            {t('syntheticData.form.fieldset.sourceDataset')}
                         </legend>
                         <div className="grid gap-3">
                             <FormField
@@ -96,7 +102,7 @@ export default function BiasSettings({
                     <div className="flex flex-row ml-auto gap-2">
                         {isErrorDuringAnalysis && (
                             <div className="text-red-500">
-                                {'Error while analysing'}
+                                {t('syntheticData.form.errors.analysisError')}
                             </div>
                         )}
                     </div>
@@ -113,7 +119,9 @@ export default function BiasSettings({
                             className="gap-1.5 xl:hidden"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Initialising...'}
+                            {!isLoading
+                                ? t('syntheticData.form.actions.tryItOut')
+                                : t('syntheticData.form.actions.initializing')}
                         </Button>
                         <Button
                             type="submit"
@@ -122,10 +130,12 @@ export default function BiasSettings({
                             disabled={isLoading}
                         >
                             {!isLoading
-                                ? 'Run Synthetic Data Generation'
+                                ? t('syntheticData.form.actions.runGeneration')
                                 : isInitialised
-                                  ? 'Analyzing...'
-                                  : 'Initialising...'}
+                                  ? t('syntheticData.form.actions.analyzing')
+                                  : t(
+                                        'syntheticData.form.actions.initializing'
+                                    )}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>
@@ -136,11 +146,10 @@ export default function BiasSettings({
                     <div className="flex flex-row w-full items-center justify-between">
                         <CardHeader>
                             <CardTitle className="text-aaDark text-md">
-                                Try it out!
+                                {t('syntheticData.demoCard.title')}
                             </CardTitle>
                             <CardDescription>
-                                Do you not have a dataset at hand? No worries
-                                use our demo data set.
+                                {t('syntheticData.demoCard.description')}
                             </CardDescription>
                         </CardHeader>
                         <Button
@@ -150,7 +159,9 @@ export default function BiasSettings({
                             className="gap-1.5 mr-4"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Initializing...'}
+                            {!isLoading
+                                ? t('syntheticData.form.actions.tryItOut')
+                                : t('syntheticData.form.actions.initializing')}
                         </Button>
                     </div>
                 </Card>

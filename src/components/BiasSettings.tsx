@@ -1,5 +1,4 @@
 import { Label } from '@/components/ui/label';
-
 import {
     Select,
     SelectContent,
@@ -7,11 +6,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-
 import { Slider } from '@/components/ui/slider';
-
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
@@ -23,20 +19,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
 import { BiasDetectionParameters } from './bias-detection-interfaces/BiasDetectionParameters';
+import { useTranslation } from 'react-i18next';
 
 const FormSchema = z.object({
     file: z.string({
-        required_error: 'Please upload a CSV file.',
+        required_error: 'biasSettings.form.errors.csvRequired',
     }),
     whichPerformanceMetricValueIsBetter: z.string(),
     targetColumn: z
         .string({
-            required_error: 'Please select a target column.',
+            required_error: 'biasSettings.form.errors.targetColumnRequired',
         })
         .nonempty(),
     dataType: z
         .string({
-            required_error: 'Please select a data type.',
+            required_error: 'biasSettings.form.errors.dataTypeRequired',
         })
         .nonempty(),
 });
@@ -54,6 +51,7 @@ export default function BiasSettings({
     isErrorDuringAnalysis: boolean;
     isInitialised: boolean;
 }) {
+    const { t } = useTranslation();
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -63,9 +61,6 @@ export default function BiasSettings({
     });
     const [iter, setIter] = useState([10]);
     const [clusters, setClusters] = useState([25]);
-    // const [defaultDataType, setDefaultDataType] = useState<
-    //     'numeric' | 'categorical'
-    // >('numeric');
 
     const [performanceMetricColumnError, setPerformanceMetricColumnError] =
         useState<string | null>(null);
@@ -160,11 +155,11 @@ export default function BiasSettings({
                 >
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
-                            Data
+                            {t('biasSettings.form.fieldsets.data.title')}
                         </legend>
                         <div className="relative grid gap-3 select-none">
                             <div className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
-                                Data set
+                                {t('biasSettings.form.fieldsets.data.dataSet')}
                             </div>
                             <FormField
                                 control={form.control}
@@ -176,7 +171,7 @@ export default function BiasSettings({
                         </div>
                         {performanceMetricColumnError && (
                             <div className="text-red-500">
-                                {performanceMetricColumnError}
+                                {t('biasSettings.form.errors.noNumericColumns')}
                             </div>
                         )}
                         <div className="grid gap-3">
@@ -186,7 +181,9 @@ export default function BiasSettings({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>
-                                            Performance metric column
+                                            {t(
+                                                'biasSettings.form.fieldsets.data.performanceMetric'
+                                            )}
                                         </FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
@@ -231,7 +228,9 @@ export default function BiasSettings({
                                                         value="noData"
                                                         disabled
                                                     >
-                                                        No data loaded
+                                                        {t(
+                                                            'biasSettings.form.errors.noData'
+                                                        )}
                                                     </SelectItem>
                                                 )}
                                             </SelectContent>
@@ -240,51 +239,18 @@ export default function BiasSettings({
                                 )}
                             />
                         </div>
-                        {/* <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="dataType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Data type</FormLabel>
-                                        <Select
-                                            defaultValue={defaultDataType}
-                                            onValueChange={field.onChange}
-                                            key={`${dataKey}_dataType`}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select dataType" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem
-                                                    key="numeric"
-                                                    value="numeric"
-                                                >
-                                                    Numeric
-                                                </SelectItem>
-                                                <SelectItem
-                                                    key="categorical"
-                                                    value="categorical"
-                                                >
-                                                    Categorical
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormItem>
-                                )}
-                            />
-                        </div> */}
                     </fieldset>
 
                     <fieldset className="grid gap-6 rounded-lg border p-4">
                         <legend className="-ml-1 px-1 text-sm font-medium">
-                            Parameters
+                            {t('biasSettings.form.fieldsets.parameters.title')}
                         </legend>
                         <div className="grid gap-3">
                             <Label htmlFor="iterations">
-                                Iterations ({iter})
+                                {t(
+                                    'biasSettings.form.fieldsets.parameters.iterations'
+                                )}{' '}
+                                ({iter})
                             </Label>
                             <Slider
                                 id="iterations"
@@ -297,7 +263,10 @@ export default function BiasSettings({
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="min-cluster-size">
-                                Minimal cluster size ({clusters})
+                                {t(
+                                    'biasSettings.form.fieldsets.parameters.minClusterSize'
+                                )}{' '}
+                                ({clusters})
                             </Label>
                             <Slider
                                 id="min-cluster-size"
@@ -313,7 +282,9 @@ export default function BiasSettings({
                         </div>
                         <div className="flex flex-col gap-3">
                             <label className="text-sm font-medium">
-                                Performance metric interpretation
+                                {t(
+                                    'biasSettings.form.fieldsets.parameters.performanceInterpretation.title'
+                                )}
                             </label>
                             <FormField
                                 control={form.control}
@@ -330,9 +301,9 @@ export default function BiasSettings({
                                                 <RadioGroupItem value="lower" />
                                             </FormControl>
                                             <FormLabel className="font-normal">
-                                                Lower value of performance
-                                                metric is better, e.g., error
-                                                rate
+                                                {t(
+                                                    'biasSettings.form.fieldsets.parameters.performanceInterpretation.lower'
+                                                )}
                                             </FormLabel>
                                         </FormItem>
                                         <FormItem className="flex items-center space-x-3 space-y-0">
@@ -340,20 +311,21 @@ export default function BiasSettings({
                                                 <RadioGroupItem value="higher" />
                                             </FormControl>
                                             <FormLabel className="font-normal">
-                                                Higher value of performance
-                                                metric is better, e.g., accuracy
+                                                {t(
+                                                    'biasSettings.form.fieldsets.parameters.performanceInterpretation.higher'
+                                                )}
                                             </FormLabel>
                                         </FormItem>
                                     </RadioGroup>
                                 )}
-                            ></FormField>
+                            />
                         </div>
                     </fieldset>
 
                     <div className="flex flex-row ml-auto gap-2">
                         {isErrorDuringAnalysis && (
                             <div className="text-red-500">
-                                {'Error while analysing'}
+                                {t('biasSettings.form.errors.analysisError')}
                             </div>
                         )}
                     </div>
@@ -370,7 +342,9 @@ export default function BiasSettings({
                             className="gap-1.5 xl:hidden"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Initialising...'}
+                            {!isLoading
+                                ? t('biasSettings.form.actions.tryItOut')
+                                : t('biasSettings.form.actions.initializing')}
                         </Button>
                         <Button
                             type="submit"
@@ -379,10 +353,10 @@ export default function BiasSettings({
                             disabled={isLoading}
                         >
                             {!isLoading
-                                ? 'Run Analysis'
+                                ? t('biasSettings.form.actions.runAnalysis')
                                 : isInitialised
-                                  ? 'Analyzing...'
-                                  : 'Initialising...'}
+                                  ? t('biasSettings.form.actions.analyzing')
+                                  : t('biasSettings.form.actions.initializing')}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>
@@ -393,11 +367,10 @@ export default function BiasSettings({
                     <div className="flex flex-row w-full items-center justify-between">
                         <CardHeader>
                             <CardTitle className="text-aaDark text-md">
-                                Try it out!
+                                {t('biasSettings.demoCard.title')}
                             </CardTitle>
                             <CardDescription>
-                                Do you not have a dataset at hand? No worries
-                                use our demo data set.
+                                {t('biasSettings.demoCard.description')}
                             </CardDescription>
                         </CardHeader>
                         <Button
@@ -407,7 +380,9 @@ export default function BiasSettings({
                             className="gap-1.5 mr-4"
                             disabled={isLoading}
                         >
-                            {!isLoading ? 'Try it out' : 'Initializing...'}
+                            {!isLoading
+                                ? t('biasSettings.form.actions.tryItOut')
+                                : t('biasSettings.form.actions.initializing')}
                         </Button>
                     </div>
                 </Card>

@@ -1,7 +1,7 @@
 export const getLabel = (index: number) => {
     if (index === 0) {
-        return 'Most biased\ncluster';
+        return { key: 'mostBiasedCluster' };
     }
 
-    return `Cluster ${index}`;
+    return { key: 'cluster', params: { value: index } };
 };

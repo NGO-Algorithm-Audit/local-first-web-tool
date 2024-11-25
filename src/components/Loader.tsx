@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export default function Loader() {
+    const { t } = useTranslation();
     return (
         <div className="pointer-events-none absolute bottom-0 right-0 z-10 flex justify-end p-2">
             <div className="inline-flex items-center rounded-md bg-sky-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow">
@@ -22,8 +25,8 @@ export default function Loader() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                 </svg>
-                Setting up environment...
+                {t('loadingMessage')}
             </div>
         </div>
-    )
+    );
 }
