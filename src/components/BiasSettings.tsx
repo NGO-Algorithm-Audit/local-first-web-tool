@@ -102,7 +102,7 @@ export default function BiasSettings({
 
             if (numericColumns.length === 0) {
                 setPerformanceMetricColumnError(
-                    'No numeric columns found. Please upload a valid data set.'
+                    t('biasSettings.form.errors.noNumericColumns')
                 );
             }
 
@@ -191,7 +191,11 @@ export default function BiasSettings({
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select a column" />
+                                                    <SelectValue
+                                                        placeholder={t(
+                                                            'biasSettings.form.actions.selectColumn'
+                                                        )}
+                                                    />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>

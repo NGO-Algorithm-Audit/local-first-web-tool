@@ -42,7 +42,8 @@
                 "tryItOut": "Try it out",
                 "runAnalysis": "Run Analysis",
                 "analyzing": "Analyzing...",
-                "initializing": "Initialising..."
+                "initializing": "Initialising...",
+                "selectColumn": "Select a column"
             }
         },
         "demoCard": {

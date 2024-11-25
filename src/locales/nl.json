@@ -42,7 +42,8 @@
                 "tryItOut": "Probeer het uit",
                 "runAnalysis": "Start analyse",
                 "analyzing": "Analyseren...",
-                "initializing": "Initialiseren..."
+                "initializing": "Initialiseren...",
+                "selectColumn": "Selecteer een kolom"
             }
         },
         "demoCard": {
