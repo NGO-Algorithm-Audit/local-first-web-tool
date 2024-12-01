@@ -7,6 +7,7 @@ import { getLabel } from './graphs/get-label';
 import { CSVData } from './bias-detection-interfaces/csv-data';
 import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
+import { useTranslation } from 'react-i18next';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -28,6 +29,7 @@ export default function ComponentMapper({
     items: string[];
     data: CSVData;
 }) {
+    const { t } = useTranslation();
     const components = items
         .map((r, index) => {
             try {
@@ -40,7 +42,7 @@ export default function ComponentMapper({
                                 {data.data.length > 0 && (
                                     <SimpleTable
                                         data={data.data.slice(0, 5)}
-                                        title="Dataset preview showing the first 5 rows."
+                                        title="datasetPreview"
                                     />
                                 )}
                             </Fragment>
@@ -51,40 +53,66 @@ export default function ComponentMapper({
                             <SimpleTable
                                 key={index}
                                 data={JSON.parse(resultItem.data)}
-                                title={resultItem.title}
+                                title={t(resultItem.title)}
                             />
                         );
-                    case 'text':
-                        return (
-                            <Markdown
-                                key={index}
-                                className="-mt-2 text-gray-800 markdown"
-                            >
-                                {resultItem.data}
-                            </Markdown>
-                        );
+                    case 'accordion':
+                        if (resultItem.comparisons) {
+                            // Handle translation of comparisons
+                            const content = resultItem.comparisons
+                                .map(
+                                    (comparison: {
+                                        key: string;
+                                        params: Record<string, any>;
+                                    }) => t(comparison.key, comparison.params)
+                                )
+                                .join('\n');
+
+                            return (
+                                <Accordion
+                                    key={index}
+                                    title={t(resultItem.titleKey || '')}
+                                    content={content}
+                                />
+                            );
+                        }
+                        return null;
+
                     case 'heading':
                         return (
                             <h5
                                 key={index}
                                 className="text-gray-800 font-semibold"
                             >
-                                {resultItem.data}
+                                {resultItem.headingKey
+                                    ? t(resultItem.headingKey)
+                                    : resultItem.data}
                             </h5>
                         );
-                    case 'accordion':
+
+                    case 'text':
+                        // Handle text that might need translation
+                        const textContent = resultItem.key
+                            ? t(resultItem.key, resultItem.params)
+                            : resultItem.data;
+
                         return (
-                            <Accordion
+                            <Markdown
                                 key={index}
-                                title={resultItem.title}
-                                content={resultItem.content}
-                            />
+                                className="-mt-2 text-gray-800 markdown"
+                            >
+                                {textContent}
+                            </Markdown>
                         );
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
+                                const translationID = getLabel(index);
                                 return {
-                                    name: getLabel(index),
+                                    name: t(
+                                        translationID.key,
+                                        translationID.params
+                                    ),
                                     values: createArrayFromPythonDictionary(x),
                                 };
                             }
@@ -102,8 +130,12 @@ export default function ComponentMapper({
                     case 'barchart': {
                         const barchartData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
+                                const translationID = getLabel(index);
                                 return {
-                                    name: getLabel(index),
+                                    name: t(
+                                        translationID.key,
+                                        translationID.params
+                                    ),
                                     values: x,
                                 };
                             }

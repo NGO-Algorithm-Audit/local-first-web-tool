@@ -1,0 +1,104 @@
+{
+    "Let's get started! Fill out the form.": "Bienvenue à React et react-i18next",
+    "shareButton": "Delen",
+    "exportButton": "Exporteren naar .json",
+    "getStarted": "Laten we beginnen! Vul het formulier in.",
+    "fileUploadError": "Upload een geldig CSV-bestand.",
+    "removeButton": "Verwijderen",
+    "dropzoneLabel": "Sleep je CSV-bestand hierheen of klik om een bestand te selecteren",
+    "datasetPreview": "Voorbeeld van dataset met de eerste 5 rijen.",
+    "error": "Sorry, er is iets misgegaan.",
+    "loadingMessage": "Omgeving instellen...",
+    "mostBiasedCluster": "Meest bevooroordeelde\n cluster",
+    "cluster": "Cluster {{value}}",
+    "biasSettings": {
+        "form": {
+            "fieldsets": {
+                "data": {
+                    "title": "Gegevens",
+                    "dataSet": "Dataset",
+                    "performanceMetric": "Prestatiemetingkolom"
+                },
+                "parameters": {
+                    "title": "Parameters",
+                    "iterations": "Iteraties",
+                    "minClusterSize": "Minimale clustergrootte",
+                    "performanceInterpretation": {
+                        "title": "Interpretatie van prestatiemeting",
+                        "lower": "Lagere waarde van prestatiemeting is beter, bijv. foutpercentage",
+                        "higher": "Hogere waarde van prestatiemeting is beter, bijv. nauwkeurigheid"
+                    }
+                }
+            },
+            "errors": {
+                "csvRequired": "Upload een CSV-bestand.",
+                "targetColumnRequired": "Selecteer een doelkolom.",
+                "dataTypeRequired": "Selecteer een gegevenstype.",
+                "noNumericColumns": "Geen numerieke kolommen gevonden. Upload een geldige dataset.",
+                "analysisError": "Fout tijdens analyse",
+                "noData": "Geen gegevens geladen"
+            },
+            "actions": {
+                "tryItOut": "Probeer het uit",
+                "runAnalysis": "Start analyse",
+                "analyzing": "Analyseren...",
+                "initializing": "Initialiseren...",
+                "selectColumn": "Selecteer een kolom"
+            }
+        },
+        "demoCard": {
+            "title": "Probeer het uit!",
+            "description": "Heeft u geen dataset bij de hand? Geen probleem, gebruik onze demoset."
+        }
+    },
+    "syntheticData": {
+        "form": {
+            "errors": {
+                "csvRequired": "Upload een CSV-bestand.",
+                "analysisError": "Fout tijdens analyse"
+            },
+            "fieldset": {
+                "sourceDataset": "Brondataset"
+            },
+            "actions": {
+                "tryItOut": "Uitproberen",
+                "runGeneration": "Start synthetische data generatie",
+                "analyzing": "Analyseren...",
+                "initializing": "Initialiseren..."
+            }
+        },
+        "demoCard": {
+            "title": "Probeer het uit!",
+            "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
+        }
+    },
+    "biasAnalysis": {
+        "demo": {
+            "heading": "Informatie over de demodataset",
+            "description": "Een demodataset is hieronder geladen. Met behulp van een subset van de [Twitter15] dataset heeft een op BERT gebaseerde classifier, op basis van tweet-kenmerken, voorspeld of een bericht nepnieuws is of niet. Fout-positieve classificaties zijn gemarkeerd in de FP-kolom en zullen in dit voorbeeld worden gebruikt als prestatiemeting."
+        },
+        "parameters": {
+            "heading": "Geselecteerde parameters",
+            "iterations": "Aantal iteraties: {{value}}",
+            "minClusterSize": "Minimale clustergrootte: {{value}}",
+            "performanceMetric": "Prestatiemetingkolom: {{value}}",
+            "dataType": "Gegevenstype: {{value}}"
+        },
+        "clusters": {
+            "summary": "We hebben {{clusterCount}} clusters gevonden. Cluster met de meeste bias bestaat uit {{biasedCount}} datapunten. De geüploade dataset bestaat uit {{totalCount}} datapunten.",
+            "sizeHint": "Door de parameter \"Minimale clustergrootte\" aan te passen, kunt u het aantal clusters beheren."
+        },
+        "biasedCluster": {
+            "heading": "In het cluster met de meeste bias hebben datapunten:",
+            "accordionTitle": "Open details om vergelijkingen van kenmerken met de rest van de dataset te bekijken",
+            "comparison": {
+                "less": "{{value}} minder {{feature}} dan in de rest van de dataset.",
+                "more": "{{value}} meer {{feature}} dan in de rest van de dataset.",
+                "equal": "gelijke {{feature}} als in de rest van de dataset."
+            }
+        },
+        "distribution": {
+            "heading": "De \"{{variable}}\" variabele verdeling over de verschillende clusters:"
+        }
+    }
+}

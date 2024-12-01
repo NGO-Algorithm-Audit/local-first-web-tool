@@ -68,7 +68,7 @@ export const Accordion = (props: AccordionProps) => (
                 <AccordionItem value="item-1">
                     <AccordionTrigger>{props.title}</AccordionTrigger>
                     <AccordionContent>
-                        <Markdown className="mt-2 text-gray-800 markdown px-3">
+                        <Markdown className="mt-2 text-gray-800 markdown px-3 whitespace-pre-wrap">
                             {props.content}
                         </Markdown>
                     </AccordionContent>

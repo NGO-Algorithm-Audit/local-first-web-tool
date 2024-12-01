@@ -10,6 +10,8 @@ import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
 import SyntheticDataSettings from '@/components/SyntheticDataSettings';
 import { SyntheticDataInfo } from '@/components/synthetic-data-interfaces/cluster-export';
+import LanguageSwitcher from '@/components/ui/languageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const PAGE_STYLE = `
     @page {
@@ -50,7 +52,7 @@ export default function SyntheticDataGeneration() {
         contentRef: contentRef,
         pageStyle: PAGE_STYLE,
     });
-
+    const { t, i18n } = useTranslation();
     const {
         loading,
         initialised,
@@ -64,6 +66,9 @@ export default function SyntheticDataGeneration() {
         isDemo: false,
     });
 
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get('lang');
+
     const onFileLoad: csvReader['onChange'] = (
         data,
         stringified,
@@ -72,6 +77,12 @@ export default function SyntheticDataGeneration() {
     ) => {
         setData({ data, stringified, fileName, demo });
     };
+
+    useEffect(() => {
+        if (lang) {
+            i18n.changeLanguage(lang);
+        }
+    }, [i18n]);
 
     useEffect(() => {
         if (pythonCode) {
@@ -104,6 +115,7 @@ export default function SyntheticDataGeneration() {
 
     return (
         <main ref={contentRef} className="gap-4 p-4 flex flex-col">
+            {!lang && <LanguageSwitcher />}
             <div className="relative flex-1 flex-col items-start">
                 <SyntheticDataSettings
                     onRun={onRun}
@@ -129,7 +141,7 @@ export default function SyntheticDataGeneration() {
                             onClick={() => reactToPrintFn()}
                         >
                             <Share className="size-3.5 mr-2" />
-                            Share
+                            {t('shareButton')}
                         </Button>
                     </div>
                 )}
@@ -140,7 +152,7 @@ export default function SyntheticDataGeneration() {
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
                         <h1 className="text-md text-center text-aaDark">
-                            Let's get started! Fill out the form.
+                            {t('getStarted')}
                         </h1>
                         <div className="flex-1" />
                     </>

@@ -1,15 +1,18 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-
-interface Props {
-    children?: ReactNode;
-}
+import { useTranslation } from 'react-i18next';
 
 interface State {
     hasError: boolean;
     error: Error | null;
 }
 
-class ErrorBoundary extends Component<Props, State> {
+class ErrorBoundaryClass extends Component<
+    {
+        children?: ReactNode;
+        t: (key: string) => string;
+    },
+    State
+> {
     public state: State = {
         hasError: false,
         error: null,
@@ -24,10 +27,11 @@ class ErrorBoundary extends Component<Props, State> {
     }
 
     public render() {
+        const { t } = this.props;
         if (this.state.hasError) {
             return (
                 <h1>
-                    Sorry.. there was an error: {this.state.error?.toString()}
+                    {t('error')} {this.state.error?.toString()}
                 </h1>
             );
         }
@@ -35,5 +39,13 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.children;
     }
 }
+
+// Wrapper component that provides translation function
+const ErrorBoundary: React.FC<{
+    children?: ReactNode;
+}> = props => {
+    const { t } = useTranslation();
+    return <ErrorBoundaryClass {...props} t={t} />;
+};
 
 export default ErrorBoundary;
