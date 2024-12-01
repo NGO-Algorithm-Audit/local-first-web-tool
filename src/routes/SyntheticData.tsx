@@ -52,7 +52,7 @@ export default function SyntheticDataGeneration() {
         contentRef: contentRef,
         pageStyle: PAGE_STYLE,
     });
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const {
         loading,
         initialised,
@@ -66,6 +66,9 @@ export default function SyntheticDataGeneration() {
         isDemo: false,
     });
 
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get('lang');
+
     const onFileLoad: csvReader['onChange'] = (
         data,
         stringified,
@@ -74,6 +77,12 @@ export default function SyntheticDataGeneration() {
     ) => {
         setData({ data, stringified, fileName, demo });
     };
+
+    useEffect(() => {
+        if (lang) {
+            i18n.changeLanguage(lang);
+        }
+    }, [i18n]);
 
     useEffect(() => {
         if (pythonCode) {
@@ -106,7 +115,7 @@ export default function SyntheticDataGeneration() {
 
     return (
         <main ref={contentRef} className="gap-4 p-4 flex flex-col">
-            <LanguageSwitcher />
+            {!lang && <LanguageSwitcher />}
             <div className="relative flex-1 flex-col items-start">
                 <SyntheticDataSettings
                     onRun={onRun}
