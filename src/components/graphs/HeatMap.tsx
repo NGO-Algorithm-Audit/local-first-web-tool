@@ -19,17 +19,17 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
     useEffect(() => {
         // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
-
+        const widthForHeatmap = containerWidth - 50;
         const barWidth = Math.max(
             10,
-            Math.floor(Math.min(containerWidth, 500) / data[0].length)
+            Math.floor(Math.min(widthForHeatmap, 500) / data[0].length)
         );
         const barHeight = barWidth;
         // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
             .attr('width', containerWidth)
-            .attr('height', data.length * barHeight)
+            .attr('height', 50 + data.length * barHeight)
             .append('g');
         //.attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -48,7 +48,7 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
         data.forEach((dataRow, rowIndex) => {
             dataRow.forEach((dataCell, cellIndex) => {
                 svg.append('rect')
-                    .attr('x', cellIndex * barWidth)
+                    .attr('x', 50 + cellIndex * barWidth)
                     .attr('y', rowIndex * barHeight)
                     .attr('width', barWidth)
                     .attr('height', barHeight)
@@ -57,6 +57,29 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
                     });
             });
         });
+
+        // Add x-axis labels (columns)
+        svg.append('g')
+            .selectAll('text')
+            .data(data[0])
+            .join('text')
+            .attr('x', (_, i) => 50 + i * barWidth + barWidth / 2)
+            .attr('y', 50 + barHeight * data.length)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '12px')
+            .text((_, i) => `Cell ${i + 1}`);
+
+        // Add y-axis labels (rows)
+        svg.append('g')
+            .selectAll('text')
+            .data(data)
+            .join('text')
+            .attr('x', 40)
+            .attr('y', (_, i) => i * barHeight + barHeight / 2)
+            .attr('dy', '0.35em')
+            .attr('text-anchor', 'end')
+            .style('font-size', '12px')
+            .text((_, i) => `Row ${i + 1}`);
     }, [data, title, containerWidth]);
 
     useEffect(() => {
