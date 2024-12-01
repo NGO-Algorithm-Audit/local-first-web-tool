@@ -8,6 +8,7 @@ import { CSVData } from './bias-detection-interfaces/csv-data';
 import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
+import HeatMapChart from './graphs/HeatMap';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -125,6 +126,25 @@ export default function ComponentMapper({
                                     title={resultItem.title ?? ''}
                                 />
                             </ErrorBoundary>
+                        );
+                    }
+                    case 'heatmap': {
+                        console.log('heatmap data', resultItem.data);
+                        /*
+                            Array in Array
+
+                            [
+                                [1,2,3],
+                                [4,5,6],
+                                [7,8,9]
+                            ]
+                        */
+                        return (
+                            <HeatMapChart
+                                key={index}
+                                data={resultItem.data}
+                                title={resultItem.title ?? ''}
+                            />
                         );
                     }
                     case 'barchart': {
