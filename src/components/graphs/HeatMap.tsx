@@ -7,40 +7,31 @@ interface HeatMapChartProps {
 }
 
 // Define margins for the chart
-const margin = { top: 10, right: 50, bottom: 40, left: 50 };
+const margin = { top: 10, right: 0, bottom: 40, left: 0 };
 // Define height for the chart, adjusting for margins
 const height = 300 - margin.top - margin.bottom;
 
-// Define width of bars and adjust for screenwidth
-const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
-const barGap = 5;
-
 const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
-    const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
-    const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
+    const svgRef = useRef(null); // Reference to the SVG element
+    const containerRef = useRef(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
 
     useEffect(() => {
         // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
 
+        const barWidth = Math.max(
+            10,
+            Math.floor(Math.min(containerWidth, 500) / data[0].length)
+        );
+        const barHeight = barWidth;
         // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
-            .attr('class', `min-h-[${height}px]`)
-            .attr(
-                'width',
-                Math.max(
-                    containerWidth,
-                    margin.left + data.length * (barWidth + barGap)
-                )
-            )
-            .attr(
-                'height',
-                data.length * (barWidth + barGap) + margin.top + margin.bottom
-            )
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+            .attr('width', containerWidth)
+            .attr('height', data.length * barHeight)
+            .append('g');
+        //.attr('transform', `translate(${margin.left},${margin.top})`);
 
         svg.append('defs')
             .append('style')
@@ -53,13 +44,14 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .scaleSequential()
             .domain([-1, 1])
             .interpolator(d3.interpolateBlues);
+
         data.forEach((dataRow, rowIndex) => {
             dataRow.forEach((dataCell, cellIndex) => {
                 svg.append('rect')
                     .attr('x', cellIndex * barWidth)
-                    .attr('y', rowIndex * barWidth)
+                    .attr('y', rowIndex * barHeight)
                     .attr('width', barWidth)
-                    .attr('height', barWidth)
+                    .attr('height', barHeight)
                     .style('fill', function () {
                         return colorScale(dataCell);
                     });
