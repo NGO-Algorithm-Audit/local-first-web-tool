@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-
+import { autoBandwidth, extentLinear, seriesSvgBar } from 'd3fc';
 interface HeatMapChartProps {
     title: string;
     data: number[][];
@@ -19,19 +19,18 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
     useEffect(() => {
         // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
-        const widthForHeatmap = containerWidth - 50;
+        const legendWidth = 100;
+        const widthForHeatmap = containerWidth - 50 - legendWidth;
         const barWidth = Math.max(
             10,
             Math.floor(Math.min(widthForHeatmap, 500) / data[0].length)
         );
         const barHeight = barWidth;
-        // Create the SVG container and set its dimensions
         const svg = d3
             .select(svgRef.current)
             .attr('width', containerWidth)
             .attr('height', 50 + data.length * barHeight)
             .append('g');
-        //.attr('transform', `translate(${margin.left},${margin.top})`);
 
         svg.append('defs')
             .append('style')
@@ -44,6 +43,25 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .scaleSequential()
             .domain([-1, 1])
             .interpolator(d3.interpolateBlues);
+
+        const domain = colorScale.domain();
+
+        const paddedDomain = extentLinear().pad([0.1, 0.1]).padUnit('percent')(
+            domain
+        );
+        const [min, max] = paddedDomain;
+        const heightBar = data.length * barHeight;
+        const expandedDomain = d3.range(min, max, (max - min) / heightBar);
+
+        const xScale = d3
+            .scaleBand()
+            .domain([0 as unknown as string, 1 as unknown as string])
+            .range([0, 60]);
+
+        const yScale = d3
+            .scaleLinear()
+            .domain(paddedDomain)
+            .range([heightBar, 0]);
 
         data.forEach((dataRow, rowIndex) => {
             dataRow.forEach((dataCell, cellIndex) => {
@@ -58,7 +76,6 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             });
         });
 
-        // Add x-axis labels (columns)
         svg.append('g')
             .selectAll('text')
             .data(data[0])
@@ -69,7 +86,6 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .style('font-size', '12px')
             .text((_, i) => `Cell ${i + 1}`);
 
-        // Add y-axis labels (rows)
         svg.append('g')
             .selectAll('text')
             .data(data)
@@ -80,6 +96,51 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .attr('text-anchor', 'end')
             .style('font-size', '12px')
             .text((_, i) => `Row ${i + 1}`);
+
+        const svgBar = autoBandwidth(seriesSvgBar())
+            .xScale(xScale)
+            .yScale(yScale)
+            .crossValue(0)
+            .baseValue((_: unknown, i: number) =>
+                i > 0 ? expandedDomain[i - 1] : 0
+            )
+            .mainValue((d: number) => d)
+            .decorate(
+                (
+                    selection: d3.Selection<
+                        SVGGElement,
+                        unknown,
+                        null,
+                        undefined
+                    >
+                ) => {
+                    selection
+                        .selectAll('path')
+                        .style('fill', d =>
+                            colorScale(d as unknown as d3.NumberValue)
+                        );
+                }
+            );
+
+        const axisLabel = d3
+            .axisRight(yScale)
+            .tickValues([...domain, (domain[1] + domain[0]) / 2])
+            .tickSizeOuter(0);
+
+        const legendBar = svg.append('g').datum(expandedDomain).call(svgBar);
+        legendBar.attr(
+            'transform',
+            `translate(${legendWidth + barWidth * data.length},0)`
+        );
+        const legendBarWidth = Math.abs(
+            legendBar.node()!.getBoundingClientRect().x
+        );
+        svg.append('g')
+            .attr('transform', `translate(${legendBarWidth + 10})`)
+            .datum(expandedDomain)
+            .call(axisLabel)
+            .select('.domain')
+            .attr('visibility', 'hidden');
     }, [data, title, containerWidth]);
 
     useEffect(() => {
