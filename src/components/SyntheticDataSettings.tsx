@@ -5,17 +5,19 @@ import { ArrowDown, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormField } from './ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
 import { SyntheticDataParameters } from './synthetic-data-interfaces/BiasDetectionParameters';
 import { useTranslation } from 'react-i18next';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 const createFormSchema = (t: (key: string) => string) =>
     z.object({
         file: z.string({
             required_error: t('syntheticData.form.errors.csvRequired'),
         }),
+        sdgMethod: z.string(),
     });
 
 export default function BiasSettings({
@@ -36,8 +38,11 @@ export default function BiasSettings({
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
+        defaultValues: {
+            sdgMethod: 'gc',
+        },
     });
-
+    const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
         stringified: string;
@@ -55,6 +60,7 @@ export default function BiasSettings({
             form.setValue('file', stringified);
         }
         setData({ data, stringified, fileName });
+        setDataKey(new Date().toISOString());
     };
 
     useEffect(() => {
@@ -73,8 +79,12 @@ export default function BiasSettings({
         );
     };
 
-    const onSubmit = () => {
-        onRun({ dataType: 'numeric', isDemo: false });
+    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        onRun({
+            dataType: 'numeric',
+            isDemo: false,
+            sdgMethod: data.sdgMethod,
+        });
     };
 
     return (
@@ -94,6 +104,47 @@ export default function BiasSettings({
                                 name="file"
                                 render={() => (
                                     <CSVReader onChange={onFileLoad} />
+                                )}
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <label className="text-sm font-medium">
+                                {t(
+                                    'syntheticData.form.fieldset.sdgMethod.title'
+                                )}
+                            </label>
+                            <FormField
+                                control={form.control}
+                                name="sdgMethod"
+                                render={({ field }) => (
+                                    <RadioGroup
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        key={`${dataKey}_sdgMethod`}
+                                        className="flex flex-col space-y-1"
+                                    >
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                            <FormControl>
+                                                <RadioGroupItem value="cart" />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                                {t(
+                                                    'syntheticData.form.fieldset.sdgMethod.cart'
+                                                )}
+                                            </FormLabel>
+                                        </FormItem>
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                            <FormControl>
+                                                <RadioGroupItem value="gc" />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                                {t(
+                                                    'syntheticData.form.fieldset.sdgMethod.gc'
+                                                )}
+                                            </FormLabel>
+                                        </FormItem>
+                                    </RadioGroup>
                                 )}
                             />
                         </div>

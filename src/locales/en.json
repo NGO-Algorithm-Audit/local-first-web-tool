@@ -58,7 +58,12 @@
                 "analysisError": "Error while analysing"
             },
             "fieldset": {
-                "sourceDataset": "Source Dataset"
+                "sourceDataset": "Source Dataset",
+                "sdgMethod": {
+                    "title": "Method",
+                    "cart": "cart",
+                    "gc": "Gaussian Copula"
+                }
             },
             "actions": {
                 "tryItOut": "Try it out",
