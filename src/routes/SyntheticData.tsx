@@ -64,6 +64,8 @@ export default function SyntheticDataGeneration() {
     } = usePython<SyntheticDataInfo, SyntheticDataInfo>({
         dataType: 'numeric',
         isDemo: false,
+        sdgMethod: 'gc',
+        samples: 1000,
     });
 
     const params = new URLSearchParams(window.location.search);
@@ -97,17 +99,29 @@ export default function SyntheticDataGeneration() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun({ dataType: 'numeric', isDemo: true });
+            onRun({
+                dataType: 'numeric',
+                isDemo: true,
+                sdgMethod: 'cart',
+                samples: 1000,
+            });
         }
     }, [initialised, data]);
 
-    const onRun = (props: { dataType: string; isDemo: boolean }) => {
+    const onRun = (props: {
+        dataType: string;
+        isDemo: boolean;
+        sdgMethod: string;
+        samples: number;
+    }) => {
         runPython({
             type: 'start',
             params: {
                 parameters: {
                     dataType: props.dataType,
                     isDemo: props.isDemo,
+                    sdgMethod: props.sdgMethod,
+                    samples: props.samples,
                 },
             },
         });

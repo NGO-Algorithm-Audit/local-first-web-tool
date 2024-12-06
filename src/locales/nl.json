@@ -58,7 +58,13 @@
                 "analysisError": "Fout tijdens analyse"
             },
             "fieldset": {
-                "sourceDataset": "Brondataset"
+                "sourceDataset": "Brondataset",
+                "sdgMethod": {
+                    "title": "Methode",
+                    "cart": "cart",
+                    "gc": "Gaussian Copula"
+                },
+                "samples": "Aantal samples"
             },
             "actions": {
                 "tryItOut": "Uitproberen",
