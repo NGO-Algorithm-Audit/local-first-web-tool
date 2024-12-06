@@ -52,14 +52,16 @@ export default function BiasDetection() {
         fileName: '',
         demo: false,
     });
-    const { t } = useTranslation();
-    // Select the content to print
+    const { t, i18n } = useTranslation();
 
     const contentRef = useRef<HTMLDivElement | null>(null);
     const reactToPrintFn = useReactToPrint({
         contentRef: contentRef,
         pageStyle: PAGE_STYLE,
     });
+
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get('lang');
 
     const {
         loading,
@@ -89,11 +91,12 @@ export default function BiasDetection() {
     };
 
     useEffect(() => {
-        console.log(
-            'document.referrer and is nl',
-            document.referrer,
-            document.referrer?.includes('/nl/')
-        );
+        if (lang) {
+            i18n.changeLanguage(lang);
+        }
+    }, [i18n]);
+
+    useEffect(() => {
         if (pythonCode) {
             initialise({ code: pythonCode, data: '' });
         }
@@ -135,7 +138,7 @@ export default function BiasDetection() {
 
     return (
         <main ref={contentRef} className="gap-4 p-4 flex flex-col">
-            <LanguageSwitcher />
+            {!lang && <LanguageSwitcher />}
             <div className="relative flex-1 flex-col items-start">
                 <BiasSettings
                     onRun={onRun}
