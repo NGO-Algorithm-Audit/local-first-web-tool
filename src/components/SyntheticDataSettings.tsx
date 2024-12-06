@@ -11,6 +11,8 @@ import Papa from 'papaparse';
 import { SyntheticDataParameters } from './synthetic-data-interfaces/BiasDetectionParameters';
 import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { Slider } from './ui/slider';
+import { Label } from './ui/label';
 
 const createFormSchema = (t: (key: string) => string) =>
     z.object({
@@ -42,6 +44,8 @@ export default function BiasSettings({
             sdgMethod: 'gc',
         },
     });
+
+    const [outputSamples, setOutputSamples] = useState([1000]);
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
         data: Record<string, string>[];
@@ -84,6 +88,7 @@ export default function BiasSettings({
             dataType: 'numeric',
             isDemo: false,
             sdgMethod: data.sdgMethod,
+            samples: outputSamples[0],
         });
     };
 
@@ -146,6 +151,21 @@ export default function BiasSettings({
                                         </FormItem>
                                     </RadioGroup>
                                 )}
+                            />
+                        </div>
+
+                        <div className="grid gap-3">
+                            <Label htmlFor="samples">
+                                {t('syntheticData.form.fieldset.samples')} (
+                                {outputSamples})
+                            </Label>
+                            <Slider
+                                id="samples"
+                                defaultValue={outputSamples}
+                                max={5000}
+                                step={10}
+                                onValueChange={value => setOutputSamples(value)}
+                                className="cursor-pointer"
                             />
                         </div>
                     </fieldset>

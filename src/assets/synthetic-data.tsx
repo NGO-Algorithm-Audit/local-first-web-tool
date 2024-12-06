@@ -44,6 +44,7 @@ from js import setResult
 from js import dataType
 from js import isDemo
 from js import sdgMethod
+from js import samples
 
 INIT_STEP = 'init'
 PROCESSOR_STEP = 'processor'
@@ -577,7 +578,7 @@ def run():
         spop = Synthpop(method='cart')
 
         spop.fit(real_data, dtypes=dtypes_dict)
-        synthetic_data = spop.generate(k=1000)
+        synthetic_data = spop.generate(k=samples)
 
     if (sdgMethod == 'gc'):
         # Initialize synthesizer and fit it to the data
@@ -585,7 +586,7 @@ def run():
         synthesizer.fit(real_data)
 
         # Generate synthetic data
-        synthetic_data = synthesizer.sample(1000)
+        synthetic_data = synthesizer.sample(samples)
 
     # Output some results
     print("Original Data (first 5 rows):", real_data.head())

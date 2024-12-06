@@ -63,7 +63,8 @@
                     "title": "Method",
                     "cart": "cart",
                     "gc": "Gaussian Copula"
-                }
+                },
+                "samples": "Number of samples"
             },
             "actions": {
                 "tryItOut": "Try it out",

@@ -65,6 +65,7 @@ export default function SyntheticDataGeneration() {
         dataType: 'numeric',
         isDemo: false,
         sdgMethod: 'gc',
+        samples: 1000,
     });
 
     const onFileLoad: csvReader['onChange'] = (
@@ -89,7 +90,12 @@ export default function SyntheticDataGeneration() {
             sendData(data.stringified);
         }
         if (data.demo) {
-            onRun({ dataType: 'numeric', isDemo: true, sdgMethod: 'cart' });
+            onRun({
+                dataType: 'numeric',
+                isDemo: true,
+                sdgMethod: 'cart',
+                samples: 1000,
+            });
         }
     }, [initialised, data]);
 
@@ -97,6 +103,7 @@ export default function SyntheticDataGeneration() {
         dataType: string;
         isDemo: boolean;
         sdgMethod: string;
+        samples: number;
     }) => {
         runPython({
             type: 'start',
@@ -105,6 +112,7 @@ export default function SyntheticDataGeneration() {
                     dataType: props.dataType,
                     isDemo: props.isDemo,
                     sdgMethod: props.sdgMethod,
+                    samples: props.samples,
                 },
             },
         });
