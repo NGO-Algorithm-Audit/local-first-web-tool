@@ -22,6 +22,13 @@ const createFormSchema = (t: (key: string) => string) =>
         sdgMethod: z.string(),
     });
 
+interface DemoDataColumns {
+    sex: string;
+    race1: string;
+    ugpa: string;
+    bar: string;
+}
+
 export default function BiasSettings({
     onRun,
     onDataLoad,
@@ -75,9 +82,16 @@ export default function BiasSettings({
         const file = await fetch('/Bar-Pass-Prediction.csv')
             .then(response => response.text())
             .then(data => Papa.parse(data, { header: true }));
+
+        const demoData = file.data.map((row: unknown) => ({
+            sex: (row as DemoDataColumns)['sex'],
+            race1: (row as DemoDataColumns)['race1'],
+            ugpa: (row as DemoDataColumns)['ugpa'],
+            bar: (row as DemoDataColumns)['bar'],
+        }));
         onDataLoad(
-            file.data as Record<string, string>[],
-            Papa.unparse(file.data),
+            demoData as Record<string, string>[],
+            Papa.unparse(demoData),
             'demo',
             true
         );
