@@ -81,7 +81,7 @@
     "biasAnalysis": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A demo dataset is loaded below. Using a subset of the [Twitter15] dataset..."
+            "description": "A demo data set is loaded below. Based on features of tweets, from the dataset [Twitter15], a BERT-based classifier has predicted whether a tweet is fake news or not. False positive classifications are marker in the FP column and will be used as a performance metric is this use case."
         },
         "parameters": {
             "heading": "Parameters selected",
@@ -92,7 +92,7 @@
         },
         "clusters": {
             "summary": "We found {{clusterCount}} clusters. Cluster with most bias consists of {{biasedCount}} datapoints. The uploaded dataset consists of {{totalCount}} datapoints.",
-            "sizeHint": "By adapting the \"Minimal cluster size\" parameter, you can control the number of clusters."
+            "sizeHint": "By adapting the \"Minimal cluster size\" parameter, the number of clusters can be controlled."
         },
         "biasedCluster": {
             "heading": "In the most biased cluster datapoints have:",
