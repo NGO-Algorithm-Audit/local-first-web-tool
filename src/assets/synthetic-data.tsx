@@ -592,8 +592,8 @@ def run():
     print("Original Data (first 5 rows):", real_data.head())
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
 
+    # Store synthetic data for export
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
-
 
     results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     print('Results:', results)

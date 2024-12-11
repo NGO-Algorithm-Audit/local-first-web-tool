@@ -16,6 +16,7 @@
     "biasSettings": {
         "exportToPDF": "Download bias detection rapport als pdf",
         "exportToJSON": "Export clusters als JSON",
+
         "form": {
             "fieldsets": {
                 "data": {
@@ -58,6 +59,7 @@
     "syntheticData": {
         "exportToPDF": "Download evulatie rapport als pdf",
         "exportToJSON": "Download synthetische data als JSON",
+        "exportToCSV": "Download synthetische data als CSV",
         "form": {
             "errors": {
                 "csvRequired": "Upload een CSV-bestand.",

@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { downloadFile } from '@/lib/download-file';
 import { SyntheticDataParameters } from '@/components/synthetic-data-interfaces/SyntheticDataParameters';
+import { exportToCSV } from '@/lib/utils';
 
 const PAGE_STYLE = `
     @page {
@@ -132,6 +133,12 @@ export default function SyntheticDataGeneration() {
         });
     };
 
+    const handleExport = (syntheticData: object[]) => {
+        if (syntheticData.length > 0) {
+            exportToCSV(syntheticData, 'synthetic_data');
+        }
+    };
+
     return (
         <main ref={contentRef} className="gap-4 p-4 flex flex-col">
             {!lang && <LanguageSwitcher />}
@@ -172,25 +179,38 @@ export default function SyntheticDataGeneration() {
                                     {t('syntheticData.exportToPDF')}
                                 </DropdownMenuItem>
                                 {clusterInfo && (
-                                    <DropdownMenuItem
-                                        onClick={() => {
-                                            downloadFile(
-                                                JSON.stringify(
-                                                    {
-                                                        fileName: data.fileName,
-                                                        ...clusterInfo,
-                                                    },
-                                                    null,
-                                                    2
-                                                ),
-                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                                'application/json'
-                                            );
-                                        }}
-                                    >
-                                        <Share className="size-3.5 mr-2" />
-                                        {t('syntheticData.exportToJSON')}
-                                    </DropdownMenuItem>
+                                    <>
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                downloadFile(
+                                                    JSON.stringify(
+                                                        {
+                                                            fileName:
+                                                                data.fileName,
+                                                            ...clusterInfo,
+                                                        },
+                                                        null,
+                                                        2
+                                                    ),
+                                                    `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
+                                                    'application/json'
+                                                );
+                                            }}
+                                        >
+                                            <Share className="size-3.5 mr-2" />
+                                            {t('syntheticData.exportToJSON')}
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                handleExport(
+                                                    clusterInfo.syntheticData as object[]
+                                                );
+                                            }}
+                                        >
+                                            <Share className="size-3.5 mr-2" />
+                                            {t('syntheticData.exportToCSV')}
+                                        </DropdownMenuItem>
+                                    </>
                                 )}
                             </DropdownMenuContent>
                         </DropdownMenu>
