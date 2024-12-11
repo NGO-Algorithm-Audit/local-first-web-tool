@@ -11,7 +11,12 @@
     "loadingMessage": "Setting up environment...",
     "mostBiasedCluster": "Most biased\n cluster",
     "cluster": "Cluster",
+    "exportToPDF": "Export to PDF",
+    "exportToJSON": "Export synthetic data to JSON",
+    "downloadButton": "Download",
     "biasSettings": {
+        "exportToPDF": "Download bias detection report as pdf",
+        "exportToJSON": "Export clusters as JSON",
         "form": {
             "fieldsets": {
                 "data": {
@@ -52,6 +57,8 @@
         }
     },
     "syntheticData": {
+        "exportToPDF": "Download evaluation report as pdf",
+        "exportToJSON": "Download synthetic data as JSON",
         "form": {
             "errors": {
                 "csvRequired": "Please upload a CSV file.",

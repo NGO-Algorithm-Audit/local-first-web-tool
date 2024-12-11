@@ -11,7 +11,11 @@
     "loadingMessage": "Omgeving instellen...",
     "mostBiasedCluster": "Meest bevooroordeelde\n cluster",
     "cluster": "Cluster {{value}}",
+    "downloadButton": "Download",
+
     "biasSettings": {
+        "exportToPDF": "Download bias detection rapport als pdf",
+        "exportToJSON": "Export clusters als JSON",
         "form": {
             "fieldsets": {
                 "data": {
@@ -52,6 +56,8 @@
         }
     },
     "syntheticData": {
+        "exportToPDF": "Download evulatie rapport als pdf",
+        "exportToJSON": "Download synthetische data als JSON",
         "form": {
             "errors": {
                 "csvRequired": "Upload een CSV-bestand.",

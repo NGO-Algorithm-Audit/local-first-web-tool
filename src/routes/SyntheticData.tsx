@@ -12,6 +12,12 @@ import SyntheticDataSettings from '@/components/SyntheticDataSettings';
 import { SyntheticDataInfo } from '@/components/synthetic-data-interfaces/cluster-export';
 import LanguageSwitcher from '@/components/ui/languageSwitcher';
 import { useTranslation } from 'react-i18next';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const PAGE_STYLE = `
     @page {
@@ -148,15 +154,23 @@ export default function SyntheticDataGeneration() {
             >
                 {initialised && data.data.length > 0 && result.length > 0 && (
                     <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="p-4 text-sm"
-                            onClick={() => reactToPrintFn()}
-                        >
-                            <Share className="size-3.5 mr-2" />
-                            {t('shareButton')}
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm" className="p-4 text-sm">
+                                    {t('downloadButton')}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => reactToPrintFn()}>
+                                    <Share className="size-3.5 mr-2" />
+                                    {t('syntheticData.exportToPDF')}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Share className="size-3.5 mr-2" />
+                                    {t('syntheticData.exportToJSON')}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 )}
 
