@@ -15,7 +15,7 @@
     "exportToJSON": "Export synthetic data to JSON",
     "downloadButton": "Download",
     "biasSettings": {
-        "exportToPDF": "Download bias detection report as pdf",
+        "exportToPDF": "Download bias detection report as PDF",
         "exportToJSON": "Export clusters as JSON",
         "form": {
             "fieldsets": {
@@ -57,8 +57,9 @@
         }
     },
     "syntheticData": {
-        "exportToPDF": "Download evaluation report as pdf",
+        "exportToPDF": "Download evaluation report as PDF",
         "exportToJSON": "Download synthetic data as JSON",
+        "exportToCSV": "Download synthetic data as CSV",
         "form": {
             "errors": {
                 "csvRequired": "Please upload a CSV file.",

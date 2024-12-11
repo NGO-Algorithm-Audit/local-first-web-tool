@@ -592,8 +592,8 @@ def run():
     print("Original Data (first 5 rows):", real_data.head())
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
 
+    # Store synthetic data for export
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
-
 
     results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     print('Results:', results)
@@ -616,7 +616,7 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Output file:'}
     ))
-    setResult(json.dumps({'type': 'table', 'data': synthetic_data.to_json(orient="records")}))
+    setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 
     np.random.seed(42)
     heatmap = np.random.rand(100, 10)
