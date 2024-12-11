@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
-import { Share } from 'lucide-react';
+import { ChevronDown, Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
@@ -20,7 +20,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 const PAGE_STYLE = `
     @page {
@@ -165,31 +165,40 @@ export default function BiasDetection() {
                     <div className="ml-auto flex flex-row gap-2 hideonprint">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm" className="p-4 text-sm">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="p-4 text-sm"
+                                >
                                     {t('downloadButton')}
+                                    <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => reactToPrintFn()}>
+                                <DropdownMenuItem
+                                    onClick={() => reactToPrintFn()}
+                                >
                                     <Share className="size-3.5 mr-2" />
                                     {t('biasSettings.exportToPDF')}
                                 </DropdownMenuItem>
                                 {clusterInfo && (
-                                    <DropdownMenuItem onClick={() => {
-                                        downloadFile(
-                                            JSON.stringify(
-                                                {
-                                                    fileName: data.fileName,
-                                                    ...clusterInfo,
-                                                },
-                                                null,
-                                                2
-                                            ),
-                                            `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                            'application/json'
-                                        );
-                                    }}>
-                                       <Share className="size-3.5 mr-2" />
+                                    <DropdownMenuItem
+                                        onClick={() => {
+                                            downloadFile(
+                                                JSON.stringify(
+                                                    {
+                                                        fileName: data.fileName,
+                                                        ...clusterInfo,
+                                                    },
+                                                    null,
+                                                    2
+                                                ),
+                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
+                                                'application/json'
+                                            );
+                                        }}
+                                    >
+                                        <Share className="size-3.5 mr-2" />
                                         {t('biasSettings.exportToJSON')}
                                     </DropdownMenuItem>
                                 )}

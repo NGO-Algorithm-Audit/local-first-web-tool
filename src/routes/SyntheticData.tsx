@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/synthetic-data';
 import { usePython } from '@/components/pyodide/use-python';
-import { Share } from 'lucide-react';
+import { Share, ChevronDown } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
@@ -161,6 +161,7 @@ export default function SyntheticDataGeneration() {
                                     className="p-4 text-sm"
                                 >
                                     {t('downloadButton')}
+                                    <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
