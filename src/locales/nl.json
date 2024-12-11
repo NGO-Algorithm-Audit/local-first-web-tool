@@ -14,7 +14,7 @@
     "downloadButton": "Download",
 
     "biasSettings": {
-        "exportToPDF": "Download bias detection rapport als pdf",
+        "exportToPDF": "Download bias detection rapport als PDF",
         "exportToJSON": "Export clusters als JSON",
 
         "form": {
@@ -57,7 +57,7 @@
         }
     },
     "syntheticData": {
-        "exportToPDF": "Download evulatie rapport als pdf",
+        "exportToPDF": "Download evulatie rapport als PDF",
         "exportToJSON": "Download synthetische data als JSON",
         "exportToCSV": "Download synthetische data als CSV",
         "form": {
