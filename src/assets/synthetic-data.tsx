@@ -616,7 +616,7 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Output file:'}
     ))
-    setResult(json.dumps({'type': 'table', 'data': synthetic_data.to_json(orient="records")}))
+    setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 
     np.random.seed(42)
     heatmap = np.random.rand(100, 10)
