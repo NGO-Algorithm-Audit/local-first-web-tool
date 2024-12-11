@@ -42,7 +42,7 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
         const colorScale = d3
             .scaleSequential()
             .domain([-1, 1])
-            .interpolator(d3.interpolateBlues);
+            .interpolator(d3.interpolateRdYlBu);
 
         const domain = colorScale.domain();
 

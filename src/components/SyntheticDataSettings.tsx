@@ -8,11 +8,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
-import { SyntheticDataParameters } from './synthetic-data-interfaces/BiasDetectionParameters';
 import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Slider } from './ui/slider';
 import { Label } from './ui/label';
+import { SyntheticDataParameters } from './synthetic-data-interfaces/SyntheticDataParameters';
 
 const createFormSchema = (t: (key: string) => string) =>
     z.object({
@@ -99,7 +99,6 @@ export default function BiasSettings({
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
         onRun({
-            dataType: 'numeric',
             isDemo: false,
             sdgMethod: data.sdgMethod,
             samples: outputSamples[0],

@@ -15,6 +15,12 @@ import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/
 import { CSVData } from '@/components/bias-detection-interfaces/csv-data';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/languageSwitcher';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const PAGE_STYLE = `
     @page {
@@ -157,39 +163,38 @@ export default function BiasDetection() {
             >
                 {initialised && data.data.length > 0 && result.length > 0 && (
                     <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="p-4 text-sm"
-                            onClick={() => reactToPrintFn()}
-                        >
-                            <Share className="size-3.5 mr-2" />
-                            {t('shareButton')}
-                        </Button>
-                        {clusterInfo && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="p-4 text-sm"
-                                onClick={() => {
-                                    downloadFile(
-                                        JSON.stringify(
-                                            {
-                                                fileName: data.fileName,
-                                                ...clusterInfo,
-                                            },
-                                            null,
-                                            2
-                                        ),
-                                        `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                        'application/json'
-                                    );
-                                }}
-                            >
-                                <Share className="size-3.5 mr-2" />
-                                {t('exportButton')}
-                            </Button>
-                        )}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm" className="p-4 text-sm">
+                                    {t('downloadButton')}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => reactToPrintFn()}>
+                                    <Share className="size-3.5 mr-2" />
+                                    {t('biasSettings.exportToPDF')}
+                                </DropdownMenuItem>
+                                {clusterInfo && (
+                                    <DropdownMenuItem onClick={() => {
+                                        downloadFile(
+                                            JSON.stringify(
+                                                {
+                                                    fileName: data.fileName,
+                                                    ...clusterInfo,
+                                                },
+                                                null,
+                                                2
+                                            ),
+                                            `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
+                                            'application/json'
+                                        );
+                                    }}>
+                                       <Share className="size-3.5 mr-2" />
+                                        {t('biasSettings.exportToJSON')}
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 )}
 
