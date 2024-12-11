@@ -17,7 +17,9 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
+import { downloadFile } from '@/lib/download-file';
+import { SyntheticDataParameters } from '@/components/synthetic-data-interfaces/SyntheticDataParameters';
 
 const PAGE_STYLE = `
     @page {
@@ -67,8 +69,8 @@ export default function SyntheticDataGeneration() {
         runPython,
         sendData,
         error,
-    } = usePython<SyntheticDataInfo, SyntheticDataInfo>({
-        dataType: 'numeric',
+        clusterInfo,
+    } = usePython<SyntheticDataParameters, SyntheticDataInfo>({
         isDemo: false,
         sdgMethod: 'gc',
         samples: 1000,
@@ -106,7 +108,6 @@ export default function SyntheticDataGeneration() {
         }
         if (data.demo) {
             onRun({
-                dataType: 'numeric',
                 isDemo: true,
                 sdgMethod: 'cart',
                 samples: 1000,
@@ -115,7 +116,6 @@ export default function SyntheticDataGeneration() {
     }, [initialised, data]);
 
     const onRun = (props: {
-        dataType: string;
         isDemo: boolean;
         sdgMethod: string;
         samples: number;
@@ -124,7 +124,6 @@ export default function SyntheticDataGeneration() {
             type: 'start',
             params: {
                 parameters: {
-                    dataType: props.dataType,
                     isDemo: props.isDemo,
                     sdgMethod: props.sdgMethod,
                     samples: props.samples,
@@ -156,19 +155,42 @@ export default function SyntheticDataGeneration() {
                     <div className="ml-auto flex flex-row gap-2 hideonprint">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm" className="p-4 text-sm">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="p-4 text-sm"
+                                >
                                     {t('downloadButton')}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => reactToPrintFn()}>
+                                <DropdownMenuItem
+                                    onClick={() => reactToPrintFn()}
+                                >
                                     <Share className="size-3.5 mr-2" />
                                     {t('syntheticData.exportToPDF')}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Share className="size-3.5 mr-2" />
-                                    {t('syntheticData.exportToJSON')}
-                                </DropdownMenuItem>
+                                {clusterInfo && (
+                                    <DropdownMenuItem
+                                        onClick={() => {
+                                            downloadFile(
+                                                JSON.stringify(
+                                                    {
+                                                        fileName: data.fileName,
+                                                        ...clusterInfo,
+                                                    },
+                                                    null,
+                                                    2
+                                                ),
+                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
+                                                'application/json'
+                                            );
+                                        }}
+                                    >
+                                        <Share className="size-3.5 mr-2" />
+                                        {t('syntheticData.exportToJSON')}
+                                    </DropdownMenuItem>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

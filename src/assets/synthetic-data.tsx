@@ -41,10 +41,10 @@ start = time.time()
 
 from js import data
 from js import setResult
-from js import dataType
 from js import isDemo
 from js import sdgMethod
 from js import samples
+from js import setOutputData
 
 INIT_STEP = 'init'
 PROCESSOR_STEP = 'processor'
@@ -591,6 +591,9 @@ def run():
     # Output some results
     print("Original Data (first 5 rows):", real_data.head())
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
+
+    setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
+
 
     results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     print('Results:', results)
