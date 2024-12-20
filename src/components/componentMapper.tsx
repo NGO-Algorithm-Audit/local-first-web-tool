@@ -184,7 +184,7 @@ export default function ComponentMapper({
                                     : Object.keys(realData[0]).map(
                                           (
                                               columnName: string,
-                                              index: number
+                                              columnIndex: number
                                           ) => {
                                               const realDataColumn =
                                                   realData.map(
@@ -205,7 +205,9 @@ export default function ComponentMapper({
                                                       ) => row[columnName]
                                                   );
                                               return (
-                                                  <ErrorBoundary key={index}>
+                                                  <ErrorBoundary
+                                                      key={columnIndex}
+                                                  >
                                                       <DistributionBarChart
                                                           realData={
                                                               realDataColumn
@@ -252,7 +254,10 @@ export default function ComponentMapper({
                             data: syntheticData,
                         } = createHeatmapdata(resultItem.synthetic);
                         return (
-                            <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                            <div
+                                key={`heatmap-${index}`}
+                                className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
+                            >
                                 <div className="col-[1]">
                                     <h2 className="pb-2">
                                         {t('heatmap.realdata')}
