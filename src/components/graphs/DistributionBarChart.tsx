@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { useTranslation } from 'react-i18next';
 
 interface DistributionBarChartProps {
     column: string;
@@ -8,7 +9,7 @@ interface DistributionBarChartProps {
 }
 
 // Define margins for the chart
-const margin = { top: 10, right: 50, bottom: 40, left: 50 };
+const margin = { top: 30, right: 50, bottom: 40, left: 50 };
 // Define height for the chart, adjusting for margins
 const height = 300 - margin.top - margin.bottom;
 
@@ -24,38 +25,7 @@ const DistributionBarChart = ({
     const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
-
-    // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
-    // const x0 = useMemo(
-    //     () =>
-    //         d3
-    //             .scaleBand()
-    //             .domain(data.map(d => d.name))
-    //             .range([
-    //                 0,
-    //                 Math.max(
-    //                     containerWidth - margin.right,
-    //                     data.length * (barWidth + barGap)
-    //                 ),
-    //             ])
-    //             .padding(0.2),
-    //     [data, containerWidth]
-    // );
-
-    // // Create y-axis scale using d3.scaleLinear, with a range from the height to 0
-    // const y = useMemo(
-    //     () =>
-    //         d3
-    //             .scaleLinear()
-    //             .domain([
-    //                 d3.min(data, d => d.values) ?? 0, // Minimum value in the dataset (or 0 if undefined)
-    //                 d3.max(data, d => d.values) ?? 0, // Maximum value in the dataset (or 0 if undefined)
-    //             ])
-    //             .nice() // Rounds the domain to nice round values
-    //             .range([height, 0]),
-    //     [data]
-    // );
-
+    const { t } = useTranslation();
     useEffect(() => {
         const plotWidth = containerWidth - margin.left - margin.right;
         const plotHeight = height - margin.top - margin.bottom;
@@ -160,9 +130,67 @@ const DistributionBarChart = ({
             .attr('text-anchor', 'middle')
             .style('font-size', '12px')
             .style('font-weight', 'bold')
-            .text(`Distribution for ${column}`);
+            .text(`${t('distribution.distributionFor')} ${column}`);
 
-        // Add a legend label for the mean line
+        // Add legend
+        const legend = svg
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', `translate(${plotWidth - 120}, -20)`);
+
+        // Add the text elements first so we can measure them
+        const realDataText = legend
+            .append('text')
+            .attr('x', 20)
+            .attr('y', 12)
+            .style('font-size', '12px')
+            .text(t('distribution.realData'));
+
+        const syntheticDataText = legend
+            .append('text')
+            .attr('x', 20)
+            .attr('y', 32)
+            .style('font-size', '12px')
+            .text(t('distribution.syntheticData'));
+
+        // Calculate the width needed based on the longest text
+        const realTextWidth = realDataText.node()?.getBBox().width || 0;
+        const syntheticTextWidth =
+            syntheticDataText.node()?.getBBox().width || 0;
+        const maxTextWidth = Math.max(realTextWidth, syntheticTextWidth);
+        const legendWidth = maxTextWidth + 40; // 40 = 20px text offset + 15px rect width + 5px padding
+
+        // Add background rectangle for legend with calculated width
+        legend
+            .insert('rect', 'text') // Insert before the text elements
+            .attr('x', -10)
+            .attr('y', -10)
+            .attr('width', legendWidth)
+            .attr('height', 55)
+            .attr('rx', 5)
+            .style('fill', 'white')
+            .style('opacity', 0.7)
+            .style('stroke', '#e2e8f0')
+            .style('stroke-width', 1);
+
+        // Add the colored rectangles
+        legend
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 15)
+            .attr('height', 15)
+            .style('fill', 'steelblue')
+            .style('opacity', 0.5);
+
+        legend
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 20)
+            .attr('width', 15)
+            .attr('height', 15)
+            .style('fill', 'orange')
+            .style('opacity', 0.5);
     }, [containerWidth, column, realData, syntheticData]);
 
     useEffect(() => {
