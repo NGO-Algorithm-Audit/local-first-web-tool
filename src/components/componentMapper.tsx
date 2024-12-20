@@ -9,6 +9,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
 import HeatMapChart from './graphs/HeatMap';
+import DistributionBarChart from './graphs/DistributionBarChart';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -172,6 +173,57 @@ export default function ComponentMapper({
                             </ErrorBoundary>
                         );
                     }
+                    case 'distribution': {
+                        const realData = JSON.parse(resultItem.real);
+                        const syntheticData = JSON.parse(resultItem.synthetic);
+                        return (
+                            <div key={`distribution-${index}`}>
+                                {realData.length === 0 ||
+                                syntheticData.length === 0
+                                    ? null
+                                    : Object.keys(realData[0]).map(
+                                          (
+                                              columnName: string,
+                                              columnIndex: number
+                                          ) => {
+                                              const realDataColumn =
+                                                  realData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              const syntheticDataColumn =
+                                                  syntheticData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              return (
+                                                  <ErrorBoundary
+                                                      key={columnIndex}
+                                                  >
+                                                      <DistributionBarChart
+                                                          realData={
+                                                              realDataColumn
+                                                          }
+                                                          syntheticData={
+                                                              syntheticDataColumn
+                                                          }
+                                                          column={columnName}
+                                                      />
+                                                  </ErrorBoundary>
+                                              );
+                                          }
+                                      )}
+                            </div>
+                        );
+                    }
                     case 'heatmap': {
                         /*
                             resultItem.real
@@ -202,7 +254,10 @@ export default function ComponentMapper({
                             data: syntheticData,
                         } = createHeatmapdata(resultItem.synthetic);
                         return (
-                            <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                            <div
+                                key={`heatmap-${index}`}
+                                className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
+                            >
                                 <div className="col-[1]">
                                     <h2 className="pb-2">
                                         {t('heatmap.realdata')}
