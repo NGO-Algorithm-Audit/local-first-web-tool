@@ -4,6 +4,7 @@ import { autoBandwidth, extentLinear, seriesSvgBar } from 'd3fc';
 interface HeatMapChartProps {
     title: string;
     data: number[][];
+    columns: string[];
 }
 
 // Define margins for the chart
@@ -11,7 +12,7 @@ const margin = { top: 10, right: 0, bottom: 40, left: 0 };
 // Define height for the chart, adjusting for margins
 const height = 300 - margin.top - margin.bottom;
 
-const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
+const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
     const svgRef = useRef(null); // Reference to the SVG element
     const containerRef = useRef(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
@@ -19,7 +20,7 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
     useEffect(() => {
         // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
-        const legendWidth = 100;
+        const legendWidth = 150;
         const widthForHeatmap = containerWidth - 50 - legendWidth;
         const barWidth = Math.max(
             10,
@@ -73,6 +74,25 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
                     .style('fill', function () {
                         return colorScale(dataCell);
                     });
+
+                const color = d3.color(colorScale(dataCell));
+                if (!color) return 'black';
+
+                // Get RGB values using d3.rgb() ..
+                const rgb = d3.rgb(color);
+
+                // Calculate perceived brightness
+                const luminance =
+                    (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+                const textColor = luminance < 0.5 ? 'white' : 'black';
+                svg.append('text')
+                    .attr('x', barWidth / 2 + 50 + cellIndex * barWidth)
+                    .attr('y', barHeight / 2 + rowIndex * barHeight)
+                    .attr('text-anchor', 'middle')
+                    .attr('dominant-baseline', 'middle')
+                    .style('fill', textColor)
+                    .style('font-size', '10px')
+                    .text(dataCell.toFixed(2));
             });
         });
 
@@ -81,10 +101,10 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .data(data[0])
             .join('text')
             .attr('x', (_, i) => 50 + i * barWidth + barWidth / 2)
-            .attr('y', 50 + barHeight * data.length)
+            .attr('y', 20 + barHeight * data.length)
             .attr('text-anchor', 'middle')
             .style('font-size', '12px')
-            .text((_, i) => `Cell ${i + 1}`);
+            .text((_, i) => `${columns?.[i]}`);
 
         svg.append('g')
             .selectAll('text')
@@ -95,7 +115,7 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
             .attr('dy', '0.35em')
             .attr('text-anchor', 'end')
             .style('font-size', '12px')
-            .text((_, i) => `Row ${i + 1}`);
+            .text((_, i) => `${columns?.[i]}`);
 
         const svgBar = autoBandwidth(seriesSvgBar())
             .xScale(xScale)
@@ -130,7 +150,7 @@ const HeatMapChart = ({ title, data }: HeatMapChartProps) => {
         const legendBar = svg.append('g').datum(expandedDomain).call(svgBar);
         legendBar.attr(
             'transform',
-            `translate(${legendWidth + barWidth * data.length},0)`
+            `translate(${legendWidth - 50 + barWidth * data.length},0)`
         );
         const legendBarWidth = Math.abs(
             legendBar.node()!.getBoundingClientRect().x

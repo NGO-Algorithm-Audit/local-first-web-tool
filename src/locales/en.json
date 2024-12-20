@@ -114,5 +114,9 @@
         "distribution": {
             "heading": "The \"{{variable}}\" variable distribution across the different clusters:"
         }
+    },
+    "heatmap": {
+        "realdata": "Correlation matrix of real data",
+        "syntheticdata": "Correlation matrix of synthetic data"
     }
 }
