@@ -76,14 +76,6 @@ const DistributionBarChart = ({
             .domain(xScale.domain() as [number, number])
             .thresholds(30)(syntheticData);
 
-        const yScale = d3
-            .scaleLinear()
-            .domain([
-                0,
-                d3.max([...binsReal, ...binsSynthetic], d => d.length) || 1,
-            ])
-            .range([plotHeight, 0]);
-
         // Clear any previous SVG content to avoid overlapping elements
         d3.select(svgRef.current).selectAll('*').remove();
 
@@ -99,7 +91,6 @@ const DistributionBarChart = ({
         svg.append('g')
             .attr('transform', `translate(0, ${plotHeight})`)
             .call(d3.axisBottom(xScale));
-        svg.append('g').call(d3.axisLeft(yScale));
 
         svg.append('defs')
             .append('style')
@@ -108,6 +99,28 @@ const DistributionBarChart = ({
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
 
+        const realDensityFactor = 1 / realData.length;
+        const syntheticDensityFactor = 1 / syntheticData.length;
+
+        const yScale = d3
+            .scaleLinear()
+            .domain([
+                0,
+                d3.max([
+                    ...binsReal.map(bin => bin.length * realDensityFactor),
+                    ...binsSynthetic.map(
+                        bin => bin.length * syntheticDensityFactor
+                    ),
+                ]) || 1,
+            ])
+            .range([plotHeight, 0]);
+
+        // Add axes
+        svg.append('g')
+            .attr('transform', `translate(0, ${plotHeight})`)
+            .call(d3.axisBottom(xScale));
+        svg.append('g').call(d3.axisLeft(yScale));
+
         // Draw real data histogram
         svg.selectAll('.bar-real')
             .data(binsReal)
@@ -115,9 +128,12 @@ const DistributionBarChart = ({
             .append('rect')
             .attr('class', 'bar-real')
             .attr('x', d => xScale(d.x0 || 0))
-            .attr('y', d => yScale(d.length))
+            .attr('y', d => yScale(d.length * realDensityFactor))
             .attr('width', d => xScale(d.x1 || 0) - xScale(d.x0 || 0) - 1)
-            .attr('height', d => plotHeight - yScale(d.length))
+            .attr(
+                'height',
+                d => plotHeight - yScale(d.length * realDensityFactor)
+            )
             .style('fill', 'steelblue')
             .style('opacity', 0.5);
 
@@ -128,9 +144,12 @@ const DistributionBarChart = ({
             .append('rect')
             .attr('class', 'bar-synthetic')
             .attr('x', d => xScale(d.x0 || 0))
-            .attr('y', d => yScale(d.length))
+            .attr('y', d => yScale(d.length * syntheticDensityFactor))
             .attr('width', d => xScale(d.x1 || 0) - xScale(d.x0 || 0) - 1)
-            .attr('height', d => plotHeight - yScale(d.length))
+            .attr(
+                'height',
+                d => plotHeight - yScale(d.length * syntheticDensityFactor)
+            )
             .style('fill', 'orange')
             .style('opacity', 0.5);
 

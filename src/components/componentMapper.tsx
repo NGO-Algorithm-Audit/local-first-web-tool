@@ -176,33 +176,51 @@ export default function ComponentMapper({
                     case 'distribution': {
                         const realData = JSON.parse(resultItem.real);
                         const syntheticData = JSON.parse(resultItem.synthetic);
-                        return realData.length === 0 ||
-                            syntheticData.length === 0
-                            ? null
-                            : Object.keys(realData[0]).map(
-                                  (columnName: string, index: number) => {
-                                      const realDataColumn = realData.map(
-                                          (row: Record<string, number>) =>
-                                              row[columnName]
-                                      );
-                                      const syntheticDataColumn =
-                                          syntheticData.map(
-                                              (row: Record<string, number>) =>
-                                                  row[columnName]
-                                          );
-                                      return (
-                                          <ErrorBoundary key={index}>
-                                              <DistributionBarChart
-                                                  realData={realDataColumn}
-                                                  syntheticData={
-                                                      syntheticDataColumn
-                                                  }
-                                                  column={columnName}
-                                              />
-                                          </ErrorBoundary>
-                                      );
-                                  }
-                              );
+                        return (
+                            <div key={`distribution-${index}`}>
+                                {realData.length === 0 ||
+                                syntheticData.length === 0
+                                    ? null
+                                    : Object.keys(realData[0]).map(
+                                          (
+                                              columnName: string,
+                                              index: number
+                                          ) => {
+                                              const realDataColumn =
+                                                  realData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              const syntheticDataColumn =
+                                                  syntheticData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              return (
+                                                  <ErrorBoundary key={index}>
+                                                      <DistributionBarChart
+                                                          realData={
+                                                              realDataColumn
+                                                          }
+                                                          syntheticData={
+                                                              syntheticDataColumn
+                                                          }
+                                                          column={columnName}
+                                                      />
+                                                  </ErrorBoundary>
+                                              );
+                                          }
+                                      )}
+                            </div>
+                        );
                     }
                     case 'heatmap': {
                         /*
