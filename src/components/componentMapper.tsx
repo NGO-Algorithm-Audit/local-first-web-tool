@@ -9,6 +9,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
 import HeatMapChart from './graphs/HeatMap';
+import DistributionBarChart from './graphs/DistributionBarChart';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -171,6 +172,37 @@ export default function ComponentMapper({
                                 />
                             </ErrorBoundary>
                         );
+                    }
+                    case 'distribution': {
+                        const realData = JSON.parse(resultItem.real);
+                        const syntheticData = JSON.parse(resultItem.synthetic);
+                        return realData.length === 0 ||
+                            syntheticData.length === 0
+                            ? null
+                            : Object.keys(realData[0]).map(
+                                  (columnName: string, index: number) => {
+                                      const realDataColumn = realData.map(
+                                          (row: Record<string, number>) =>
+                                              row[columnName]
+                                      );
+                                      const syntheticDataColumn =
+                                          syntheticData.map(
+                                              (row: Record<string, number>) =>
+                                                  row[columnName]
+                                          );
+                                      return (
+                                          <ErrorBoundary key={index}>
+                                              <DistributionBarChart
+                                                  realData={realDataColumn}
+                                                  syntheticData={
+                                                      syntheticDataColumn
+                                                  }
+                                                  column={columnName}
+                                              />
+                                          </ErrorBoundary>
+                                      );
+                                  }
+                              );
                     }
                     case 'heatmap': {
                         /*
