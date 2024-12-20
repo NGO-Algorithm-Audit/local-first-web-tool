@@ -619,11 +619,15 @@ def run():
     setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 
     np.random.seed(42)
-    heatmap = np.random.rand(100, 10)
+    # heatmap = np.random.rand(100, 10)
 
-    # Compute the correlation matrix
-    correlation_matrix = np.corrcoef(heatmap, rowvar=False)
-    setResult(json.dumps({'type': 'heatmap', 'data': correlation_matrix.tolist()}))
+    # Compute the (test) correlation matrix
+    # correlation_matrix = np.corrcoef(heatmap, rowvar=False)
+    # setResult(json.dumps({'type': 'heatmap', 'data': correlation_matrix.tolist()}))
+
+    setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
+    
+    # setResult(json.dumps({'type': 'heatmap', 'data': synthetic_data.corr().to_json(orient="records")}))
     return 
     
 

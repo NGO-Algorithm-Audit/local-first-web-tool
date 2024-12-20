@@ -23,6 +23,50 @@ const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     return resultArray;
 };
 
+function createHeatmapdata(resultItem: unknown) {
+    const columns: string[] = [];
+    const heatmapList =
+        typeof resultItem === 'string'
+            ? JSON.parse(resultItem as string)
+            : (resultItem as Record<string, unknown>);
+    const convertedData: number[][] = [];
+    let createdColumns = false;
+    if (heatmapList) {
+        heatmapList.forEach(
+            (heatmapRow: number[] | object, rowIndex: number) => {
+                if (Array.isArray(heatmapRow)) {
+                    columns.push(`${rowIndex + 1}`);
+                    convertedData.push(heatmapRow);
+                } else {
+                    if (typeof heatmapRow === 'object') {
+                        const temp = [];
+                        for (const key in heatmapRow) {
+                            temp.push(
+                                (
+                                    heatmapRow as unknown as Record<
+                                        string,
+                                        number
+                                    >
+                                )[key]
+                            );
+                            if (!createdColumns) {
+                                columns.push(key);
+                            }
+                        }
+                        createdColumns = true;
+                        convertedData.push(temp);
+                    }
+                }
+            }
+        );
+    }
+
+    return {
+        columns,
+        data: convertedData,
+    };
+}
+
 export default function ComponentMapper({
     items,
     data,
@@ -129,8 +173,10 @@ export default function ComponentMapper({
                         );
                     }
                     case 'heatmap': {
-                        console.log('heatmap data', resultItem.data);
                         /*
+                            resultItem.real
+                            resultItem.synthetic
+                          
                             Array in Array
 
                             [
@@ -138,13 +184,48 @@ export default function ComponentMapper({
                                 [4,5,6],
                                 [7,8,9]
                             ]
+
+                            of 
+
+                            Object in Array
+                                
+                            [
+                                {a: 1, b: 2, c: 3},
+                                {a: 4, b: 5, c: 6},
+                                {a: 7, b: 8, c: 9}
+                            ]
                         */
+                        const { columns: realColumns, data: convertedData } =
+                            createHeatmapdata(resultItem.real);
+                        const {
+                            columns: synthticColumns,
+                            data: syntheticData,
+                        } = createHeatmapdata(resultItem.synthetic);
                         return (
-                            <HeatMapChart
-                                key={index}
-                                data={resultItem.data}
-                                title={resultItem.title ?? ''}
-                            />
+                            <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                <div className="col-[1]">
+                                    <h2 className="pb-2">
+                                        {t('heatmap.realdata')}
+                                    </h2>
+                                    <HeatMapChart
+                                        columns={realColumns}
+                                        key={index}
+                                        data={convertedData}
+                                        title={resultItem.title ?? ''}
+                                    />
+                                </div>
+                                <div className="col-[1] lg:col-[2]">
+                                    <h2 className="pb-2">
+                                        {t('heatmap.syntheticdata')}
+                                    </h2>
+                                    <HeatMapChart
+                                        columns={synthticColumns}
+                                        key={index}
+                                        data={syntheticData}
+                                        title={resultItem.title ?? ''}
+                                    />
+                                </div>
+                            </div>
                         );
                     }
                     case 'barchart': {
