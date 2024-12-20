@@ -118,5 +118,10 @@
     "heatmap": {
         "realdata": "Correlation matrix of real data",
         "syntheticdata": "Correlation matrix of synthetic data"
+    },
+    "distribution": {
+        "distributionFor": "Distribution for",
+        "syntheticData": "Synthetic data",
+        "realData": "Real data"
     }
 }
