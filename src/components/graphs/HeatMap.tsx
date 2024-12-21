@@ -152,11 +152,11 @@ const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
             'transform',
             `translate(${legendWidth - 50 + barWidth * data.length},0)`
         );
-        const legendBarWidth = Math.abs(
-            legendBar.node()!.getBoundingClientRect().x
-        );
         svg.append('g')
-            .attr('transform', `translate(${legendBarWidth + 10})`)
+            .attr(
+                'transform',
+                `translate(${legendWidth - 50 + barWidth * data.length + 20})`
+            )
             .datum(expandedDomain)
             .call(axisLabel)
             .select('.domain')
