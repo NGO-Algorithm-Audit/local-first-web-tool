@@ -259,25 +259,19 @@ export default function ComponentMapper({
                                 className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
                             >
                                 <div className="col-[1]">
-                                    <h2 className="pb-2">
-                                        {t('heatmap.realdata')}
-                                    </h2>
                                     <HeatMapChart
                                         columns={realColumns}
                                         key={index}
                                         data={convertedData}
-                                        title={resultItem.title ?? ''}
+                                        title={t('heatmap.realdata')}
                                     />
                                 </div>
                                 <div className="col-[1] lg:col-[2]">
-                                    <h2 className="pb-2">
-                                        {t('heatmap.syntheticdata')}
-                                    </h2>
                                     <HeatMapChart
                                         columns={synthticColumns}
                                         key={index}
                                         data={syntheticData}
-                                        title={resultItem.title ?? ''}
+                                        title={t('heatmap.syntheticdata')}
                                     />
                                 </div>
                             </div>
