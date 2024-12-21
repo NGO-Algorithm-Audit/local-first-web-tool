@@ -118,7 +118,7 @@ self.onmessage = async (e: MessageData) => {
         await micropip.install('unsupervised-bias-detection');
         await micropip.install('kmodes');
         await micropip.install('scipy');
-        await micropip.install('py-synthpop');
+        await micropip.install('python-synthpop');
         return true;
     }
 

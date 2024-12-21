@@ -114,5 +114,14 @@
         "distribution": {
             "heading": "De \"{{variable}}\" variabele verdeling over de verschillende clusters:"
         }
+    },
+    "heatmap": {
+        "realdata": "Correlatie matrix van echte data",
+        "syntheticdata": "Correlatie matrix van synthetische data"
+    },
+    "distribution": {
+        "distributionFor": "Distributie voor",
+        "syntheticData": "Synthetische data",
+        "realData": "Echte data"
     }
 }

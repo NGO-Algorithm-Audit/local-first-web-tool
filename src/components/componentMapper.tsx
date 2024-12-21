@@ -9,6 +9,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
 import HeatMapChart from './graphs/HeatMap';
+import DistributionBarChart from './graphs/DistributionBarChart';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -22,6 +23,50 @@ const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     }
     return resultArray;
 };
+
+function createHeatmapdata(resultItem: unknown) {
+    const columns: string[] = [];
+    const heatmapList =
+        typeof resultItem === 'string'
+            ? JSON.parse(resultItem as string)
+            : (resultItem as Record<string, unknown>);
+    const convertedData: number[][] = [];
+    let createdColumns = false;
+    if (heatmapList) {
+        heatmapList.forEach(
+            (heatmapRow: number[] | object, rowIndex: number) => {
+                if (Array.isArray(heatmapRow)) {
+                    columns.push(`${rowIndex + 1}`);
+                    convertedData.push(heatmapRow);
+                } else {
+                    if (typeof heatmapRow === 'object') {
+                        const temp = [];
+                        for (const key in heatmapRow) {
+                            temp.push(
+                                (
+                                    heatmapRow as unknown as Record<
+                                        string,
+                                        number
+                                    >
+                                )[key]
+                            );
+                            if (!createdColumns) {
+                                columns.push(key);
+                            }
+                        }
+                        createdColumns = true;
+                        convertedData.push(temp);
+                    }
+                }
+            }
+        );
+    }
+
+    return {
+        columns,
+        data: convertedData,
+    };
+}
 
 export default function ComponentMapper({
     items,
@@ -128,9 +173,62 @@ export default function ComponentMapper({
                             </ErrorBoundary>
                         );
                     }
+                    case 'distribution': {
+                        const realData = JSON.parse(resultItem.real);
+                        const syntheticData = JSON.parse(resultItem.synthetic);
+                        return (
+                            <div key={`distribution-${index}`}>
+                                {realData.length === 0 ||
+                                syntheticData.length === 0
+                                    ? null
+                                    : Object.keys(realData[0]).map(
+                                          (
+                                              columnName: string,
+                                              columnIndex: number
+                                          ) => {
+                                              const realDataColumn =
+                                                  realData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              const syntheticDataColumn =
+                                                  syntheticData.map(
+                                                      (
+                                                          row: Record<
+                                                              string,
+                                                              number
+                                                          >
+                                                      ) => row[columnName]
+                                                  );
+                                              return (
+                                                  <ErrorBoundary
+                                                      key={columnIndex}
+                                                  >
+                                                      <DistributionBarChart
+                                                          realData={
+                                                              realDataColumn
+                                                          }
+                                                          syntheticData={
+                                                              syntheticDataColumn
+                                                          }
+                                                          column={columnName}
+                                                      />
+                                                  </ErrorBoundary>
+                                              );
+                                          }
+                                      )}
+                            </div>
+                        );
+                    }
                     case 'heatmap': {
-                        console.log('heatmap data', resultItem.data);
                         /*
+                            resultItem.real
+                            resultItem.synthetic
+                          
                             Array in Array
 
                             [
@@ -138,13 +236,45 @@ export default function ComponentMapper({
                                 [4,5,6],
                                 [7,8,9]
                             ]
+
+                            of 
+
+                            Object in Array
+                                
+                            [
+                                {a: 1, b: 2, c: 3},
+                                {a: 4, b: 5, c: 6},
+                                {a: 7, b: 8, c: 9}
+                            ]
                         */
+                        const { columns: realColumns, data: convertedData } =
+                            createHeatmapdata(resultItem.real);
+                        const {
+                            columns: synthticColumns,
+                            data: syntheticData,
+                        } = createHeatmapdata(resultItem.synthetic);
                         return (
-                            <HeatMapChart
-                                key={index}
-                                data={resultItem.data}
-                                title={resultItem.title ?? ''}
-                            />
+                            <div
+                                key={`heatmap-${index}`}
+                                className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
+                            >
+                                <div className="col-[1]">
+                                    <HeatMapChart
+                                        columns={realColumns}
+                                        key={index}
+                                        data={convertedData}
+                                        title={t('heatmap.realdata')}
+                                    />
+                                </div>
+                                <div className="col-[1] lg:col-[2]">
+                                    <HeatMapChart
+                                        columns={synthticColumns}
+                                        key={index}
+                                        data={syntheticData}
+                                        title={t('heatmap.syntheticdata')}
+                                    />
+                                </div>
+                            </div>
                         );
                     }
                     case 'barchart': {
