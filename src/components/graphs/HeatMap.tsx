@@ -152,11 +152,11 @@ const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
             'transform',
             `translate(${legendWidth - 50 + barWidth * data.length},0)`
         );
-        const legendBarWidth = Math.abs(
-            legendBar.node()!.getBoundingClientRect().x
-        );
         svg.append('g')
-            .attr('transform', `translate(${legendBarWidth + 10})`)
+            .attr(
+                'transform',
+                `translate(${legendWidth - 50 + barWidth * data.length + 20})`
+            )
             .datum(expandedDomain)
             .call(axisLabel)
             .select('.domain')
@@ -184,12 +184,15 @@ const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
 
     // Render the chart container and SVG element with horizontal scroll if needed
     return (
-        <div
-            ref={containerRef}
-            style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className={`min-h-[${height}px] flex-col`}
-        >
-            <svg ref={svgRef}></svg>
+        <div className="flex flex-col gap-4">
+            <h3 className="text-center font-semibold text-base">{title}</h3>
+            <div
+                ref={containerRef}
+                style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
+                className={`min-h-[${height}px] flex-col`}
+            >
+                <svg ref={svgRef}></svg>
+            </div>
         </div>
     );
 };
