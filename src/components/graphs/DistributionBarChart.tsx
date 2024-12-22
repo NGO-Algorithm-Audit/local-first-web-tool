@@ -136,7 +136,7 @@ const DistributionBarChart = ({
         const legend = svg
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${plotWidth - 120}, -20)`);
+            .attr('transform', `translate(${plotWidth - 120}, 30)`);
 
         // Add the text elements first so we can measure them
         const realDataText = legend
