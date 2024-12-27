@@ -24,24 +24,43 @@ def encode_data(df):
     return df_encoded, label_encoders
 
 """Plot the univariate distribution of the attached dataset, categorical labels are preserved in the visualization"""
-def univariate_hist(df,dtypes_dict):
+def univariate_hist(df,dtypes_dict,Comparison=False):
     for column in df.columns:
-        if dtypes_dict[column]=='float':
+        if column == 'realOrSynthetic':
+            continue
+        if dtypes_dict[column] == 'float':
             plt.figure(figsize=(8, 5))
-            sns.histplot(data=df,
-                        x= column,
-                        stat="count"
-                        )
-        # adjust y-axis labels for large numbers
+
+            if Comparison == False:
+                sns.histplot(data=df,
+                            x=column,
+                            stat="count",
+                            palette='Set2')
+            else:   
+                sns.histplot(data=df,
+                            x=column,
+                            stat="count",
+                             palette='Set2',
+                            hue='Data')
+        
+            # adjust y-axis labels for large numbers
             if df[column].value_counts().max() > 10000:
                 plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
 
         else:
             plt.figure(figsize=(8, 5))
-            sns.histplot(data=df,
-                        x= column,
-                        stat="count"
-                        )
+
+            if Comparison == False:
+                sns.histplot(data=df,
+                            x=column,
+                            stat="count",
+                            palette='Set2')
+            else:   
+                sns.histplot(data=df,
+                            x=column,
+                            stat="count",
+                            palette='Set2',
+                            hue='Data')
             
             # adjust y-axis labels for large numbers
             if df[column].value_counts().max() > 10000:
@@ -49,47 +68,68 @@ def univariate_hist(df,dtypes_dict):
         
     plt.show()
 
-"""Plot the bivariate distribution of the attached dataset, categorical labels are preserved in the visualization"""
-def bivariate_plot(df, combined_data, dtypes_dict):
+"""Plot the bivariate distribution of the attached dataset. Distinguishes three types of plots: 1) both categorical variables, 2) both numerical variables and 3) either cateogrical or numerical variables. Categorical labels are preserved in the visualization"""
+def bivariate_plot(df, combined_data, dtypes_dict,Comparison=False):
     n_columns = len(df.columns)
     for i in range(n_columns):
         for j in range(n_columns):
-            plt.figure(figsize=(8, 5))
             column_name1 = df.columns[i]
             column_name2 = df.columns[j]
 
-            if i == j:
+            if i >= j:
                 continue
 
-            # if columns are both categorical show countplot 
-            if dtypes_dict[column_name1] == 'category' and dtypes_dict[column_name2] == 'category':
-                sns.countplot(data=df, x=column_name1, hue=column_name2, palette="Set2")
-                plt.title(f'Distribution plot of {column_name1} and {column_name2}')
-
-                # adjust y-axis labels for large numbers
-                if df[column_name2].value_counts().max() > 10000:
-                    plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
-
-            # if one of the columns is categorical and the other is not, show violinplot
-            elif dtypes_dict[column_name1] == 'category' or dtypes_dict[column_name2] == 'category':
-                sns.violinplot( data=combined_data, x='sex', y='ugpa',hue='realOrSynthetic',
-                                inner=None,
-                                dodge=True,
-                                fill=False,
-                                split=True,
-                                density_norm="count"
-                                )
-                plt.legend().set_visible(False)
-                plt.title(f'Distribution plot of {column_name1} and {column_name2}')
-
-            # if both columns are numerical, show scatter plot
             else:
-                sns.scatterplot(data=df, x=column_name1, y=column_name2)
-                plt.title(f'Distribution plot of {column_name1} and {column_name2}')
+                plt.figure(figsize=(8, 5))
 
-                # adjust y-axis labels for large numbers
-                if df[column_name2].value_counts().max() > 10000:
-                    plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
+                # if columns are both categorical show countplot 
+                if dtypes_dict[column_name1] == 'category' and dtypes_dict[column_name2] == 'category':
+
+                    if Comparison==False:
+                        sns.countplot(data=df, 
+                                    x=column_name1, 
+                                    hue=column_name2, 
+                                    palette='Set2'
+                                    )
+                        plt.title(f'Distribution plot of {column_name1} and {column_name2}')
+
+                    else:
+                        sns.catplot(x=column_name2,
+                            hue="Data",
+                            col=column_name1,
+                            data=combined_data,
+                            kind="count",
+                            palette='Set2')
+
+                    # adjust y-axis labels for large numbers
+                    if df[column_name2].value_counts().max() > 10000:
+                        plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
+
+                # if one of the columns is categorical and the other is not, show violinplot
+                elif dtypes_dict[column_name1] == 'category' or dtypes_dict[column_name2] == 'category':
+                    sns.violinplot(data=combined_data, 
+                                   x=column_name1, 
+                                   y=column_name2, 
+                                   hue='realOrSynthetic',
+                                   inner='quart',
+                                   split=True,
+                                   palette='Set2',
+                                   linewidth=1.5
+                                   )
+                    for line in plt.gca().lines:
+                        line.set_linestyle('--')
+                        line.set_color('white')
+                    plt.legend().set_visible(False)
+                    plt.title(f'Distribution plot of {column_name1} and {column_name2}')
+
+                # if both columns are numerical, show scatter plot
+                else:
+                    sns.scatterplot(data=df, x=column_name1, y=column_name2)
+                    plt.title(f'Distribution plot of {column_name1} and {column_name2}')
+
+                    # adjust y-axis labels for large numbers
+                    if df[column_name2].value_counts().max() > 10000:
+                        plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
 
 """Class for Gaussian Copula Synthesizer"""
 class GaussianCopulaSynthesizer:
