@@ -10,6 +10,7 @@ import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
 import HeatMapChart from './graphs/HeatMap';
 import DistributionBarChart from './graphs/DistributionBarChart';
+import { UnivariateCharts } from './UnivariateCharts';
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -177,10 +178,26 @@ export default function ComponentMapper({
                         );
                     }
                     case 'distribution': {
+                        console.log(
+                            'distribution',
+                            JSON.parse(resultItem.dataTypes)
+                        );
+
                         const realData = JSON.parse(resultItem.real);
                         const syntheticData = JSON.parse(resultItem.synthetic);
+
+                        console.log('realData', realData);
                         return (
                             <div key={`distribution-${index}`}>
+                                <UnivariateCharts
+                                    realData={realData}
+                                    syntheticData={syntheticData}
+                                    dataTypes={JSON.parse(resultItem.dataTypes)}
+                                    combined_data={JSON.parse(
+                                        resultItem.combined_data
+                                    )}
+                                    comparison={false}
+                                />
                                 {realData.length === 0 ||
                                 syntheticData.length === 0
                                     ? null

@@ -140,10 +140,10 @@ def run():
         {'type': 'data-set-preview', 'data': ''}
     ))
 
+    dtypes_dict = real_data.dtypes.to_dict()
+    dtypes_dict = {k: 'float' if v == 'float64' else 'category' if v == 'O' else v for k, v in dtypes_dict.items()}
 
     if (sdgMethod == 'cart'):
-        dtypes_dict = real_data.dtypes.to_dict()
-        dtypes_dict = {k: 'float' if v == 'float64' else 'category' if v == 'O' else v for k, v in dtypes_dict.items()}
         label_encoders = {}
         for column in real_data.select_dtypes(include=['object']).columns:
             label_encoders[column] = LabelEncoder()
@@ -193,7 +193,15 @@ def run():
 
     setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
 
-    setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records")}))
+    # copy dataframe and assign NaN to all values
+    synth_df = real_data.copy()
+    synth_df[:] = np.nan
+
+    # combine empty synthetic data with original data and with encoded data 
+    combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
+    # combined_data_encoded = pd.concat((df_encoded.assign(realOrSynthetic='real_encoded'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real_encoded','synthetic'], names=['Data'])
+    
+    setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
 
     return 
     
