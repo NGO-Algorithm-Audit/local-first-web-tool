@@ -131,7 +131,10 @@ export default function ComponentMapper({
                                 className="text-gray-800 font-semibold"
                             >
                                 {resultItem.headingKey
-                                    ? t(resultItem.headingKey)
+                                    ? t(
+                                          resultItem.headingKey,
+                                          resultItem.params
+                                      )
                                     : resultItem.data}
                             </h5>
                         );

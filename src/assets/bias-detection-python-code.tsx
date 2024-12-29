@@ -267,7 +267,7 @@ def run():
             if col != targetColumn and col != 'Cluster' and col != "":
                 setResult(json.dumps({
                     'type': 'heading',
-                    'key': 'biasAnalysis.distribution.heading',
+                    'headingKey': 'biasAnalysis.distribution.heading',
                     'params': {'variable': col}
                 }))
 
@@ -281,7 +281,7 @@ def run():
             if col != targetColumn and col != 'Cluster' and col != "" and col in features:
                 setResult(json.dumps({
                     'type': 'heading',
-                    'key': 'biasAnalysis.distribution.heading',
+                    'headingKey': 'biasAnalysis.distribution.heading',
                     'params': {'variable': col}
                 }))
 
