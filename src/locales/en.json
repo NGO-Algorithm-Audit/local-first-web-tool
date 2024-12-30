@@ -10,7 +10,7 @@
     "error": "Sorry, something went wrong.",
     "loadingMessage": "Setting up environment...",
     "mostBiasedCluster": "Most biased\n cluster",
-    "cluster": "Cluster",
+    "cluster": "Cluster {{value}}",
     "exportToPDF": "Export to PDF",
     "exportToJSON": "Export synthetic data to JSON",
     "downloadButton": "Download",

@@ -24,7 +24,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
-
+    console.log('SingleBarChart', data);
     // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
     const x0 = useMemo(
         () =>
