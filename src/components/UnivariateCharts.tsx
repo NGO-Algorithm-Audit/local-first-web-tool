@@ -41,27 +41,24 @@ export const UnivariateCharts = (props: ChartProps) => {
                 return column != 'realOrSynthetic';
             })
             .map((column, index) => {
-                const isFloatColumn = dataTypes[column] == 'float';
-                if (isFloatColumn) {
-                    return (
-                        <React.Fragment key={index}>
-                            <h2>{column}</h2>
-                            <CountBarChart
-                                key={index}
-                                column={column}
-                                realData={realData.map(
-                                    row =>
-                                        (
-                                            row as unknown as Record<
-                                                string,
-                                                object
-                                            >
-                                        )[column] as unknown as number
-                                )}
-                            />
-                        </React.Fragment>
-                    );
-                }
+                //const isFloatColumn = dataTypes[column] == 'float';
+                //if (true) {
+                return (
+                    <React.Fragment key={index}>
+                        <h2>{column}</h2>
+                        <CountBarChart
+                            key={index}
+                            column={column}
+                            realData={realData.map(
+                                row =>
+                                    (row as unknown as Record<string, object>)[
+                                        column
+                                    ] as unknown as number
+                            )}
+                        />
+                    </React.Fragment>
+                );
+                //}
 
                 return (
                     <div key={index}>
