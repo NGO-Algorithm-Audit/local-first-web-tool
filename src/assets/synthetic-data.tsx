@@ -148,12 +148,12 @@ def run():
     real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
 
     cloned_real_data = real_data.copy()
+    label_encoders = {}
+    for column in real_data.select_dtypes(include=['object']).columns:
+        label_encoders[column] = LabelEncoder()
+        real_data[column] = label_encoders[column].fit_transform(real_data[column])
 
     if (sdgMethod == 'cart'):
-        label_encoders = {}
-        for column in real_data.select_dtypes(include=['object']).columns:
-            label_encoders[column] = LabelEncoder()
-            real_data[column] = label_encoders[column].fit_transform(real_data[column])
         # spop = Synthpop(method='cart')
         spop = Synthpop()
         spop.fit(real_data, dtypes=dtypes_dict)
@@ -167,9 +167,17 @@ def run():
         # Generate synthetic data
         synthetic_data = synthesizer.sample(samples)
 
+    synth_df_decoded = synthetic_data.copy()
+    for column in synth_df_decoded.columns:
+        if column in label_encoders:
+            synth_df_decoded[column] = label_encoders[column].inverse_transform(synth_df_decoded[column])
+
+
     # Output some results
     print("Original Data (first 5 rows):", real_data.head())
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
+
+    print("Synthetic Data decoded (first 5 rows):", synth_df_decoded.head())
 
     # Store synthetic data for export
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
@@ -197,7 +205,6 @@ def run():
     ))
     setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 
-    setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
 
     # copy dataframe and assign NaN to all values
     synth_df = real_data.copy()
@@ -207,7 +214,10 @@ def run():
     combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
     # combined_data_encoded = pd.concat((df_encoded.assign(realOrSynthetic='real_encoded'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real_encoded','synthetic'], names=['Data'])
     
-    setResult(json.dumps({'type': 'distribution', 'real': cloned_real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
+    # setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
+    setResult(json.dumps({'type': 'distribution', 'real': cloned_real_data.to_json(orient="records"), 'synthetic': synth_df_decoded.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
+
+    setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
 
     return 
     

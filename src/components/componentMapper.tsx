@@ -185,14 +185,14 @@ export default function ComponentMapper({
 
                         const realData = JSON.parse(resultItem.real);
                         const syntheticData = JSON.parse(resultItem.synthetic);
-
+                        const dataTypes = JSON.parse(resultItem.dataTypes);
                         console.log('realData', realData);
                         return (
                             <div key={`distribution-${index}`}>
                                 <UnivariateCharts
                                     realData={realData}
                                     syntheticData={syntheticData}
-                                    dataTypes={JSON.parse(resultItem.dataTypes)}
+                                    dataTypes={dataTypes}
                                     combined_data={JSON.parse(
                                         resultItem.combined_data
                                     )}
@@ -229,6 +229,11 @@ export default function ComponentMapper({
                                                       key={columnIndex}
                                                   >
                                                       <DistributionBarChart
+                                                          dataType={
+                                                              dataTypes[
+                                                                  columnName
+                                                              ]
+                                                          }
                                                           realData={
                                                               realDataColumn
                                                           }
