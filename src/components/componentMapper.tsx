@@ -103,6 +103,32 @@ export default function ComponentMapper({
                                 title={t(resultItem.title)}
                             />
                         );
+
+                    case 'list':
+                        if (resultItem.list) {
+                            console.log('list', resultItem.list);
+                            const content = resultItem.list.map(
+                                (
+                                    listItem: {
+                                        key: string;
+                                        value: string;
+                                    },
+                                    index: number
+                                ) => (
+                                    <li key={`list-${index}`}>
+                                        <span className="font-bold">{`${listItem.key}`}</span>
+                                        {`: ${listItem.value}`}
+                                    </li>
+                                )
+                            );
+
+                            return (
+                                <div className="content-list">
+                                    <ul key={index}>{content}</ul>
+                                </div>
+                            );
+                        }
+                        return null;
                     case 'accordion':
                         if (resultItem.comparisons) {
                             // Handle translation of comparisons

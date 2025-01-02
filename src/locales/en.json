@@ -88,7 +88,9 @@
         "demoCard": {
             "title": "Try it out!",
             "description": "Do you not have a dataset at hand? No worries use our demo data set."
-        }
+        },
+        "columnsInDataset": "Detected column data-types in dataset",
+        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before uploading it again."
     },
     "biasAnalysis": {
         "demo": {

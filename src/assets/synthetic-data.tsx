@@ -149,6 +149,27 @@ def run():
     dtypes_dict['sex'] = 'category'
     real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
 
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'syntheticData.columnsInDataset'
+    }))
+    dataInfo = []
+    for column in real_data.columns:
+        dataInfo.append({
+            'key': column, 
+            'value': dtypes_dict[column]    
+        })
+
+    setResult(json.dumps({
+        'type': 'list',
+        'list': dataInfo
+    }))
+        
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'syntheticData.columnsInDatasetInfo'
+    }))
+
     cloned_real_data = real_data.copy()
     label_encoders = {}
     for column in real_data.select_dtypes(include=['object']).columns:
