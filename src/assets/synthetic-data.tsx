@@ -224,7 +224,7 @@ def run():
     ))
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': 'Output data'}
+        {'type': 'heading', 'data': '5. Output data'}
     ))
     setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 
