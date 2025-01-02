@@ -93,7 +93,10 @@
         "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.",
         "univariateCharts": "Univariate distributies van de gekoppelde dataset",
         "synthVsReal": "Univariate distributies in synthetische vs originele data",
-        "heatmapCorrelation": "Correlatiematrix"
+        "heatmapCorrelation": "Correlatiematrix",
+        "dataSetPreview": {
+            "heading": "0. Preview van de data"
+        }
     },
     "biasAnalysis": {
         "demo": {

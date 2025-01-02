@@ -16,7 +16,7 @@
     "downloadButton": "Download",
     "biasSettings": {
         "exportToPDF": "Download bias detection report as pdf",
-        "exportToJSON": "Export clusters as json", 
+        "exportToJSON": "Export clusters as json",
         "form": {
             "fieldsets": {
                 "data": {
@@ -93,7 +93,10 @@
         "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before attaching it again.",
         "univariateCharts": "Univariate distributions of the attached dataset",
         "synthVsReal": "Univariate distributions of synthetic vs real data",
-        "heatmapCorrelation": "Correlation matrix"
+        "heatmapCorrelation": "Correlation matrix",
+        "dataSetPreview": {
+            "heading": "0. Preview of data"
+        }
     },
 
     "biasAnalysis": {

@@ -136,6 +136,11 @@ def run():
             'key': 'syntheticData.demo.description'
         }))
 
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'syntheticData.dataSetPreview.heading'
+    }))
     setResult(json.dumps(
         {'type': 'data-set-preview', 'data': ''}
     ))
