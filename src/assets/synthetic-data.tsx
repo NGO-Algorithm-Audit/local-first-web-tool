@@ -238,9 +238,24 @@ def run():
     # combined_data_encoded = pd.concat((df_encoded.assign(realOrSynthetic='real_encoded'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real_encoded','synthetic'], names=['Data'])
     
     # setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
-    setResult(json.dumps({'type': 'distribution', 'real': cloned_real_data.to_json(orient="records"), 'synthetic': synth_df_decoded.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
+    setResult(json.dumps({
+        'type': 'distribution',
+        'real': cloned_real_data.to_json(orient="records"),
+        'synthetic': synth_df_decoded.to_json(orient="records"),
+        'dataTypes': json.dumps(dtypes_dict),
+        'combined_data' : combined_data.to_json(orient="records"),
+        'realCorrelations': real_data.corr().to_json(orient="records"),
+        'syntheticCorrelations': synthetic_data.corr().to_json(orient="records"),
+        'reports' : [
+            'univariate', 'distribution', 'correlation'
+        ]
+    }))
 
-    setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
+    # setResult(json.dumps({
+    #     'type': 'heatmap',
+    #     'real': real_data.corr().to_json(orient="records"),
+    #     'synthetic': synthetic_data.corr().to_json(orient="records")
+    # }))
 
     return 
     

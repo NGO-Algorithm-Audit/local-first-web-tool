@@ -123,8 +123,8 @@ export default function ComponentMapper({
                             );
 
                             return (
-                                <div className="content-list">
-                                    <ul key={index}>{content}</ul>
+                                <div key={index} className="content-list">
+                                    <ul>{content}</ul>
                                 </div>
                             );
                         }
@@ -212,66 +212,178 @@ export default function ComponentMapper({
                         const realData = JSON.parse(resultItem.real);
                         const syntheticData = JSON.parse(resultItem.synthetic);
                         const dataTypes = JSON.parse(resultItem.dataTypes);
-                        console.log('realData', realData);
+                        console.log('reports', resultItem.reports);
                         return (
                             <div key={`distribution-${index}`}>
-                                <UnivariateCharts
-                                    realData={realData}
-                                    syntheticData={syntheticData}
-                                    dataTypes={dataTypes}
-                                    combined_data={JSON.parse(
-                                        resultItem.combined_data
-                                    )}
-                                    comparison={false}
-                                />
-                                {realData.length === 0 ||
-                                syntheticData.length === 0
-                                    ? null
-                                    : Object.keys(realData[0]).map(
-                                          (
-                                              columnName: string,
-                                              columnIndex: number
-                                          ) => {
-                                              const realDataColumn =
-                                                  realData.map(
-                                                      (
-                                                          row: Record<
-                                                              string,
-                                                              number
-                                                          >
-                                                      ) => row[columnName]
-                                                  );
-                                              const syntheticDataColumn =
-                                                  syntheticData.map(
-                                                      (
-                                                          row: Record<
-                                                              string,
-                                                              number
-                                                          >
-                                                      ) => row[columnName]
-                                                  );
-                                              return (
-                                                  <ErrorBoundary
-                                                      key={columnIndex}
-                                                  >
-                                                      <DistributionBarChart
-                                                          dataType={
-                                                              dataTypes[
-                                                                  columnName
-                                                              ]
-                                                          }
-                                                          realData={
-                                                              realDataColumn
-                                                          }
-                                                          syntheticData={
-                                                              syntheticDataColumn
-                                                          }
-                                                          column={columnName}
-                                                      />
-                                                  </ErrorBoundary>
-                                              );
-                                          }
-                                      )}
+                                {resultItem.reports.map(
+                                    (report: string, indexReport: number) => {
+                                        if (report === 'univariate') {
+                                            return (
+                                                <div
+                                                    key={indexReport}
+                                                    className="mb-4"
+                                                >
+                                                    <Accordion
+                                                        title={t(
+                                                            'syntheticData.univariateCharts'
+                                                        )}
+                                                        content={
+                                                            <UnivariateCharts
+                                                                realData={
+                                                                    realData
+                                                                }
+                                                                syntheticData={
+                                                                    syntheticData
+                                                                }
+                                                                dataTypes={
+                                                                    dataTypes
+                                                                }
+                                                                combined_data={JSON.parse(
+                                                                    resultItem.combined_data
+                                                                )}
+                                                                comparison={
+                                                                    false
+                                                                }
+                                                            />
+                                                        }
+                                                    />
+                                                </div>
+                                            );
+                                        }
+                                        if (report === 'distribution') {
+                                            return (
+                                                <Fragment key={indexReport}>
+                                                    {realData.length === 0 ||
+                                                    syntheticData.length ===
+                                                        0 ? null : (
+                                                        <div className="mb-4">
+                                                            <Accordion
+                                                                title={t(
+                                                                    'syntheticData.synthVsReal'
+                                                                )}
+                                                                content={Object.keys(
+                                                                    realData[0]
+                                                                ).map(
+                                                                    (
+                                                                        columnName: string,
+                                                                        columnIndex: number
+                                                                    ) => {
+                                                                        const realDataColumn =
+                                                                            realData.map(
+                                                                                (
+                                                                                    row: Record<
+                                                                                        string,
+                                                                                        number
+                                                                                    >
+                                                                                ) =>
+                                                                                    row[
+                                                                                        columnName
+                                                                                    ]
+                                                                            );
+                                                                        const syntheticDataColumn =
+                                                                            syntheticData.map(
+                                                                                (
+                                                                                    row: Record<
+                                                                                        string,
+                                                                                        number
+                                                                                    >
+                                                                                ) =>
+                                                                                    row[
+                                                                                        columnName
+                                                                                    ]
+                                                                            );
+                                                                        return (
+                                                                            <ErrorBoundary
+                                                                                key={
+                                                                                    columnIndex
+                                                                                }
+                                                                            >
+                                                                                <DistributionBarChart
+                                                                                    dataType={
+                                                                                        dataTypes[
+                                                                                            columnName
+                                                                                        ]
+                                                                                    }
+                                                                                    realData={
+                                                                                        realDataColumn
+                                                                                    }
+                                                                                    syntheticData={
+                                                                                        syntheticDataColumn
+                                                                                    }
+                                                                                    column={
+                                                                                        columnName
+                                                                                    }
+                                                                                />
+                                                                            </ErrorBoundary>
+                                                                        );
+                                                                    }
+                                                                )}
+                                                            ></Accordion>
+                                                        </div>
+                                                    )}
+                                                </Fragment>
+                                            );
+                                        }
+
+                                        if (report === 'correlation') {
+                                            const {
+                                                columns: realColumns,
+                                                data: convertedData,
+                                            } = createHeatmapdata(
+                                                resultItem.realCorrelations
+                                            );
+                                            const {
+                                                columns: synthticColumns,
+                                                data: syntheticData,
+                                            } = createHeatmapdata(
+                                                resultItem.syntheticCorrelations
+                                            );
+                                            return (
+                                                <div
+                                                    className="mb-4"
+                                                    key={indexReport}
+                                                >
+                                                    <Accordion
+                                                        title={t(
+                                                            'syntheticData.heatmapCorrelation'
+                                                        )}
+                                                        content={
+                                                            <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                                                <div className="col-[1]">
+                                                                    <HeatMapChart
+                                                                        columns={
+                                                                            realColumns
+                                                                        }
+                                                                        data={
+                                                                            convertedData
+                                                                        }
+                                                                        title={t(
+                                                                            'heatmap.realdata'
+                                                                        )}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-[1] lg:col-[2]">
+                                                                    <HeatMapChart
+                                                                        columns={
+                                                                            synthticColumns
+                                                                        }
+                                                                        data={
+                                                                            syntheticData
+                                                                        }
+                                                                        title={t(
+                                                                            'heatmap.syntheticdata'
+                                                                        )}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    ></Accordion>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }
+                                )}
                             </div>
                         );
                     }
@@ -305,27 +417,32 @@ export default function ComponentMapper({
                             data: syntheticData,
                         } = createHeatmapdata(resultItem.synthetic);
                         return (
-                            <div
+                            <Accordion
                                 key={`heatmap-${index}`}
-                                className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
-                            >
-                                <div className="col-[1]">
-                                    <HeatMapChart
-                                        columns={realColumns}
-                                        key={index}
-                                        data={convertedData}
-                                        title={t('heatmap.realdata')}
-                                    />
-                                </div>
-                                <div className="col-[1] lg:col-[2]">
-                                    <HeatMapChart
-                                        columns={synthticColumns}
-                                        key={index}
-                                        data={syntheticData}
-                                        title={t('heatmap.syntheticdata')}
-                                    />
-                                </div>
-                            </div>
+                                title={t('syntheticData.heatmapCorrelation')}
+                                content={
+                                    <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                        <div className="col-[1]">
+                                            <HeatMapChart
+                                                columns={realColumns}
+                                                key={index}
+                                                data={convertedData}
+                                                title={t('heatmap.realdata')}
+                                            />
+                                        </div>
+                                        <div className="col-[1] lg:col-[2]">
+                                            <HeatMapChart
+                                                columns={synthticColumns}
+                                                key={index}
+                                                data={syntheticData}
+                                                title={t(
+                                                    'heatmap.syntheticdata'
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                }
+                            ></Accordion>
                         );
                     }
                     case 'barchart': {

@@ -90,7 +90,10 @@
             "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
         },
         "columnsInDataset": "Gedetecteerde kolom data-types in de dataset",
-        "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw uploadt."
+        "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw uploadt.",
+        "univariateCharts": "Univariate distributies van de geuploade dataset",
+        "synthVsReal": "Synthetic vs Real data",
+        "heatmapCorrelation": "Heatmap correlatie"
     },
     "biasAnalysis": {
         "demo": {

@@ -90,8 +90,12 @@
             "description": "Do you not have a dataset at hand? No worries use our demo data set."
         },
         "columnsInDataset": "Detected column data-types in dataset",
-        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before uploading it again."
+        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before uploading it again.",
+        "univariateCharts": "Univariate distributions of the uploaded dataset",
+        "synthVsReal": "Synthetic vs Real data",
+        "heatmapCorrelation": "Heatmap correlation"
     },
+
     "biasAnalysis": {
         "demo": {
             "heading": "Information about demo dataset",
