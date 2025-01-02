@@ -213,14 +213,16 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Diagnostic Results:'}
     ))
-    setResult(json.dumps({'type': 'table', 'data': json.dumps([
-        {
-            'attribute': key,
-            'ks_stat': values['ks_stat'],
-            'p_value': values['p_value']
-        }
-        for key, values in results['distribution_results'].items()
-    ])}))
+    setResult(json.dumps({'type': 'table', 
+        'showIndex' : False,
+        'data': json.dumps([
+            {
+                'attribute': key,
+                'ks_stat': values['ks_stat'],
+                'p_value': values['p_value']
+            }
+            for key, values in results['distribution_results'].items()
+        ])}))
 
     setResult(json.dumps(
         {'type': 'heading', 'data': 'Correlation difference: ' + str(results['correlation_diff']) }
@@ -229,7 +231,11 @@ def run():
     setResult(json.dumps(
         {'type': 'heading', 'data': '5. Output data'}
     ))
-    setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
+    setResult(json.dumps({
+        'type': 'table', 
+        'showIndex': True,
+        'data': synthetic_data.head().to_json(orient="records")
+        }))
 
 
     # copy dataframe and assign NaN to all values

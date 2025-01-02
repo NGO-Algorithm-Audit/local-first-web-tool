@@ -90,6 +90,7 @@ export default function ComponentMapper({
                                     <SimpleTable
                                         data={data.data.slice(0, 5)}
                                         title="datasetPreview"
+                                        showIndex={true}
                                     />
                                 )}
                             </Fragment>
@@ -101,6 +102,7 @@ export default function ComponentMapper({
                                 key={index}
                                 data={JSON.parse(resultItem.data)}
                                 title={t(resultItem.title)}
+                                showIndex={resultItem.showIndex ?? false}
                             />
                         );
 
