@@ -128,7 +128,7 @@ def run():
     setResult(json.dumps(
             {'type': 'heading', 'data': sdgMethod}
     ))
-    if isDemo:
+    if isDemo: 
         setResult(json.dumps({
             'type': 'heading',
             'headingKey': 'syntheticData.demo.heading'
@@ -224,7 +224,7 @@ def run():
     ))
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': 'Output file:'}
+        {'type': 'heading', 'data': 'Output data'}
     ))
     setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
 

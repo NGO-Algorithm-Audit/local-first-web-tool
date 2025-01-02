@@ -3,25 +3,25 @@
     "shareButton": "Share",
     "exportButton": "Export to .json",
     "getStarted": "Let's get started! Fill out the form.",
-    "fileUploadError": "Please upload a valid CSV file.",
+    "fileUploadError": "Please upload a valid csv file.",
     "removeButton": "Remove",
-    "dropzoneLabel": "Drag and drop your CSV file here, or click to select a file",
+    "dropzoneLabel": "Drag and drop your csv file here, or click to select a file",
     "datasetPreview": "Dataset preview showing the first 5 rows.",
     "error": "Sorry, something went wrong.",
     "loadingMessage": "Setting up environment...",
     "mostBiasedCluster": "Most biased\n cluster",
     "cluster": "Cluster {{value}}",
-    "exportToPDF": "Export to PDF",
-    "exportToJSON": "Export synthetic data to JSON",
+    "exportToPDF": "Export to pdf",
+    "exportToJSON": "Export synthetic data to json",
     "downloadButton": "Download",
     "biasSettings": {
-        "exportToPDF": "Download bias detection report as PDF",
-        "exportToJSON": "Export clusters as JSON",
+        "exportToPDF": "Download bias detection report as pdf",
+        "exportToJSON": "Export clusters as json", 
         "form": {
             "fieldsets": {
                 "data": {
                     "title": "Data",
-                    "dataSet": "Data set",
+                    "dataSet": "Dataset",
                     "performanceMetric": "Performance metric column"
                 },
                 "parameters": {
@@ -36,10 +36,10 @@
                 }
             },
             "errors": {
-                "csvRequired": "Please upload a CSV file.",
+                "csvRequired": "Please upload a csv file.",
                 "targetColumnRequired": "Please select a target column.",
                 "dataTypeRequired": "Please select a data type.",
-                "noNumericColumns": "No numeric columns found. Please upload a valid data set.",
+                "noNumericColumns": "No numeric columns found. Please upload a valid dataset.",
                 "analysisError": "Error while analysing",
                 "noData": "No data loaded"
             },
@@ -53,53 +53,53 @@
         },
         "demoCard": {
             "title": "Try it out!",
-            "description": "Do you not have a dataset at hand? No worries use our demo data set."
+            "description": "Do you not have a dataset at hand? No worries use our demo dataset."
         }
     },
     "syntheticData": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "**UI text** A subset of the [Law School Admission Bar*](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage) dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female)\n- race1: race, i.e. asian, black, hispanic, white, other\n- ugpa: The student's undergraduate GPA, continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e. passed 1st time, passed 2nd time, failed, non-graduated\n  \n&nbsp;&nbsp;\n\nThe CART method will be used  evaluate the distribution and correlation differences between the real and synthetic data.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)."
+            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female);\n- race1: race of student, i.e., asian, black, hispanic, white, other;\n- ugpa: undergraduate GPA of student (average course grades), continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e., passed 1st time, passed 2nd time, failed, non-graduated.\n  \n&nbsp;&nbsp;\n\nThe CART method will be used  evaluate the distribution and correlation differences between the real and synthetic data.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n 0. Preview of the dataset"
         },
-        "exportToPDF": "Download evaluation report as PDF",
-        "exportToJSON": "Download synthetic data as JSON",
-        "exportToCSV": "Download synthetic data as CSV",
+        "exportToPDF": "Download evaluation report as pdf",
+        "exportToJSON": "Download synthetic data as json",
+        "exportToCSV": "Download synthetic data as csv",
         "form": {
             "errors": {
-                "csvRequired": "Please upload a CSV file.",
+                "csvRequired": "Please upload a csv file.",
                 "analysisError": "Error while analysing"
             },
             "fieldset": {
-                "sourceDataset": "Source Dataset",
+                "sourceDataset": "Source dataset",
                 "sdgMethod": {
                     "title": "Method",
-                    "cart": "cart",
+                    "cart": "CART",
                     "gc": "Gaussian Copula"
                 },
                 "samples": "Number of samples"
             },
             "actions": {
                 "tryItOut": "Try it out",
-                "runGeneration": "Run Synthetic Data Generation",
+                "runGeneration": "Run synthetic data generation",
                 "analyzing": "Analyzing...",
                 "initializing": "Initialising..."
             }
         },
         "demoCard": {
             "title": "Try it out!",
-            "description": "Do you not have a dataset at hand? No worries use our demo data set."
+            "description": "Do you not have a dataset at hand? No worries use our demo dataset."
         },
-        "columnsInDataset": "Detected column data-types in dataset",
-        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before uploading it again.",
-        "univariateCharts": "Univariate distributions of the uploaded dataset",
-        "synthVsReal": "Synthetic vs Real data",
-        "heatmapCorrelation": "Heatmap correlation"
+        "columnsInDataset": "1. Data types detection",
+        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before attaching it again.",
+        "univariateCharts": "Univariate distributions of the attached dataset",
+        "synthVsReal": "Univariate distributions of synthetic vs real data",
+        "heatmapCorrelation": "Correlation matrix"
     },
 
     "biasAnalysis": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A demo data set is loaded below. Based on features of tweets, from the dataset [Twitter15], a BERT-based classifier has predicted whether a tweet is fake news or not. False positive classifications are marker in the FP column and will be used as a performance metric is this use case."
+            "description": "A demo dataset is loaded below. Based on features of tweets, from the dataset [Twitter15], a BERT-based classifier has predicted whether a tweet is fake news or not. False positive classifications are marker in the FP column and will be used as a performance metric is this use case."
         },
         "parameters": {
             "heading": "Parameters selected",

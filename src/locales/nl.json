@@ -3,9 +3,9 @@
     "shareButton": "Delen",
     "exportButton": "Exporteren naar .json",
     "getStarted": "Laten we beginnen! Vul het formulier in.",
-    "fileUploadError": "Upload een geldig CSV-bestand.",
+    "fileUploadError": "Upload een geldig csv-bestand.",
     "removeButton": "Verwijderen",
-    "dropzoneLabel": "Sleep je CSV-bestand hierheen of klik om een bestand te selecteren",
+    "dropzoneLabel": "Sleep je csv-bestand hierheen of klik om een bestand te selecteren",
     "datasetPreview": "Voorbeeld van dataset met de eerste 5 rijen.",
     "error": "Sorry, er is iets misgegaan.",
     "loadingMessage": "Omgeving instellen...",
@@ -14,8 +14,8 @@
     "downloadButton": "Download",
 
     "biasSettings": {
-        "exportToPDF": "Download bias detection rapport als PDF",
-        "exportToJSON": "Export clusters als JSON",
+        "exportToPDF": "Download bias detection rapport als pdf",
+        "exportToJSON": "Export clusters als json",
 
         "form": {
             "fieldsets": {
@@ -59,21 +59,21 @@
     "syntheticData": {
         "demo": {
             "heading": "Informatie over demodataset",
-            "description": "**UI-tekst** Een subset van de [Law School Admission Bar*](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage) dataset wordt gebruikt als demo. Er zullen synthetische gegevens worden gegenereerd voor de volgende kolommen:\n  \n&nbsp;&nbsp;\n\n- sex: geslacht van de student, d.w.z. 1 (man), 2 (vrouw)\n- race1: etniciteit, d.w.z. aziatisch, zwart, hispanic, wit, anders\n- ugpa: Het GPA van de student tijdens de undergraduate-opleiding, continue variabele;\n- bar: Waarheidslabel dat aangeeft of de student is geslaagd voor de bar, d.w.z. geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd\n  \n&nbsp;&nbsp;\n\nDe CART-methode zal worden gebruikt om de verschillen in distributie en correlatie tussen de echte en synthetische gegevens te evalueren.\n  \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden."
+            "description": "Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende kolommen:\n  \n&nbsp;&nbsp;\n\n- sex: geslacht van de student, zijnde 1 (man), 2 (vrouw);\n- race1: etniciteit van de student, d.w.z. aziatisch, zwart, hispanic, wit, anders\n- ugpa: Het GPA van de student tijdens de undergraduate-opleiding, continue variabele;\n- bar: Waarheidslabel dat aangeeft of de student is geslaagd voor de bar, d.w.z. geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd\n  \n&nbsp;&nbsp;\n\nDe CART-methode zal worden gebruikt om de verschillen in distributie en correlatie tussen de echte en synthetische gegevens te evalueren.\n  \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden."
         },
-        "exportToPDF": "Download evulatie rapport als PDF",
-        "exportToJSON": "Download synthetische data als JSON",
-        "exportToCSV": "Download synthetische data als CSV",
+        "exportToPDF": "Download evulatie rapport als pdf",
+        "exportToJSON": "Download synthetische data als json",
+        "exportToCSV": "Download synthetische data als csv",
         "form": {
             "errors": {
-                "csvRequired": "Upload een CSV-bestand.",
+                "csvRequired": "Upload een csv-bestand.",
                 "analysisError": "Fout tijdens analyse"
             },
             "fieldset": {
                 "sourceDataset": "Brondataset",
                 "sdgMethod": {
                     "title": "Methode",
-                    "cart": "cart",
+                    "cart": "CART",
                     "gc": "Gaussian Copula"
                 },
                 "samples": "Aantal samples"
@@ -89,11 +89,11 @@
             "title": "Probeer het uit!",
             "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
         },
-        "columnsInDataset": "Gedetecteerde kolom data-types in de dataset",
-        "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw uploadt.",
-        "univariateCharts": "Univariate distributies van de geuploade dataset",
-        "synthVsReal": "Synthetic vs Real data",
-        "heatmapCorrelation": "Heatmap correlatie"
+        "columnsInDataset": "1. Detectie van datatypes",
+        "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.",
+        "univariateCharts": "Univariate distributies van de gekoppelde dataset",
+        "synthVsReal": "Univariate distributies in synthetische vs originele data",
+        "heatmapCorrelation": "Correlatiematrix"
     },
     "biasAnalysis": {
         "demo": {
