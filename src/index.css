@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.content-list,
 .markdown {
     p a {
         @apply text-blue-500 underline;
+    }
+
+    ul {
+        @apply list-disc list-inside;
     }
 }

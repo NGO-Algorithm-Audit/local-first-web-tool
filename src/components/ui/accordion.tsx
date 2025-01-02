@@ -58,7 +58,7 @@ AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
 export interface AccordionProps {
     title: string;
-    content: string;
+    content: React.ReactNode;
 }
 
 export const Accordion = (props: AccordionProps) => (
@@ -68,17 +68,25 @@ export const Accordion = (props: AccordionProps) => (
                 <AccordionItem value="item-1">
                     <AccordionTrigger>{props.title}</AccordionTrigger>
                     <AccordionContent>
-                        <Markdown className="mt-2 text-gray-800 markdown px-3 whitespace-pre-wrap">
-                            {props.content}
-                        </Markdown>
+                        {typeof props.content === 'string' ? (
+                            <Markdown className="mt-2 text-gray-800 markdown px-3 whitespace-pre-wrap">
+                                {props.content}
+                            </Markdown>
+                        ) : (
+                            props.content
+                        )}
                     </AccordionContent>
                 </AccordionItem>
             </AccordionPrimitive.Root>
         </div>
         <div className="hidden showonprint">
-            <Markdown className="text-gray-800 markdown">
-                {props.content}
-            </Markdown>
+            {typeof props.content === 'string' ? (
+                <Markdown className="text-gray-800 markdown">
+                    {props.content}
+                </Markdown>
+            ) : (
+                props.content
+            )}
         </div>
     </>
 );

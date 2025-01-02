@@ -105,7 +105,7 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
             .attr('text-anchor', 'middle')
             .style('font-size', '12px')
             .style('font-weight', 'bold')
-            .text(`${t('distribution.countFor')} ${column}`);
+            .text(`${t('distribution.distributionFor')} ${column}`);
     }, [containerWidth, column, realData]);
 
     useEffect(() => {

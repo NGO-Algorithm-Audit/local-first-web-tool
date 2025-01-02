@@ -57,6 +57,10 @@
         }
     },
     "syntheticData": {
+        "demo": {
+            "heading": "Information about demo dataset",
+            "description": "**UI text** A subset of the [Law School Admission Bar*](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage) dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female)\n- race1: race, i.e. asian, black, hispanic, white, other\n- ugpa: The student's undergraduate GPA, continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e. passed 1st time, passed 2nd time, failed, non-graduated\n  \n&nbsp;&nbsp;\n\nThe CART method will be used  evaluate the distribution and correlation differences between the real and synthetic data.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)."
+        },
         "exportToPDF": "Download evaluation report as PDF",
         "exportToJSON": "Download synthetic data as JSON",
         "exportToCSV": "Download synthetic data as CSV",
@@ -84,8 +88,14 @@
         "demoCard": {
             "title": "Try it out!",
             "description": "Do you not have a dataset at hand? No worries use our demo data set."
-        }
+        },
+        "columnsInDataset": "Detected column data-types in dataset",
+        "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before uploading it again.",
+        "univariateCharts": "Univariate distributions of the uploaded dataset",
+        "synthVsReal": "Synthetic vs Real data",
+        "heatmapCorrelation": "Heatmap correlation"
     },
+
     "biasAnalysis": {
         "demo": {
             "heading": "Information about demo dataset",

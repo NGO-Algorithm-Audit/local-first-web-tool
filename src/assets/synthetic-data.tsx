@@ -129,12 +129,14 @@ def run():
             {'type': 'heading', 'data': sdgMethod}
     ))
     if isDemo:
-        setResult(json.dumps(
-            {'type': 'heading', 'data': '''Demo'''}
-        ))
-        setResult(json.dumps(
-            {'type': 'text', 'data': '''A demo dataset is loaded below. We will now generate synthetic data on the columns: 'sex', 'race1', 'ugpa', 'bar'. We will be using the Gaussian Copula method and evaluate the distribution and correlation differences between the real and synthetic data.'''}
-        ))
+        setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'syntheticData.demo.heading'
+        }))
+        setResult(json.dumps({
+            'type': 'text',
+            'key': 'syntheticData.demo.description'
+        }))
 
     setResult(json.dumps(
         {'type': 'data-set-preview', 'data': ''}
@@ -146,6 +148,27 @@ def run():
 
     dtypes_dict['sex'] = 'category'
     real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'syntheticData.columnsInDataset'
+    }))
+    dataInfo = []
+    for column in real_data.columns:
+        dataInfo.append({
+            'key': column, 
+            'value': dtypes_dict[column]    
+        })
+
+    setResult(json.dumps({
+        'type': 'list',
+        'list': dataInfo
+    }))
+        
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'syntheticData.columnsInDatasetInfo'
+    }))
 
     cloned_real_data = real_data.copy()
     label_encoders = {}
@@ -215,9 +238,24 @@ def run():
     # combined_data_encoded = pd.concat((df_encoded.assign(realOrSynthetic='real_encoded'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real_encoded','synthetic'], names=['Data'])
     
     # setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
-    setResult(json.dumps({'type': 'distribution', 'real': cloned_real_data.to_json(orient="records"), 'synthetic': synth_df_decoded.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
+    setResult(json.dumps({
+        'type': 'distribution',
+        'real': cloned_real_data.to_json(orient="records"),
+        'synthetic': synth_df_decoded.to_json(orient="records"),
+        'dataTypes': json.dumps(dtypes_dict),
+        'combined_data' : combined_data.to_json(orient="records"),
+        'realCorrelations': real_data.corr().to_json(orient="records"),
+        'syntheticCorrelations': synthetic_data.corr().to_json(orient="records"),
+        'reports' : [
+            'univariate', 'distribution', 'correlation'
+        ]
+    }))
 
-    setResult(json.dumps({'type': 'heatmap', 'real': real_data.corr().to_json(orient="records"), 'synthetic': synthetic_data.corr().to_json(orient="records")}))
+    # setResult(json.dumps({
+    #     'type': 'heatmap',
+    #     'real': real_data.corr().to_json(orient="records"),
+    #     'synthetic': synthetic_data.corr().to_json(orient="records")
+    # }))
 
     return 
     
