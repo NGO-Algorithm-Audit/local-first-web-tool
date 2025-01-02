@@ -129,12 +129,14 @@ def run():
             {'type': 'heading', 'data': sdgMethod}
     ))
     if isDemo:
-        setResult(json.dumps(
-            {'type': 'heading', 'data': '''Demo'''}
-        ))
-        setResult(json.dumps(
-            {'type': 'text', 'data': '''A demo dataset is loaded below. We will now generate synthetic data on the columns: 'sex', 'race1', 'ugpa', 'bar'. We will be using the Gaussian Copula method and evaluate the distribution and correlation differences between the real and synthetic data.'''}
-        ))
+        setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'syntheticData.demo.heading'
+        }))
+        setResult(json.dumps({
+            'type': 'text',
+            'key': 'syntheticData.demo.description'
+        }))
 
     setResult(json.dumps(
         {'type': 'data-set-preview', 'data': ''}
