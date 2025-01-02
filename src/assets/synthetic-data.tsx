@@ -125,9 +125,7 @@ def run():
 
     admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
     real_data = admissions_sub.dropna()
-    setResult(json.dumps(
-            {'type': 'heading', 'data': sdgMethod}
-    ))
+    
     if isDemo: 
         setResult(json.dumps({
             'type': 'heading',
