@@ -12,7 +12,9 @@ import { useTranslation } from 'react-i18next';
 export default function SimpleTable({
     title,
     data,
+    showIndex,
 }: {
+    showIndex: boolean;
     title?: string;
     data: Record<string, string | number>[];
 }) {
@@ -26,6 +28,7 @@ export default function SimpleTable({
                 {title && <TableCaption>{t(title)}</TableCaption>}
                 <TableHeader>
                     <TableRow className="bg-aaLight">
+                        {showIndex && <TableHead></TableHead>}
                         {Object.keys(data[0]).map(key => (
                             <TableHead key={key} className="text-black">
                                 {key}
@@ -36,6 +39,7 @@ export default function SimpleTable({
                 <TableBody>
                     {data.map((row, i) => (
                         <TableRow key={i}>
+                            {showIndex && <TableCell>{i}</TableCell>}
                             {Object.values(row).map((value, i) => (
                                 <TableCell key={i}>{value}</TableCell>
                             ))}

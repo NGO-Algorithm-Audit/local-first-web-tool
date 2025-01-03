@@ -90,6 +90,7 @@ export default function ComponentMapper({
                                     <SimpleTable
                                         data={data.data.slice(0, 5)}
                                         title="datasetPreview"
+                                        showIndex={true}
                                     />
                                 )}
                             </Fragment>
@@ -101,6 +102,7 @@ export default function ComponentMapper({
                                 key={index}
                                 data={JSON.parse(resultItem.data)}
                                 title={t(resultItem.title)}
+                                showIndex={resultItem.showIndex ?? false}
                             />
                         );
 
@@ -167,17 +169,14 @@ export default function ComponentMapper({
                         );
 
                     case 'text':
-                        // Handle text that might need translation
-                        const textContent = resultItem.key
-                            ? t(resultItem.key, resultItem.params)
-                            : resultItem.data;
-
                         return (
                             <Markdown
                                 key={index}
                                 className="-mt-2 text-gray-800 markdown"
                             >
-                                {textContent}
+                                {resultItem.key
+                                    ? t(resultItem.key, resultItem.params)
+                                    : resultItem.data}
                             </Markdown>
                         );
                     case 'histogram': {
@@ -214,10 +213,58 @@ export default function ComponentMapper({
                         const dataTypes = JSON.parse(resultItem.dataTypes);
                         console.log('reports', resultItem.reports);
                         return (
-                            <div key={`distribution-${index}`}>
+                            <div
+                                key={`distribution-${index}`}
+                                className="flex flex-col gap-6"
+                            >
                                 {resultItem.reports.map(
-                                    (report: string, indexReport: number) => {
-                                        if (report === 'univariate') {
+                                    (
+                                        report: {
+                                            reportType: string;
+                                            headingKey?: string;
+                                            textKey?: string;
+                                            params?: Record<
+                                                string,
+                                                string | number | boolean
+                                            >;
+                                        },
+                                        indexReport: number
+                                    ) => {
+                                        if (
+                                            report.reportType === 'heading' &&
+                                            report.headingKey
+                                        ) {
+                                            return (
+                                                <h5
+                                                    key={indexReport}
+                                                    className="text-gray-800 font-semibold mb-4"
+                                                >
+                                                    {t(
+                                                        report.headingKey,
+                                                        report.params
+                                                    )}
+                                                </h5>
+                                            );
+                                        }
+                                        if (
+                                            report.reportType === 'text' &&
+                                            report.textKey
+                                        ) {
+                                            return (
+                                                <Markdown
+                                                    key={index}
+                                                    className="-mt-2 text-gray-800 markdown"
+                                                >
+                                                    {t(
+                                                        report.textKey,
+                                                        report.params
+                                                    )}
+                                                </Markdown>
+                                            );
+                                        }
+                                        if (
+                                            report.reportType === 'univariate'
+                                        ) {
                                             return (
                                                 <div
                                                     key={indexReport}
@@ -250,7 +297,9 @@ export default function ComponentMapper({
                                                 </div>
                                             );
                                         }
-                                        if (report === 'distribution') {
+                                        if (
+                                            report.reportType === 'distribution'
+                                        ) {
                                             return (
                                                 <Fragment key={indexReport}>
                                                     {realData.length === 0 ||
@@ -325,7 +374,9 @@ export default function ComponentMapper({
                                             );
                                         }
 
-                                        if (report === 'correlation') {
+                                        if (
+                                            report.reportType === 'correlation'
+                                        ) {
                                             const {
                                                 columns: realColumns,
                                                 data: convertedData,

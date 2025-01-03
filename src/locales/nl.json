@@ -89,11 +89,21 @@
             "title": "Probeer het uit!",
             "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
         },
-        "columnsInDataset": "1. Detectie van datatypes",
         "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.",
         "univariateCharts": "Univariate distributies van de gekoppelde dataset",
         "synthVsReal": "Univariate distributies in synthetische vs originele data",
-        "heatmapCorrelation": "Correlatiematrix"
+        "heatmapCorrelation": "Correlatiematrix",
+        "dataSetPreview": {
+            "heading": "0. Preview van de data"
+        },
+        "columnsInDataset": "1. Detectie van datatypes",
+        "explanatoryDataAnalysisTitle": "2. Explanatory data analyse",
+        "cartModelTitle": "3. CART model",
+        "cartModelDescription": "De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerkwaarden. Voor numerieke data voorspelt de methode gemiddelden, en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om nieuwe synthetische gegevenspunten te creëren.",
+        "evaluationOfGeneratedDataTitle": "4. Evaluatie van gegenereerde data",
+        "outputDataTitle": "5. Output data",
+        "diagnosticsTitle": "Diagnostische Resultaten:",
+        "correlationDifference": "Correlatie verschil: {{correlationDifference}}"
     },
     "biasAnalysis": {
         "demo": {

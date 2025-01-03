@@ -16,7 +16,7 @@
     "downloadButton": "Download",
     "biasSettings": {
         "exportToPDF": "Download bias detection report as pdf",
-        "exportToJSON": "Export clusters as json", 
+        "exportToJSON": "Export clusters as json",
         "form": {
             "fieldsets": {
                 "data": {
@@ -59,7 +59,7 @@
     "syntheticData": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female);\n- race1: race of student, i.e., asian, black, hispanic, white, other;\n- ugpa: undergraduate GPA of student (average course grades), continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e., passed 1st time, passed 2nd time, failed, non-graduated.\n  \n&nbsp;&nbsp;\n\nThe CART method will be used  evaluate the distribution and correlation differences between the real and synthetic data.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n 0. Preview of the dataset"
+            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female);\n- race1: race of student, i.e., asian, black, hispanic, white, other;\n- ugpa: undergraduate GPA of student (average course grades), continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e., passed 1st time, passed 2nd time, failed, non-graduated.\n  \n&nbsp;&nbsp;\n\nThe CART method will be used  evaluate the distribution and correlation differences between the real and synthetic data.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n"
         },
         "exportToPDF": "Download evaluation report as pdf",
         "exportToJSON": "Download synthetic data as json",
@@ -89,11 +89,21 @@
             "title": "Try it out!",
             "description": "Do you not have a dataset at hand? No worries use our demo dataset."
         },
-        "columnsInDataset": "1. Data types detection",
         "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before attaching it again.",
         "univariateCharts": "Univariate distributions of the attached dataset",
         "synthVsReal": "Univariate distributions of synthetic vs real data",
-        "heatmapCorrelation": "Correlation matrix"
+        "heatmapCorrelation": "Correlation matrix",
+        "dataSetPreview": {
+            "heading": "0. Preview of data"
+        },
+        "columnsInDataset": "1. Data types detection",
+        "explanatoryDataAnalysisTitle": "2. Explanatory data analysis",
+        "cartModelTitle": "3. CART model",
+        "cartModelDescription": "The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.",
+        "evaluationOfGeneratedDataTitle": "4. Evaluation of generated data",
+        "outputDataTitle": "5. Output data",
+        "diagnosticsTitle": "Diagnostic Results:",
+        "correlationDifference": "Correlation difference: {{correlationDifference}}"
     },
 
     "biasAnalysis": {

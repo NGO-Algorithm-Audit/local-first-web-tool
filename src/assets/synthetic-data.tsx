@@ -125,9 +125,7 @@ def run():
 
     admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
     real_data = admissions_sub.dropna()
-    setResult(json.dumps(
-            {'type': 'heading', 'data': sdgMethod}
-    ))
+    
     if isDemo: 
         setResult(json.dumps({
             'type': 'heading',
@@ -138,6 +136,11 @@ def run():
             'key': 'syntheticData.demo.description'
         }))
 
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'syntheticData.dataSetPreview.heading'
+    }))
     setResult(json.dumps(
         {'type': 'data-set-preview', 'data': ''}
     ))
@@ -207,27 +210,7 @@ def run():
 
     results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     print('Results:', results)
-    setResult(json.dumps(
-        {'type': 'heading', 'data': 'Diagnostic Results:'}
-    ))
-    setResult(json.dumps({'type': 'table', 'data': json.dumps([
-        {
-            'attribute': key,
-            'ks_stat': values['ks_stat'],
-            'p_value': values['p_value']
-        }
-        for key, values in results['distribution_results'].items()
-    ])}))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': 'Correlation difference: ' + str(results['correlation_diff']) }
-    ))
-
-    setResult(json.dumps(
-        {'type': 'heading', 'data': '5. Output data'}
-    ))
-    setResult(json.dumps({'type': 'table', 'data': synthetic_data.head().to_json(orient="records")}))
-
+    
 
     # copy dataframe and assign NaN to all values
     synth_df = real_data.copy()
@@ -247,7 +230,26 @@ def run():
         'realCorrelations': real_data.corr().to_json(orient="records"),
         'syntheticCorrelations': synthetic_data.corr().to_json(orient="records"),
         'reports' : [
-            'univariate', 'distribution', 'correlation'
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.explanatoryDataAnalysisTitle'
+            },
+            {'reportType': 'univariate'},
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.cartModelTitle'
+            },
+             {
+                'reportType': 'text',
+                'textKey': 'syntheticData.cartModelDescription'
+            },
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
+            },
+            {'reportType': 'distribution'},
+            {'reportType': 'correlation'},
+            
         ]
     }))
 
@@ -256,6 +258,44 @@ def run():
     #     'real': real_data.corr().to_json(orient="records"),
     #     'synthetic': synthetic_data.corr().to_json(orient="records")
     # }))
+
+    setResult(json.dumps(
+        {
+            'type': 'heading', 
+            'headingKey': 'syntheticData.diagnosticsTitle'
+        }
+    ))
+    setResult(json.dumps({'type': 'table', 
+        'showIndex' : False,
+        'data': json.dumps([
+            {
+                'attribute': key,
+                'ks_stat': values['ks_stat'],
+                'p_value': values['p_value']
+            }
+            for key, values in results['distribution_results'].items()
+        ])}))
+
+    setResult(json.dumps(
+        {
+            'type': 'heading', 
+            'headingKey': 'syntheticData.correlationDifference',
+            'params': {
+                'correlationDifference' : str(results['correlation_diff'])
+            }
+        }
+    ))
+
+    setResult(json.dumps({
+        'type': 'heading', 
+        'headingKey': 'syntheticData.outputDataTitle'        
+    }))
+
+    setResult(json.dumps({
+        'type': 'table', 
+        'showIndex': True,
+        'data': synthetic_data.head().to_json(orient="records")
+    }))
 
     return 
     
