@@ -230,7 +230,26 @@ def run():
         'realCorrelations': real_data.corr().to_json(orient="records"),
         'syntheticCorrelations': synthetic_data.corr().to_json(orient="records"),
         'reports' : [
-            'univariate', 'distribution', 'correlation'
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.explanatoryDataAnalysisTitle'
+            },
+            {'reportType': 'univariate'},
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.cartModelTitle'
+            },
+             {
+                'reportType': 'text',
+                'textKey': 'syntheticData.cartModelDescription'
+            },
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
+            },
+            {'reportType': 'distribution'},
+            {'reportType': 'correlation'},
+            
         ]
     }))
 
@@ -241,7 +260,10 @@ def run():
     # }))
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': 'Diagnostic Results:'}
+        {
+            'type': 'heading', 
+            'headingKey': 'syntheticData.diagnosticsTitle'
+        }
     ))
     setResult(json.dumps({'type': 'table', 
         'showIndex' : False,
@@ -255,12 +277,18 @@ def run():
         ])}))
 
     setResult(json.dumps(
-        {'type': 'heading', 'data': 'Correlation difference: ' + str(results['correlation_diff']) }
+        {
+            'type': 'heading', 
+            'headingKey': 'syntheticData.correlationDifference',
+            'params': {
+                'correlationDifference' : str(results['correlation_diff'])
+            }
+        }
     ))
 
     setResult(json.dumps({
         'type': 'heading', 
-        'data': '5. Output data'
+        'headingKey': 'syntheticData.outputDataTitle'        
     }))
 
     setResult(json.dumps({
