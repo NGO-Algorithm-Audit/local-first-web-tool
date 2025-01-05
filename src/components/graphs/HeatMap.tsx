@@ -168,7 +168,9 @@ const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
         const resizeObserver = new ResizeObserver(entries => {
             if (!entries || entries.length === 0) return;
             const { width } = entries[0].contentRect;
-            setContainerWidth(width); // Update the state with the new container width
+            if (width > 0) {
+                setContainerWidth(width);
+            }
         });
 
         if (containerRef.current) {

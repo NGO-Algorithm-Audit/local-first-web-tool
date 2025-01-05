@@ -12,3 +12,8 @@
         @apply list-disc list-inside;
     }
 }
+
+.showonprint .chart-container {
+    @apply min-w-[800px];
+    width: 800px !important;
+}

@@ -214,7 +214,10 @@ const DistributionBarChart = ({
         const resizeObserver = new ResizeObserver(entries => {
             if (!entries || entries.length === 0) return;
             const { width } = entries[0].contentRect;
-            setContainerWidth(width);
+
+            if (width > 0) {
+                setContainerWidth(width);
+            }
         });
 
         if (containerRef.current) {
@@ -232,7 +235,7 @@ const DistributionBarChart = ({
         <div
             ref={containerRef}
             style={{ width: '100%', display: 'flex', overflowX: 'auto' }}
-            className={`min-h-[${height}px] flex-col`}
+            className={`chart-container min-h-[${height}px] flex-col`}
         >
             <svg ref={svgRef}></svg>
         </div>
