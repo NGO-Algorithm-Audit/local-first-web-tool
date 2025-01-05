@@ -106,6 +106,40 @@ self.onmessage = async (e: MessageData) => {
     }
 
     async function initPython() {
+        const fetchOriginal = fetch;
+        const fetchWithProgress = async (url: any) => {
+            console.log('fetching', url);
+            const isPyodide =
+                typeof url !== 'string' &&
+                url?.pathname &&
+                url.pathname.includes('pyodide.asm.wasm');
+            if (!isPyodide) {
+                return fetchOriginal(url as URL | RequestInfo);
+            }
+
+            const response = await fetchOriginal(url as URL | RequestInfo);
+
+            const contentLength = response.headers.get('Content-Length');
+            const total = contentLength ? parseInt(contentLength) : 1;
+
+            let bytesLoaded = 0;
+            const ts = new TransformStream({
+                transform(chunk, ctrl) {
+                    // Put some custom progress function here.
+                    bytesLoaded += chunk.byteLength;
+                    console.log(bytesLoaded / total);
+                    postMessage({
+                        type: 'progress',
+                        progress: bytesLoaded / total,
+                    });
+                    ctrl.enqueue(chunk);
+                },
+            });
+
+            return new Response(response.body!.pipeThrough(ts), response);
+        };
+        globalThis.fetch = fetchWithProgress;
+
         self.pyodide = await loadPyodide({ indexURL: '/pyodide' });
         await self.pyodide.loadPackage([
             'micropip',
@@ -119,6 +153,9 @@ self.onmessage = async (e: MessageData) => {
         await micropip.install('kmodes');
         await micropip.install('scipy');
         await micropip.install('python-synthpop');
+
+        globalThis.fetch = fetchOriginal; // put back original fetch
+
         return true;
     }
 

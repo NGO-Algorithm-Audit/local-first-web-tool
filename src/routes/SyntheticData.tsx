@@ -75,6 +75,7 @@ export default function SyntheticDataGeneration() {
         sendData,
         error,
         clusterInfo,
+        progress,
     } = usePython<SyntheticDataParameters, SyntheticDataInfo>({
         isDemo: false,
         sdgMethod: 'gc',
@@ -155,6 +156,9 @@ export default function SyntheticDataGeneration() {
                     isInitialised={initialised}
                 />
             </div>
+            {loading && (
+                <div>Loading progress:{(progress * 100).toFixed(2)}</div>
+            )}
 
             <div
                 className={cn(

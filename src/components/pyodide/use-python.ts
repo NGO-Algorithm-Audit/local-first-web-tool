@@ -10,6 +10,7 @@ export const usePython = <T, TExport>(emptyParams: T) => {
     const [clusterInfo, setClusterInfo] = useState<TExport | undefined>(
         undefined
     );
+    const [progress, setProgress] = useState<number>(0);
 
     const workerRef = useRef<Worker | undefined>(undefined);
 
@@ -37,6 +38,11 @@ export const usePython = <T, TExport>(emptyParams: T) => {
             } else if (event.data.type && event.data.type === 'data-set') {
                 setError(undefined);
                 setLoading(false);
+            }
+            if (event.data.type && event.data.type === 'progress') {
+                if (!initialised) {
+                    setProgress(event.data.progress ?? 0);
+                }
             } else {
                 setError('Unknown message type');
                 setLoading(false);
@@ -91,5 +97,6 @@ export const usePython = <T, TExport>(emptyParams: T) => {
         error,
         sendData,
         clusterInfo,
+        progress,
     };
 };

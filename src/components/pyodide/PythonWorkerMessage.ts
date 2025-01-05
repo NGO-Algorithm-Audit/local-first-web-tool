@@ -4,4 +4,5 @@ export interface PythonWorkerMessage<T> {
     message?: string;
     export: T;
     params?: Record<string, number | string | boolean>;
+    progress?: number;
 }
