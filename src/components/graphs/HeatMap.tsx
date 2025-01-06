@@ -50,12 +50,26 @@ const HeatMapChart = ({
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
 
-        const colorScale = d3
-            .scaleSequential()
-            .domain([rangeMin, rangeMax])
-            .interpolator(
-                colors === 'RdYlBu' ? d3.interpolateRdYlBu : d3.interpolatePuRd
-            );
+        const customColors = ['#ddebd5', '#f4b183', '#c15811', '#f50101'];
+
+        // Create a linear color scale
+        const customColorScale = d3
+            .scaleLinear<string>()
+            .domain([
+                0,
+                1 / (customColors.length - 1),
+                2 / (colors.length - 1),
+                1,
+            ])
+            .range(customColors);
+
+        const colorScale =
+            colors === 'RdYlBu'
+                ? d3
+                      .scaleSequential()
+                      .domain([rangeMin, rangeMax])
+                      .interpolator(d3.interpolateRdYlBu)
+                : customColorScale;
 
         const domain = colorScale.domain();
 
