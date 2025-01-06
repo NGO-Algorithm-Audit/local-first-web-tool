@@ -5,6 +5,9 @@ interface HeatMapChartProps {
     title: string;
     data: number[][];
     columns: string[];
+    rangeMin: number;
+    rangeMax: number;
+    colors: 'RdYlBu' | 'RdGn';
 }
 
 // Define margins for the chart
@@ -12,7 +15,14 @@ const margin = { top: 10, right: 0, bottom: 40, left: 0 };
 // Define height for the chart, adjusting for margins
 const height = 300 - margin.top - margin.bottom;
 
-const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
+const HeatMapChart = ({
+    title,
+    data,
+    columns,
+    rangeMin,
+    rangeMax,
+    colors,
+}: HeatMapChartProps) => {
     const svgRef = useRef(null); // Reference to the SVG element
     const containerRef = useRef(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
@@ -42,8 +52,10 @@ const HeatMapChart = ({ title, data, columns }: HeatMapChartProps) => {
 
         const colorScale = d3
             .scaleSequential()
-            .domain([-1, 1])
-            .interpolator(d3.interpolateRdYlBu);
+            .domain([rangeMin, rangeMax])
+            .interpolator(
+                colors === 'RdYlBu' ? d3.interpolateRdYlBu : d3.interpolatePuRd
+            );
 
         const domain = colorScale.domain();
 

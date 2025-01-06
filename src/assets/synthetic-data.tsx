@@ -220,6 +220,10 @@ def run():
     combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
     # combined_data_encoded = pd.concat((df_encoded.assign(realOrSynthetic='real_encoded'), synth_df.assign(realOrSynthetic='synthetic')), keys=['real_encoded','synthetic'], names=['Data'])
     
+    df_numeric = real_data.apply(pd.to_numeric, errors='coerce')
+    synth_df_numeric = synthetic_data.apply(pd.to_numeric, errors='coerce')
+
+
     # setResult(json.dumps({'type': 'distribution', 'real': real_data.to_json(orient="records"), 'synthetic': synthetic_data.to_json(orient="records"), 'dataTypes': json.dumps(dtypes_dict), 'combined_data' : combined_data.to_json(orient="records")}))
     setResult(json.dumps({
         'type': 'distribution',
@@ -228,13 +232,15 @@ def run():
         'dataTypes': json.dumps(dtypes_dict),
         'combined_data' : combined_data.to_json(orient="records"),
         'realCorrelations': real_data.corr().to_json(orient="records"),
-        'syntheticCorrelations': synthetic_data.corr().to_json(orient="records"),
+        'syntheticCorrelations': np.abs(df_numeric.corr() - synth_df_numeric.corr()).to_json(orient="records"),
         'reports' : [
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.explanatoryDataAnalysisTitle'
             },
-            {'reportType': 'univariate'},
+            {'reportType': 'univariateDistributionRealData'},
+            {'reportType': 'bivariateDistributionRealData'},
+            {'reportType': 'correlationRealData'},
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.cartModelTitle'
@@ -247,8 +253,9 @@ def run():
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
-            {'reportType': 'distribution'},
-            {'reportType': 'correlation'},
+            {'reportType': 'univariateDistributionSyntheticData'},
+            {'reportType': 'bivariateDistributionSyntheticData'},
+            {'reportType': 'correlationSyntheticData'},
             
         ]
     }))
