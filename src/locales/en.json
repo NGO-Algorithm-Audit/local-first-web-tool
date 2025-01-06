@@ -90,9 +90,12 @@
             "description": "Do you not have a dataset at hand? No worries use our demo dataset."
         },
         "columnsInDatasetInfo": "If detected data types are incorrect, please change this locally in the dataset before attaching it again.",
-        "univariateCharts": "Univariate distributions of the attached dataset",
-        "synthVsReal": "Univariate distributions of synthetic vs real data",
-        "heatmapCorrelation": "Correlation matrix",
+        "univariateCharts": "Univariate distributions",
+        "bivariateDistributionRealData": "Bivariate distribution",
+        "univariateDistributionSyntheticData": "Univariate distribution",
+        "bivariateDistributionSyntheticData": "Bivariate distribution",
+        "correlationRealdata": "Correlation matrix",
+        "correlationSyntheticData": "Correlation matrix",
         "dataSetPreview": {
             "heading": "0. Preview of data"
         },
@@ -137,7 +140,7 @@
     },
     "heatmap": {
         "realdata": "Correlation matrix of real data",
-        "syntheticdata": "Correlation matrix of synthetic data"
+        "syntheticdata": "Absolute difference in correlation matrix, i.e., |real data - synthetic data|"
     },
     "distribution": {
         "distributionFor": "Distribution for",

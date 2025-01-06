@@ -90,9 +90,12 @@
             "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
         },
         "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.",
-        "univariateCharts": "Univariate distributies van de gekoppelde dataset",
-        "synthVsReal": "Univariate distributies in synthetische vs originele data",
-        "heatmapCorrelation": "Correlatiematrix",
+        "univariateCharts": "Univariate distributies",
+        "bivariateDistributionRealData": "Bivariate distributies",
+        "univariateDistributionSyntheticData": "Univariate distributies",
+        "bivariateDistributionSyntheticData": "Bivariate distributies",
+        "correlationRealdata": "Correlatie matrix",
+        "correlationSyntheticData": "Correlatie matrix",
         "dataSetPreview": {
             "heading": "0. Preview van de data"
         },
@@ -136,7 +139,7 @@
     },
     "heatmap": {
         "realdata": "Correlatie matrix van echte data",
-        "syntheticdata": "Correlatie matrix van synthetische data"
+        "syntheticdata": "Absoluut verschil in correlation matrix, m.a.w., |echte data - synthetische data|"
     },
     "distribution": {
         "distributionFor": "Distributie voor",
