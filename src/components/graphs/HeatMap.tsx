@@ -7,7 +7,7 @@ interface HeatMapChartProps {
     columns: string[];
     rangeMin: number;
     rangeMax: number;
-    colors: 'RdYlBu' | 'RdGn';
+    colors: 'RdYlBu' | 'LtRd';
 }
 
 // Define margins for the chart
