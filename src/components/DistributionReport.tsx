@@ -227,7 +227,7 @@ export const DistributionReport = (
                                                     )}
                                                     rangeMax={2}
                                                     rangeMin={0}
-                                                    colors="RdGn"
+                                                    colors="LtRd"
                                                 />
                                             </div>
                                         </div>

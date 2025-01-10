@@ -16,6 +16,15 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
     const [containerWidth, setContainerWidth] = useState(800);
     const { t } = useTranslation();
 
+    const formatTick = (value: number) => {
+        if (value >= 1000000) {
+            return `${(value / 1000000).toFixed(1)}M`;
+        } else if (value >= 1000) {
+            return `${(value / 1000).toFixed(1)}K`;
+        }
+        return value.toString();
+    };
+
     useEffect(() => {
         const plotWidth = containerWidth - margin.left - margin.right;
         const plotHeight = height - margin.top - margin.bottom;
@@ -86,7 +95,7 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
             .style('fill', 'steelblue')
             .style('opacity', 0.5);
 
-        // Add axes
+        // Add axes with formatted ticks
         svg.append('g')
             .attr('transform', `translate(0,${plotHeight})`)
             .call(d3.axisBottom(xScale))
@@ -96,7 +105,12 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
             .attr('dx', '-.8em')
             .attr('dy', '.15em');
 
-        svg.append('g').call(d3.axisLeft(yScale));
+        svg.append('g').call(
+            d3
+                .axisLeft(yScale)
+                .ticks(5) // Reduce number of ticks
+                .tickFormat(d => formatTick(d as number))
+        );
 
         // Add title
         svg.append('text')
