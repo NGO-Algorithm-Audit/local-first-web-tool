@@ -144,6 +144,8 @@
     },
     "distribution": {
         "distributionFor": "Distribution for",
+        "countFor": "Distribution for",
+        "frequency": "Frequency",
         "syntheticData": "Synthetic data",
         "realData": "Real data"
     }

@@ -143,6 +143,8 @@
     },
     "distribution": {
         "distributionFor": "Distributie voor",
+        "countFor": "Distributie voor",
+        "frequency": "Frequentie",
         "syntheticData": "Synthetische data",
         "realData": "Echte data"
     }

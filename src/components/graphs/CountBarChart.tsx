@@ -108,9 +108,18 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
         svg.append('g').call(
             d3
                 .axisLeft(yScale)
-                .ticks(5) // Reduce number of ticks
+                .ticks(5)
                 .tickFormat(d => formatTick(d as number))
         );
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -40) // Adjust position from left edge
+            .attr('x', -plotHeight / 2) // Center vertically
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '12px')
+            .text(t('distribution.frequency'));
 
         // Add title
         svg.append('text')
@@ -119,7 +128,7 @@ const CountBarChart = ({ column, realData }: CountBarChartProps) => {
             .attr('text-anchor', 'middle')
             .style('font-size', '12px')
             .style('font-weight', 'bold')
-            .text(`${t('distribution.distributionFor')} ${column}`);
+            .text(`${t('distribution.countFor')} ${column}`);
     }, [containerWidth, column, realData]);
 
     useEffect(() => {
