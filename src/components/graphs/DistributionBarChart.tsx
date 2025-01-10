@@ -23,6 +23,10 @@ const DistributionBarChart = ({
     const [containerWidth, setContainerWidth] = useState(800);
     const { t } = useTranslation();
 
+    const formatTickAsPercentage = (value: number) => {
+        return `${(value * 100).toFixed(1)}%`;
+    };
+
     useEffect(() => {
         const plotWidth = containerWidth - margin.left - margin.right;
         const plotHeight = height - margin.top - margin.bottom;
@@ -146,7 +150,12 @@ const DistributionBarChart = ({
             .attr('dx', '-.8em')
             .attr('dy', '.15em');
 
-        svg.append('g').call(d3.axisLeft(yScale));
+        svg.append('g').call(
+            d3
+                .axisLeft(yScale)
+                .ticks(5) // Reduce number of ticks
+                .tickFormat(d => formatTickAsPercentage(d as number))
+        );
 
         // Add title
         svg.append('text')
