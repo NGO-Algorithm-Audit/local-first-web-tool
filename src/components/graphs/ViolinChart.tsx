@@ -92,14 +92,19 @@ const ViolinChart = ({
 
             // Function to create violin path
             const createViolin = (values: number[], side: 'left' | 'right') => {
-                const bins = d3.bin().domain(yScale.domain()).thresholds(20)(
-                    values
-                );
+                // Create properly typed bin generator
+                const binGenerator = d3
+                    .bin<number, number>()
+                    .domain(yScale.domain() as [number, number])
+                    .thresholds(20);
 
+                const bins = binGenerator(values);
+
+                // Now bins is properly typed as d3.Bin<number, number>[]
                 const maxCount = d3.max(bins, d => d.length) || 0;
                 const widthScale = d3
                     .scaleLinear()
-                    .domain([0, maxCount / values.length]) // Normalize by total count
+                    .domain([0, maxCount / values.length])
                     .range([0, bandwidth]);
 
                 const area = d3

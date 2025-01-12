@@ -7,6 +7,7 @@ import HeatMapChart from './graphs/HeatMap';
 import { UnivariateCharts } from './UnivariateCharts';
 import { Accordion } from './ui/accordion';
 import { createHeatmapdata } from './createHeatmapdata';
+import ViolinChart from './graphs/ViolinChart';
 
 interface DistributionReport {
     reportType: string;
@@ -98,7 +99,22 @@ export const DistributionReport = (
                                     title={t(
                                         'syntheticData.bivariateDistributionSyntheticData'
                                     )}
-                                    content={<p>PLACEHOLDER</p>}
+                                    content={
+                                        <p>
+                                            <ViolinChart
+                                                categoricalColumn="sex"
+                                                numericColumn="ugpa"
+                                                realData={realData}
+                                                syntheticData={syntheticData}
+                                            />
+                                            <ViolinChart
+                                                categoricalColumn="race1"
+                                                numericColumn="ugpa"
+                                                realData={realData}
+                                                syntheticData={syntheticData}
+                                            />
+                                        </p>
+                                    }
                                 />
                             </div>
                         );
