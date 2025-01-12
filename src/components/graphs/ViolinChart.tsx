@@ -24,7 +24,6 @@ const ViolinChart = ({
     const { t } = useTranslation();
 
     useEffect(() => {
-        const plotWidth = containerWidth - margin.left - margin.right;
         const plotHeight = height - margin.top - margin.bottom;
 
         // Get unique categories
@@ -61,6 +60,11 @@ const ViolinChart = ({
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Reserve space for legend (120px width + 20px padding)
+        const legendWidth = 140;
+        const plotWidth =
+            containerWidth - margin.left - margin.right - legendWidth;
 
         // Create scales
         const xScale = d3
@@ -237,11 +241,13 @@ const ViolinChart = ({
             .attr('font-size', '12px')
             .text(numericColumn);
 
-        // Add legend
+        // Add legend at fixed position relative to plot area
         const legend = svg
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', `translate(${plotWidth - 120}, 30)`);
+            .attr('transform', `translate(${plotWidth + 20}, 30)`);
+
+        // No need to adjust SVG width since we reserved space for legend
 
         // Add background rectangle for legend
         legend
