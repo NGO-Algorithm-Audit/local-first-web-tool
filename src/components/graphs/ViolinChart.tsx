@@ -102,7 +102,7 @@ const ViolinChart = ({
                     kernelEpanechnikov(0.2),
                     yScale.ticks(50)
                 );
-                const density = kde(values);
+                const density: [number, number][] = kde(values);
                 const maxDensity = d3.max(density, d => d[1]) || 0;
 
                 const widthScale = d3
@@ -130,7 +130,7 @@ const ViolinChart = ({
             function kernelDensityEstimator(
                 kernel: (v: number) => number,
                 X: number[]
-            ) {
+            ): (V: number[]) => [number, number][] {
                 return function (V: number[]) {
                     return X.map(x => [x, d3.mean(V, v => kernel(x - v)) || 0]);
                 };
