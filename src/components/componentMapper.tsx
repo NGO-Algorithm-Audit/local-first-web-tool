@@ -146,6 +146,7 @@ export default function ComponentMapper({
                                 };
                             }
                         );
+                        console.log('histogramData', histogramData);
 
                         return (
                             <ErrorBoundary key={index}>

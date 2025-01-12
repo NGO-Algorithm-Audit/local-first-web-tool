@@ -8,6 +8,7 @@ import { UnivariateCharts } from './UnivariateCharts';
 import { Accordion } from './ui/accordion';
 import { createHeatmapdata } from './createHeatmapdata';
 import ViolinChart from './graphs/ViolinChart';
+import GroupBarChart from './graphs/GroupBarChart';
 
 interface DistributionReport {
     reportType: string;
@@ -82,13 +83,101 @@ export const DistributionReport = (
                         );
                     }
                     if (report.reportType === 'bivariateDistributionRealData') {
+                        /*
+							for all category colums (main column)
+							- foreach column that is also a category column (secondary column)
+								- get all categories of the main column
+								- foreach category of the main column
+									- count all the categories of the secondary column
+									- add this to a data structure
+								- create a historgram with the data structure
+							
+						*/
+                        const charts = columnNames.map((column, index) => {
+                            const dataType = dataTypes[column];
+                            return columnNames.map((column2, index2) => {
+                                if (column === column2 || index >= index2) {
+                                    return null;
+                                }
+                                const dataType2 = dataTypes[column2];
+
+                                if (
+                                    dataType === 'category' &&
+                                    dataType2 === 'category'
+                                ) {
+                                    const data = realData.reduce(
+                                        (
+                                            acc: Record<string, any>,
+                                            row: Record<string, any>
+                                        ) => {
+                                            const category = row[column];
+                                            const category2 = row[column2];
+                                            if (!acc[category]) {
+                                                acc[category] = {};
+                                            }
+                                            if (!acc[category][category2]) {
+                                                acc[category][category2] = 0;
+                                            }
+                                            acc[category][category2]++;
+                                            return acc;
+                                        },
+                                        {} as Record<
+                                            string,
+                                            Record<string, number>
+                                        >
+                                    );
+
+                                    const categories = Object.keys(data);
+                                    const categories2 = new Set<string>();
+                                    for (const category in data) {
+                                        for (const category2 in data[
+                                            category
+                                        ]) {
+                                            categories2.add(category2);
+                                        }
+                                    }
+                                    const categories2Array =
+                                        Array.from(categories2);
+
+                                    const histogramData = categories.map(
+                                        category => {
+                                            const categoryData =
+                                                categories2Array.map(
+                                                    category2 => {
+                                                        return {
+                                                            name: category2,
+                                                            value:
+                                                                data[category][
+                                                                    category2
+                                                                ] || 0,
+                                                        };
+                                                    }
+                                                );
+                                            return {
+                                                name: category,
+                                                values: categoryData,
+                                            };
+                                        }
+                                    );
+                                    return (
+                                        <div key={column + column2}>
+                                            <GroupBarChart
+                                                data={histogramData}
+                                                title={`${column} vs ${column2}`}
+                                            />
+                                        </div>
+                                    );
+                                }
+                            });
+                        });
+
                         return (
                             <div key={indexReport} className="mb-4">
                                 <Accordion
                                     title={t(
                                         'syntheticData.bivariateDistributionRealData'
                                     )}
-                                    content={<p>PLACEHOLDER</p>}
+                                    content={<div>{charts}</div>}
                                 />
                             </div>
                         );
