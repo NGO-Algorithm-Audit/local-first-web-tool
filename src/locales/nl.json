@@ -146,6 +146,7 @@
         "countFor": "Distributie voor",
         "frequency": "Frequentie",
         "syntheticData": "Synthetische data",
-        "realData": "Echte data"
+        "realData": "Echte data",
+        "percentage": "Percentage van dataset"
     }
 }

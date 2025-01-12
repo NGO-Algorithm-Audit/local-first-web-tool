@@ -8,7 +8,7 @@ interface CountBarChartProps {
 }
 
 const margin = { top: 30, right: 50, bottom: 60, left: 50 }; // Increased bottom margin for rotated labels
-const height = 300 - margin.top - margin.bottom;
+const height = 380 - margin.top - margin.bottom;
 
 const CountBarChart = ({ column, realData }: CountBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);

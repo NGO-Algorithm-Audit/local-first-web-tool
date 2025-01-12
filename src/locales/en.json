@@ -147,6 +147,7 @@
         "countFor": "Distribution for",
         "frequency": "Frequency",
         "syntheticData": "Synthetic data",
-        "realData": "Real data"
+        "realData": "Real data",
+        "percentage": "Percentage of dataset"
     }
 }
