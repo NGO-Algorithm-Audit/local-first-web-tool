@@ -7,6 +7,7 @@ import HeatMapChart from './graphs/HeatMap';
 import { UnivariateCharts } from './UnivariateCharts';
 import { Accordion } from './ui/accordion';
 import { createHeatmapdata } from './createHeatmapdata';
+import ViolinChart from './graphs/ViolinChart';
 
 interface DistributionReport {
     reportType: string;
@@ -30,6 +31,10 @@ export const DistributionReport = (
     const syntheticData = JSON.parse(distributionReportProps.synthetic);
     const dataTypes = JSON.parse(distributionReportProps.dataTypes);
     console.log('reports', distributionReportProps.reports);
+
+    const columnNames = Object.keys(realData[0]).filter(column => {
+        return column != 'realOrSynthetic';
+    });
     return (
         <div className="flex flex-col gap-6">
             {distributionReportProps.reports.map(
@@ -92,13 +97,37 @@ export const DistributionReport = (
                         report.reportType ===
                         'bivariateDistributionSyntheticData'
                     ) {
+                        const charts = columnNames.map(column => {
+                            const dataType = dataTypes[column];
+                            return columnNames.map(column2 => {
+                                if (column === column2) {
+                                    return null;
+                                }
+                                const dataType2 = dataTypes[column2];
+                                if (
+                                    dataType === 'float' &&
+                                    dataType2 === 'category'
+                                ) {
+                                    return (
+                                        <ViolinChart
+                                            key={column + column2}
+                                            categoricalColumn={column2}
+                                            numericColumn={column}
+                                            realData={realData}
+                                            syntheticData={syntheticData}
+                                        />
+                                    );
+                                }
+                                return null;
+                            });
+                        });
                         return (
                             <div key={indexReport} className="mb-4">
                                 <Accordion
                                     title={t(
                                         'syntheticData.bivariateDistributionSyntheticData'
                                     )}
-                                    content={<p>PLACEHOLDER</p>}
+                                    content={<div>{charts}</div>}
                                 />
                             </div>
                         );
