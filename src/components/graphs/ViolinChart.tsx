@@ -87,7 +87,7 @@ const ViolinChart = ({
                 ...realData.map(d => +d[numericColumn]),
                 ...syntheticData.map(d => +d[numericColumn]),
             ]) || 0;
-        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.1;
+        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.2;
 
         const yScale = d3
             .scaleLinear()
@@ -101,17 +101,34 @@ const ViolinChart = ({
 
             // Function to create violin path
             const createViolin = (values: number[], side: 'left' | 'right') => {
-                // Create kernel density estimation
+                // Skip if no values
+                if (values.length === 0) return null;
+
+                // Calculate Scott's rule for bandwidth
+                const std = Math.sqrt(d3.variance(values) || 0);
+                // Adjust bandwidth calculation to be more suitable for visualization
+                const bw = 1.06 * std * Math.pow(values.length, -0.2);
+
+                // Create kernel density estimation with Gaussian kernel
                 const kde = kernelDensityEstimator(
-                    kernelEpanechnikov(0.2),
-                    yScale.ticks(50)
+                    v => kernelGaussian(v, bw),
+                    yScale.ticks(100)
                 );
                 const density: [number, number][] = kde(values);
+
+                // Scale the density values
                 const maxDensity = d3.max(density, d => d[1]) || 0;
+                const normalizedDensity = density.map(
+                    d =>
+                        [d[0], (d[1] / maxDensity) * bandwidth] as [
+                            number,
+                            number,
+                        ]
+                );
 
                 const widthScale = d3
                     .scaleLinear()
-                    .domain([0, maxDensity])
+                    .domain([0, d3.max(normalizedDensity, d => d[1]) || 0])
                     .range([0, bandwidth]);
 
                 const area = d3
@@ -127,7 +144,7 @@ const ViolinChart = ({
                     .y(d => yScale(d[0]))
                     .curve(d3.curveBasis);
 
-                return area(density);
+                return area(normalizedDensity);
             };
 
             // Kernel functions
@@ -140,12 +157,11 @@ const ViolinChart = ({
                 };
             }
 
-            function kernelEpanechnikov(k: number) {
-                return function (v: number) {
-                    return Math.abs((v /= k)) <= 1
-                        ? (0.75 * (1 - v * v)) / k
-                        : 0;
-                };
+            function kernelGaussian(v: number, bandwidth: number) {
+                return (
+                    Math.exp(-0.5 * Math.pow(v / bandwidth, 2)) /
+                    (bandwidth * Math.sqrt(2 * Math.PI))
+                );
             }
 
             // Calculate center position for the violin plot
@@ -186,24 +202,30 @@ const ViolinChart = ({
 
             // Draw real data violin (left side)
             if (real.length > 0) {
-                svg.append('path')
-                    .attr('d', createViolin(real, 'left'))
-                    .attr('transform', `translate(${centerPos}, 0)`)
-                    .style('fill', 'steelblue')
-                    .style('opacity', 0.5);
+                const path = createViolin(real, 'left');
+                if (path) {
+                    svg.append('path')
+                        .attr('d', path)
+                        .attr('transform', `translate(${centerPos}, 0)`)
+                        .style('fill', 'steelblue')
+                        .style('opacity', 0.5);
 
-                drawQuartileLines(real, 'left', 'steelblue');
+                    drawQuartileLines(real, 'left', 'steelblue');
+                }
             }
 
             // Draw synthetic data violin (right side)
             if (synthetic.length > 0) {
-                svg.append('path')
-                    .attr('d', createViolin(synthetic, 'right'))
-                    .attr('transform', `translate(${centerPos}, 0)`)
-                    .style('fill', 'orange')
-                    .style('opacity', 0.5);
+                const path = createViolin(synthetic, 'right');
+                if (path) {
+                    svg.append('path')
+                        .attr('d', path)
+                        .attr('transform', `translate(${centerPos}, 0)`)
+                        .style('fill', 'orange')
+                        .style('opacity', 0.5);
 
-                drawQuartileLines(synthetic, 'right', 'orange');
+                    drawQuartileLines(synthetic, 'right', 'orange');
+                }
             }
         });
 
