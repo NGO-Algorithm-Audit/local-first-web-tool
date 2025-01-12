@@ -10,7 +10,7 @@ interface ViolinChartProps {
 }
 
 const margin = { top: 30, right: 50, bottom: 60, left: 80 };
-const height = 380 - margin.top - margin.bottom;
+const height = 480 - margin.top - margin.bottom;
 
 const ViolinChart = ({
     categoricalColumn,
@@ -179,7 +179,7 @@ const ViolinChart = ({
                         .attr('y2', yScale(q))
                         .attr('transform', `translate(${centerPos}, 0)`)
                         .style('stroke', color)
-                        .style('stroke-width', 1)
+                        .style('stroke-width', 2)
                         .style('stroke-dasharray', '3,3');
                 });
             };
