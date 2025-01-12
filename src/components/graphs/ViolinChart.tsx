@@ -131,6 +131,39 @@ const ViolinChart = ({
             // Calculate center position for the violin plot
             const centerPos = xPos + xScale.bandwidth() / 2;
 
+            // Function to calculate quartiles
+            const calculateQuartiles = (values: number[]) => {
+                const sorted = [...values].sort((a, b) => a - b);
+                return {
+                    q1: d3.quantile(sorted, 0.25) || 0,
+                    q2: d3.quantile(sorted, 0.5) || 0,
+                    q3: d3.quantile(sorted, 0.75) || 0,
+                };
+            };
+
+            // Function to draw quartile lines
+            const drawQuartileLines = (
+                values: number[],
+                side: 'left' | 'right',
+                color: string
+            ) => {
+                const quartiles = calculateQuartiles(values);
+                const maxWidth = bandwidth;
+
+                // Draw lines for each quartile
+                Object.values(quartiles).forEach(q => {
+                    svg.append('line')
+                        .attr('x1', side === 'left' ? -maxWidth : 0)
+                        .attr('x2', side === 'left' ? 0 : maxWidth)
+                        .attr('y1', yScale(q))
+                        .attr('y2', yScale(q))
+                        .attr('transform', `translate(${centerPos}, 0)`)
+                        .style('stroke', color)
+                        .style('stroke-width', 1)
+                        .style('stroke-dasharray', '3,3');
+                });
+            };
+
             // Draw real data violin (left side)
             if (real.length > 0) {
                 svg.append('path')
@@ -138,6 +171,8 @@ const ViolinChart = ({
                     .attr('transform', `translate(${centerPos}, 0)`)
                     .style('fill', 'steelblue')
                     .style('opacity', 0.5);
+
+                drawQuartileLines(real, 'left', 'steelblue');
             }
 
             // Draw synthetic data violin (right side)
@@ -147,6 +182,8 @@ const ViolinChart = ({
                     .attr('transform', `translate(${centerPos}, 0)`)
                     .style('fill', 'orange')
                     .style('opacity', 0.5);
+
+                drawQuartileLines(synthetic, 'right', 'orange');
             }
         });
 
