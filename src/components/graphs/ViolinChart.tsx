@@ -97,36 +97,52 @@ const ViolinChart = ({
 
             // Function to create violin path
             const createViolin = (values: number[], side: 'left' | 'right') => {
-                // Create properly typed bin generator
-                const binGenerator = d3
-                    .bin<number, number>()
-                    .domain(yScale.domain() as [number, number])
-                    .thresholds(20);
+                // Create kernel density estimation
+                const kde = kernelDensityEstimator(
+                    kernelEpanechnikov(0.2),
+                    yScale.ticks(50)
+                );
+                const density = kde(values);
+                const maxDensity = d3.max(density, d => d[1]) || 0;
 
-                const bins = binGenerator(values);
-
-                // Now bins is properly typed as d3.Bin<number, number>[]
-                const maxCount = d3.max(bins, d => d.length) || 0;
                 const widthScale = d3
                     .scaleLinear()
-                    .domain([0, maxCount / values.length])
+                    .domain([0, maxDensity])
                     .range([0, bandwidth]);
 
                 const area = d3
-                    .area<d3.Bin<number, number>>()
+                    .area<[number, number]>()
                     .x0(d => {
-                        const width = widthScale(d.length / values.length);
+                        const width = widthScale(d[1]);
                         return side === 'left' ? -width : 0;
                     })
                     .x1(d => {
-                        const width = widthScale(d.length / values.length);
+                        const width = widthScale(d[1]);
                         return side === 'left' ? 0 : width;
                     })
-                    .y(d => yScale((d.x0! + d.x1!) / 2))
-                    .curve(d3.curveCatmullRom);
+                    .y(d => yScale(d[0]))
+                    .curve(d3.curveBasis);
 
-                return area(bins);
+                return area(density);
             };
+
+            // Kernel functions
+            function kernelDensityEstimator(
+                kernel: (v: number) => number,
+                X: number[]
+            ) {
+                return function (V: number[]) {
+                    return X.map(x => [x, d3.mean(V, v => kernel(x - v)) || 0]);
+                };
+            }
+
+            function kernelEpanechnikov(k: number) {
+                return function (v: number) {
+                    return Math.abs((v /= k)) <= 1
+                        ? (0.75 * (1 - v * v)) / k
+                        : 0;
+                };
+            }
 
             // Calculate center position for the violin plot
             const centerPos = xPos + xScale.bandwidth() / 2;
