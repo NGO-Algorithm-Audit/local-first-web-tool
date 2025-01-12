@@ -115,7 +115,7 @@ export default function SyntheticDataGeneration() {
             onRun({
                 isDemo: true,
                 sdgMethod: 'cart',
-                samples: 1000,
+                samples: 5000,
             });
         }
     }, [initialised, data]);
