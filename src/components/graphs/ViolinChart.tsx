@@ -10,7 +10,7 @@ interface ViolinChartProps {
 }
 
 const margin = { top: 30, right: 50, bottom: 60, left: 80 };
-const height = 480 - margin.top - margin.bottom;
+const height = 580 - margin.top - margin.bottom;
 
 const ViolinChart = ({
     categoricalColumn,
@@ -106,13 +106,22 @@ const ViolinChart = ({
 
                 // Calculate Scott's rule for bandwidth
                 const std = Math.sqrt(d3.variance(values) || 0);
-                // Adjust bandwidth calculation to be more suitable for visualization
                 const bw = 1.06 * std * Math.pow(values.length, -0.2);
+
+                // Extend the range by 2 bandwidths on each side (cut=2)
+                const minValue = d3.min(values) || 0;
+                const maxValue = d3.max(values) || 0;
+                const extension = 2 * bw;
+                const densityPoints = d3.range(
+                    minValue - extension,
+                    maxValue + extension,
+                    (maxValue - minValue + 2 * extension) / 100
+                );
 
                 // Create kernel density estimation with Gaussian kernel
                 const kde = kernelDensityEstimator(
                     v => kernelGaussian(v, bw),
-                    yScale.ticks(100)
+                    densityPoints
                 );
                 const density: [number, number][] = kde(values);
 
