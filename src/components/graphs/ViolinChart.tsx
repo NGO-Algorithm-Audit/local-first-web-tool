@@ -96,7 +96,7 @@ const ViolinChart = ({
                 const binGenerator = d3
                     .bin<number, number>()
                     .domain(yScale.domain() as [number, number])
-                    .thresholds(20);
+                    .thresholds(15);
 
                 const bins = binGenerator(values);
 
