@@ -9,8 +9,8 @@ interface DistributionBarChartProps {
     syntheticData: (string | number)[];
 }
 
-const margin = { top: 30, right: 50, bottom: 60, left: 50 }; // Increased bottom margin for rotated labels
-const height = 300 - margin.top - margin.bottom;
+const margin = { top: 30, right: 50, bottom: 60, left: 80 }; // Increased bottom margin for rotated labels
+const height = 380 - margin.top - margin.bottom;
 
 const DistributionBarChart = ({
     column,
@@ -165,6 +165,15 @@ const DistributionBarChart = ({
             .style('font-size', '12px')
             .style('font-weight', 'bold')
             .text(`${t('distribution.distributionFor')} ${column}`);
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -50) // Adjust position from left edge
+            .attr('x', -plotHeight / 2) // Center vertically
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '12px')
+            .text(t('distribution.percentage'));
 
         // Add legend
         const legend = svg
