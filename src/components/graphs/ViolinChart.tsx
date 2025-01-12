@@ -87,7 +87,7 @@ const ViolinChart = ({
                 ...realData.map(d => +d[numericColumn]),
                 ...syntheticData.map(d => +d[numericColumn]),
             ]) || 0;
-        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.2;
+        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.25;
 
         const yScale = d3
             .scaleLinear()
@@ -106,7 +106,7 @@ const ViolinChart = ({
 
                 // Calculate Scott's rule for bandwidth
                 const std = Math.sqrt(d3.variance(values) || 0);
-                const bw = 1.06 * std * Math.pow(values.length, -0.2);
+                const bw = Math.pow(4 / (3 * values.length), 1 / 5) * std;
 
                 // Extend the range by 2 bandwidths on each side (cut=2)
                 const minValue = d3.min(values) || 0;
@@ -126,10 +126,18 @@ const ViolinChart = ({
                 const density: [number, number][] = kde(values);
 
                 // Scale the density values
-                const maxDensity = d3.max(density, d => d[1]) || 0;
+                // const maxDensity = d3.max(density, d => d[1]) || 0;
+                // const normalizedDensity = density.map(
+                //     d =>
+                //         [d[0], (d[1] / maxDensity) * bandwidth] as [
+                //             number,
+                //             number,
+                //         ]
+                // );
+                const totalArea = d3.sum(density, d => d[1]);
                 const normalizedDensity = density.map(
                     d =>
-                        [d[0], (d[1] / maxDensity) * bandwidth] as [
+                        [d[0], (d[1] / totalArea) * bandwidth] as [
                             number,
                             number,
                         ]
@@ -151,7 +159,7 @@ const ViolinChart = ({
                         return side === 'left' ? 0 : width;
                     })
                     .y(d => yScale(d[0]))
-                    .curve(d3.curveBasis);
+                    .curve(d3.curveLinear);
 
                 return area(normalizedDensity);
             };
