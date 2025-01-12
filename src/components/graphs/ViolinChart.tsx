@@ -69,18 +69,25 @@ const ViolinChart = ({
             .range([0, plotWidth])
             .padding(0.1);
 
+        // Limit the bandwidth to 200px max (100px per side)
+        const bandwidth = Math.min(xScale.bandwidth() / 2, 50);
+
+        // Calculate min and max with 10% padding on top
+        const minValue =
+            d3.min([
+                ...realData.map(d => +d[numericColumn]),
+                ...syntheticData.map(d => +d[numericColumn]),
+            ]) || 0;
+        const maxValue =
+            d3.max([
+                ...realData.map(d => +d[numericColumn]),
+                ...syntheticData.map(d => +d[numericColumn]),
+            ]) || 0;
+        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.1;
+
         const yScale = d3
             .scaleLinear()
-            .domain([
-                d3.min([
-                    ...realData.map(d => +d[numericColumn]),
-                    ...syntheticData.map(d => +d[numericColumn]),
-                ]) || 0,
-                d3.max([
-                    ...realData.map(d => +d[numericColumn]),
-                    ...syntheticData.map(d => +d[numericColumn]),
-                ]) || 0,
-            ])
+            .domain([minValue, paddedMaxValue])
             .range([plotHeight, 0]);
 
         // Create violin plot for each category
@@ -88,15 +95,13 @@ const ViolinChart = ({
             const xPos = xScale(category);
             if (xPos === undefined) return;
 
-            const bandwidth = xScale.bandwidth() / 2;
-
             // Function to create violin path
             const createViolin = (values: number[], side: 'left' | 'right') => {
                 // Create properly typed bin generator
                 const binGenerator = d3
                     .bin<number, number>()
                     .domain(yScale.domain() as [number, number])
-                    .thresholds(15);
+                    .thresholds(20);
 
                 const bins = binGenerator(values);
 
@@ -123,11 +128,14 @@ const ViolinChart = ({
                 return area(bins);
             };
 
+            // Calculate center position for the violin plot
+            const centerPos = xPos + xScale.bandwidth() / 2;
+
             // Draw real data violin (left side)
             if (real.length > 0) {
                 svg.append('path')
                     .attr('d', createViolin(real, 'left'))
-                    .attr('transform', `translate(${xPos + bandwidth}, 0)`)
+                    .attr('transform', `translate(${centerPos}, 0)`)
                     .style('fill', 'steelblue')
                     .style('opacity', 0.5);
             }
@@ -136,7 +144,7 @@ const ViolinChart = ({
             if (synthetic.length > 0) {
                 svg.append('path')
                     .attr('d', createViolin(synthetic, 'right'))
-                    .attr('transform', `translate(${xPos + bandwidth}, 0)`)
+                    .attr('transform', `translate(${centerPos}, 0)`)
                     .style('fill', 'orange')
                     .style('opacity', 0.5);
             }
