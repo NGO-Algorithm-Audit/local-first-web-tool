@@ -151,7 +151,7 @@ def run():
     ))
 
     dtypes_dict = real_data.dtypes.to_dict()
-    dtypes_dict = {k: 'float' if v == 'float64' else 'category' if v == 'O' else v for k, v in dtypes_dict.items()}
+    dtypes_dict = {k: 'float' if (v == 'float64' or v == 'int64') else 'category' if (v == 'O' or v =='bool') else v for k, v in dtypes_dict.items()}
     if isDemo:
         dtypes_dict['sex'] = 'category'
         real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
@@ -160,6 +160,9 @@ def run():
         'type': 'heading',
         'headingKey': 'syntheticData.columnsInDataset'
     }))
+    print("dtypes_dict:", dtypes_dict)
+    
+
     dataInfo = []
     for column in real_data.columns:
         dataInfo.append({
