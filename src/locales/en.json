@@ -148,6 +148,8 @@
         "frequency": "Frequency",
         "syntheticData": "Synthetic data",
         "realData": "Real data",
-        "percentage": "Percentage of dataset"
+        "percentage": "Percentage of dataset",
+        "by": "by",
+        "distributionOf": "Distribution of"
     }
 }
