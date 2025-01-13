@@ -170,7 +170,7 @@ const HeatMapChart = ({
 
         const axisLabel = d3
             .axisRight(yScale)
-            .tickValues([...domain, (domain[1] + domain[0]) / 2])
+            .tickValues([...domain])
             .tickSizeOuter(0);
 
         const legendBar = svg.append('g').datum(expandedDomain).call(svgBar);
