@@ -147,6 +147,8 @@
         "frequency": "Frequentie",
         "syntheticData": "Synthetische data",
         "realData": "Echte data",
-        "percentage": "Percentage van dataset"
+        "percentage": "Percentage van dataset",
+        "by": "van",
+        "distributionOf": "Distributie van"
     }
 }

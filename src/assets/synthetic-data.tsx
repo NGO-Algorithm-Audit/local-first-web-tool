@@ -123,10 +123,12 @@ def run():
 
     admissions_df = pd.read_csv(csv_data)
 
-    admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
-    real_data = admissions_sub.dropna()
+    # admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
+    # real_data = admissions_sub.dropna()
     
     if isDemo: 
+        admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
+        real_data = admissions_sub.dropna()    
         setResult(json.dumps({
             'type': 'heading',
             'headingKey': 'syntheticData.demo.heading'
@@ -135,7 +137,10 @@ def run():
             'type': 'text',
             'key': 'syntheticData.demo.description'
         }))
-
+    else:
+        admissions_df.reset_index(drop=True, inplace=True)
+        admissions_sub = admissions_df
+        real_data = admissions_sub.dropna()
 
     setResult(json.dumps({
         'type': 'heading',
@@ -145,17 +150,19 @@ def run():
         {'type': 'data-set-preview', 'data': ''}
     ))
 
-
     dtypes_dict = real_data.dtypes.to_dict()
-    dtypes_dict = {k: 'float' if v == 'float64' else 'category' if v == 'O' else v for k, v in dtypes_dict.items()}
-
-    dtypes_dict['sex'] = 'category'
-    real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
+    dtypes_dict = {k: 'float' if (v == 'float64' or v == 'int64') else 'category' if (v == 'O' or v =='bool') else v for k, v in dtypes_dict.items()}
+    if isDemo:
+        dtypes_dict['sex'] = 'category'
+        real_data['sex'] = real_data['sex'].map({1: 'male', 2: 'female'})
 
     setResult(json.dumps({
         'type': 'heading',
         'headingKey': 'syntheticData.columnsInDataset'
     }))
+    print("dtypes_dict:", dtypes_dict)
+    
+
     dataInfo = []
     for column in real_data.columns:
         dataInfo.append({
