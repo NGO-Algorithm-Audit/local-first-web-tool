@@ -139,8 +139,8 @@
         }
     },
     "heatmap": {
-        "realdata": "Correlation matrix of real data",
-        "syntheticdata": "Absolute difference in correlation matrix, i.e., |real data - synthetic data|"
+        "realdata": "Correlation matrix of attached data",
+        "syntheticdata": "Absolute difference in correlation matrix, i.e., |attached data - synthetic data|"
     },
     "distribution": {
         "distributionFor": "Distribution for",

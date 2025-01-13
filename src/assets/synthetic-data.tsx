@@ -256,32 +256,21 @@ def run():
             {'reportType': 'univariateDistributionSyntheticData'},
             {'reportType': 'bivariateDistributionSyntheticData'},
             {'reportType': 'correlationSyntheticData'},
-            
+            {            
+                'reportType': 'table',
+                'titleKey': 'syntheticData.diagnosticsTitle',
+                'showIndex' : False,
+                'data': json.dumps([
+                        {
+                            'attribute': key,
+                            'ks_stat': values['ks_stat'],
+                            'p_value': values['p_value']
+                        }
+                        for key, values in results['distribution_results'].items()
+                    ])
+            }
         ]
     }))
-
-    # setResult(json.dumps({
-    #     'type': 'heatmap',
-    #     'real': real_data.corr().to_json(orient="records"),
-    #     'synthetic': synthetic_data.corr().to_json(orient="records")
-    # }))
-
-    setResult(json.dumps(
-        {
-            'type': 'heading', 
-            'headingKey': 'syntheticData.diagnosticsTitle'
-        }
-    ))
-    setResult(json.dumps({'type': 'table', 
-        'showIndex' : False,
-        'data': json.dumps([
-            {
-                'attribute': key,
-                'ks_stat': values['ks_stat'],
-                'p_value': values['p_value']
-            }
-            for key, values in results['distribution_results'].items()
-        ])}))
 
     setResult(json.dumps(
         {

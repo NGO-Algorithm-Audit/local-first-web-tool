@@ -9,12 +9,16 @@ import { Accordion } from './ui/accordion';
 import { createHeatmapdata } from './createHeatmapdata';
 import ViolinChart from './graphs/ViolinChart';
 import GroupBarChart from './graphs/GroupBarChart';
+import SimpleTable from './SimpleTable';
 
 interface DistributionReport {
     reportType: string;
     headingKey?: string;
     textKey?: string;
     params?: Record<string, string | number | boolean>;
+    data?: string;
+    titleKey?: string;
+    showIndex?: boolean;
 }
 export interface DistributionReportProps {
     dataTypes: string;
@@ -58,6 +62,35 @@ export const DistributionReport = (
                             >
                                 {t(report.textKey, report.params)}
                             </Markdown>
+                        );
+                    }
+
+                    if (report.reportType === 'table') {
+                        if (!report.data) {
+                            return null;
+                        }
+                        if (!report.titleKey) {
+                            return null;
+                        }
+
+                        return (
+                            <div key={indexReport} className="mb-4">
+                                <Accordion
+                                    title={t(report.titleKey)}
+                                    content={
+                                        <div>
+                                            <p>&nbsp;</p>
+                                            <SimpleTable
+                                                data={JSON.parse(report.data)}
+                                                title={t(report.titleKey)}
+                                                showIndex={
+                                                    report.showIndex ?? false
+                                                }
+                                            />
+                                        </div>
+                                    }
+                                />
+                            </div>
                         );
                     }
                     if (
