@@ -163,6 +163,7 @@ class GaussianCopulaSynthesizer:
         Generate synthetic data using the fitted Gaussian Copula model.
         """
         # Step 1: Sample from the multivariate normal distribution
+        print(self.means)
         synthetic_gaussian = np.random.multivariate_normal(self.means, self.cov_matrix, n_samples)
 
         # Step 2: Convert back to uniform distribution using CDF (normal -> uniform)
