@@ -129,7 +129,7 @@ export const DistributionReport = (
                         const charts = columnNames.map((column, index) => {
                             const dataType = dataTypes[column];
                             return columnNames.map((column2, index2) => {
-                                if (column === column2 || index >= index2) {
+                                if (column === column2 || index <= index2) {
                                     return null;
                                 }
                                 const dataType2 = dataTypes[column2];
@@ -195,10 +195,25 @@ export const DistributionReport = (
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
+                                                yAxisLabel={column}
                                                 data={histogramData}
                                                 title={`${column} vs ${column2}`}
                                             />
                                         </div>
+                                    );
+                                } else if (
+                                    dataType === 'float' &&
+                                    dataType2 === 'category'
+                                ) {
+                                    return (
+                                        <ViolinChart
+                                            key={column + column2}
+                                            categoricalColumn={column2}
+                                            numericColumn={column}
+                                            realData={realData}
+                                            syntheticData={syntheticData}
+                                            comparison={false}
+                                        />
                                     );
                                 }
                             });
@@ -237,6 +252,7 @@ export const DistributionReport = (
                                             numericColumn={column}
                                             realData={realData}
                                             syntheticData={syntheticData}
+                                            comparison={true}
                                         />
                                     );
                                 }
