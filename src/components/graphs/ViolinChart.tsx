@@ -9,6 +9,15 @@ interface ViolinChartProps {
     syntheticData: Array<{ [key: string]: any }>;
 }
 
+const formatTick = (value: number) => {
+    if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1)}M`;
+    } else if (value >= 1000) {
+        return `${(value / 1000).toFixed(1)}K`;
+    }
+    return value.toString();
+};
+
 const margin = { top: 30, right: 50, bottom: 60, left: 80 };
 const height = 580 - margin.top - margin.bottom;
 
@@ -76,7 +85,7 @@ const ViolinChart = ({
         // Limit the bandwidth to 200px max (100px per side)
         const bandwidth = Math.min(xScale.bandwidth() / 2, 50);
 
-        // Calculate min and max with 10% padding on top
+        // Calculate min and max with padding
         const minValue =
             d3.min([
                 ...realData.map(d => +d[numericColumn]),
@@ -87,12 +96,57 @@ const ViolinChart = ({
                 ...realData.map(d => +d[numericColumn]),
                 ...syntheticData.map(d => +d[numericColumn]),
             ]) || 0;
-        const paddedMaxValue = maxValue + (maxValue - minValue) * 0.25;
+
+        // Add padding and ensure domain includes zero
+        const range = Math.abs(maxValue - minValue);
+        const padding = range * 0.25;
+        const yMin = minValue - padding; // Ensure negative values are shown
+        const yMax = maxValue + padding;
 
         const yScale = d3
             .scaleLinear()
-            .domain([minValue, paddedMaxValue])
+            .domain([yMin, yMax])
             .range([plotHeight, 0]);
+
+        // Add x-axis at y=0 position if there are negative values
+        if (yMin < 0) {
+            // Add zero line
+            svg.append('line')
+                .attr('x1', 0)
+                .attr('x2', plotWidth)
+                .attr('y1', yScale(0))
+                .attr('y2', yScale(0))
+                .style('stroke', '#ccc')
+                .style('stroke-width', 1);
+
+            // Add x-axis at y=0
+            svg.append('g')
+                .attr('transform', `translate(0,${yScale(0)})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('transform', 'rotate(-45)')
+                .style('text-anchor', 'end')
+                .attr('dx', '-.8em')
+                .attr('dy', '.15em');
+        } else {
+            // Add x-axis at the bottom if all values are positive
+            svg.append('g')
+                .attr('transform', `translate(0,${plotHeight})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .attr('transform', 'rotate(-45)')
+                .style('text-anchor', 'end')
+                .attr('dx', '-.8em')
+                .attr('dy', '.15em');
+        }
+
+        // Add y-axis
+        svg.append('g').call(
+            d3
+                .axisLeft(yScale)
+                .ticks(5)
+                .tickFormat(d => formatTick(d as number))
+        );
 
         // Create violin plot for each category
         violinData.forEach(({ category, real, synthetic }) => {
@@ -245,18 +299,6 @@ const ViolinChart = ({
                 }
             }
         });
-
-        // Add axes
-        svg.append('g')
-            .attr('transform', `translate(0,${plotHeight})`)
-            .call(d3.axisBottom(xScale))
-            .selectAll('text')
-            .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'end')
-            .attr('dx', '-.8em')
-            .attr('dy', '.15em');
-
-        svg.append('g').call(d3.axisLeft(yScale));
 
         // Add title
         svg.append('text')
