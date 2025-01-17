@@ -7,6 +7,7 @@ interface ViolinChartProps {
     numericColumn: string;
     realData: Array<{ [key: string]: any }>;
     syntheticData: Array<{ [key: string]: any }>;
+    comparison: boolean;
 }
 
 const formatTick = (value: number) => {
@@ -26,6 +27,7 @@ const ViolinChart = ({
     numericColumn,
     realData,
     syntheticData,
+    comparison,
 }: ViolinChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -37,10 +39,12 @@ const ViolinChart = ({
 
         // Get unique categories
         const categories = Array.from(
-            new Set([
-                ...realData.map(d => d[categoricalColumn]),
-                ...syntheticData.map(d => d[categoricalColumn]),
-            ])
+            comparison
+                ? new Set([
+                      ...realData.map(d => d[categoricalColumn]),
+                      ...syntheticData.map(d => d[categoricalColumn]),
+                  ])
+                : new Set([...realData.map(d => d[categoricalColumn])])
         );
 
         // Process data for violin plots
@@ -73,7 +77,10 @@ const ViolinChart = ({
         // Reserve space for legend (120px width + 20px padding)
         const legendWidth = 140;
         const plotWidth =
-            containerWidth - margin.left - margin.right - legendWidth;
+            containerWidth -
+            margin.left -
+            margin.right -
+            (comparison ? legendWidth : 0);
 
         // Create scales
         const xScale = d3
@@ -86,16 +93,18 @@ const ViolinChart = ({
         const bandwidth = Math.min(xScale.bandwidth() / 2, 50);
 
         // Calculate min and max with padding
-        const minValue =
-            d3.min([
-                ...realData.map(d => +d[numericColumn]),
-                ...syntheticData.map(d => +d[numericColumn]),
-            ]) || 0;
-        const maxValue =
-            d3.max([
-                ...realData.map(d => +d[numericColumn]),
-                ...syntheticData.map(d => +d[numericColumn]),
-            ]) || 0;
+        const minValue = comparison
+            ? d3.min([
+                  ...realData.map(d => +d[numericColumn]),
+                  ...syntheticData.map(d => +d[numericColumn]),
+              ]) || 0
+            : d3.min([...realData.map(d => +d[numericColumn])]) || 0;
+        const maxValue = comparison
+            ? d3.max([
+                  ...realData.map(d => +d[numericColumn]),
+                  ...syntheticData.map(d => +d[numericColumn]),
+              ]) || 0
+            : d3.max([...realData.map(d => +d[numericColumn])]) || 0;
 
         // Add padding and ensure domain includes zero
         const range = Math.abs(maxValue - minValue);
@@ -279,6 +288,7 @@ const ViolinChart = ({
                         .attr('d', path)
                         .attr('transform', `translate(${centerPos}, 0)`)
                         .style('fill', 'steelblue')
+                        .style('stroke', 'darkblue')
                         .style('opacity', 0.5);
 
                     drawQuartileLines(real, 'left', 'steelblue');
@@ -286,13 +296,14 @@ const ViolinChart = ({
             }
 
             // Draw synthetic data violin (right side)
-            if (synthetic.length > 0) {
+            if (comparison && synthetic.length > 0) {
                 const path = createViolin(synthetic, 'right');
                 if (path) {
                     svg.append('path')
                         .attr('d', path)
                         .attr('transform', `translate(${centerPos}, 0)`)
                         .style('fill', 'orange')
+                        .style('stroke', '#ff6200')
                         .style('opacity', 0.5);
 
                     drawQuartileLines(synthetic, 'right', 'orange');
@@ -322,59 +333,61 @@ const ViolinChart = ({
             .attr('font-size', '12px')
             .text(numericColumn);
 
-        // Add legend at fixed position relative to plot area
-        const legend = svg
-            .append('g')
-            .attr('class', 'legend')
-            .attr('transform', `translate(${plotWidth + 20}, 30)`);
+        if (comparison) {
+            // Add legend at fixed position relative to plot area
+            const legend = svg
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', `translate(${plotWidth + 20}, 30)`);
 
-        // No need to adjust SVG width since we reserved space for legend
+            // No need to adjust SVG width since we reserved space for legend
 
-        // Add background rectangle for legend
-        legend
-            .append('rect')
-            .attr('x', -10)
-            .attr('y', -10)
-            .attr('width', 110)
-            .attr('height', 55)
-            .attr('rx', 5)
-            .style('fill', 'white')
-            .style('opacity', 0.7)
-            .style('stroke', '#e2e8f0')
-            .style('stroke-width', 1);
+            // Add background rectangle for legend
+            legend
+                .append('rect')
+                .attr('x', -10)
+                .attr('y', -10)
+                .attr('width', 110)
+                .attr('height', 55)
+                .attr('rx', 5)
+                .style('fill', 'white')
+                .style('opacity', 0.7)
+                .style('stroke', '#e2e8f0')
+                .style('stroke-width', 1);
 
-        // Add legend items
-        legend
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', 15)
-            .attr('height', 15)
-            .style('fill', 'steelblue')
-            .style('opacity', 0.5);
+            // Add legend items
+            legend
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 15)
+                .attr('height', 15)
+                .style('fill', 'steelblue')
+                .style('opacity', 0.5);
 
-        legend
-            .append('text')
-            .attr('x', 20)
-            .attr('y', 12)
-            .style('font-size', '12px')
-            .text(t('distribution.realData'));
+            legend
+                .append('text')
+                .attr('x', 20)
+                .attr('y', 12)
+                .style('font-size', '12px')
+                .text(t('distribution.realData'));
 
-        legend
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 20)
-            .attr('width', 15)
-            .attr('height', 15)
-            .style('fill', 'orange')
-            .style('opacity', 0.5);
+            legend
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 20)
+                .attr('width', 15)
+                .attr('height', 15)
+                .style('fill', 'orange')
+                .style('opacity', 0.5);
 
-        legend
-            .append('text')
-            .attr('x', 20)
-            .attr('y', 32)
-            .style('font-size', '12px')
-            .text(t('distribution.syntheticData'));
+            legend
+                .append('text')
+                .attr('x', 20)
+                .attr('y', 32)
+                .style('font-size', '12px')
+                .text(t('distribution.syntheticData'));
+        }
     }, [
         containerWidth,
         categoricalColumn,
