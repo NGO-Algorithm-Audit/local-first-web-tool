@@ -7,19 +7,27 @@ interface Data extends DataLabel {
 }
 
 interface GroupBarChartProps {
+    yAxisLabel: string;
     title: string;
     data: Data[];
 }
 
-const margin = { top: 10, right: 10, bottom: 40, left: 50 };
+const margin = { top: 30, right: 50, bottom: 40, left: 80 };
 const height = 300 - margin.top - margin.bottom;
 const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
 const barGap = 5;
 
-const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
+const GroupBarChart = ({ title, data, yAxisLabel }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
+
+    //const legendWidth = 140;
+    // const plotWidth =
+    //     containerWidth -
+    //     margin.left -
+    //     margin.right ;
+
     const fx = useMemo(
         () =>
             d3
@@ -82,6 +90,7 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
             .text(
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
+
         // Append x-axis
         const xAxis = svg
             .append('g')
@@ -143,13 +152,23 @@ const GroupBarChart = ({ title, data }: GroupBarChartProps) => {
                 `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right + 20}, 0)`
             );
 
-        // Append title to the legend
-        legend
-            .append('text')
-            .attr('x', 0)
-            .attr('y', 0)
+        // Append title to the svg
+        svg.append('text')
+            .attr('x', (containerWidth - margin.left - margin.right) / 2)
+            .attr('y', -10)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '12px')
             .style('font-weight', 'bold')
             .text(title);
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -50)
+            .attr('x', -height / 2)
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '12px')
+            .text(yAxisLabel);
 
         // Append legend color boxes and text labels
         const legendItems = legend

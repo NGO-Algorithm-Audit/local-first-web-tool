@@ -195,6 +195,7 @@ export const DistributionReport = (
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
+                                                yAxisLabel={column}
                                                 data={histogramData}
                                                 title={`${column} vs ${column2}`}
                                             />

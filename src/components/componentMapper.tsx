@@ -152,6 +152,7 @@ export default function ComponentMapper({
                             <ErrorBoundary key={index}>
                                 <GroupBarChart
                                     data={histogramData}
+                                    yAxisLabel={t('distribution.frequency')}
                                     title={resultItem.title ?? ''}
                                 />
                             </ErrorBoundary>
