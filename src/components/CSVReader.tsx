@@ -11,7 +11,8 @@ export interface csvReader {
         data: Record<string, string>[],
         stringified: string,
         fileName: string,
-        demo?: boolean
+        demo?: boolean,
+        columnsCount?: number
     ) => void;
 }
 
@@ -30,10 +31,13 @@ export default function CSVReader({ onChange }: csvReader) {
                 dynamicTyping: true,
 
                 complete: function (results) {
+                    const columns = (results?.data as unknown as [][])[0];
                     onChange(
                         results.data as Record<string, string>[],
                         Papa.unparse(results.data),
-                        file.name
+                        file.name,
+                        false,
+                        Object.keys(columns).length
                     );
                 },
                 error: function (error) {

@@ -29,7 +29,7 @@ interface DemoDataColumns {
     bar: string;
 }
 
-export default function BiasSettings({
+export default function SyntheticDataSettings({
     onRun,
     onDataLoad,
     isLoading,
@@ -51,7 +51,7 @@ export default function BiasSettings({
             sdgMethod: 'gc',
         },
     });
-
+    const [columnsCountError, setColumnsCountError] = useState(false);
     const [outputSamples, setOutputSamples] = useState([1000]);
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
@@ -63,13 +63,20 @@ export default function BiasSettings({
     const onFileLoad = (
         data: Record<string, string>[],
         stringified: string,
-        fileName: string
+        fileName: string,
+        isDemo?: boolean,
+        columnsCount?: number
     ) => {
         if (stringified.length === 0) {
+            setColumnsCountError(false);
             form.reset();
         } else {
             form.setValue('file', stringified);
+            if (!isDemo && columnsCount && columnsCount > 8) {
+                setColumnsCountError(true);
+            }
         }
+
         setData({ data, stringified, fileName });
         setDataKey(new Date().toISOString());
     };
@@ -89,6 +96,7 @@ export default function BiasSettings({
             ugpa: (row as DemoDataColumns)['ugpa'],
             bar: (row as DemoDataColumns)['bar'],
         }));
+
         onDataLoad(
             demoData as Record<string, string>[],
             Papa.unparse(demoData),
@@ -124,6 +132,15 @@ export default function BiasSettings({
                                     <CSVReader onChange={onFileLoad} />
                                 )}
                             />
+                        </div>
+                        <div className="flex flex-row gap-2 justify-start">
+                            {columnsCountError && (
+                                <div className="text-red-500">
+                                    {t(
+                                        'syntheticData.form.errors.columnsCountError'
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-3">
@@ -211,7 +228,7 @@ export default function BiasSettings({
                             type="submit"
                             size="sm"
                             className="gap-1.5"
-                            disabled={isLoading}
+                            disabled={isLoading || columnsCountError}
                         >
                             {!isLoading
                                 ? t('syntheticData.form.actions.runGeneration')

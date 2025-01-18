@@ -67,7 +67,8 @@
         "form": {
             "errors": {
                 "csvRequired": "Upload een csv-bestand.",
-                "analysisError": "Fout tijdens analyse"
+                "analysisError": "Fout tijdens analyse",
+                "columnsCountError": "File mag maximaal 8 kolommen bevatten."
             },
             "fieldset": {
                 "sourceDataset": "Brondataset",
