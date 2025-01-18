@@ -67,7 +67,8 @@
         "form": {
             "errors": {
                 "csvRequired": "Please upload a csv file.",
-                "analysisError": "Error while analysing"
+                "analysisError": "Error while analysing",
+                "columnsCountError": "File may contain a maximum of 8 columns."
             },
             "fieldset": {
                 "sourceDataset": "Source dataset",
