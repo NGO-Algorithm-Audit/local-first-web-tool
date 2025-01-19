@@ -11,6 +11,19 @@ import ViolinChart from './graphs/ViolinChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import SimpleTable from './SimpleTable';
 
+function countCategory2ForCategory1(
+    data: Record<string, any>[],
+    category1: string,
+    category2: string,
+    column1: string,
+    column2: string
+) {
+    const count = data.filter(
+        row => row[column1] === category1 && row[column2] === category2
+    ).length;
+    return count;
+}
+
 interface DistributionReport {
     reportType: string;
     headingKey?: string;
@@ -234,31 +247,139 @@ export const DistributionReport = (
                         report.reportType ===
                         'bivariateDistributionSyntheticData'
                     ) {
-                        const charts = columnNames.map(column => {
-                            const dataType = dataTypes[column];
-                            return columnNames.map(column2 => {
-                                if (column === column2) {
-                                    return null;
-                                }
-                                const dataType2 = dataTypes[column2];
-                                if (
-                                    dataType === 'float' &&
-                                    dataType2 === 'category'
-                                ) {
-                                    return (
-                                        <ViolinChart
-                                            key={column + column2}
-                                            categoricalColumn={column2}
-                                            numericColumn={column}
-                                            realData={realData}
-                                            syntheticData={syntheticData}
-                                            comparison={true}
-                                        />
-                                    );
-                                }
-                                return null;
-                            });
-                        });
+                        console.log(
+                            'bivariateDistributionSyntheticData',
+                            columnNames
+                        );
+                        const charts = columnNames.map(
+                            (column, indexcolumn1) => {
+                                const dataType = dataTypes[column];
+                                return columnNames.map(
+                                    (column2, indexcolumn2) => {
+                                        const dataType2 = dataTypes[column2];
+                                        if (
+                                            //column === column2 ||
+                                            indexcolumn1 >= indexcolumn2
+                                        ) {
+                                            if (indexcolumn1 != indexcolumn2) {
+                                                console.log(
+                                                    'skipped columns',
+                                                    column,
+                                                    column2,
+                                                    indexcolumn1,
+                                                    indexcolumn2,
+                                                    indexcolumn1 >=
+                                                        indexcolumn2,
+                                                    dataType,
+                                                    dataType2
+                                                );
+                                            }
+
+                                            return null;
+                                        }
+
+                                        if (
+                                            dataType === 'category' &&
+                                            dataType2 === 'float'
+                                        ) {
+                                            return (
+                                                <ViolinChart
+                                                    key={column + column2}
+                                                    categoricalColumn={column}
+                                                    numericColumn={column2}
+                                                    realData={realData}
+                                                    syntheticData={
+                                                        syntheticData
+                                                    }
+                                                    comparison={true}
+                                                />
+                                            );
+                                        } else if (
+                                            dataType === 'float' &&
+                                            dataType2 === 'category'
+                                        ) {
+                                            return (
+                                                <ViolinChart
+                                                    key={column + column2}
+                                                    categoricalColumn={column2}
+                                                    numericColumn={column}
+                                                    realData={realData}
+                                                    syntheticData={
+                                                        syntheticData
+                                                    }
+                                                    comparison={true}
+                                                />
+                                            );
+                                        } else if (
+                                            dataType === 'category' &&
+                                            dataType2 === 'category'
+                                        ) {
+                                            const categories = Array.from(
+                                                new Set([
+                                                    ...realData.map(
+                                                        (d: any) => d[column]
+                                                    ),
+                                                ])
+                                            );
+                                            const categories2 = Array.from(
+                                                new Set([
+                                                    ...realData.map(
+                                                        (d: any) => d[column2]
+                                                    ),
+                                                ])
+                                            );
+
+                                            return (
+                                                <div className="flex flex-row w-full overflow-auto gap-4">
+                                                    {categories.map(item => (
+                                                        <div
+                                                            key={item}
+                                                            className="flex flex-col"
+                                                        >
+                                                            <GroupBarChart
+                                                                yAxisLabel={
+                                                                    'count'
+                                                                }
+                                                                title={`${column} = ${item}`}
+                                                                data={categories2.map(
+                                                                    item2 => ({
+                                                                        // count : number of times where item2 appears in the data for category2 and rows where category1 = item
+                                                                        name: `${item2}`,
+                                                                        values: [
+                                                                            {
+                                                                                name: 'real',
+                                                                                value: countCategory2ForCategory1(
+                                                                                    realData,
+                                                                                    item,
+                                                                                    item2,
+                                                                                    column,
+                                                                                    column2
+                                                                                ),
+                                                                            },
+                                                                            {
+                                                                                name: 'synth',
+                                                                                value: countCategory2ForCategory1(
+                                                                                    syntheticData,
+                                                                                    item,
+                                                                                    item2,
+                                                                                    column,
+                                                                                    column2
+                                                                                ),
+                                                                            },
+                                                                        ],
+                                                                    })
+                                                                )}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }
+                                );
+                            }
+                        );
                         return (
                             <div key={indexReport} className="mb-4">
                                 <Accordion
