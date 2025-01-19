@@ -208,7 +208,9 @@ export const DistributionReport = (
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
-                                                yAxisLabel={column}
+                                                yAxisLabel={t(
+                                                    'distribution.frequency'
+                                                )}
                                                 data={histogramData}
                                                 title={`${column} vs ${column2}`}
                                             />
@@ -325,9 +327,9 @@ export const DistributionReport = (
                                                                     className="flex flex-col"
                                                                 >
                                                                     <GroupBarChart
-                                                                        yAxisLabel={
-                                                                            'count'
-                                                                        }
+                                                                        yAxisLabel={t(
+                                                                            'distribution.frequency'
+                                                                        )}
                                                                         title={`${column} = ${item}`}
                                                                         data={categories2.map(
                                                                             item2 => ({
