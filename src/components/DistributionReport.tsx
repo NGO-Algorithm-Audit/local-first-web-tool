@@ -208,7 +208,9 @@ export const DistributionReport = (
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
-                                                yAxisLabel={column}
+                                                yAxisLabel={t(
+                                                    'distribution.frequency'
+                                                )}
                                                 data={histogramData}
                                                 title={`${column} vs ${column2}`}
                                             />
@@ -257,24 +259,7 @@ export const DistributionReport = (
                                 return columnNames.map(
                                     (column2, indexcolumn2) => {
                                         const dataType2 = dataTypes[column2];
-                                        if (
-                                            //column === column2 ||
-                                            indexcolumn1 >= indexcolumn2
-                                        ) {
-                                            if (indexcolumn1 != indexcolumn2) {
-                                                console.log(
-                                                    'skipped columns',
-                                                    column,
-                                                    column2,
-                                                    indexcolumn1,
-                                                    indexcolumn2,
-                                                    indexcolumn1 >=
-                                                        indexcolumn2,
-                                                    dataType,
-                                                    dataType2
-                                                );
-                                            }
-
+                                        if (indexcolumn1 >= indexcolumn2) {
                                             return null;
                                         }
 
@@ -330,48 +315,55 @@ export const DistributionReport = (
                                             );
 
                                             return (
-                                                <div className="flex flex-row w-full overflow-auto gap-4">
-                                                    {categories.map(item => (
-                                                        <div
-                                                            key={item}
-                                                            className="flex flex-col"
-                                                        >
-                                                            <GroupBarChart
-                                                                yAxisLabel={
-                                                                    'count'
-                                                                }
-                                                                title={`${column} = ${item}`}
-                                                                data={categories2.map(
-                                                                    item2 => ({
-                                                                        // count : number of times where item2 appears in the data for category2 and rows where category1 = item
-                                                                        name: `${item2}`,
-                                                                        values: [
-                                                                            {
-                                                                                name: 'real',
-                                                                                value: countCategory2ForCategory1(
-                                                                                    realData,
-                                                                                    item,
-                                                                                    item2,
-                                                                                    column,
-                                                                                    column2
-                                                                                ),
-                                                                            },
-                                                                            {
-                                                                                name: 'synth',
-                                                                                value: countCategory2ForCategory1(
-                                                                                    syntheticData,
-                                                                                    item,
-                                                                                    item2,
-                                                                                    column,
-                                                                                    column2
-                                                                                ),
-                                                                            },
-                                                                        ],
-                                                                    })
-                                                                )}
-                                                            />
-                                                        </div>
-                                                    ))}
+                                                <div>
+                                                    <h2 className="text-center font-bold mt-2 text-[12px]">
+                                                        {column} vs {column2}
+                                                    </h2>
+                                                    <div className="flex flex-row w-full overflow-auto gap-4">
+                                                        {categories.map(
+                                                            item => (
+                                                                <div
+                                                                    key={item}
+                                                                    className="flex flex-col"
+                                                                >
+                                                                    <GroupBarChart
+                                                                        yAxisLabel={t(
+                                                                            'distribution.frequency'
+                                                                        )}
+                                                                        title={`${column} = ${item}`}
+                                                                        data={categories2.map(
+                                                                            item2 => ({
+                                                                                // count : number of times where item2 appears in the data for category2 and rows where category1 = item
+                                                                                name: `${item2}`,
+                                                                                values: [
+                                                                                    {
+                                                                                        name: 'real',
+                                                                                        value: countCategory2ForCategory1(
+                                                                                            realData,
+                                                                                            item,
+                                                                                            item2,
+                                                                                            column,
+                                                                                            column2
+                                                                                        ),
+                                                                                    },
+                                                                                    {
+                                                                                        name: 'synth',
+                                                                                        value: countCategory2ForCategory1(
+                                                                                            syntheticData,
+                                                                                            item,
+                                                                                            item2,
+                                                                                            column,
+                                                                                            column2
+                                                                                        ),
+                                                                                    },
+                                                                                ],
+                                                                            })
+                                                                        )}
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 </div>
                                             );
                                         }

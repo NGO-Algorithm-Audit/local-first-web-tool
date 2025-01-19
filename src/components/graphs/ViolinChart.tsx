@@ -318,11 +318,7 @@ const ViolinChart = ({
             .attr('text-anchor', 'middle')
             .style('font-size', '12px')
             .style('font-weight', 'bold')
-            .text(
-                `${t('distribution.distributionOf')} ${numericColumn} ${t(
-                    'distribution.by'
-                )} ${categoricalColumn}`
-            );
+            .text(`${numericColumn} vs ${categoricalColumn}`);
 
         // Add y-axis label
         svg.append('text')
