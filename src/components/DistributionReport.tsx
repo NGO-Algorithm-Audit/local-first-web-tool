@@ -21,7 +21,12 @@ function countCategory2ForCategory1(
     const count = data.filter(
         row => row[column1] === category1 && row[column2] === category2
     ).length;
-    return count;
+
+    const total = data.filter(row => row[column1] === category1).length;
+    if (total === 0) {
+        return 0;
+    }
+    return (count / total) * 100;
 }
 
 interface DistributionReport {
@@ -328,7 +333,7 @@ export const DistributionReport = (
                                                                 >
                                                                     <GroupBarChart
                                                                         yAxisLabel={t(
-                                                                            'distribution.frequency'
+                                                                            'distribution.percentage'
                                                                         )}
                                                                         title={`${column} = ${item}`}
                                                                         data={categories2.map(
