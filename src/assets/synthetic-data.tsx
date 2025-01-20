@@ -241,13 +241,13 @@ def run():
         'realCorrelations': real_data.corr().to_json(orient="records"),
         'syntheticCorrelations': np.abs(df_numeric.corr() - synth_df_numeric.corr()).to_json(orient="records"),
         'reports' : [
-            {
-                'reportType': 'heading',
-                'headingKey': 'syntheticData.explanatoryDataAnalysisTitle'
-            },
-            {'reportType': 'univariateDistributionRealData'},
-            {'reportType': 'bivariateDistributionRealData'},
-            {'reportType': 'correlationRealData'},
+            # {
+            #    'reportType': 'heading',
+            #    'headingKey': 'syntheticData.explanatoryDataAnalysisTitle'
+            # },
+            # {'reportType': 'univariateDistributionRealData'},
+            # {'reportType': 'bivariateDistributionRealData'},
+            # {'reportType': 'correlationRealData'},
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.cartModelTitle'
