@@ -10,6 +10,7 @@ interface GroupBarChartProps {
     yAxisLabel: string;
     title: string;
     data: Data[];
+    colorRange?: string[];
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -17,7 +18,12 @@ const height = 300 - margin.top - margin.bottom;
 const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
 const barGap = 5;
 
-const GroupBarChart = ({ title, data, yAxisLabel }: GroupBarChartProps) => {
+const GroupBarChart = ({
+    title,
+    data,
+    yAxisLabel,
+    colorRange,
+}: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
@@ -57,7 +63,10 @@ const GroupBarChart = ({ title, data, yAxisLabel }: GroupBarChartProps) => {
     const color = d3
         .scaleOrdinal()
         .domain(groupbarNames)
-        .range(d3.schemeSpectral[Math.max(Math.min(groupbarNames.size, 11), 3)])
+        .range(
+            colorRange ??
+                d3.schemeSpectral[Math.max(Math.min(groupbarNames.size, 11), 3)]
+        )
         .unknown('#ccc');
 
     const y = useMemo(

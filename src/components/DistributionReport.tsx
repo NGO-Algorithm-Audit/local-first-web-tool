@@ -332,6 +332,10 @@ export const DistributionReport = (
                                                                     className="flex flex-col"
                                                                 >
                                                                     <GroupBarChart
+                                                                        colorRange={[
+                                                                            'steelblue',
+                                                                            'orange',
+                                                                        ]}
                                                                         yAxisLabel={t(
                                                                             'distribution.percentage'
                                                                         )}
