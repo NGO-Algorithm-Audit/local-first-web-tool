@@ -1,8 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/synthetic-data';
 import { usePython } from '@/components/pyodide/use-python';
-import { Share, ChevronDown } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
@@ -12,15 +10,9 @@ import SyntheticDataSettings from '@/components/SyntheticDataSettings';
 import { SyntheticDataInfo } from '@/components/synthetic-data-interfaces/cluster-export';
 import LanguageSwitcher from '@/components/ui/languageSwitcher';
 import { useTranslation } from 'react-i18next';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { downloadFile } from '@/lib/download-file';
 import { SyntheticDataParameters } from '@/components/synthetic-data-interfaces/SyntheticDataParameters';
 import { exportToCSV } from '@/lib/utils';
+import { ExportButton } from '@/components/synthetic-data/export-button';
 
 const PAGE_STYLE = `
     @page {
@@ -163,62 +155,12 @@ export default function SyntheticDataGeneration() {
                 )}
             >
                 {initialised && data.data.length > 0 && result.length > 0 && (
-                    <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="p-4 text-sm"
-                                >
-                                    {t('downloadButton')}
-                                    <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                    onClick={() => reactToPrintFn()}
-                                >
-                                    <Share className="size-3.5 mr-2" />
-                                    {t('syntheticData.exportToPDF')}
-                                </DropdownMenuItem>
-                                {clusterInfo && (
-                                    <>
-                                        <DropdownMenuItem
-                                            onClick={() => {
-                                                downloadFile(
-                                                    JSON.stringify(
-                                                        {
-                                                            fileName:
-                                                                data.fileName,
-                                                            ...clusterInfo,
-                                                        },
-                                                        null,
-                                                        2
-                                                    ),
-                                                    `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                                    'application/json'
-                                                );
-                                            }}
-                                        >
-                                            <Share className="size-3.5 mr-2" />
-                                            {t('syntheticData.exportToJSON')}
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => {
-                                                handleExport(
-                                                    clusterInfo.syntheticData as object[]
-                                                );
-                                            }}
-                                        >
-                                            <Share className="size-3.5 mr-2" />
-                                            {t('syntheticData.exportToCSV')}
-                                        </DropdownMenuItem>
-                                    </>
-                                )}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                    <ExportButton
+                        clusterInfo={clusterInfo}
+                        data={data}
+                        handleExport={handleExport}
+                        reactToPrintFn={reactToPrintFn}
+                    />
                 )}
 
                 {result.length > 0 ? (
@@ -231,6 +173,15 @@ export default function SyntheticDataGeneration() {
                         </h1>
                         <div className="flex-1" />
                     </>
+                )}
+
+                {initialised && data.data.length > 0 && result.length > 0 && (
+                    <ExportButton
+                        clusterInfo={clusterInfo}
+                        data={data}
+                        handleExport={handleExport}
+                        reactToPrintFn={reactToPrintFn}
+                    />
                 )}
             </div>
         </main>
