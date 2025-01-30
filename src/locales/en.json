@@ -67,7 +67,8 @@
         "form": {
             "errors": {
                 "csvRequired": "Please upload a csv file.",
-                "analysisError": "Error while analysing"
+                "analysisError": "Error while analysing",
+                "columnsCountError": "File may contain a maximum of 8 columns."
             },
             "fieldset": {
                 "sourceDataset": "Source dataset",
@@ -100,12 +101,12 @@
             "heading": "0. Preview of data"
         },
         "columnsInDataset": "1. Data types detection",
-        "explanatoryDataAnalysisTitle": "2. Explanatory data analysis",
-        "cartModelTitle": "3. CART model",
+        "_explanatoryDataAnalysisTitle": "2. Explanatory data analysis",
+        "cartModelTitle": "2. CART model",
         "cartModelDescription": "The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.",
-        "evaluationOfGeneratedDataTitle": "4. Evaluation of generated data",
-        "outputDataTitle": "5. Output data",
-        "diagnosticsTitle": "Diagnostic Results:",
+        "evaluationOfGeneratedDataTitle": "3. Evaluation of generated data",
+        "outputDataTitle": "4. Output data",
+        "diagnosticsTitle": "Diagnostic Results",
         "correlationDifference": "Correlation difference: {{correlationDifference}}"
     },
 

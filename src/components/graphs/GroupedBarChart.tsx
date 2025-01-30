@@ -11,7 +11,7 @@ interface GroupedBarChartProps {
     data: Data[];
 }
 
-const margin = { top: 20, right: 250, bottom: 40, left: 50 };
+const margin = { top: 20, right: 250, bottom: 40, left: 80 };
 const height = 300 - margin.top - margin.bottom;
 const maxBuckets = 10; // Maximum number of buckets per group
 
