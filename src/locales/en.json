@@ -59,7 +59,7 @@
     "syntheticData": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female);\n- race1: race of student, i.e., asian, black, hispanic, white, other;\n- ugpa: undergraduate GPA of student (average course grades), continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e., passed 1st time, passed 2nd time, failed, non-graduated.\n  \n&nbsp;&nbsp;\n\nThe The CART method is used to generate the synthetic data. CART generally produces higher quality synthetic datasets, but might not run on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n"
+            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n  \n&nbsp;&nbsp;\n- sex: student gender, i.e. 1 (male), 2 (female);\n- race1: race of student, i.e., asian, black, hispanic, white, other;\n- ugpa: undergraduate GPA of student (average course grades), continous variable;\n- bar: Ground truth label indicating whether or not the student passed the bar, i.e., passed 1st time, passed 2nd time, failed, non-graduated.\n  \n&nbsp;&nbsp;\n\nThe CART method is used to generate the synthetic data. CART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n"
         },
         "exportToPDF": "Download evaluation report as pdf",
         "exportToJSON": "Download synthetic data as json",
@@ -105,7 +105,7 @@
         "cartModelTitle": "2. CART model",
         "cartModelDescription": "The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.",
         "evaluationOfGeneratedDataTitle": "3. Evaluation of generated data",
-        "outputDataTitle": "4. Output data",
+        "outputDataTitle": "4. Generated synthetic data",
         "diagnosticsTitle": "Diagnostic Results",
         "correlationDifference": "Correlation difference: {{correlationDifference}}"
     },
