@@ -148,6 +148,49 @@ const DistributionBarChart = ({
             .attr('height', d => plotHeight - yScale(d.value))
             .style('fill', 'orange');
 
+        // Calculate means for both datasets
+        const realMean = d3.mean(processedRealData, d => d.value) || 0;
+        const syntheticMean =
+            d3.mean(processedSyntheticData, d => d.value) || 0;
+
+        // Add horizontal mean lines
+        // Real data mean line
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('x2', plotWidth)
+            .attr('y1', yScale(realMean))
+            .attr('y2', yScale(realMean))
+            .style('stroke', 'steelblue')
+            .style('stroke-width', 1.5)
+            .style('stroke-dasharray', '5,5');
+
+        // Synthetic data mean line
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('x2', plotWidth)
+            .attr('y1', yScale(syntheticMean))
+            .attr('y2', yScale(syntheticMean))
+            .style('stroke', 'orange')
+            .style('stroke-width', 1.5)
+            .style('stroke-dasharray', '5,5');
+
+        // Add mean labels on the right side
+        svg.append('text')
+            .attr('x', plotWidth + 5)
+            .attr('y', yScale(realMean))
+            .attr('dy', '0.35em')
+            .style('font-size', '10px')
+            .style('fill', 'steelblue')
+            .text(`Mean: ${(realMean * 100).toFixed(1)}%`);
+
+        svg.append('text')
+            .attr('x', plotWidth + 5)
+            .attr('y', yScale(syntheticMean))
+            .attr('dy', '0.35em')
+            .style('font-size', '10px')
+            .style('fill', 'orange')
+            .text(`Mean: ${(syntheticMean * 100).toFixed(1)}%`);
+
         // Add axes
         svg.append('g')
             .attr('transform', `translate(0,${plotHeight})`)
