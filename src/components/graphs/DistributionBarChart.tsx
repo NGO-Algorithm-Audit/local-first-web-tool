@@ -101,7 +101,14 @@ const DistributionBarChart = ({
             .scaleBand()
             .domain(processedRealData.map(d => String(d.key)))
             .range([0, plotWidth])
-            .padding(0.1);
+            .padding(0.2); // Increased padding between category groups
+
+        // Create inner scale for the two bars
+        const innerScale = d3
+            .scaleBand()
+            .domain(['real', 'synthetic'])
+            .range([0, xScale.bandwidth()])
+            .padding(0.05); // Small padding between real and synthetic bars
 
         const yScale = d3
             .scaleLinear()
@@ -120,12 +127,11 @@ const DistributionBarChart = ({
             .enter()
             .append('rect')
             .attr('class', 'bar-real')
-            .attr('x', d => xScale(String(d.key)) || 0)
+            .attr('x', d => (xScale(String(d.key)) || 0) + innerScale('real')!)
             .attr('y', d => yScale(d.value))
-            .attr('width', xScale.bandwidth())
+            .attr('width', innerScale.bandwidth())
             .attr('height', d => plotHeight - yScale(d.value))
-            .style('fill', 'steelblue')
-            .style('opacity', 0.5);
+            .style('fill', 'steelblue');
 
         // Draw synthetic data bars
         svg.selectAll('.bar-synthetic')
@@ -133,12 +139,14 @@ const DistributionBarChart = ({
             .enter()
             .append('rect')
             .attr('class', 'bar-synthetic')
-            .attr('x', d => xScale(String(d.key)) || 0)
+            .attr(
+                'x',
+                d => (xScale(String(d.key)) || 0) + innerScale('synthetic')!
+            )
             .attr('y', d => yScale(d.value))
-            .attr('width', xScale.bandwidth())
+            .attr('width', innerScale.bandwidth())
             .attr('height', d => plotHeight - yScale(d.value))
-            .style('fill', 'orange')
-            .style('opacity', 0.5);
+            .style('fill', 'orange');
 
         // Add axes
         svg.append('g')
@@ -201,8 +209,7 @@ const DistributionBarChart = ({
             .attr('y', 0)
             .attr('width', 15)
             .attr('height', 15)
-            .style('fill', 'steelblue')
-            .style('opacity', 0.5);
+            .style('fill', 'steelblue');
 
         legend
             .append('text')
@@ -217,8 +224,7 @@ const DistributionBarChart = ({
             .attr('y', 20)
             .attr('width', 15)
             .attr('height', 15)
-            .style('fill', 'orange')
-            .style('opacity', 0.5);
+            .style('fill', 'orange');
 
         legend
             .append('text')
