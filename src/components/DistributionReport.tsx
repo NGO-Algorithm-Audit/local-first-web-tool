@@ -346,7 +346,9 @@ export const DistributionReport = (
                                                                                 name: `${item2}`,
                                                                                 values: [
                                                                                     {
-                                                                                        name: 'real',
+                                                                                        name: t(
+                                                                                            'distribution.realData'
+                                                                                        ),
                                                                                         value: countCategory2ForCategory1(
                                                                                             realData,
                                                                                             item,
@@ -356,7 +358,9 @@ export const DistributionReport = (
                                                                                         ),
                                                                                     },
                                                                                     {
-                                                                                        name: 'synth',
+                                                                                        name: t(
+                                                                                            'distribution.syntheticData'
+                                                                                        ),
                                                                                         value: countCategory2ForCategory1(
                                                                                             syntheticData,
                                                                                             item,
