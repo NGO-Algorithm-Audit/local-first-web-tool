@@ -289,9 +289,9 @@ const ViolinChart = ({
                         .attr('transform', `translate(${centerPos}, 0)`)
                         .style('fill', 'steelblue')
                         .style('stroke', 'darkblue')
-                        .style('opacity', 0.5);
+                        .style('opacity', 1);
 
-                    drawQuartileLines(real, 'left', 'steelblue');
+                    drawQuartileLines(real, 'left', 'darkblue');
                 }
             }
 
@@ -304,9 +304,9 @@ const ViolinChart = ({
                         .attr('transform', `translate(${centerPos}, 0)`)
                         .style('fill', 'orange')
                         .style('stroke', '#ff6200')
-                        .style('opacity', 0.5);
+                        .style('opacity', 1);
 
-                    drawQuartileLines(synthetic, 'right', 'orange');
+                    drawQuartileLines(synthetic, 'right', '#ff6200');
                 }
             }
         });
@@ -347,7 +347,7 @@ const ViolinChart = ({
                 .attr('height', 55)
                 .attr('rx', 5)
                 .style('fill', 'white')
-                .style('opacity', 0.7)
+                .style('opacity', 1)
                 .style('stroke', '#e2e8f0')
                 .style('stroke-width', 1);
 
@@ -359,7 +359,7 @@ const ViolinChart = ({
                 .attr('width', 15)
                 .attr('height', 15)
                 .style('fill', 'steelblue')
-                .style('opacity', 0.5);
+                .style('opacity', 1);
 
             legend
                 .append('text')
@@ -375,7 +375,7 @@ const ViolinChart = ({
                 .attr('width', 15)
                 .attr('height', 15)
                 .style('fill', 'orange')
-                .style('opacity', 0.5);
+                .style('opacity', 1);
 
             legend
                 .append('text')
