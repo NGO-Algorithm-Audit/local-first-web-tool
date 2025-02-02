@@ -391,7 +391,20 @@ export const DistributionReport = (
                                     title={t(
                                         'syntheticData.bivariateDistributionSyntheticData'
                                     )}
-                                    content={<div>{charts}</div>}
+                                    content={
+                                        <div>
+                                            <Markdown className="py-4 markdown">
+                                                {t(
+                                                    'syntheticData.bivariateText',
+                                                    {
+                                                        samples:
+                                                            syntheticData.length,
+                                                    }
+                                                )}
+                                            </Markdown>
+                                            {charts}
+                                        </div>
+                                    }
                                 />
                             </div>
                         );
@@ -440,55 +453,76 @@ export const DistributionReport = (
                                             title={t(
                                                 'syntheticData.univariateDistributionSyntheticData'
                                             )}
-                                            content={Object.keys(
-                                                realData[0]
-                                            ).map(
-                                                (
-                                                    columnName: string,
-                                                    columnIndex: number
-                                                ) => {
-                                                    const realDataColumn =
-                                                        realData.map(
-                                                            (
-                                                                row: Record<
-                                                                    string,
-                                                                    number
+                                            content={
+                                                <>
+                                                    <Markdown className="py-4 markdown">
+                                                        {t(
+                                                            'syntheticData.univariateText',
+                                                            {
+                                                                samples:
+                                                                    syntheticData.length,
+                                                            }
+                                                        )}
+                                                    </Markdown>
+                                                    {Object.keys(
+                                                        realData[0]
+                                                    ).map(
+                                                        (
+                                                            columnName: string,
+                                                            columnIndex: number
+                                                        ) => {
+                                                            const realDataColumn =
+                                                                realData.map(
+                                                                    (
+                                                                        row: Record<
+                                                                            string,
+                                                                            number
+                                                                        >
+                                                                    ) =>
+                                                                        row[
+                                                                            columnName
+                                                                        ]
+                                                                );
+                                                            const syntheticDataColumn =
+                                                                syntheticData.map(
+                                                                    (
+                                                                        row: Record<
+                                                                            string,
+                                                                            number
+                                                                        >
+                                                                    ) =>
+                                                                        row[
+                                                                            columnName
+                                                                        ]
+                                                                );
+                                                            return (
+                                                                <ErrorBoundary
+                                                                    key={
+                                                                        columnIndex
+                                                                    }
                                                                 >
-                                                            ) => row[columnName]
-                                                        );
-                                                    const syntheticDataColumn =
-                                                        syntheticData.map(
-                                                            (
-                                                                row: Record<
-                                                                    string,
-                                                                    number
-                                                                >
-                                                            ) => row[columnName]
-                                                        );
-                                                    return (
-                                                        <ErrorBoundary
-                                                            key={columnIndex}
-                                                        >
-                                                            <DistributionBarChart
-                                                                dataType={
-                                                                    dataTypes[
-                                                                        columnName
-                                                                    ]
-                                                                }
-                                                                realData={
-                                                                    realDataColumn
-                                                                }
-                                                                syntheticData={
-                                                                    syntheticDataColumn
-                                                                }
-                                                                column={
-                                                                    columnName
-                                                                }
-                                                            />
-                                                        </ErrorBoundary>
-                                                    );
-                                                }
-                                            )}
+                                                                    <DistributionBarChart
+                                                                        dataType={
+                                                                            dataTypes[
+                                                                                columnName
+                                                                            ]
+                                                                        }
+                                                                        realData={
+                                                                            realDataColumn
+                                                                        }
+                                                                        syntheticData={
+                                                                            syntheticDataColumn
+                                                                        }
+                                                                        column={
+                                                                            columnName
+                                                                        }
+                                                                    />
+                                                                </ErrorBoundary>
+                                                            );
+                                                        }
+                                                    )}
+                                                </>
+                                            }
                                         ></Accordion>
                                     </div>
                                 )}

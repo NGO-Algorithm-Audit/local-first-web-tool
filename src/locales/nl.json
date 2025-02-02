@@ -84,7 +84,8 @@
                 "runGeneration": "Start synthetische data generatie",
                 "analyzing": "Analyseren...",
                 "initializing": "Initialiseren..."
-            }
+            },
+            "univariateText": "{{samples}} synthetic data punten zijn gegeneert met CART. De grafieken tonen de verschillen in waarde frequentie voor elle variabele. De synthetische data is van hoge kwaliteit als alle balken van gelijke hoogte zijn."
         },
         "demoCard": {
             "title": "Probeer het uit!",
