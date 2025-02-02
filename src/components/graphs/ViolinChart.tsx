@@ -63,24 +63,35 @@ const ViolinChart = ({
             };
         });
 
+        // Set minimum width for the plot to ensure readability
+        const minWidth = 600; // Minimum width in pixels
+        const effectiveWidth = Math.max(containerWidth, minWidth);
+
         // Clear previous content
         d3.select(svgRef.current).selectAll('*').remove();
 
-        // Create SVG
+        // Create SVG with minimum width
         const svg = d3
             .select(svgRef.current)
-            .attr('width', containerWidth)
+            .attr('width', effectiveWidth)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        // Reserve space for legend (120px width + 20px padding)
+        // Reserve space for legend and use effective width
         const legendWidth = 140;
         const plotWidth =
-            containerWidth -
+            effectiveWidth -
             margin.left -
             margin.right -
             (comparison ? legendWidth : 0);
+
+        // Update container styles to enable horizontal scrolling
+        if (containerRef.current) {
+            containerRef.current.style.overflowX =
+                effectiveWidth > containerWidth ? 'auto' : 'hidden';
+            containerRef.current.style.maxWidth = '100%';
+        }
 
         // Create scales
         const xScale = d3
