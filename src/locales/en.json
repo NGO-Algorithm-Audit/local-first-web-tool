@@ -76,7 +76,7 @@
                     "title": "Method",
                     "cart": "CART",
                     "gc": "Gaussian Copula",
-                    "tooltip": "The CART method is used to generate the synthetic data.\n  \n  \n  \nCART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories.\n  \n  \n  \nsUse Gaussian Copula in those cases"
+                    "tooltip": "The CART method is used to generate the synthetic data.\n  \n  \n  \nCART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories.\n  \n  \n  \nUse Gaussian Copula in those cases."
                 },
                 "samples": "Number of samples"
             },
