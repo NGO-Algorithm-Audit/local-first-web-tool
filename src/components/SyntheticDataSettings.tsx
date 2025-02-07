@@ -1,7 +1,7 @@
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight, InfoIcon } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,6 +13,13 @@ import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Slider } from './ui/slider';
 import { Label } from './ui/label';
 import { SyntheticDataParameters } from './synthetic-data-interfaces/SyntheticDataParameters';
+import {
+    Tooltip,
+    TooltipProvider,
+    TooltipTrigger,
+    TooltipContent,
+} from './ui/tooltip';
+import Markdown from 'react-markdown';
 
 const createFormSchema = (t: (key: string) => string) =>
     z.object({
@@ -48,7 +55,7 @@ export default function SyntheticDataSettings({
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            sdgMethod: 'gc',
+            sdgMethod: 'cart',
         },
     });
     const [columnsCountError, setColumnsCountError] = useState(false);
@@ -144,10 +151,30 @@ export default function SyntheticDataSettings({
                         </div>
 
                         <div className="flex flex-col gap-3">
-                            <label className="text-sm font-medium">
+                            <label className="text-sm font-medium flex flex-row items-center gap-1">
                                 {t(
                                     'syntheticData.form.fieldset.sdgMethod.title'
                                 )}
+                                <TooltipProvider>
+                                    <Tooltip delayDuration={250}>
+                                        <TooltipTrigger
+                                            onClick={event => {
+                                                event.preventDefault();
+                                            }}
+                                        >
+                                            <InfoIcon className="size-3.5 hidden xl:flex" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
+                                                <Markdown className="-mt-2 text-gray-800 markdown">
+                                                    {t(
+                                                        'syntheticData.form.fieldset.sdgMethod.tooltip'
+                                                    )}
+                                                </Markdown>
+                                            </div>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </label>
                             <FormField
                                 control={form.control}
