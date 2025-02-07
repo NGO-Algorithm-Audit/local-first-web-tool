@@ -11,6 +11,30 @@ import ViolinChart from './graphs/ViolinChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import SimpleTable from './SimpleTable';
 
+interface CorrelationMatrixProps {
+    heatmapData: {
+        columns: string[];
+        data: number[][];
+    };
+}
+
+function CorrelationMatrix(props: CorrelationMatrixProps) {
+    return (
+        <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+            <div className="col-[1]">
+                <HeatMapChart
+                    columns={props.heatmapData.columns}
+                    data={props.heatmapData.data}
+                    title={t('heatmap.syntheticdata')}
+                    rangeMax={2}
+                    rangeMin={0}
+                    colors="LtRd"
+                />
+            </div>
+        </div>
+    );
+}
+
 function countCategory2ForCategory1(
     data: Record<string, any>[],
     category1: string,
@@ -29,6 +53,12 @@ function countCategory2ForCategory1(
     return (count / total) * 100;
 }
 
+type additionalContent = {
+    contentType: string;
+    textKey?: string;
+    params?: Record<string, string | number | boolean>;
+}[];
+
 interface DistributionReport {
     reportType: string;
     headingKey?: string;
@@ -37,6 +67,8 @@ interface DistributionReport {
     data?: string;
     titleKey?: string;
     showIndex?: boolean;
+    preContent?: string;
+    postContent?: string;
 }
 export interface DistributionReportProps {
     dataTypes: string;
@@ -90,6 +122,13 @@ export const DistributionReport = (
                         if (!report.titleKey) {
                             return null;
                         }
+                        const preContent: additionalContent = report.preContent
+                            ? JSON.parse(report.preContent)
+                            : [];
+                        const postContent: additionalContent =
+                            report.postContent
+                                ? JSON.parse(report.postContent)
+                                : [];
 
                         return (
                             <div key={indexReport} className="mb-4">
@@ -98,6 +137,27 @@ export const DistributionReport = (
                                     content={
                                         <div>
                                             <p>&nbsp;</p>
+                                            {preContent.map(
+                                                (content, index) => {
+                                                    if (
+                                                        content.contentType ===
+                                                        'text'
+                                                    ) {
+                                                        return (
+                                                            <Markdown
+                                                                key={index}
+                                                                className="-mt-2 text-gray-800 markdown"
+                                                            >
+                                                                {t(
+                                                                    content.textKey ??
+                                                                        '',
+                                                                    content.params
+                                                                )}
+                                                            </Markdown>
+                                                        );
+                                                    }
+                                                }
+                                            )}
                                             <SimpleTable
                                                 data={JSON.parse(report.data)}
                                                 title={t(report.titleKey)}
@@ -105,6 +165,40 @@ export const DistributionReport = (
                                                     report.showIndex ?? false
                                                 }
                                             />
+                                            {report.postContent &&
+                                                postContent.map(
+                                                    (content, index) => {
+                                                        if (
+                                                            content.contentType ===
+                                                            'text'
+                                                        ) {
+                                                            return (
+                                                                <Markdown
+                                                                    key={index}
+                                                                    className="-mt-2 text-gray-800 markdown"
+                                                                >
+                                                                    {t(
+                                                                        content.textKey ??
+                                                                            '',
+                                                                        content.params
+                                                                    )}
+                                                                </Markdown>
+                                                            );
+                                                        } else if (
+                                                            content.contentType ===
+                                                            'correlationSyntheticData'
+                                                        ) {
+                                                            return (
+                                                                <CorrelationMatrix
+                                                                    key={index}
+                                                                    heatmapData={createHeatmapdata(
+                                                                        distributionReportProps.syntheticCorrelations
+                                                                    )}
+                                                                />
+                                                            );
+                                                        }
+                                                    }
+                                                )}
                                         </div>
                                     }
                                 />
@@ -326,9 +420,9 @@ export const DistributionReport = (
                                                     </h2>
                                                     <div className="flex flex-row w-full overflow-auto gap-4">
                                                         {categories.map(
-                                                            item => (
+                                                            (item, index) => (
                                                                 <div
-                                                                    key={item}
+                                                                    key={`${item}${index}`}
                                                                     className="flex flex-col"
                                                                 >
                                                                     <GroupBarChart
@@ -531,12 +625,6 @@ export const DistributionReport = (
                     }
 
                     if (report.reportType === 'correlationSyntheticData') {
-                        const {
-                            columns: synthticColumns,
-                            data: syntheticData,
-                        } = createHeatmapdata(
-                            distributionReportProps.syntheticCorrelations
-                        );
                         return (
                             <div className="mb-4" key={indexReport}>
                                 <Accordion
@@ -544,20 +632,11 @@ export const DistributionReport = (
                                         'syntheticData.correlationSyntheticData'
                                     )}
                                     content={
-                                        <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
-                                            <div className="col-[1]">
-                                                <HeatMapChart
-                                                    columns={synthticColumns}
-                                                    data={syntheticData}
-                                                    title={t(
-                                                        'heatmap.syntheticdata'
-                                                    )}
-                                                    rangeMax={2}
-                                                    rangeMin={0}
-                                                    colors="LtRd"
-                                                />
-                                            </div>
-                                        </div>
+                                        <CorrelationMatrix
+                                            heatmapData={createHeatmapdata(
+                                                distributionReportProps.syntheticCorrelations
+                                            )}
+                                        />
                                     }
                                 ></Accordion>
                             </div>

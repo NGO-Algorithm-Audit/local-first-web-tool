@@ -261,12 +261,10 @@ def run():
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
             {'reportType': 'univariateDistributionSyntheticData'},
-            {'reportType': 'bivariateDistributionSyntheticData'},
-            {'reportType': 'correlationSyntheticData'},
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.diagnosticsTitle',
-                'showIndex' : False,
+                'showIndex' : False,                
                 'data': json.dumps([
                         {
                             'attribute': key,
@@ -274,20 +272,14 @@ def run():
                             'p_value': values['p_value']
                         }
                         for key, values in results['distribution_results'].items()
-                    ])
-            }
+                    ]),
+                'postContent': json.dumps([{
+                    'contentType' : 'correlationSyntheticData'
+                }])
+            },
+            {'reportType': 'bivariateDistributionSyntheticData'}
         ]
     }))
-
-    setResult(json.dumps(
-        {
-            'type': 'heading', 
-            'headingKey': 'syntheticData.correlationDifference',
-            'params': {
-                'correlationDifference' : str(results['correlation_diff'])
-            }
-        }
-    ))
 
     setResult(json.dumps({
         'type': 'heading', 
