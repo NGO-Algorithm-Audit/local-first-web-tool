@@ -18,7 +18,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
     TooltipContent,
-} from './ui/tooltip';
+} from './ui/touch-tooltip';
 import Markdown from 'react-markdown';
 
 const createFormSchema = (t: (key: string) => string) =>
@@ -155,8 +155,9 @@ export default function SyntheticDataSettings({
                                 {t(
                                     'syntheticData.form.fieldset.sdgMethod.title'
                                 )}
+
                                 <TooltipProvider>
-                                    <Tooltip delayDuration={250}>
+                                    <Tooltip>
                                         <TooltipTrigger
                                             onClick={event => {
                                                 event.preventDefault();
