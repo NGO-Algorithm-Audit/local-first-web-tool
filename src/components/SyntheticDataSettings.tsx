@@ -162,7 +162,7 @@ export default function SyntheticDataSettings({
                                                 event.preventDefault();
                                             }}
                                         >
-                                            <InfoIcon className="size-3.5 hidden xl:flex" />
+                                            <InfoIcon className="size-3.5" />
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
