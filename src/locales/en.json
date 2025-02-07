@@ -75,7 +75,8 @@
                 "sdgMethod": {
                     "title": "Method",
                     "cart": "CART",
-                    "gc": "Gaussian Copula"
+                    "gc": "Gaussian Copula",
+                    "tooltip": "The CART method is used to generate the synthetic data.\n  \n  \n  \nCART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories.\n  \n  \n  \nsUse Gaussian Copula in those cases"
                 },
                 "samples": "Number of samples"
             },
@@ -102,7 +103,8 @@
         },
         "columnsInDataset": "1. Data types detection",
         "_explanatoryDataAnalysisTitle": "2. Explanatory data analysis",
-        "cartModelTitle": "2. CART model",
+        "cartModelTitle": "2. Method: CART model",
+        "gaussianCopulaModelTitle": "2. Method: Gaussian Copula model",
         "cartModelDescription": "The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.",
         "evaluationOfGeneratedDataTitle": "3. Evaluation of generated data",
         "outputDataTitle": "4. Generated synthetic data",
@@ -114,7 +116,7 @@
 
     "biasAnalysis": {
         "demo": {
-            "heading": "Information about demo dataset", 
+            "heading": "Information about demo dataset",
             "description": "As a demo, the [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset is loaded below. The dataset contains features of tweets and the prediction of a BERT-based misinformation classifier whether the tweet is fake news or not. False positive classifications are marked as FP. The FP column indicates that a tweet is falsy accused by the misinformation detection algorithm to be fake news. The FP metric will be used as a performance metric to measure bias is this use case.\n  \n&nbsp;&nbsp;\n\n In this example, we will examine what type of tweets are more/less often classified by misinformation detection algorithm as fake news."
         },
         "parameters": {

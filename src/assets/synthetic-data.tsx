@@ -250,11 +250,11 @@ def run():
             # {'reportType': 'correlationRealData'},
             {
                 'reportType': 'heading',
-                'headingKey': 'syntheticData.cartModelTitle'
+                'headingKey': 'syntheticData.cartModelTitle' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelTitle'
             },
              {
                 'reportType': 'text',
-                'textKey': 'syntheticData.cartModelDescription'
+                'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelDescription'
             },
             {
                 'reportType': 'heading',
