@@ -18,3 +18,7 @@
     @apply min-w-[800px];
     width: 800px !important;
 }
+
+button:has(+ [data-radix-popper-content-wrapper]) {
+    @apply bg-aaRegularLight text-black;
+}

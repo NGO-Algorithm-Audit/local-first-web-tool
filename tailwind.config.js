@@ -22,6 +22,7 @@ export default {
             },
             colors: {
                 aaLight: '#deecf7',
+                aaRegularLight: '#c5d8eb',
                 aaRegular: '#005aa7',
                 aaDark: '#0a3f70',
             },

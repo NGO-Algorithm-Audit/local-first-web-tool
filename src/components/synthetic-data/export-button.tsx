@@ -26,10 +26,14 @@ export const ExportButton = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <div className="ml-auto flex flex-row gap-2 hideonprint">
+        <div className="flex flex-row gap-2 hideonprint">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="p-4 text-sm">
+                    <Button
+                        variant="default"
+                        size="sm"
+                        className="mx-auto py-6 px-4 text-sm bg-aaRegularLight hover:bg-aaRegularLight text-black hover:text-black transform transition-colors duration-200 group"
+                    >
                         {t('downloadButton')}
                         <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
                     </Button>
@@ -40,7 +44,7 @@ export const ExportButton = ({
                 >
                     <DropdownMenuItem
                         onClick={() => reactToPrintFn()}
-                        className="flex flex-row items-center"
+                        className="flex flex-row items-center cursor-pointer"
                     >
                         <Share className="size-3.5 mr-2" />
                         {t('syntheticData.exportToPDF')}
@@ -48,7 +52,7 @@ export const ExportButton = ({
                     {clusterInfo && (
                         <>
                             <DropdownMenuItem
-                                className="flex flex-row items-center"
+                                className="flex flex-row items-center cursor-pointer"
                                 onClick={() => {
                                     downloadFile(
                                         JSON.stringify(
@@ -68,7 +72,7 @@ export const ExportButton = ({
                                 {t('syntheticData.exportToJSON')}
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                className="flex flex-row items-center"
+                                className="flex flex-row items-center cursor-pointer"
                                 onClick={() => {
                                     handleExport(
                                         clusterInfo.syntheticData as object[]
