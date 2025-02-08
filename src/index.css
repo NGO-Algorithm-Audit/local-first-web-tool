@@ -4,7 +4,8 @@
 
 .content-list,
 .markdown {
-    p a {
+    p a,
+    li a {
         @apply text-blue-500 underline;
     }
 
