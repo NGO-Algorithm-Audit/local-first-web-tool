@@ -57,6 +57,7 @@ export default function ComponentMapper({
                                 data={JSON.parse(resultItem.data)}
                                 title={t(resultItem.title)}
                                 showIndex={resultItem.showIndex ?? false}
+                                translate={resultItem.translate ?? false}
                             />
                         );
 
