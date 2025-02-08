@@ -137,6 +137,41 @@ def run():
             'type': 'text',
             'key': 'syntheticData.demo.description'
         }))
+
+        demoData = {
+            "syntheticData.demo.data.column.Variable_name": ["syntheticData.demo.data.sex", "syntheticData.demo.data.race1", "syntheticData.demo.data.ugpa", "syntheticData.demo.data.bar"],
+            "syntheticData.demo.data.column.Description": [
+                "syntheticData.demo.data.column.Description.gender_of_students",
+                "syntheticData.demo.data.column.Description.race_of_students",
+                "syntheticData.demo.data.column.Description.undergraduate_GPA_student",
+                "syntheticData.demo.data.column.Description.Ground_truth_label"
+            ],
+            "syntheticData.demo.data.column.Values": [
+                "syntheticData.demo.data.column.Values.sex",
+                "syntheticData.demo.data.column.Values.race",
+                "syntheticData.demo.data.column.Values.ugpa",
+                "syntheticData.demo.data.column.Values.bar"
+            ]
+        }
+
+        # Create the DataFrame
+        dfDemoData = pd.DataFrame(demoData)
+
+        # Display the DataFrame
+        print(dfDemoData)
+
+        setResult(json.dumps({
+            'type': 'table', 
+            'showIndex': False,
+            'translate': True,
+            'data': dfDemoData.to_json(orient="records")
+        }))
+
+        setResult(json.dumps({
+            'type': 'text',
+            'key': 'syntheticData.demo.post.description'
+        }))
+
     else:
         admissions_df.reset_index(drop=True, inplace=True)
         admissions_sub = admissions_df

@@ -59,7 +59,27 @@
     "syntheticData": {
         "demo": {
             "heading": "Informatie over demodataset",
-            "description": "Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende kolommen:\n  \n&nbsp;&nbsp;\n\n- sex: geslacht van de student, zijnde 1 (man), 2 (vrouw);\n- race1: etniciteit van de student, d.w.z. aziatisch, zwart, hispanic, wit, anders\n- ugpa: Het GPA van de student tijdens de undergraduate-opleiding, continue variabele;\n- bar: Waarheidslabel dat aangeeft of de student is geslaagd voor de bar, d.w.z. geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd\n  \n&nbsp;&nbsp;\n\nDe CART-methode zal worden gebruikt om de verschillen in distributie en correlatie tussen de echte en synthetische gegevens te evalueren.\n  \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden."
+            "description": "Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende kolommen:\n  \n&nbsp;&nbsp;\n\n",
+            "post.description": "De CART-methode zal worden gebruikt om de verschillen in distributie en correlatie tussen de echte en synthetische gegevens te evalueren.\n  \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.",
+            "data.column.Variable_name": "Variabele name",
+            "data.sex": "sex",
+            "data.race1": "race1",
+            "data.ugpa": "ugpa",
+            "data.bar": "bar",
+
+            "data.column.Description": "Omschrijving",
+
+            "data.column.Description.gender_of_students": "geslacht van de student",
+            "data.column.Description.race_of_students": "etniciteit van de student",
+            "data.column.Description.undergraduate_GPA_student": "het GPA van de student tijdens de undergraduate-opleiding",
+            "data.column.Description.Ground_truth_label": "Waarheidslabel dat aangeeft of de student is geslaagd voor de bar",
+
+            "data.column.Values": "Waardes",
+
+            "data.column.Values.sex": "1 (man), 2 (vrouw)",
+            "data.column.Values.race": "aziatisch, zwart, hispanic, wit, anders",
+            "data.column.Values.ugpa": "1-4",
+            "data.column.Values.bar": "geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd"
         },
         "exportToPDF": "Download evulatie rapport als pdf",
         "exportToJSON": "Download synthetische data als json",
