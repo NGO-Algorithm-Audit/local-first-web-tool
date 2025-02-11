@@ -156,6 +156,7 @@ export default function SyntheticDataGeneration() {
             >
                 {initialised && data.data.length > 0 && result.length > 0 && (
                     <ExportButton
+                        buttonAlign="right"
                         clusterInfo={clusterInfo}
                         data={data}
                         handleExport={handleExport}
@@ -177,6 +178,7 @@ export default function SyntheticDataGeneration() {
 
                 {initialised && data.data.length > 0 && result.length > 0 && (
                     <ExportButton
+                        buttonAlign="center"
                         clusterInfo={clusterInfo}
                         data={data}
                         handleExport={handleExport}

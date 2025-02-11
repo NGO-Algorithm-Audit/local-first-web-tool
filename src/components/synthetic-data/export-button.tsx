@@ -18,13 +18,21 @@ export const ExportButton = ({
     reactToPrintFn,
     data,
     handleExport,
+    buttonAlign,
 }: {
+    buttonAlign: 'left' | 'right' | 'center';
     clusterInfo: SyntheticDataInfo | undefined;
     reactToPrintFn: UseReactToPrintFn;
     data: SyntheticData;
     handleExport: (syntheticData: object[]) => void;
 }) => {
     const { t } = useTranslation();
+    const buttonAlignClass =
+        buttonAlign === 'left'
+            ? 'mr-auto'
+            : buttonAlign === 'right'
+              ? 'ml-auto'
+              : 'mx-auto';
     return (
         <div className="flex flex-row gap-2 hideonprint">
             <DropdownMenu>
@@ -32,7 +40,19 @@ export const ExportButton = ({
                     <Button
                         variant="default"
                         size="sm"
-                        className="mx-auto py-6 px-4 text-sm bg-aaRegularLight hover:bg-aaRegularLight text-black hover:text-black transform transition-colors duration-200 group"
+                        className={`${buttonAlignClass} py-6 px-4 text-sm 
+                            bg-aaRegularLight hover:bg-aaRegularLight 
+                            text-black hover:text-black 
+                            transform transition-colors duration-200 group
+                            relative
+                            before:absolute before:inset-0
+                            before:p-[3px] before:rounded-md
+                            before:bg-gradient-to-br before:from-[#60a5fa] before:to-[#c5d8eb]
+                            before:-z-10
+                            after:absolute after:inset-[2px]
+                            after:rounded-[4px]
+                            after:bg-aaRegularLight
+                            after:-z-10`}
                     >
                         {t('downloadButton')}
                         <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
@@ -40,11 +60,11 @@ export const ExportButton = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                     align="end"
-                    className="bg-white p-4 rounded-md flex flex-col gap-2 shadow-md"
+                    className="bg-white  rounded-md flex flex-col gap-0 shadow-md"
                 >
                     <DropdownMenuItem
                         onClick={() => reactToPrintFn()}
-                        className="flex flex-row items-center cursor-pointer"
+                        className="px-4 py-2 flex flex-row items-center cursor-pointer hover:bg-slate-100 rounded-md transition-colors duration-200"
                     >
                         <Share className="size-3.5 mr-2" />
                         {t('syntheticData.exportToPDF')}
@@ -52,7 +72,7 @@ export const ExportButton = ({
                     {clusterInfo && (
                         <>
                             <DropdownMenuItem
-                                className="flex flex-row items-center cursor-pointer"
+                                className="px-4 py-2 flex flex-row items-center cursor-pointer hover:bg-slate-100 rounded-md transition-colors duration-200"
                                 onClick={() => {
                                     downloadFile(
                                         JSON.stringify(
@@ -72,7 +92,7 @@ export const ExportButton = ({
                                 {t('syntheticData.exportToJSON')}
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                className="flex flex-row items-center cursor-pointer"
+                                className="px-4 py-2 flex flex-row items-center cursor-pointer hover:bg-slate-100 rounded-md transition-colors duration-200"
                                 onClick={() => {
                                     handleExport(
                                         clusterInfo.syntheticData as object[]
