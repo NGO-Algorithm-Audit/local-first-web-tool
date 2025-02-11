@@ -307,6 +307,7 @@ export const DistributionReport = (
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
+                                                showMeanLine={false}
                                                 yAxisLabel={t(
                                                     'distribution.frequency'
                                                 )}
@@ -426,6 +427,9 @@ export const DistributionReport = (
                                                                     className="flex flex-col"
                                                                 >
                                                                     <GroupBarChart
+                                                                        showMeanLine={
+                                                                            false
+                                                                        }
                                                                         colorRange={[
                                                                             'steelblue',
                                                                             'orange',

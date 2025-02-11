@@ -11,6 +11,7 @@ interface GroupBarChartProps {
     title: string;
     data: Data[];
     colorRange?: string[];
+    showMeanLine: boolean;
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -23,6 +24,7 @@ const GroupBarChart = ({
     data,
     yAxisLabel,
     colorRange,
+    showMeanLine,
 }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -126,33 +128,36 @@ const GroupBarChart = ({
             .attr('height', d => y(0) - y(d.value))
             .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
-        // Calculate the mean of all bar values
-        const meanValue = d3.mean(flattenData, d => d.value) ?? 0;
+        if (showMeanLine) {
+            // Calculate the mean of all bar values
 
-        // Draw a dotted line representing the mean value
-        svg.append('line')
-            .attr('x1', 0)
-            .attr(
-                'x2',
-                Math.max(containerWidth, data.length * barWidth) - margin.right
-            )
-            .attr('y1', y(meanValue))
-            .attr('y2', y(meanValue))
-            .attr('stroke', 'black')
-            .attr('stroke-width', 2)
-            .attr('stroke-dasharray', '4 4')
-            .attr('opacity', 0.8)
-            .attr('class', 'mean-line');
+            const meanValue = d3.mean(flattenData, d => d.value) ?? 0;
 
-        // Add a label for the mean line
-        svg.append('text')
-            .attr('x', margin.left + 30 + 50)
-            .attr('y', y(meanValue) - 5)
-            .attr('text-anchor', 'end')
-            .attr('fill', 'black')
-            .style('font-size', '12px')
-            .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+            // Draw a dotted line representing the mean value
+            svg.append('line')
+                .attr('x1', 0)
+                .attr(
+                    'x2',
+                    Math.max(containerWidth, data.length * barWidth) -
+                        margin.right
+                )
+                .attr('y1', y(meanValue))
+                .attr('y2', y(meanValue))
+                .attr('stroke', 'black')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '4 4')
+                .attr('opacity', 0.8)
+                .attr('class', 'mean-line');
 
+            // Add a label for the mean line
+            svg.append('text')
+                .attr('x', margin.left + 30 + 50)
+                .attr('y', y(meanValue) - 5)
+                .attr('text-anchor', 'end')
+                .attr('fill', 'black')
+                .style('font-size', '12px')
+                .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+        }
         // Append legend
         const legend = svg
             .append('g')
