@@ -274,6 +274,7 @@ def run():
         'dataTypes': json.dumps(dtypes_dict),
         'combined_data' : combined_data.to_json(orient="records"),
         'realCorrelations': real_data.corr().to_json(orient="records"),
+        'synthDataCorrelations': synthetic_data.corr().to_json(orient="records"),
         'syntheticCorrelations': np.abs(df_numeric.corr() - synth_df_numeric.corr()).to_json(orient="records"),
         'reports' : [
             # {
@@ -283,6 +284,7 @@ def run():
             # {'reportType': 'univariateDistributionRealData'},
             # {'reportType': 'bivariateDistributionRealData'},
             # {'reportType': 'correlationRealData'},
+            # {'reportType': 'correlationSynthData'},
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.cartModelTitle' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelTitle'

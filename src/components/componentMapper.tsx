@@ -169,6 +169,9 @@ export default function ComponentMapper({
                                 synthetic={resultItem.synthetic}
                                 reports={resultItem.reports}
                                 realCorrelations={resultItem.realCorrelations}
+                                synthDataCorrelations={
+                                    resultItem.synthDataCorrelations
+                                }
                                 syntheticCorrelations={
                                     resultItem.syntheticCorrelations
                                 }

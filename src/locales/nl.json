@@ -164,7 +164,8 @@
     },
     "heatmap": {
         "realdata": "Correlatie matrix van gekoppelde data",
-        "syntheticdata": "Absoluut verschil in correlation matrix, m.a.w., |gekoppelde data - synthetische data|"
+        "syntheticdata": "Absoluut verschil in correlation matrix, m.a.w., |gekoppelde data - synthetische data|",
+        "synthData": "Correlatie matrix van synthetische data"
     },
     "distribution": {
         "distributionFor": "Distributie voor",
