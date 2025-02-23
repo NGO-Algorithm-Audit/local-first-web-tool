@@ -16,22 +16,21 @@ interface CorrelationMatrixProps {
         columns: string[];
         data: number[][];
     };
+    title: string;
+    showLegend?: boolean;
 }
 
 function CorrelationMatrix(props: CorrelationMatrixProps) {
     return (
-        <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
-            <div className="col-[1]">
-                <HeatMapChart
-                    columns={props.heatmapData.columns}
-                    data={props.heatmapData.data}
-                    title={t('heatmap.syntheticdata')}
-                    rangeMax={2}
-                    rangeMin={0}
-                    colors="LtRd"
-                />
-            </div>
-        </div>
+        <HeatMapChart
+            columns={props.heatmapData.columns}
+            data={props.heatmapData.data}
+            title={props.title}
+            rangeMax={2}
+            rangeMin={0}
+            colors="LtRd"
+            showLegend={props.showLegend}
+        />
     );
 }
 
@@ -76,6 +75,7 @@ export interface DistributionReportProps {
     synthetic: string;
     reports: DistributionReport[];
     realCorrelations: string;
+    synthDataCorrelations: string;
     syntheticCorrelations: string;
     combined_data: string;
 }
@@ -189,12 +189,40 @@ export const DistributionReport = (
                                                             'correlationSyntheticData'
                                                         ) {
                                                             return (
-                                                                <CorrelationMatrix
-                                                                    key={index}
-                                                                    heatmapData={createHeatmapdata(
-                                                                        distributionReportProps.syntheticCorrelations
-                                                                    )}
-                                                                />
+                                                                <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                                                    <div className="col-[1] lg:col-[1]">
+                                                                        <CorrelationMatrix
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            title={t(
+                                                                                'heatmap.realdata'
+                                                                            )}
+                                                                            heatmapData={createHeatmapdata(
+                                                                                distributionReportProps.realCorrelations
+                                                                            )}
+                                                                            showLegend={
+                                                                                false
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-[1] lg:col-[2]">
+                                                                        <CorrelationMatrix
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            title={t(
+                                                                                'heatmap.synthData'
+                                                                            )}
+                                                                            heatmapData={createHeatmapdata(
+                                                                                distributionReportProps.synthDataCorrelations
+                                                                            )}
+                                                                            showLegend={
+                                                                                true
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                </div>
                                                             );
                                                         }
                                                     }
@@ -538,6 +566,38 @@ export const DistributionReport = (
                             </div>
                         );
                     }
+
+                    if (report.reportType === 'correlationSynthData') {
+                        const { columns: realColumns, data: convertedData } =
+                            createHeatmapdata(
+                                distributionReportProps.synthDataCorrelations
+                            );
+                        return (
+                            <div key={indexReport} className="mb-4">
+                                <Accordion
+                                    title={t(
+                                        'syntheticData.correlationSynthData'
+                                    )}
+                                    content={
+                                        <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                            <div className="col-[1]">
+                                                <HeatMapChart
+                                                    columns={realColumns}
+                                                    data={convertedData}
+                                                    title={t(
+                                                        'heatmap.synthData'
+                                                    )}
+                                                    rangeMax={1}
+                                                    rangeMin={-1}
+                                                    colors="RdYlBu"
+                                                />
+                                            </div>
+                                        </div>
+                                    }
+                                />
+                            </div>
+                        );
+                    }
                     if (
                         report.reportType ===
                         'univariateDistributionSyntheticData'
@@ -628,24 +688,6 @@ export const DistributionReport = (
                         );
                     }
 
-                    if (report.reportType === 'correlationSyntheticData') {
-                        return (
-                            <div className="mb-4" key={indexReport}>
-                                <Accordion
-                                    title={t(
-                                        'syntheticData.correlationSyntheticData'
-                                    )}
-                                    content={
-                                        <CorrelationMatrix
-                                            heatmapData={createHeatmapdata(
-                                                distributionReportProps.syntheticCorrelations
-                                            )}
-                                        />
-                                    }
-                                ></Accordion>
-                            </div>
-                        );
-                    }
                     return null;
                 }
             )}
