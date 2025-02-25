@@ -104,7 +104,10 @@
                 "tryItOut": "Try it out",
                 "runGeneration": "Run synthetic data generation",
                 "analyzing": "Analyzing...",
-                "initializing": "Initialising..."
+                "initializing": "Initialising...",
+                "loadingPyodide": "Loading Python environment...",
+                "loadingPackages": "Loading core packages...",
+                "installingPackages": "Installing additional packages..."
             }
         },
         "demoCard": {

@@ -40,12 +40,14 @@ export default function SyntheticDataSettings({
     onRun,
     onDataLoad,
     isLoading,
+    loadingMessage,
     isErrorDuringAnalysis,
     isInitialised,
 }: {
     onRun: (params: SyntheticDataParameters) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
+    loadingMessage: string;
     isErrorDuringAnalysis: boolean;
     isInitialised: boolean;
 }) {
@@ -248,9 +250,7 @@ export default function SyntheticDataSettings({
                             className="gap-1.5 xl:hidden"
                             disabled={isLoading}
                         >
-                            {!isLoading
-                                ? t('syntheticData.form.actions.tryItOut')
-                                : t('syntheticData.form.actions.initializing')}
+                            {t('syntheticData.form.actions.tryItOut')}
                         </Button>
                         <Button
                             type="submit"
@@ -258,13 +258,7 @@ export default function SyntheticDataSettings({
                             className="gap-1.5"
                             disabled={isLoading || columnsCountError}
                         >
-                            {!isLoading
-                                ? t('syntheticData.form.actions.runGeneration')
-                                : isInitialised
-                                  ? t('syntheticData.form.actions.analyzing')
-                                  : t(
-                                        'syntheticData.form.actions.initializing'
-                                    )}
+                            {t('syntheticData.form.actions.runGeneration')}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>
@@ -288,9 +282,7 @@ export default function SyntheticDataSettings({
                             className="gap-1.5 mr-4"
                             disabled={isLoading}
                         >
-                            {!isLoading
-                                ? t('syntheticData.form.actions.tryItOut')
-                                : t('syntheticData.form.actions.initializing')}
+                            {t('syntheticData.form.actions.tryItOut')}
                         </Button>
                     </div>
                 </Card>

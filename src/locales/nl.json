@@ -48,6 +48,9 @@
                 "runAnalysis": "Start analyse",
                 "analyzing": "Analyseren...",
                 "initializing": "Initialiseren...",
+                "loadingPyodide": "Pyodide laden...",
+                "loadingPackages": "Laden van belangrijke modules",
+                "installingPackages": "Extra modules installeren",
                 "selectColumn": "Selecteer een kolom"
             }
         },

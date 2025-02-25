@@ -44,12 +44,14 @@ export default function BiasSettings({
     isLoading,
     isErrorDuringAnalysis,
     isInitialised,
+    loadingMessage,
 }: {
     onRun: (params: BiasDetectionParameters) => void;
     onDataLoad: csvReader['onChange'];
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
     isInitialised: boolean;
+    loadingMessage: string;
 }) {
     const { t } = useTranslation();
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -346,9 +348,7 @@ export default function BiasSettings({
                             className="gap-1.5 xl:hidden"
                             disabled={isLoading}
                         >
-                            {!isLoading
-                                ? t('biasSettings.form.actions.tryItOut')
-                                : t('biasSettings.form.actions.initializing')}
+                            {t('biasSettings.form.actions.tryItOut')}
                         </Button>
                         <Button
                             type="submit"
@@ -356,11 +356,7 @@ export default function BiasSettings({
                             className="gap-1.5"
                             disabled={isLoading}
                         >
-                            {!isLoading
-                                ? t('biasSettings.form.actions.runAnalysis')
-                                : isInitialised
-                                  ? t('biasSettings.form.actions.analyzing')
-                                  : t('biasSettings.form.actions.initializing')}
+                            {t('biasSettings.form.actions.runAnalysis')}
                             <ArrowRight className="size-3.5 hidden xl:flex" />
                             <ArrowDown className="size-3.5 xl:hidden" />
                         </Button>
@@ -384,9 +380,7 @@ export default function BiasSettings({
                             className="gap-1.5 mr-4"
                             disabled={isLoading}
                         >
-                            {!isLoading
-                                ? t('biasSettings.form.actions.tryItOut')
-                                : t('biasSettings.form.actions.initializing')}
+                            {t('biasSettings.form.actions.tryItOut')}
                         </Button>
                     </div>
                 </Card>
