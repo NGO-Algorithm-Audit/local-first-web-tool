@@ -14,6 +14,9 @@
     "exportToPDF": "Export to pdf",
     "exportToJSON": "Export synthetic data to json",
     "downloadButton": "Download",
+    "loadingPyodide": "Loading Python environment...",
+    "loadingPackages": "Loading core packages...",
+    "installingPackages": "Installing additional packages...",
     "biasSettings": {
         "exportToPDF": "Download bias detection report as pdf",
         "exportToJSON": "Export clusters as json",
@@ -104,10 +107,7 @@
                 "tryItOut": "Try it out",
                 "runGeneration": "Run synthetic data generation",
                 "analyzing": "Analyzing...",
-                "initializing": "Initialising...",
-                "loadingPyodide": "Loading Python environment...",
-                "loadingPackages": "Loading core packages...",
-                "installingPackages": "Installing additional packages..."
+                "initializing": "Initialising..."
             }
         },
         "demoCard": {

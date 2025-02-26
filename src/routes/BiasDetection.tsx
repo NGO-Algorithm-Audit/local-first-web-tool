@@ -212,7 +212,7 @@ export default function BiasDetection() {
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
                 ) : data.data.length > 0 ? null : loading ? (
-                    <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="flex flex-col py-24 items-center justify-center gap-4">
                         <LoadingIndicator className="w-12 h-12 text-aaDark" />
                         <h1 className="text-md text-center text-aaDark">
                             {loadingMessage

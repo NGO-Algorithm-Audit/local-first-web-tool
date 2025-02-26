@@ -108,13 +108,13 @@ self.onmessage = async (e: MessageData) => {
     async function initPython() {
         postMessage({
             type: 'loading',
-            loadingStage: 'syntheticData.form.actions.loadingPyodide',
+            loadingStage: 'loadingPyodide',
         });
         self.pyodide = await loadPyodide({ indexURL: '/pyodide' });
 
         postMessage({
             type: 'loading',
-            loadingStage: 'syntheticData.form.actions.loadingPackages',
+            loadingStage: 'loadingPackages',
         });
         await self.pyodide.loadPackage([
             'micropip',
@@ -127,7 +127,7 @@ self.onmessage = async (e: MessageData) => {
 
         postMessage({
             type: 'loading',
-            loadingStage: 'syntheticData.form.actions.installingPackages',
+            loadingStage: 'installingPackages',
         });
         await micropip.install('unsupervised-bias-detection');
         await micropip.install('kmodes');
