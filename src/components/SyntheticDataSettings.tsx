@@ -40,9 +40,7 @@ export default function SyntheticDataSettings({
     onRun,
     onDataLoad,
     isLoading,
-    loadingMessage,
     isErrorDuringAnalysis,
-    isInitialised,
 }: {
     onRun: (params: SyntheticDataParameters) => void;
     onDataLoad: csvReader['onChange'];

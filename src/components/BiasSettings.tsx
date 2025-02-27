@@ -43,8 +43,6 @@ export default function BiasSettings({
     onDataLoad,
     isLoading,
     isErrorDuringAnalysis,
-    isInitialised,
-    loadingMessage,
 }: {
     onRun: (params: BiasDetectionParameters) => void;
     onDataLoad: csvReader['onChange'];

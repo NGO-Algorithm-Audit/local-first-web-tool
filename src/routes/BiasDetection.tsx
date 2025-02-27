@@ -154,6 +154,7 @@ export default function BiasDetection() {
                     isLoading={loading || !initialised}
                     isErrorDuringAnalysis={Boolean(error && initialised)}
                     isInitialised={initialised}
+                    loadingMessage={loadingMessage}
                 />
             </div>
 
