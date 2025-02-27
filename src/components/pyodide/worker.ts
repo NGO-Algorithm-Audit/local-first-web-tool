@@ -129,10 +129,13 @@ self.onmessage = async (e: MessageData) => {
             type: 'loading',
             loadingStage: 'installingPackages',
         });
-        await micropip.install('unsupervised-bias-detection');
-        await micropip.install('kmodes');
+      
+        await micropip.install('/kmodes-0.12.2-py2.py3-none-any.whl');
+        await micropip.install(
+            '/unsupervised_bias_detection-0.2.1-py3-none-any.whl'
+        );
         await micropip.install('scipy');
-        await micropip.install('python-synthpop');
+        await micropip.install('/python_synthpop-0.0.1-py3-none-any.whl');
         return true;
     }
 
