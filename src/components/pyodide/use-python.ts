@@ -5,6 +5,7 @@ import { PythonWorkerMessage } from './PythonWorkerMessage';
 export const usePython = <T, TExport>(emptyParams: T) => {
     const [result, setResult] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingMessage, setLoadingMessage] = useState<string>('');
     const [initialised, setInitialised] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
     const [clusterInfo, setClusterInfo] = useState<TExport | undefined>(
@@ -16,30 +17,34 @@ export const usePython = <T, TExport>(emptyParams: T) => {
     const onWorkerMessage = useCallback(
         (event: MessageEvent<PythonWorkerMessage<TExport>>) => {
             console.log('Worker message', event.data);
-            if (event.data.type && event.data.type === 'pre-initialised') {
+            if (event.data.type === 'loading') {
+                setLoadingMessage(event.data.loadingStage ?? '');
+            } else if (event.data.type === 'pre-initialised') {
                 workerRef.current?.postMessage({
                     type: 'init-run',
                     params: {
                         parameters: emptyParams,
                     },
                 });
-            } else if (event.data.type && event.data.type === 'initialised') {
+            } else if (event.data.type === 'initialised') {
                 console.log('Worker initialised');
                 setInitialised(true);
                 setLoading(false);
-            } else if (event.data.type && event.data.type === 'result') {
+                setLoadingMessage('');
+            } else if (event.data.type === 'result') {
                 setResult(event.data.result ?? ['']);
                 setClusterInfo(event.data.export);
                 setLoading(false);
-            } else if (event.data.type && event.data.type === 'error') {
+            } else if (event.data.type === 'error') {
                 setError(event.data.message ?? '');
                 setLoading(false);
-            } else if (event.data.type && event.data.type === 'data-set') {
+            } else if (event.data.type === 'data-set') {
                 setError(undefined);
                 setLoading(false);
             } else {
                 setError('Unknown message type');
                 setLoading(false);
+                setLoadingMessage('');
             }
         },
         [result]
@@ -85,6 +90,7 @@ export const usePython = <T, TExport>(emptyParams: T) => {
     return {
         initialised,
         loading,
+        loadingMessage,
         result,
         initialise,
         runPython,

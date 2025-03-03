@@ -21,6 +21,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { LoadingState } from '@/components/LoadingState';
 
 const PAGE_STYLE = `
     @page {
@@ -71,6 +72,7 @@ export default function BiasDetection() {
 
     const {
         loading,
+        loadingMessage,
         initialised,
         result,
         initialise,
@@ -152,6 +154,7 @@ export default function BiasDetection() {
                     isLoading={loading || !initialised}
                     isErrorDuringAnalysis={Boolean(error && initialised)}
                     isInitialised={initialised}
+                    loadingMessage={loadingMessage}
                 />
             </div>
 
@@ -209,7 +212,14 @@ export default function BiasDetection() {
 
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
-                ) : data.data.length > 0 ? null : (
+                ) : data.data.length > 0 ? null : loading ? (
+                    <LoadingState
+                        loadingMessageKey={loadingMessage}
+                        initializingKey={
+                            'syntheticData.form.actions.initializing'
+                        }
+                    />
+                ) : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
                         <h1 className="text-md text-center text-aaDark">

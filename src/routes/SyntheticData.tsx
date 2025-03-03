@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { SyntheticDataParameters } from '@/components/synthetic-data-interfaces/SyntheticDataParameters';
 import { exportToCSV } from '@/lib/utils';
 import { ExportButton } from '@/components/synthetic-data/export-button';
+import { LoadingState } from '@/components/LoadingState';
 
 const PAGE_STYLE = `
     @page {
@@ -60,6 +61,7 @@ export default function SyntheticDataGeneration() {
     const { t, i18n } = useTranslation();
     const {
         loading,
+        loadingMessage,
         initialised,
         result,
         initialise,
@@ -143,6 +145,7 @@ export default function SyntheticDataGeneration() {
                     onRun={onRun}
                     onDataLoad={onFileLoad}
                     isLoading={loading || !initialised}
+                    loadingMessage={loadingMessage}
                     isErrorDuringAnalysis={Boolean(error && initialised)}
                     isInitialised={initialised}
                 />
@@ -166,7 +169,14 @@ export default function SyntheticDataGeneration() {
 
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
-                ) : data.data.length > 0 ? null : (
+                ) : data.data.length > 0 ? null : loading ? (
+                    <LoadingState
+                        loadingMessageKey={loadingMessage}
+                        initializingKey={
+                            'syntheticData.form.actions.initializing'
+                        }
+                    />
+                ) : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
                         <h1 className="text-md text-center text-aaDark">

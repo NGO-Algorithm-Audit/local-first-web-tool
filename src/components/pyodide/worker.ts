@@ -106,7 +106,16 @@ self.onmessage = async (e: MessageData) => {
     }
 
     async function initPython() {
+        postMessage({
+            type: 'loading',
+            loadingStage: 'loadingPyodide',
+        });
         self.pyodide = await loadPyodide({ indexURL: '/pyodide' });
+
+        postMessage({
+            type: 'loading',
+            loadingStage: 'loadingPackages',
+        });
         await self.pyodide.loadPackage([
             'micropip',
             'numpy',
@@ -116,8 +125,12 @@ self.onmessage = async (e: MessageData) => {
 
         const micropip = self.pyodide.pyimport('micropip');
 
+        postMessage({
+            type: 'loading',
+            loadingStage: 'installingPackages',
+        });
+      
         await micropip.install('/kmodes-0.12.2-py2.py3-none-any.whl');
-
         await micropip.install(
             '/unsupervised_bias_detection-0.2.1-py3-none-any.whl'
         );

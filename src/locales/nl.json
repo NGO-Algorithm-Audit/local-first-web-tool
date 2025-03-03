@@ -12,7 +12,9 @@
     "mostBiasedCluster": "Meest bevooroordeelde\n cluster",
     "cluster": "Cluster {{value}}",
     "downloadButton": "Download",
-
+    "loadingPyodide": "Pyodide laden...",
+    "loadingPackages": "Laden van belangrijke modules",
+    "installingPackages": "Extra modules installeren",
     "biasSettings": {
         "exportToPDF": "Download bias detection rapport als pdf",
         "exportToJSON": "Export clusters als json",
