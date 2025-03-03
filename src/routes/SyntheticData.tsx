@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { SyntheticDataParameters } from '@/components/synthetic-data-interfaces/SyntheticDataParameters';
 import { exportToCSV } from '@/lib/utils';
 import { ExportButton } from '@/components/synthetic-data/export-button';
-import LoadingIndicator from '@/components/ui/loadingIndicator';
+import { LoadingState } from '@/components/LoadingState';
 
 const PAGE_STYLE = `
     @page {
@@ -170,14 +170,12 @@ export default function SyntheticDataGeneration() {
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
                 ) : data.data.length > 0 ? null : loading ? (
-                    <div className="flex py-24 flex-col items-center justify-center gap-4">
-                        <LoadingIndicator className="w-12 h-12 text-aaDark" />
-                        <h1 className="text-md text-center text-aaDark">
-                            {loadingMessage
-                                ? t(loadingMessage)
-                                : t('syntheticData.form.actions.initializing')}
-                        </h1>
-                    </div>
+                    <LoadingState
+                        loadingMessageKey={loadingMessage}
+                        initializingKey={
+                            'syntheticData.form.actions.initializing'
+                        }
+                    />
                 ) : (
                     <>
                         <Measuring className="max-w-96 m-auto 2xl:max-w-full" />
