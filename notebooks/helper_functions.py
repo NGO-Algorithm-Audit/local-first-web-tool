@@ -28,7 +28,7 @@ def univariate_hist(df,dtypes_dict,Comparison=False):
     for column in df.columns:
         if column == 'realOrSynthetic':
             continue
-        if dtypes_dict[column] == 'float':
+        if dtypes_dict[column] == 'numerical':
             plt.figure(figsize=(8, 5))
 
             if Comparison == False:
