@@ -110,7 +110,7 @@ self.onmessage = async (e: MessageData) => {
             type: 'loading',
             loadingStage: 'loadingPyodide',
         });
-        self.pyodide = await loadPyodide({ indexURL: '/pyodide' });
+        self.pyodide = await loadPyodide({ indexURL: '/pyodide-0.27.3' });
 
         postMessage({
             type: 'loading',
