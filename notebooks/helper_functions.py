@@ -83,7 +83,7 @@ def bivariate_plot(df, combined_data, dtypes_dict,Comparison=False):
                 plt.figure(figsize=(8, 5))
 
                 # if columns are both categorical show countplot 
-                if dtypes_dict[column_name1] == 'category' and dtypes_dict[column_name2] == 'category':
+                if dtypes_dict[column_name1] == 'categorical' and dtypes_dict[column_name2] == 'categorical':
 
                     if Comparison==False:
                         sns.countplot(data=df, 
@@ -106,7 +106,7 @@ def bivariate_plot(df, combined_data, dtypes_dict,Comparison=False):
                         plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
 
                 # if one of the columns is categorical and the other is not, show violinplot
-                elif dtypes_dict[column_name1] == 'category' or dtypes_dict[column_name2] == 'category':
+                elif dtypes_dict[column_name1] == 'categorical' or dtypes_dict[column_name2] == 'categorical':
                     sns.violinplot(data=combined_data, 
                                    x=column_name1, 
                                    y=column_name2, 
