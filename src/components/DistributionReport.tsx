@@ -275,8 +275,8 @@ export const DistributionReport = (
                                 const dataType2 = dataTypes[column2];
 
                                 if (
-                                    dataType === 'category' &&
-                                    dataType2 === 'category'
+                                    dataType === 'categorical' &&
+                                    dataType2 === 'categorical'
                                 ) {
                                     const data = realData.reduce(
                                         (
@@ -345,8 +345,8 @@ export const DistributionReport = (
                                         </div>
                                     );
                                 } else if (
-                                    dataType === 'float' &&
-                                    dataType2 === 'category'
+                                    dataType === 'numerical' &&
+                                    dataType2 === 'categorical'
                                 ) {
                                     return (
                                         <ViolinChart
@@ -392,8 +392,8 @@ export const DistributionReport = (
                                         }
 
                                         if (
-                                            dataType === 'category' &&
-                                            dataType2 === 'float'
+                                            dataType === 'categorical' &&
+                                            dataType2 === 'numerical'
                                         ) {
                                             return (
                                                 <ViolinChart
@@ -408,8 +408,8 @@ export const DistributionReport = (
                                                 />
                                             );
                                         } else if (
-                                            dataType === 'float' &&
-                                            dataType2 === 'category'
+                                            dataType === 'numerical' &&
+                                            dataType2 === 'categorical'
                                         ) {
                                             return (
                                                 <ViolinChart
@@ -424,8 +424,8 @@ export const DistributionReport = (
                                                 />
                                             );
                                         } else if (
-                                            dataType === 'category' &&
-                                            dataType2 === 'category'
+                                            dataType === 'categorical' &&
+                                            dataType2 === 'categorical'
                                         ) {
                                             const categories = Array.from(
                                                 new Set([

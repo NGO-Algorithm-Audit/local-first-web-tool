@@ -121,21 +121,26 @@ self.onmessage = async (e: MessageData) => {
             'numpy',
             'pandas',
             'scikit-learn',
+            'scipy',
+            '/kmodes-0.12.2-py2.py3-none-any.whl',
+            '/unsupervised_bias_detection-0.2.1-py3-none-any.whl',
+            '/copulas-0.12.1-py3-none-any.whl',
+            '/python_synthpop-0.1-py3-none-any.whl',
         ]);
 
-        const micropip = self.pyodide.pyimport('micropip');
+        // const micropip = self.pyodide.pyimport('micropip');
 
-        postMessage({
-            type: 'loading',
-            loadingStage: 'installingPackages',
-        });
-      
-        await micropip.install('/kmodes-0.12.2-py2.py3-none-any.whl');
-        await micropip.install(
-            '/unsupervised_bias_detection-0.2.1-py3-none-any.whl'
-        );
-        await micropip.install('scipy');
-        await micropip.install('/python_synthpop-0.0.1-py3-none-any.whl');
+        // postMessage({
+        //     type: 'loading',
+        //     loadingStage: 'installingPackages',
+        // });
+
+        // await micropip.install('/kmodes-0.12.2-py2.py3-none-any.whl');
+        // await micropip.install(
+        //     '/unsupervised_bias_detection-0.2.1-py3-none-any.whl'
+        // );
+        // await micropip.install('scipy');
+        // await micropip.install('/python_synthpop-0.0.9-py3-none-any.whl');
         return true;
     }
 

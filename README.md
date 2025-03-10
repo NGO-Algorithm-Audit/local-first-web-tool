@@ -1,5 +1,13 @@
 # Algorithm Audit AI Tooling. 
 
-Test setup for testing clientside python execution. 
+Run `npm run dev` to start the development server.
 
-Run `npm run dev` to test this version, the command is slightly changed in the package.json to fix an issue with `react-py` that don't support the dev build.
+## pyodide upgrade
+
+- upgrade pyoide in package.json
+- upgrade files in public/pyodide
+  - download from https://github.com/pyodide/pyodide/releases and extract the files
+  - download pyodide and pyodide-core 
+  - place only the needed files from pyodide in the public/pyodide folder
+  - place all files from pyodide-core in the public/pyodide folder
+  
