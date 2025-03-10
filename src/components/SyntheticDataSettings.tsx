@@ -93,7 +93,7 @@ export default function SyntheticDataSettings({
     }, [data]);
 
     const onDemoRun = async () => {
-        const file = await fetch('/Bar-Pass-Prediction.csv')
+        const file = await fetch('/LawSchoolAdmissionBar_v1.csv')
             .then(response => response.text())
             .then(data => Papa.parse(data, { header: true }));
 
