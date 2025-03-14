@@ -332,6 +332,7 @@ export const DistributionReport = (
                                             };
                                         }
                                     );
+
                                     return (
                                         <div key={column + column2}>
                                             <GroupBarChart
@@ -443,7 +444,7 @@ export const DistributionReport = (
                                             );
 
                                             return (
-                                                <div>
+                                                <div key={column + column2}>
                                                     <h2 className="text-center font-bold mt-2 text-[12px]">
                                                         {column} vs {column2}
                                                     </h2>
