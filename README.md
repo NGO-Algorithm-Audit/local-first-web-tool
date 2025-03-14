@@ -8,6 +8,7 @@ Run `npm run dev` to start the development server.
 - upgrade files in public/pyodide
   - download from https://github.com/pyodide/pyodide/releases and extract the files
   - download pyodide and pyodide-core 
-  - place only the needed files from pyodide in the public/pyodide folder
-  - place all files from pyodide-core in the public/pyodide folder
+  - place only the needed files from pyodide in the public/pyodide-[version] folder
+  - place all files from pyodide-core in the public/pyodide-[version] folder
+  - change the use-worker.ts file to point to the new version
   
