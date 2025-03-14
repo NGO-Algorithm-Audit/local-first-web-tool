@@ -292,14 +292,21 @@ def run():
 
     # Convert categorical variables to numerical values
     df_encoded = real_data.copy()
-    df_encoded['sex'] = df_encoded['sex'].astype('category').cat.codes
-    df_encoded['race1'] = df_encoded['race1'].astype('category').cat.codes
-    df_encoded['bar'] = df_encoded['bar'].astype('category').cat.codes
-    
     synth_df_encoded = synthetic_data.copy()
-    synth_df_encoded['sex'] = synth_df_encoded['sex'].astype('category').cat.codes
-    synth_df_encoded['race1'] = synth_df_encoded['race1'].astype('category').cat.codes
-    synth_df_encoded['bar'] = synth_df_encoded['bar'].astype('category').cat.codes
+    
+    for column in column_dtypes:
+        if column_dtypes[column] == 'categorical':
+            df_encoded[column] = df_encoded[column].astype('category').cat.codes
+            synth_df_encoded[column] = synth_df_encoded[column].astype('category').cat.codes
+
+    # df_encoded['sex'] = df_encoded['sex'].astype('category').cat.codes
+    # df_encoded['race1'] = df_encoded['race1'].astype('category').cat.codes
+    # df_encoded['bar'] = df_encoded['bar'].astype('category').cat.codes
+    
+    # synth_df_encoded = synthetic_data.copy()
+    # synth_df_encoded['sex'] = synth_df_encoded['sex'].astype('category').cat.codes
+    # synth_df_encoded['race1'] = synth_df_encoded['race1'].astype('category').cat.codes
+    # synth_df_encoded['bar'] = synth_df_encoded['bar'].astype('category').cat.codes
     
     # Output some results
     print("Original Data (first 5 rows):", real_data.head())
@@ -312,7 +319,10 @@ def run():
 
     # results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
     # print('Results:', results)
-    
+
+    report = MetricsReport(real_data, synthetic_data, metadata)
+    report_df = report.generate_report()
+    print('report_df:', report_df)
 
     # combine empty synthetic data with original data and with encoded data 
     combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
@@ -339,22 +349,15 @@ def run():
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
             {'reportType': 'univariateDistributionSyntheticData'},
-            # {            
-            #    'reportType': 'table',
-            #    'titleKey': 'syntheticData.diagnosticsTitle',
-            #    'showIndex' : False,                
-            #    'data': json.dumps([
-            #            {
-            #                'attribute': key,
-            #                'ks_stat': values['ks_stat'],
-            #                'p_value': values['p_value']
-            #            }
-            #            for key, values in results['distribution_results'].items()
-            #        ]),
+            {            
+                'reportType': 'table',
+                'titleKey': 'syntheticData.diagnosticsTitle',
+                'showIndex' : False,    
+                'data': report_df.to_json(orient="records"),                            
             #    'postContent': json.dumps([{
             #        'contentType' : 'correlationSyntheticData'
             #    }])
-            #},
+            },
             {'reportType': 'bivariateDistributionSyntheticData'}
         ]
     }))
