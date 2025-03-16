@@ -266,10 +266,6 @@ def run():
     }))
 
     cloned_real_data = real_data.copy()
-    # label_encoders = {}
-    # for column in real_data.select_dtypes(include=['object']).columns:
-    #    label_encoders[column] = LabelEncoder()
-    #    real_data[column] = label_encoders[column].fit_transform(real_data[column])
 
     # if (sdgMethod == 'cart'):
         # spop = Synthpop(method='cart')
@@ -286,9 +282,6 @@ def run():
         synthetic_data = synthesizer.sample(samples)
 
     synth_df_decoded = synthetic_data.copy()
-    # for column in synth_df_decoded.columns:
-    #    if column in label_encoders:
-    #        synth_df_decoded[column] = label_encoders[column].inverse_transform(synth_df_decoded[column])
 
     # Convert categorical variables to numerical values
     df_encoded = real_data.copy()
@@ -298,15 +291,6 @@ def run():
         if column_dtypes[column] == 'categorical':
             df_encoded[column] = df_encoded[column].astype('category').cat.codes
             synth_df_encoded[column] = synth_df_encoded[column].astype('category').cat.codes
-
-    # df_encoded['sex'] = df_encoded['sex'].astype('category').cat.codes
-    # df_encoded['race1'] = df_encoded['race1'].astype('category').cat.codes
-    # df_encoded['bar'] = df_encoded['bar'].astype('category').cat.codes
-    
-    # synth_df_encoded = synthetic_data.copy()
-    # synth_df_encoded['sex'] = synth_df_encoded['sex'].astype('category').cat.codes
-    # synth_df_encoded['race1'] = synth_df_encoded['race1'].astype('category').cat.codes
-    # synth_df_encoded['bar'] = synth_df_encoded['bar'].astype('category').cat.codes
     
     # Output some results
     print("Original Data (first 5 rows):", real_data.head())
@@ -317,15 +301,44 @@ def run():
     # Store synthetic data for export
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
 
-    # results = run_diagnostic(real_data, synthetic_data, target_column='gpa')  
-    # print('Results:', results)
-
     report = MetricsReport(real_data, synthetic_data, metadata)
     report_df = report.generate_report()
     print('report_df:', report_df)
 
     # combine empty synthetic data with original data and with encoded data 
     combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
+
+    # for column in column_dtypes:
+    #    if column_dtypes[column] == 'categorical':
+    #        reg_efficacy = EfficacyMetrics(task='classification', target_column=column)
+    #        reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
+    #        print("=== Regression Efficacy Metrics ===", column)
+    #        print(reg_metrics)
+    #    else:
+    #        reg_efficacy = EfficacyMetrics(task='regression', target_column=column)
+    #        reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
+    #        print("=== Regression Efficacy Metrics ===", column)
+    #        print(reg_metrics)
+
+    reg_efficacy = EfficacyMetrics(task='regression', target_column="ugpa")
+    reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
+    print("=== Regression Efficacy Metrics ===  UGPA")
+    print(reg_metrics)
+
+    clf_efficacy = EfficacyMetrics(task='classification', target_column="bar")
+    clf_metrics = clf_efficacy.evaluate(real_data, synthetic_data)
+    print("=== Classification Efficacy Metrics === BAR")
+    print(clf_metrics)
+
+
+    dp = DisclosureProtection(real_data, synthetic_data)
+    dp_score = dp.score()
+    dp_report = dp.report()
+
+    print("=== Disclosure Protection ===")
+    print(f"Score: {dp_score:.3f}")
+    print("Detailed Report:", dp_report)
+
 
     setResult(json.dumps({
         'type': 'distribution',
@@ -354,9 +367,9 @@ def run():
                 'titleKey': 'syntheticData.diagnosticsTitle',
                 'showIndex' : False,    
                 'data': report_df.to_json(orient="records"),                            
-            #    'postContent': json.dumps([{
-            #        'contentType' : 'correlationSyntheticData'
-            #    }])
+                'postContent': json.dumps([{
+                    'contentType' : 'correlationSyntheticData'
+                }])
             },
             {'reportType': 'bivariateDistributionSyntheticData'}
         ]

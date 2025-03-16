@@ -189,7 +189,10 @@ export const DistributionReport = (
                                                             'correlationSyntheticData'
                                                         ) {
                                                             return (
-                                                                <div className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]">
+                                                                <div
+                                                                    key={`index`}
+                                                                    className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
+                                                                >
                                                                     <div className="col-[1] lg:col-[1]">
                                                                         <CorrelationMatrix
                                                                             key={
