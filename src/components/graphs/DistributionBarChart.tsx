@@ -34,7 +34,7 @@ const DistributionBarChart = ({
         let processedRealData;
         let processedSyntheticData;
 
-        if (dataType === 'float') {
+        if (dataType === 'numerical') {
             // Process numerical data using bins
             const combinedData = [...realData, ...syntheticData] as number[];
             const extent = d3.extent(combinedData) as [number, number];
