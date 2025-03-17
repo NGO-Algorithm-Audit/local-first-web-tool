@@ -51,7 +51,6 @@ export const usePython = <T, TExport>(emptyParams: T) => {
 
     const runPython = useCallback(
         (message: { type: 'start'; params: { parameters: T } }) => {
-            console.log('Running python');
             setLoading(true);
             setLoadingMessage('running analysis');
 
