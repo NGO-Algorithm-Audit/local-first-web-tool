@@ -61,8 +61,8 @@
     "syntheticData": {
         "demo": {
             "heading": "Informatie over demodataset",
-            "description": "Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende kolommen:\n  \n&nbsp;&nbsp;\n\n",
-            "post.description": "De CART-methode zal worden gebruikt om de verschillen in distributie en correlatie tussen de echte en synthetische gegevens te evalueren.\n  \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.",
+            "description": "Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende variablen:\n  \n&nbsp;&nbsp;\n\n",
+            "post.description": "De CART-methode wordt gebruikt om synthetische gegevens te genereren.\n CART produceert doorgaan een goede kwaliteit synthetische data, maar werkt minder goed voor data met categorische data met meer dan 20 categorieën. Gebruik in dit geval Gaussian Copula. \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.",
             "data.column.Variable_name": "Variabele name",
             "data.sex": "sex",
             "data.race1": "race1",
@@ -79,7 +79,7 @@
             "data.column.Values": "Waardes",
 
             "data.column.Values.sex": "1 (man), 2 (vrouw)",
-            "data.column.Values.race": "aziatisch, zwart, hispanic, wit, anders",
+            "data.column.Values.race": "aziatisch, afrikaans, latino, westers, anders",
             "data.column.Values.ugpa": "1-4",
             "data.column.Values.bar": "geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd"
         },
@@ -93,14 +93,14 @@
                 "columnsCountError": "File mag maximaal 8 kolommen bevatten."
             },
             "fieldset": {
-                "sourceDataset": "Brondataset",
+                "sourceDataset": "Brondata",
                 "sdgMethod": {
                     "title": "Methode",
                     "cart": "CART",
                     "gc": "Gaussian Copula",
-                    "tooltip": "De CART-methode wordt gebruikt om de synthetische gegevens te genereren.\n  \n  \n  \nCART levert over het algemeen synthetische datasets van hogere kwaliteit op, maar werkt mogelijk niet goed bij datasets met categorische variabelen met meer dan 20 categorieën.\n  \n  \n  \nGebruik in die gevallen de Gaussian Copula."
+                    "tooltip": "In principe wordt de CART-methode gebruikt om synthetische data te genereren. CART levert over het algemeen synthetische data van hoge kwaliteit, maar werkt mogelijk niet goed bij datasets met categorische variabelen met meer dan 20 categorieën. Gebruik in die gevallen de Gaussian Copula."
                 },
-                "samples": "Aantal samples"
+                "samples": "Aantal synthetische datapunten"
             },
             "actions": {
                 "tryItOut": "Uitproberen",
@@ -108,11 +108,11 @@
                 "analyzing": "Analyseren...",
                 "initializing": "Initialiseren..."
             },
-            "univariateText": "{{samples}} synthetic data punten zijn gegeneert met CART. De grafieken tonen de verschillen in waarde frequentie voor elle variabele. De synthetische data is van hoge kwaliteit als alle balken van gelijke hoogte zijn."
+            "univariateText": "{{samples}} synthetic datapunten via de CART-methode gegeneerd. De grafieken tonen de frequentie waarmee een variabele een bepaalde waarde aanneemt. De synthetische data is van hoge kwaliteit als de frequenties ongeveer gelijke zijn."
         },
         "demoCard": {
             "title": "Probeer het uit!",
-            "description": "Heeft u geen dataset bij de hand? Geen zorgen, gebruik onze demodataset."
+            "description": "Geen dataset bij de hand? Gebruik onze demodata."
         },
         "columnsInDatasetInfo": "Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.",
         "univariateCharts": "Univariate distributies",
