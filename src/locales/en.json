@@ -62,8 +62,8 @@
     "syntheticData": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following columns:\n \n&nbsp;&nbsp;\n",
-            "post.description": "The CART method is used to generate the synthetic data. CART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n",
+            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:\n \n&nbsp;&nbsp;\n",
+            "post.description": "The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n",
             "data.column.Variable_name": "Variable name",
             "data.sex": "sex",
             "data.race1": "race1",
@@ -94,14 +94,14 @@
                 "columnsCountError": "File may contain a maximum of 8 columns."
             },
             "fieldset": {
-                "sourceDataset": "Source dataset",
+                "sourceDataset": "Source data",
                 "sdgMethod": {
                     "title": "Method",
                     "cart": "CART",
                     "gc": "Gaussian Copula",
-                    "tooltip": "The CART method is used to generate the synthetic data.\n  \n  \n  \nCART generally produces higher quality synthetic datasets, but might not work well on datasets with categorical variables with 20+ categories.\n  \n  \n  \nUse Gaussian Copula in those cases."
+                    "tooltip": "By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases."
                 },
-                "samples": "Number of samples"
+                "samples": "Number of synthetic datapoints"
             },
             "actions": {
                 "tryItOut": "Try it out",
@@ -112,9 +112,9 @@
         },
         "demoCard": {
             "title": "Try it out!",
-            "description": "Do you not have a dataset at hand? No worries use our demo dataset."
+            "description": "No dataset at hand? Use our demo dataset."
         },
-        "columnsInDatasetInfo": "If the detected data types are incorrect, please change this locally in the source dataset before attaching it to the app.",
+        "columnsInDatasetInfo": "If the detected data types are incorrect, please change this locally in the source dataset before attaching it to the web app.",
         "univariateCharts": "Univariate distributions",
         "bivariateDistributionRealData": "Bivariate distribution",
         "univariateDistributionSyntheticData": "Univariate distribution",
@@ -133,7 +133,7 @@
         "outputDataTitle": "4. Generated synthetic data",
         "diagnosticsTitle": "Diagnostic Results",
         "correlationDifference": "Correlation difference: {{correlationDifference}}",
-        "univariateText": "{{samples}} synthetic data points are generated using CART. The figures below display the differences in value frequency for each variable. The synthetic data is of high quality when all bars are of equal height.",
+        "univariateText": "{{samples}} synthetic data points are generated using CART. The figures below display the value frequency for each variable. The synthetic data is of high quality when the frequencies are approximately the same.",
         "bivariateText": "The figures below display the differences in value frequency for a combination of variables. For comparing two categorical variables, bar charts are plotted. For comparing a numerical and a categorical variables, a so called [violin plot](https://en.wikipedia.org/wiki/Violin_plot) is shown. For comparing two numercial variables, a [LOESS plot](https://en.wikipedia.org/wiki/Local_regression) is created. For all plots holds: the synthetic data is of high quality when the shape of the distributions in the synthetic data equal the distributions in the real data.",
         "moreInfo": "&nbsp;&nbsp;\n  \n  \n  \nDo you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)"
     },
