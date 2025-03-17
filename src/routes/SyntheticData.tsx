@@ -169,7 +169,7 @@ export default function SyntheticDataGeneration() {
 
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
-                ) : data.data.length > 0 ? null : loading ? (
+                ) : loading ? (
                     <LoadingState
                         loadingMessageKey={loadingMessage}
                         initializingKey={
