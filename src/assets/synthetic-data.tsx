@@ -72,54 +72,6 @@ class GaussianCopulaSynthesizer:
             synthetic_data[col] = np.interp(synthetic_uniform[:, i], quantiles, sorted_data)
 
         return synthetic_data
-    
-
-def evaluate_distribution(real_data, synthetic_data):
-    """
-    Compare the distribution of each column in the real and synthetic data using
-    the Kolmogorov-Smirnov (KS) test.
-    """
-    results = {}
-    for column in real_data.columns:
-        real_col = real_data[column].dropna()
-        synthetic_col = synthetic_data[column].dropna()
-
-        # Perform the KS test
-        ks_stat, p_value = ks_2samp(real_col, synthetic_col)
-
-        # Store the result
-        results[column] = {'ks_stat': ks_stat, 'p_value': p_value}
-    return results
-
-def evaluate_correlations(real_data, synthetic_data):
-    """
-    Compare the pairwise correlation matrices of the real and synthetic data.
-    """
-    real_corr = real_data.corr()
-    synthetic_corr = synthetic_data.corr()
-
-    # Compute the difference between the correlation matrices
-    corr_diff = np.abs(real_corr - synthetic_corr)
-    return corr_diff.mean().mean()  # Average correlation difference
-
-def run_diagnostic(real_data, synthetic_data, target_column):
-    """
-    Run diagnostics on synthetic data by evaluating distribution, correlations, and
-    classification model performance.
-    """
-    # Step 1: Evaluate distributions
-    distribution_results = evaluate_distribution(real_data, synthetic_data)
-
-    # Step 2: Evaluate correlations
-    correlation_diff = evaluate_correlations(real_data, synthetic_data)
-
-    # Aggregate results
-    diagnostics = {
-        'distribution_results': distribution_results,
-        'correlation_diff': correlation_diff
-    }
-
-    return diagnostics
 
 def run():
     csv_data = StringIO(data)
@@ -219,7 +171,7 @@ def run():
     processor = DataProcessor(metadata)
     
     # Preprocess the data: transforms raw data into a numerical format
-    processed_data = processor.preprocess(real_data)    
+    processed_data = processor.preprocess(df_imputed)    
 
     cart = CARTMethod(metadata, smoothing=True, proper=True, minibucket=5, random_state=42)
     cart.fit(processed_data)
@@ -235,10 +187,6 @@ def run():
     # categorical
 
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
-
-    
-    # dtypes_dict = real_data.dtypes.to_dict()
-    # dtypes_dict = {k: 'float' if (v == 'float64' or v == 'int64') else 'category' if (v == 'O' or v =='bool') else v for k, v in dtypes_dict.items()}
     
 
     setResult(json.dumps({
@@ -249,7 +197,7 @@ def run():
     
 
     dataInfo = []
-    for column in real_data.columns:
+    for column in df_imputed.columns:
         dataInfo.append({
             'key': column, 
             'value': column_dtypes[column]    
@@ -265,7 +213,7 @@ def run():
         'key': 'syntheticData.columnsInDatasetInfo'
     }))
 
-    cloned_real_data = real_data.copy()
+    cloned_real_data = df_imputed.copy()
 
     # if (sdgMethod == 'cart'):
         # spop = Synthpop(method='cart')
@@ -276,7 +224,7 @@ def run():
     if (sdgMethod == 'gc'):
         # Initialize synthesizer and fit it to the data
         synthesizer = GaussianCopulaSynthesizer()
-        synthesizer.fit(real_data)
+        synthesizer.fit(df_imputed)
 
         # Generate synthetic data
         synthetic_data = synthesizer.sample(samples)
@@ -284,7 +232,7 @@ def run():
     synth_df_decoded = synthetic_data.copy()
 
     # Convert categorical variables to numerical values
-    df_encoded = real_data.copy()
+    df_encoded = df_imputed.copy()
     synth_df_encoded = synthetic_data.copy()
     
     for column in column_dtypes:
@@ -293,7 +241,7 @@ def run():
             synth_df_encoded[column] = synth_df_encoded[column].astype('category').cat.codes
     
     # Output some results
-    print("Original Data (first 5 rows):", real_data.head())
+    print("Original Data (first 5 rows):", df_imputed.head())
     print("Synthetic Data (first 5 rows):", synthetic_data.head())
 
     print("Synthetic Data decoded (first 5 rows):", synth_df_decoded.head())
@@ -301,37 +249,37 @@ def run():
     # Store synthetic data for export
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
 
-    report = MetricsReport(real_data, synthetic_data, metadata)
+    report = MetricsReport(df_imputed, synthetic_data, metadata)
     report_df = report.generate_report()
     print('report_df:', report_df)
 
     # combine empty synthetic data with original data and with encoded data 
-    combined_data = pd.concat((real_data.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
+    combined_data = pd.concat((df_imputed.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
 
-    # for column in column_dtypes:
-    #    if column_dtypes[column] == 'categorical':
-    #        reg_efficacy = EfficacyMetrics(task='classification', target_column=column)
-    #        reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
-    #        print("=== Regression Efficacy Metrics ===", column)
-    #        print(reg_metrics)
-    #    else:
-    #        reg_efficacy = EfficacyMetrics(task='regression', target_column=column)
-    #        reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
-    #        print("=== Regression Efficacy Metrics ===", column)
-    #        print(reg_metrics)
+    for column in column_dtypes:
+        if column_dtypes[column] == 'categorical':
+            reg_efficacy = EfficacyMetrics(task='classification', target_column=column)
+            reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
+            print("=== Regression Efficacy Metrics ===", column)
+            print(reg_metrics)
+        else:
+            reg_efficacy = EfficacyMetrics(task='regression', target_column=column)
+            reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
+            print("=== Regression Efficacy Metrics ===", column)
+            print(reg_metrics)
 
-    reg_efficacy = EfficacyMetrics(task='regression', target_column="ugpa")
-    reg_metrics = reg_efficacy.evaluate(real_data, synthetic_data)
-    print("=== Regression Efficacy Metrics ===  UGPA")
-    print(reg_metrics)
+    # reg_efficacy = EfficacyMetrics(task='regression', target_column="ugpa")
+    # reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
+    # print("=== Regression Efficacy Metrics ===  UGPA")
+    # print(reg_metrics)
 
     clf_efficacy = EfficacyMetrics(task='classification', target_column="bar")
-    clf_metrics = clf_efficacy.evaluate(real_data, synthetic_data)
+    clf_metrics = clf_efficacy.evaluate(df_imputed, synthetic_data)
     print("=== Classification Efficacy Metrics === BAR")
     print(clf_metrics)
 
 
-    dp = DisclosureProtection(real_data, synthetic_data)
+    dp = DisclosureProtection(df_imputed, synthetic_data)
     dp_score = dp.score()
     dp_report = dp.report()
 
@@ -367,9 +315,9 @@ def run():
                 'titleKey': 'syntheticData.diagnosticsTitle',
                 'showIndex' : False,    
                 'data': report_df.to_json(orient="records"),                            
-                'postContent': json.dumps([{
+                'postContent': [{
                     'contentType' : 'correlationSyntheticData'
-                }])
+                }]
             },
             {'reportType': 'bivariateDistributionSyntheticData'}
         ]
@@ -400,7 +348,7 @@ if data != 'INIT':
 
 /*
 
-    # df_numeric = real_data.apply(pd.to_numeric, errors='coerce')
+    # df_numeric = df_imputed.apply(pd.to_numeric, errors='coerce')
     # synth_df_numeric = synthetic_data.apply(pd.to_numeric, errors='coerce')
 
     # 'syntheticCorrelations': np.abs(df_numeric.corr() - synth_df_numeric.corr()).to_json(orient="records"),

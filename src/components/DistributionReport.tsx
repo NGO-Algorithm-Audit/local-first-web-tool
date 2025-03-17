@@ -126,9 +126,8 @@ export const DistributionReport = (
                             ? JSON.parse(report.preContent)
                             : [];
                         const postContent: additionalContent =
-                            report.postContent
-                                ? JSON.parse(report.postContent)
-                                : [];
+                            (report.postContent as unknown as additionalContent) ??
+                            [];
 
                         return (
                             <div key={indexReport} className="mb-4">
