@@ -40,7 +40,6 @@ export const usePython = <T, TExport>(emptyParams: T) => {
                 setLoading(false);
             } else if (event.data.type === 'data-set') {
                 setError(undefined);
-                setLoading(false);
             } else {
                 setError('Unknown message type');
                 setLoading(false);
@@ -52,10 +51,13 @@ export const usePython = <T, TExport>(emptyParams: T) => {
 
     const runPython = useCallback(
         (message: { type: 'start'; params: { parameters: T } }) => {
+            setLoading(true);
+            setLoadingMessage('running analysis');
+
             setClusterInfo(undefined);
             setResult([]);
             setError(undefined);
-            setLoading(true);
+
             workerRef.current?.postMessage(message), [];
         },
         []

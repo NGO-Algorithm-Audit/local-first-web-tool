@@ -119,7 +119,6 @@ export default function SyntheticDataSettings({
             samples: outputSamples[0],
         });
     };
-
     return (
         <Form {...form}>
             <div className="h-auto md:h-full flex flex-col justify-between">
@@ -237,19 +236,6 @@ export default function SyntheticDataSettings({
                     </div>
 
                     <div className="flex flex-row ml-auto gap-2 hideonprint">
-                        <Button
-                            onClick={event => {
-                                event.preventDefault();
-                                onDemoRun();
-                                return false;
-                            }}
-                            size="sm"
-                            variant={'outline'}
-                            className="gap-1.5 xl:hidden"
-                            disabled={isLoading}
-                        >
-                            {t('syntheticData.form.actions.tryItOut')}
-                        </Button>
                         <Button
                             type="submit"
                             size="sm"
