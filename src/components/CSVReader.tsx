@@ -52,6 +52,9 @@ export default function CSVReader({ onChange }: csvReader) {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         onDrop,
         maxFiles: 1,
+        accept: {
+            'text/csv': ['.csv'],
+        },
     });
 
     if (acceptedFiles.length > 0) {
@@ -91,7 +94,7 @@ export default function CSVReader({ onChange }: csvReader) {
             {...getRootProps()}
             className="border-aaDark border-dashed border-2 cursor-pointer rounded-xl text-center p-10 lg:min-w-[400px]"
         >
-            <input {...getInputProps()} multiple={false} />
+            <input {...getInputProps()} multiple={false} accept=".csv" />
 
             <FormLabel>{t('dropzoneLabel')}</FormLabel>
         </FormItem>
