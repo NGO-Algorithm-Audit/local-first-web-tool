@@ -161,6 +161,8 @@ def run():
     missingness_dict = md_handler.detect_missingness(real_data)
     print("Detected Missingness Type:", missingness_dict)
 
+    missingness_dict_df = pd.DataFrame(missingness_dict, index=[0])
+
     df_imputed = md_handler.apply_imputation(real_data, missingness_dict)
     
 
@@ -250,7 +252,7 @@ def run():
     setOutputData("syntheticData", synthetic_data.to_json(orient='records'))
 
     report = MetricsReport(df_imputed, synthetic_data, metadata)
-    report_df = report.generate_report()
+    report_df = report.generate_report()    
     print('report_df:', report_df)
 
     # combine empty synthetic data with original data and with encoded data 
@@ -268,20 +270,16 @@ def run():
             print("=== Regression Efficacy Metrics ===", column)
             print(reg_metrics)
 
-    # reg_efficacy = EfficacyMetrics(task='regression', target_column="ugpa")
-    # reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
-    # print("=== Regression Efficacy Metrics ===  UGPA")
-    # print(reg_metrics)
-
     clf_efficacy = EfficacyMetrics(task='classification', target_column="bar")
     clf_metrics = clf_efficacy.evaluate(df_imputed, synthetic_data)
     print("=== Classification Efficacy Metrics === BAR")
     print(clf_metrics)
 
-
     dp = DisclosureProtection(df_imputed, synthetic_data)
     dp_score = dp.score()
     dp_report = dp.report()
+
+    dp_report_df = pd.DataFrame(dp_report, index=[0])
 
     print("=== Disclosure Protection ===")
     print(f"Score: {dp_score:.3f}")
@@ -296,12 +294,26 @@ def run():
         'combined_data' : combined_data.to_json(orient="records"),
         'realCorrelations': df_encoded.corr().to_json(orient="records"),
         'synthDataCorrelations': synth_df_encoded.corr().to_json(orient="records"),
-        'reports' : [            
+        'reports' : [ 
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.handlingMissingDataTitle' 
+            },
+            {
+                'reportType': 'text',
+                'textKey': 'syntheticData.handlingMissingDataDescription'
+            },
+            {            
+                'reportType': 'table',
+                'titleKey': 'syntheticData.handlingMissingDataTableTitle',
+                'showIndex' : False,    
+                'data': missingness_dict_df.to_json(orient="records"),                                            
+            },
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.cartModelTitle' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelTitle'
-            },
-             {
+            },           
+            {
                 'reportType': 'text',
                 'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelDescription'
             },
@@ -310,6 +322,10 @@ def run():
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
             {'reportType': 'univariateDistributionSyntheticData'},
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.diagnosticsReportTitle'
+            },
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.diagnosticsTitle',
@@ -319,7 +335,18 @@ def run():
                     'contentType' : 'correlationSyntheticData'
                 }]
             },
-            {'reportType': 'bivariateDistributionSyntheticData'}
+            {
+                'reportType': 'table',
+                'titleKey': 'syntheticData.disclosureProtectionTitle',
+                'showIndex' : False,
+                'data': dp_report_df.to_json(orient="records"),                
+            },
+            {
+                'reportType': 'heading',
+                'headingKey': 'syntheticData.bivariateDistributionSyntheticDataTitle'
+            },
+            {'reportType': 'bivariateDistributionSyntheticData'},
+            
         ]
     }))
 
@@ -332,6 +359,12 @@ def run():
         'type': 'table', 
         'showIndex': True,
         'data': synthetic_data.head().to_json(orient="records")
+    }))
+
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'syntheticData.moreInfoTitle'
     }))
 
     setResult(json.dumps({
