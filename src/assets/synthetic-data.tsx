@@ -161,7 +161,8 @@ def run():
     missingness_dict = md_handler.detect_missingness(real_data)
     print("Detected Missingness Type:", missingness_dict)
 
-    missingness_dict_df = pd.DataFrame(missingness_dict, index=[0])
+    missingness_dict_df = pd.DataFrame(list(missingness_dict.items()), columns=['key', 'value'])
+    missingness_dict_df = missingness_dict_df.rename(columns={'key': 'Column', 'value': 'Missing data type'})
 
     df_imputed = md_handler.apply_imputation(real_data, missingness_dict)
     
@@ -254,6 +255,8 @@ def run():
     report = MetricsReport(df_imputed, synthetic_data, metadata)
     report_df = report.generate_report()    
     print('report_df:', report_df)
+
+    
 
     # combine empty synthetic data with original data and with encoded data 
     combined_data = pd.concat((df_imputed.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
