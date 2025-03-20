@@ -261,17 +261,30 @@ def run():
     # combine empty synthetic data with original data and with encoded data 
     combined_data = pd.concat((df_imputed.assign(realOrSynthetic='real'), synthetic_data.assign(realOrSynthetic='synthetic')), keys=['real','synthetic'], names=['Data'])
 
+    metrics_list = []
+
+    # Loop through column_dtypes
     for column in column_dtypes:
         if column_dtypes[column] == 'categorical':
             reg_efficacy = EfficacyMetrics(task='classification', target_column=column)
-            reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
-            print("=== Regression Efficacy Metrics ===", column)
-            print(reg_metrics)
         else:
             reg_efficacy = EfficacyMetrics(task='regression', target_column=column)
-            reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
-            print("=== Regression Efficacy Metrics ===", column)
-            print(reg_metrics)
+        
+
+        reg_metrics = reg_efficacy.evaluate(df_imputed, synthetic_data)
+        reg_metrics['dataType'] = column_dtypes[column]
+    
+        # Append the column name and its metrics as a dictionary
+        reg_metrics['column'] = column  # Add column name to the metrics dictionary
+        
+        metrics_list.append(reg_metrics)
+
+    # Convert list of dictionaries to DataFrame
+    metrics_df = pd.DataFrame(metrics_list)
+    columns_order = ['dataType'] + [col for col in metrics_df.columns if col != 'dataType']
+    metrics_df = metrics_df[columns_order]
+    columns_order = ['column'] + [col for col in metrics_df.columns if col != 'column']
+    metrics_df = metrics_df[columns_order]
 
     clf_efficacy = EfficacyMetrics(task='classification', target_column="bar")
     clf_metrics = clf_efficacy.evaluate(df_imputed, synthetic_data)
@@ -337,6 +350,12 @@ def run():
                 'postContent': [{
                     'contentType' : 'correlationSyntheticData'
                 }]
+            },
+            {
+                'reportType': 'table',
+                'titleKey': 'syntheticData.efficacyMetricsTitle',
+                'showIndex' : False,
+                'data': metrics_df.to_json(orient="records"),                
             },
             {
                 'reportType': 'table',
