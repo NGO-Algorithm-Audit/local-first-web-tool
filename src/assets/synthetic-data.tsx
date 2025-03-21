@@ -281,15 +281,10 @@ def run():
 
     # Convert list of dictionaries to DataFrame
     metrics_df = pd.DataFrame(metrics_list)
-    columns_order = ['dataType'] + [col for col in metrics_df.columns if col != 'dataType']
-    metrics_df = metrics_df[columns_order]
-    columns_order = ['column'] + [col for col in metrics_df.columns if col != 'column']
-    metrics_df = metrics_df[columns_order]
-
-    clf_efficacy = EfficacyMetrics(task='classification', target_column="bar")
-    clf_metrics = clf_efficacy.evaluate(df_imputed, synthetic_data)
-    print("=== Classification Efficacy Metrics === BAR")
-    print(clf_metrics)
+    
+    front_columns = ['column', 'dataType']
+    other_columns = [col for col in metrics_df.columns if col not in front_columns]
+    metrics_df = metrics_df[front_columns + other_columns]
 
     dp = DisclosureProtection(df_imputed, synthetic_data)
     dp_score = dp.score()
