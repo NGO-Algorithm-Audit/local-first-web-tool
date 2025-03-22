@@ -1,6 +1,7 @@
 import { visit } from 'unist-util-visit';
 import type { Node } from 'unist';
 import type { Element, ElementData } from 'hast';
+import { t } from 'i18next';
 
 interface CustomElementData extends ElementData {
     properties?: {
@@ -22,7 +23,7 @@ export function rehypeInfoTooltip() {
                     type: 'element',
                     tagName: 'TooltipWrapper',
                     properties: {
-                        tooltipContent: node.properties.tooltip,
+                        tooltipContent: t(node.properties.tooltip as string),
                     },
                     children: node.children,
                 };

@@ -21,9 +21,14 @@ export function TooltipWrapper({
             {children}
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger
+                        onClick={event => {
+                            event.preventDefault();
+                        }}
+                    >
                         <InfoIcon className="size-3.5 ml-1" />
-                    </TooltipTrigger>
+                    </TooltipTrigger>{' '}
+                    &nbsp;
                     <TooltipContent className="max-w-[400px] p-2">
                         <MarkdownWithTooltips className="text-gray-800 markdown">
                             {tooltipContent}
