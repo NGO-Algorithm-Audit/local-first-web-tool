@@ -5,7 +5,7 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import Markdown from 'react-markdown';
+import { MarkdownWithTooltips } from '../MarkdownWithTooltips';
 
 const AccordionItem = React.forwardRef<
     React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -69,9 +69,9 @@ export const Accordion = (props: AccordionProps) => (
                     <AccordionTrigger>{props.title}</AccordionTrigger>
                     <AccordionContent>
                         {typeof props.content === 'string' ? (
-                            <Markdown className="mt-2 text-gray-800 markdown px-3 whitespace-pre-wrap">
+                            <MarkdownWithTooltips className="mt-2 text-gray-800 markdown px-3 whitespace-pre-wrap">
                                 {props.content}
-                            </Markdown>
+                            </MarkdownWithTooltips>
                         ) : (
                             props.content
                         )}
@@ -81,9 +81,9 @@ export const Accordion = (props: AccordionProps) => (
         </div>
         <div className="hidden showonprint">
             {typeof props.content === 'string' ? (
-                <Markdown className="text-gray-800 markdown">
+                <MarkdownWithTooltips className="text-gray-800 markdown">
                     {props.content}
-                </Markdown>
+                </MarkdownWithTooltips>
             ) : (
                 props.content
             )}

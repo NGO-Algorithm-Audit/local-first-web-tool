@@ -2,13 +2,19 @@ import SimpleTable from './SimpleTable';
 import SingleBarChart from './graphs/SingleBarChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import ErrorBoundary from './ErrorBoundary';
-import Markdown from 'react-markdown';
 import { getLabel } from './graphs/get-label';
 import { CSVData } from './bias-detection-interfaces/csv-data';
 import { Fragment } from 'react/jsx-runtime';
 import { Accordion } from './ui/accordion';
 import { useTranslation } from 'react-i18next';
 import { DistributionReport } from './DistributionReport';
+import { MarkdownWithTooltips } from './MarkdownWithTooltips';
+import { TooltipProvider } from '@radix-ui/react-tooltip';
+
+interface Comparison {
+    key: string;
+    params: Record<string, string | number | boolean>;
+}
 
 const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
     const resultArray = [];
@@ -90,11 +96,8 @@ export default function ComponentMapper({
                         if (resultItem.comparisons) {
                             // Handle translation of comparisons
                             const content = resultItem.comparisons
-                                .map(
-                                    (comparison: {
-                                        key: string;
-                                        params: Record<string, any>;
-                                    }) => t(comparison.key, comparison.params)
+                                .map((comparison: Comparison) =>
+                                    t(comparison.key, comparison.params)
                                 )
                                 .join('\n');
 
@@ -125,14 +128,16 @@ export default function ComponentMapper({
 
                     case 'text':
                         return (
-                            <Markdown
-                                key={index}
-                                className="-mt-2 text-gray-800 markdown"
-                            >
-                                {resultItem.key
-                                    ? t(resultItem.key, resultItem.params)
-                                    : resultItem.data}
-                            </Markdown>
+                            <TooltipProvider>
+                                <MarkdownWithTooltips
+                                    key={index}
+                                    className="-mt-2 text-gray-800 markdown"
+                                >
+                                    {resultItem.key
+                                        ? t(resultItem.key, resultItem.params)
+                                        : resultItem.data}
+                                </MarkdownWithTooltips>
+                            </TooltipProvider>
                         );
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
