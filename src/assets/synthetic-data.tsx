@@ -313,12 +313,16 @@ def run():
             {
                 'reportType': 'text',
                 'textKey': 'syntheticData.handlingMissingDataDescription'
-            },
+            },            
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
                 'showIndex' : False,    
                 'data': missingness_dict_df.to_json(orient="records"),                                            
+            },
+            {
+                'reportType': 'text',
+                'textKey': 'syntheticData.missingData'
             },
             {
                 'reportType': 'heading',
