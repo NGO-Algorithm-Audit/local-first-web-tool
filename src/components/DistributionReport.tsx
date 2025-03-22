@@ -1,5 +1,4 @@
 import { t } from 'i18next';
-import Markdown from 'react-markdown';
 import { Fragment } from 'react/jsx-runtime';
 import ErrorBoundary from './ErrorBoundary';
 import DistributionBarChart from './graphs/DistributionBarChart';
@@ -10,6 +9,7 @@ import { createHeatmapdata } from './createHeatmapdata';
 import ViolinChart from './graphs/ViolinChart';
 import GroupBarChart from './graphs/GroupBarChart';
 import SimpleTable from './SimpleTable';
+import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 
 interface CorrelationMatrixProps {
     heatmapData: {
@@ -34,8 +34,12 @@ function CorrelationMatrix(props: CorrelationMatrixProps) {
     );
 }
 
+interface DataRow {
+    [key: string]: string | number | boolean;
+}
+
 function countCategory2ForCategory1(
-    data: Record<string, any>[],
+    data: DataRow[],
     category1: string,
     category2: string,
     column1: string,
@@ -106,12 +110,12 @@ export const DistributionReport = (
                     }
                     if (report.reportType === 'text' && report.textKey) {
                         return (
-                            <Markdown
+                            <MarkdownWithTooltips
                                 key={indexReport}
                                 className="-mt-2 text-gray-800 markdown"
                             >
                                 {t(report.textKey, report.params)}
-                            </Markdown>
+                            </MarkdownWithTooltips>
                         );
                     }
 
@@ -143,7 +147,7 @@ export const DistributionReport = (
                                                         'text'
                                                     ) {
                                                         return (
-                                                            <Markdown
+                                                            <MarkdownWithTooltips
                                                                 key={index}
                                                                 className="-mt-2 text-gray-800 markdown"
                                                             >
@@ -152,7 +156,7 @@ export const DistributionReport = (
                                                                         '',
                                                                     content.params
                                                                 )}
-                                                            </Markdown>
+                                                            </MarkdownWithTooltips>
                                                         );
                                                     }
                                                 }
@@ -172,7 +176,7 @@ export const DistributionReport = (
                                                             'text'
                                                         ) {
                                                             return (
-                                                                <Markdown
+                                                                <MarkdownWithTooltips
                                                                     key={index}
                                                                     className="-mt-2 text-gray-800 markdown"
                                                                 >
@@ -181,7 +185,7 @@ export const DistributionReport = (
                                                                             '',
                                                                         content.params
                                                                     )}
-                                                                </Markdown>
+                                                                </MarkdownWithTooltips>
                                                             );
                                                         } else if (
                                                             content.contentType ===
@@ -282,11 +286,18 @@ export const DistributionReport = (
                                 ) {
                                     const data = realData.reduce(
                                         (
-                                            acc: Record<string, any>,
-                                            row: Record<string, any>
+                                            acc: Record<
+                                                string,
+                                                Record<string, number>
+                                            >,
+                                            row: DataRow
                                         ) => {
-                                            const category = row[column];
-                                            const category2 = row[column2];
+                                            const category = row[
+                                                column
+                                            ] as string;
+                                            const category2 = row[
+                                                column2
+                                            ] as string;
                                             if (!acc[category]) {
                                                 acc[category] = {};
                                             }
@@ -433,14 +444,16 @@ export const DistributionReport = (
                                             const categories = Array.from(
                                                 new Set([
                                                     ...realData.map(
-                                                        (d: any) => d[column]
+                                                        (d: DataRow) =>
+                                                            d[column] as string
                                                     ),
                                                 ])
                                             );
                                             const categories2 = Array.from(
                                                 new Set([
                                                     ...realData.map(
-                                                        (d: any) => d[column2]
+                                                        (d: DataRow) =>
+                                                            d[column2] as string
                                                     ),
                                                 ])
                                             );
@@ -522,7 +535,7 @@ export const DistributionReport = (
                                     )}
                                     content={
                                         <div>
-                                            <Markdown className="py-4 markdown">
+                                            <MarkdownWithTooltips className="py-4 markdown">
                                                 {t(
                                                     'syntheticData.bivariateText',
                                                     {
@@ -530,7 +543,7 @@ export const DistributionReport = (
                                                             syntheticData.length,
                                                     }
                                                 )}
-                                            </Markdown>
+                                            </MarkdownWithTooltips>
                                             {charts}
                                         </div>
                                     }
@@ -616,7 +629,7 @@ export const DistributionReport = (
                                             )}
                                             content={
                                                 <>
-                                                    <Markdown className="py-4 markdown">
+                                                    <MarkdownWithTooltips className="py-4 markdown">
                                                         {t(
                                                             'syntheticData.univariateText',
                                                             {
@@ -624,7 +637,7 @@ export const DistributionReport = (
                                                                     syntheticData.length,
                                                             }
                                                         )}
-                                                    </Markdown>
+                                                    </MarkdownWithTooltips>
                                                     {Object.keys(
                                                         realData[0]
                                                     ).map(

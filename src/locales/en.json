@@ -62,7 +62,7 @@
     "syntheticData": {
         "demo": {
             "heading": "Information about demo dataset",
-            "description": "A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:\n \n&nbsp;&nbsp;\n",
+            "description": "A subset {tooltip:This is a tooltip content}tooltip{/tooltip} of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:\n \n&nbsp;&nbsp;\n",
             "post.description": "The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n",
             "data.column.Variable_name": "Variable name",
             "data.sex": "sex",
