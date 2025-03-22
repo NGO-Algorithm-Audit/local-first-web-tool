@@ -23,10 +23,8 @@ export function rehypeInfoTooltip() {
                     tagName: 'TooltipWrapper',
                     properties: {
                         tooltipContent: node.properties.tooltip,
-                        // @ts-expect-error - We know this will be handled by react-markdown
-                        children: node.children,
                     },
-                    children: [],
+                    children: node.children,
                 };
 
                 // Replace the current node with the tooltip node

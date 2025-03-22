@@ -33,10 +33,8 @@ export function remarkInfoTooltip() {
                             /\{tooltip:([^}]+)\}(.*?)\{\/tooltip\}/
                         );
                         if (tooltipMatch) {
-                            console.log('Tooltip match:', tooltipMatch);
                             const [, tooltipContent, text] = tooltipMatch;
                             const index = node.value.indexOf(match);
-                            console.log('Match index:', index);
                             if (index !== -1) {
                                 // Create a new element node
                                 const elementNode: Element = {
@@ -55,29 +53,16 @@ export function remarkInfoTooltip() {
                                         },
                                     ],
                                 };
-                                console.log(
-                                    'Created element node:',
-                                    JSON.stringify(elementNode, null, 2)
-                                );
 
                                 // Replace the text node with the element node
                                 if (ancestors.length > 0) {
                                     const parent =
                                         ancestors[ancestors.length - 1];
-                                    console.log('Parent node:', parent);
                                     const nodeIndex =
                                         parent.children.indexOf(node);
-                                    console.log(
-                                        'Node index in parent:',
-                                        nodeIndex
-                                    );
                                     if (nodeIndex !== -1) {
                                         parent.children[nodeIndex] =
                                             elementNode;
-                                        console.log(
-                                            'Updated parent children:',
-                                            parent.children
-                                        );
                                     }
                                 }
                             }
