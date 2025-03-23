@@ -31,15 +31,18 @@ export function MarkdownWithTooltips({
             components={{
                 // @ts-expect-error - TooltipWrapper is a custom component
                 TooltipWrapper,
-                span: ({ node, children, ...props }) => {
+                div: ({ node, children, ...props }) => {
                     const element = node as CustomElement;
                     const tooltipContent = element.data?.hProperties?.tooltip;
                     if (tooltipContent) {
                         return (
-                            <TooltipWrapper
-                                tooltipContent={tooltipContent}
-                                children={children}
-                            />
+                            <>
+                                <span {...props}>{children}</span>
+                                <TooltipWrapper
+                                    tooltipContent={tooltipContent}
+                                    children={children}
+                                />
+                            </>
                         );
                     }
                     return <span {...props}>{children}</span>;

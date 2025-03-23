@@ -6,6 +6,8 @@ import { t } from 'i18next';
 interface CustomElementData extends ElementData {
     properties?: {
         tooltip?: string;
+        textBefore?: string;
+        textAfter?: string;
     };
 }
 
@@ -23,6 +25,16 @@ export function rehypeInfoTooltip() {
                     tagName: 'TooltipWrapper',
                     properties: {
                         tooltipContent: t(node.properties.tooltip as string),
+                        textBefore: node.properties.textBefore,
+                        textAfter: node.properties.textAfter,
+                        children: node.children
+                            .map(child => {
+                                if (child.type === 'text') {
+                                    return child.value;
+                                }
+                                return child;
+                            })
+                            .join(''),
                     },
                     children: node.children,
                 };

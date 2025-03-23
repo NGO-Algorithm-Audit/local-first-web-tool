@@ -138,7 +138,7 @@ export const DistributionReport = (
                                 <Accordion
                                     title={t(report.titleKey)}
                                     content={
-                                        <div>
+                                        <div className="pt-[20px];">
                                             <p>&nbsp;</p>
                                             {preContent.map(
                                                 (content, index) => {
@@ -382,7 +382,11 @@ export const DistributionReport = (
                                     title={t(
                                         'syntheticData.bivariateDistributionRealData'
                                     )}
-                                    content={<div>{charts}</div>}
+                                    content={
+                                        <div className="pt-[20px]">
+                                            {charts}
+                                        </div>
+                                    }
                                 />
                             </div>
                         );
@@ -534,7 +538,7 @@ export const DistributionReport = (
                                         'syntheticData.bivariateDistributionSyntheticData'
                                     )}
                                     content={
-                                        <div>
+                                        <div className="pt-[20px]">
                                             <MarkdownWithTooltips className="py-4 markdown">
                                                 {t(
                                                     'syntheticData.bivariateText',

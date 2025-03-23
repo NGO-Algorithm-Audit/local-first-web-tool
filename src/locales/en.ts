@@ -160,22 +160,22 @@ export const en = {
         moreInfo:
             'Do you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
         missingData: `For Missing At Random (MAR) and Missing Not At Random (MNAR) data, 
-we recommend to impute the missing data. For Missing Completely At Random (MCAR), we recommend to remove the missing data. See the info box for more information. {tooltip:syntheticData.missingDataTooltip}More info about MCAR, MAR, and MNAR{/tooltip}`,
+we recommend to impute the missing data. For Missing Completely At Random (MCAR), we recommend to remove the missing data. {tooltip:syntheticData.missingDataTooltip}See the info box for more information{/tooltip}.`,
         missingDataTooltip: `MCAR, MAR, and MNAR are terms used to describe different mechanisms of missing data:
 
-**1. MCAR (Missing Completely At Random)**:
+1. **MCAR (Missing Completely At Random)**:
 - The probability of data being missing is completely independent of both observed and unobserved data. 
 - There is no systematic pattern to the missingness.
 - Example: A survey respondent accidentally skips a question due to a printing error.
 - Recommendation: remove missing data.
 
-**2. MAR (Missing At Random)**:
+2. **MAR (Missing At Random)**:
 - The probability of data being missing is related to the observed data but not the missing data itself.
 - The missingness can be predicted by other variables in the dataset.
 - Example: Students' test scores are missing, but the missingness is related to their attendance records.
 - Recommendation: impute missing data.
 
-**3. MNAR (Missing Not At Random)**:
+3. **MNAR (Missing Not At Random)**:
 - The probability of data being missing is related to the missing data itself. 
 - There is a systematic pattern to the missingness that is related to the unobserved data.
 - Example: Patients with more severe symptoms are less likely to report their symptoms, leading to missing data that is related to the severity of the symptoms.
