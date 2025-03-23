@@ -10,8 +10,16 @@
     }
 
     ul {
-        @apply list-disc list-inside;
+        @apply pl-[20px] list-disc;
     }
+
+    p {
+        @apply mb-3;
+    }
+}
+
+.tooltip-content {
+    @apply p-4;
 }
 
 .showonprint .chart-container {
