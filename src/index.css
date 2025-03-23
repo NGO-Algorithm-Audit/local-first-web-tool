@@ -4,17 +4,33 @@
 
 .content-list,
 .markdown {
+    font-size: 16px;
+    line-height: 1.5;
+
     p a,
     li a {
         @apply text-blue-500 underline;
     }
 
     ul {
-        @apply pl-[20px] list-disc;
+        @apply pl-[25px] list-disc;
+    }
+
+    ol {
+        @apply pl-[25px] list-decimal;
+    }
+
+    ul,
+    ol {
+        @apply mb-3;
     }
 
     p {
         @apply mb-3;
+    }
+
+    p:has(> div) {
+        display: contents;
     }
 }
 

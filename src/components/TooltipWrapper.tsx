@@ -9,16 +9,22 @@ import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 
 interface TooltipWrapperProps {
     tooltipContent: string;
+    textBefore?: string;
+    textAfter?: string;
     children: React.ReactNode;
 }
 
 export function TooltipWrapper({
     tooltipContent,
+    textBefore,
+    textAfter,
     children,
 }: TooltipWrapperProps) {
     return (
-        <span className="inline-flex items-center">
+        <div>
+            {textBefore}
             {children}
+
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger
@@ -27,8 +33,7 @@ export function TooltipWrapper({
                         }}
                     >
                         <InfoIcon className="size-3.5 ml-1" />
-                    </TooltipTrigger>{' '}
-                    &nbsp;
+                    </TooltipTrigger>
                     <TooltipContent className="tooltip-content max-w-[400px] p-2">
                         <MarkdownWithTooltips className="text-gray-800 markdown">
                             {tooltipContent}
@@ -36,6 +41,7 @@ export function TooltipWrapper({
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-        </span>
+            {textAfter}
+        </div>
     );
 }

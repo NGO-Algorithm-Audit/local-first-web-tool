@@ -39,11 +39,24 @@ export function remarkInfoTooltip() {
                                 // Create a new element node
                                 const elementNode: Element = {
                                     type: 'element',
-                                    tagName: 'span',
-                                    properties: {},
+                                    tagName: 'div',
+                                    properties: {
+                                        tooltip: tooltipContent,
+                                        // textBefore: node.value.slice(0, index),
+                                        // textAfter: node.value.slice(
+                                        //     index + match.length
+                                        // ),
+                                    },
                                     data: {
                                         hProperties: {
                                             tooltip: tooltipContent,
+                                            textBefore: node.value.slice(
+                                                0,
+                                                index
+                                            ),
+                                            textAfter: node.value.slice(
+                                                index + match.length
+                                            ),
                                         },
                                     } as CustomElementData,
                                     children: [
