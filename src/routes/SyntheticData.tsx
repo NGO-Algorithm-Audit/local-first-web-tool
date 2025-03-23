@@ -153,7 +153,7 @@ export default function SyntheticDataGeneration() {
 
             <div
                 className={cn(
-                    'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] flex-col rounded-xl gap-6 bg-slate-50 p-4',
+                    'flex flex-2 w-full h-[min-content] xl:h-full xl:min-h-[100%] flex-col rounded-xl gap-4 bg-slate-50 p-4',
                     loading && 'overflow-hidden'
                 )}
             >

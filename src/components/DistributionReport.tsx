@@ -95,7 +95,7 @@ export const DistributionReport = (
         return column != 'realOrSynthetic';
     });
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
             {distributionReportProps.reports.map(
                 (report: DistributionReport, indexReport: number) => {
                     if (report.reportType === 'heading' && report.headingKey) {

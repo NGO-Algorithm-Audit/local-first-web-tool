@@ -29,7 +29,7 @@ export function TooltipWrapper({
                         <InfoIcon className="size-3.5 ml-1" />
                     </TooltipTrigger>{' '}
                     &nbsp;
-                    <TooltipContent className="max-w-[400px] p-2">
+                    <TooltipContent className="tooltip-content max-w-[400px] p-2">
                         <MarkdownWithTooltips className="text-gray-800 markdown">
                             {tooltipContent}
                         </MarkdownWithTooltips>

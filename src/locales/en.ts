@@ -66,9 +66,9 @@ export const en = {
         demo: {
             heading: 'Information about demo dataset',
             description:
-                'A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:\n \n&nbsp;&nbsp;\n',
+                'A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:',
             'post.description':
-                'The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n&nbsp;&nbsp;\n\n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)\n \n&nbsp;&nbsp;\n',
+                'The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)',
             'data.column.Variable_name': 'Variable name',
             'data.sex': 'sex',
             'data.race1': 'race1',
@@ -158,24 +158,24 @@ export const en = {
         bivariateText:
             'The figures below display the differences in value frequency for a combination of variables. For comparing two categorical variables, bar charts are plotted. For comparing a numerical and a categorical variables, a so called [violin plot](https://en.wikipedia.org/wiki/Violin_plot) is shown. For comparing two numercial variables, a [LOESS plot](https://en.wikipedia.org/wiki/Local_regression) is created. For all plots holds: the synthetic data is of high quality when the shape of the distributions in the synthetic data equal the distributions in the real data.',
         moreInfo:
-            '&nbsp;&nbsp;\n  \n  \n  \nDo you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
+            'Do you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
         missingData: `For Missing At Random (MAR) and Missing Not At Random (MNAR) data, 
 we recommend to impute the missing data. For Missing Completely At Random (MCAR), we recommend to remove the missing data. See the info box for more information. {tooltip:syntheticData.missingDataTooltip}More info about MCAR, MAR, and MNAR{/tooltip}`,
         missingDataTooltip: `MCAR, MAR, and MNAR are terms used to describe different mechanisms of missing data:
 
-1. **MCAR (Missing Completely At Random)**:
+**1. MCAR (Missing Completely At Random)**:
 - The probability of data being missing is completely independent of both observed and unobserved data. 
 - There is no systematic pattern to the missingness.
 - Example: A survey respondent accidentally skips a question due to a printing error.
 - Recommendation: remove missing data.
 
-2. **MAR (Missing At Random)**:
+**2. MAR (Missing At Random)**:
 - The probability of data being missing is related to the observed data but not the missing data itself.
 - The missingness can be predicted by other variables in the dataset.
 - Example: Students' test scores are missing, but the missingness is related to their attendance records.
 - Recommendation: impute missing data.
 
-3. **MNAR (Missing Not At Random)**:
+**3. MNAR (Missing Not At Random)**:
 - The probability of data being missing is related to the missing data itself. 
 - There is a systematic pattern to the missingness that is related to the unobserved data.
 - Example: Patients with more severe symptoms are less likely to report their symptoms, leading to missing data that is related to the severity of the symptoms.
