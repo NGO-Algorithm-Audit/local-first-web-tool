@@ -25,7 +25,7 @@ export function TooltipWrapper({
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <span className="border-b border-dotted border-gray-400 cursor-help">
+                        <span className="border-b-2 border-dashed border-gray-600 cursor-help">
                             {children}
                         </span>
                     </TooltipTrigger>
