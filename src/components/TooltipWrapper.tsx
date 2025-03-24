@@ -1,4 +1,3 @@
-import { InfoIcon } from 'lucide-react';
 import {
     Tooltip,
     TooltipContent,
@@ -9,30 +8,26 @@ import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 
 interface TooltipWrapperProps {
     tooltipContent: string;
+    children: React.ReactNode;
     textBefore?: string;
     textAfter?: string;
-    children: React.ReactNode;
 }
 
 export function TooltipWrapper({
     tooltipContent,
+    children,
     textBefore,
     textAfter,
-    children,
 }: TooltipWrapperProps) {
     return (
-        <div>
+        <span>
             {textBefore}
-            {children}
-
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger
-                        onClick={event => {
-                            event.preventDefault();
-                        }}
-                    >
-                        <InfoIcon className="size-3.5 ml-1" />
+                    <TooltipTrigger asChild>
+                        <span className="border-b border-dotted border-gray-400 cursor-help">
+                            {children}
+                        </span>
                     </TooltipTrigger>
                     <TooltipContent className="tooltip-content max-w-[400px] p-2">
                         <MarkdownWithTooltips className="text-gray-800 markdown">
@@ -42,6 +37,6 @@ export function TooltipWrapper({
                 </Tooltip>
             </TooltipProvider>
             {textAfter}
-        </div>
+        </span>
     );
 }
