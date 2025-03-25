@@ -111,7 +111,7 @@ export const en = {
                         'By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.',
                 },
                 nanTreatment: {
-                    title: 'NaN Values Treatment',
+                    title: 'NaN values treatment',
                     drop: 'Drop rows with NaN values',
                     impute: 'Impute NaN values',
                     tooltip:
@@ -151,13 +151,14 @@ export const en = {
         cartModelDescription:
             'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.',
         evaluationOfGeneratedDataTitle: '4. Evaluation of generated data',
-        diagnosticsReportTitle: '5. Diagnostic Report',
+        distributionsTitle: '4.1 Distributions',
+        diagnosticsReportTitle: '4.2. Diagnostic Report',
         diagnosticsTitle: 'Diagnostic Results',
+        correlationMatrixTitle: 'Correlation matrix',
         efficacyMetricsTitle: 'Efficacy metrics',
-        disclosureProtectionTitle: 'Disclosure protection',
-        bivariateDistributionSyntheticDataTitle: '6. Bivariate distributions',
-        outputDataTitle: '7. Generated synthetic data',
-        moreInfoTitle: '8. More information',
+        disclosureProtectionTitle: 'Privacy metrics',
+        outputDataTitle: '5. Generated synthetic data',
+        moreInfoTitle: '6. More information',
         correlationDifference:
             'Correlation difference: {{correlationDifference}}',
         univariateText:
