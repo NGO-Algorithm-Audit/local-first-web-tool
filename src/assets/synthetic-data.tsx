@@ -358,16 +358,24 @@ def run():
             {
                 'reportType': 'heading2',
                 'headingKey': 'syntheticData.diagnosticsReportTitle'
-            },
+            },            
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.diagnosticsTitle',
-                'showIndex' : False,    
+                'showIndex' : False,   
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.diagnosticsReportDescription'    
+                }],
                 'data': report_df.to_json(orient="records"),                                           
             },
             {            
                 'reportType': 'correlationSyntheticData',
-                'titleKey': 'syntheticData.correlationMatrixTitle',                
+                'titleKey': 'syntheticData.correlationMatrixTitle',
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.correlationMatrixDescription'    
+                }],                    
             },
             {
                 'reportType': 'table',
