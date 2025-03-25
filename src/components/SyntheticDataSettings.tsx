@@ -27,6 +27,7 @@ const createFormSchema = (t: (key: string) => string) =>
             required_error: t('syntheticData.form.errors.csvRequired'),
         }),
         sdgMethod: z.string(),
+        nanTreatment: z.string(),
     });
 
 interface DemoDataColumns {
@@ -56,6 +57,7 @@ export default function SyntheticDataSettings({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             sdgMethod: 'cart',
+            nanTreatment: 'drop',
         },
     });
     const [columnsCountError, setColumnsCountError] = useState(false);
@@ -117,6 +119,7 @@ export default function SyntheticDataSettings({
             isDemo: false,
             sdgMethod: data.sdgMethod,
             samples: outputSamples[0],
+            nanTreatment: data.nanTreatment,
         });
     };
     return (
@@ -209,6 +212,68 @@ export default function SyntheticDataSettings({
                                     </RadioGroup>
                                 )}
                             />
+
+                            {form.watch('sdgMethod') === 'gc' && (
+                                <div className="mt-4">
+                                    <label className="text-sm font-medium flex flex-row items-center gap-1">
+                                        {t(
+                                            'syntheticData.form.fieldset.nanTreatment.title'
+                                        )}
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger
+                                                    onClick={event => {
+                                                        event.preventDefault();
+                                                    }}
+                                                >
+                                                    <InfoIcon className="size-3.5" />
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
+                                                        <Markdown className="-mt-2 text-gray-800 markdown">
+                                                            {t(
+                                                                'syntheticData.form.fieldset.nanTreatment.tooltip'
+                                                            )}
+                                                        </Markdown>
+                                                    </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    </label>
+                                    <FormField
+                                        control={form.control}
+                                        name="nanTreatment"
+                                        render={({ field }) => (
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="flex flex-col space-y-1 mt-2"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="drop" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t(
+                                                            'syntheticData.form.fieldset.nanTreatment.drop'
+                                                        )}
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="impute" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t(
+                                                            'syntheticData.form.fieldset.nanTreatment.impute'
+                                                        )}
+                                                    </FormLabel>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        )}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <div className="grid gap-3">
