@@ -110,6 +110,13 @@ export const en = {
                     tooltip:
                         'By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.',
                 },
+                nanTreatment: {
+                    title: 'NaN Values Treatment',
+                    drop: 'Drop rows with NaN values',
+                    impute: 'Impute NaN values',
+                    tooltip:
+                        'When using Gaussian Copula, you can choose how to handle missing values (NaN values) in your dataset. Dropping rows with NaN values removes them completely, while imputation replaces them with mean values for numerical columns and mode values for categorical columns.',
+                },
                 samples: 'Number of synthetic datapoints',
             },
             actions: {

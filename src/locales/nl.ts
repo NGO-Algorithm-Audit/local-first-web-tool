@@ -113,6 +113,13 @@ export const nl = {
                     tooltip:
                         'In principe wordt de CART-methode gebruikt om synthetische data te genereren. CART levert over het algemeen synthetische data van hoge kwaliteit, maar werkt mogelijk niet goed bij datasets met categorische variabelen met meer dan 20 categorieën. Gebruik in die gevallen de Gaussian Copula.',
                 },
+                nanTreatment: {
+                    title: 'NaN Waarden Behandeling',
+                    drop: 'Verwijder rijen met NaN waarden',
+                    impute: 'Vervang NaN waarden',
+                    tooltip:
+                        'Bij gebruik van Gaussian Copula kunt u kiezen hoe u omgaat met ontbrekende waarden (NaN waarden) in uw dataset. Het verwijderen van rijen met NaN waarden verwijdert deze volledig, terwijl imputatie deze vervangt door gemiddelde waarden voor numerieke kolommen en modus waarden voor categorische kolommen.',
+                },
                 samples: 'Aantal synthetische datapunten',
             },
             actions: {
