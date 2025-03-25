@@ -22,7 +22,7 @@ export function TooltipWrapper({
     return (
         <span>
             {textBefore}
-            <TooltipProvider>
+            <TooltipProvider delayDuration={0}>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span className="border-b-2 border-dashed border-gray-600 cursor-help">
