@@ -73,6 +73,7 @@ export default function SyntheticDataGeneration() {
         isDemo: false,
         sdgMethod: 'gc',
         samples: 1000,
+        nanTreatment: '',
     });
 
     const params = new URLSearchParams(window.location.search);
@@ -110,6 +111,7 @@ export default function SyntheticDataGeneration() {
                 isDemo: true,
                 sdgMethod: 'cart',
                 samples: 5000,
+                nanTreatment: '',
             });
         }
     }, [initialised, data]);
@@ -118,6 +120,7 @@ export default function SyntheticDataGeneration() {
         isDemo: boolean;
         sdgMethod: string;
         samples: number;
+        nanTreatment: string;
     }) => {
         runPython({
             type: 'start',
@@ -126,6 +129,7 @@ export default function SyntheticDataGeneration() {
                     isDemo: props.isDemo,
                     sdgMethod: props.sdgMethod,
                     samples: props.samples,
+                    nanTreatment: props.nanTreatment,
                 },
             },
         });

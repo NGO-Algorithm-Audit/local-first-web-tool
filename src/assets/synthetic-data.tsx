@@ -28,6 +28,7 @@ from js import isDemo
 from js import sdgMethod
 from js import samples
 from js import setOutputData
+from js import nanTreatment
 
 
 class GaussianCopulaSynthesizer:
@@ -77,7 +78,7 @@ def run():
     csv_data = StringIO(data)
 
     admissions_df = pd.read_csv(csv_data, index_col=False)
-
+    print("nanTreatment:", nanTreatment)
     # admissions_sub = admissions_df[['sex', 'race1', 'ugpa', 'bar']]
     # real_data = admissions_sub.dropna()
     
@@ -227,6 +228,18 @@ def run():
     if (sdgMethod == 'gc'):
         # Initialize synthesizer and fit it to the data
         synthesizer = GaussianCopulaSynthesizer()
+        
+        # Handle NaN values based on the selected treatment method
+        if nanTreatment == 'drop':
+            df_imputed = df_imputed.dropna()
+        elif nanTreatment == 'impute':
+            # Use mean imputation for numerical columns and mode imputation for categorical columns
+            for column in df_imputed.columns:
+                if column_dtypes[column] == 'categorical':
+                    df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mode()[0])
+                else:
+                    df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mean())
+        
         synthesizer.fit(df_imputed)
 
         # Generate synthetic data
