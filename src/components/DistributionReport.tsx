@@ -137,7 +137,7 @@ export const DistributionReport = (
                             return null;
                         }
                         const preContent: additionalContent = report.preContent
-                            ? JSON.parse(report.preContent)
+                            ? (report.preContent as unknown as additionalContent)
                             : [];
                         const postContent: additionalContent =
                             (report.postContent as unknown as additionalContent) ??
@@ -255,7 +255,7 @@ export const DistributionReport = (
                             return null;
                         }
                         const preContent: additionalContent = report.preContent
-                            ? JSON.parse(report.preContent)
+                            ? (report.preContent as unknown as additionalContent)
                             : [];
                         const postContent: additionalContent =
                             (report.postContent as unknown as additionalContent) ??

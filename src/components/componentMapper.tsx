@@ -128,7 +128,7 @@ export default function ComponentMapper({
 
                     case 'text':
                         return (
-                            <TooltipProvider>
+                            <TooltipProvider key={index}>
                                 <MarkdownWithTooltips
                                     key={index}
                                     className="-mt-2 text-gray-800 markdown"

@@ -154,7 +154,39 @@ export const en = {
         distributionsTitle: '4.1 Distributions',
         diagnosticsReportTitle: '4.2. Diagnostic Report',
         diagnosticsTitle: 'Diagnostic Results',
+        diagnosticsReportDescription: `For each column, diagnostic results are computed for the quality of the generated synthetic data. The computed metrics depend on the type of data.
+
+For numerical (or datetime) columns the following metrics are computed:
+- {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
+- {tooltip:syntheticData.rangeCoverage}Range coverage{/tooltip}
+- {tooltip:syntheticData.boundaryAdherenc}Boundary adherence{/tooltip}
+- {tooltip:syntheticData.statisticSimilarity}Statistic similarity{/tooltip}
+- {tooltip:syntheticData.kolmogorovSmirnovComplement}Kolmogorov–Smirnov (KS) complement{/tooltip}
+
+For categorical (or boolean) columns the following metrics are computed:
+- {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
+- {tooltip:syntheticData.categoryCoverage}Category coverage{/tooltip}
+- {tooltip:syntheticData.categoryAdherence}Category adherence{/tooltip}
+- {tooltip:syntheticData.totalVariationComplement}Total variation (TV) complement{/tooltip}`,
+        missingValueSimilarity:
+            'Compares whether the synthetic data has the same proportion of missing values as the real data for a given column',
+        rangeCoverage:
+            'Measures whether a synthetic column covers the full range of values that are present in a real column',
+        boundaryAdherenc:
+            'Measures whether a synthetic column respects the minimum and maximum values of the real column. It returns the percentage of synthetic rows that adhere to the real boundaries',
+        statisticSimilarity:
+            'Measures the similarity between real column and a synthetic column by comparing the mean, standard deviation and median',
+        kolmogorovSmirnovComplement:
+            'Computes the similarity of a real and synthetic numerical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
+        categoryCoverage:
+            'Measures whether a synthetic column covers all the possible categories that are present in a real column',
+        categoryAdherence:
+            'Measures whether a synthetic column adheres to the same category values as the real data',
+        totalVariationComplement:
+            'Computes the similarity of a real and synthetic categorical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
         correlationMatrixTitle: 'Correlation matrix',
+        correlationMatrixDescription: `The matrix below illustrates the differences in pairwise correlations between variables in the original and synthetic data. 
+Green cells signify that the pairwise correlation was accurately captured, with 0 representing the best possible score. Red cells indicate poor capture of the pairwise correlation.`,
         efficacyMetricsTitle: 'Efficacy metrics',
         disclosureProtectionTitle: 'Privacy metrics',
         outputDataTitle: '5. Generated synthetic data',
