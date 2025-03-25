@@ -349,19 +349,25 @@ def run():
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
-            {'reportType': 'univariateDistributionSyntheticData'},
             {
-                'reportType': 'heading',
+                'reportType': 'heading2',
+                'headingKey': 'syntheticData.distributionsTitle'
+            },
+            {'reportType': 'univariateDistributionSyntheticData'},
+            {'reportType': 'bivariateDistributionSyntheticData'},
+            {
+                'reportType': 'heading2',
                 'headingKey': 'syntheticData.diagnosticsReportTitle'
             },
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.diagnosticsTitle',
                 'showIndex' : False,    
-                'data': report_df.to_json(orient="records"),                            
-                'postContent': [{
-                    'contentType' : 'correlationSyntheticData'
-                }]
+                'data': report_df.to_json(orient="records"),                                           
+            },
+            {            
+                'reportType': 'correlationSyntheticData',
+                'titleKey': 'syntheticData.correlationMatrixTitle',                
             },
             {
                 'reportType': 'table',
@@ -374,13 +380,7 @@ def run():
                 'titleKey': 'syntheticData.disclosureProtectionTitle',
                 'showIndex' : False,
                 'data': dp_report_df.to_json(orient="records"),                
-            },
-            {
-                'reportType': 'heading',
-                'headingKey': 'syntheticData.bivariateDistributionSyntheticDataTitle'
-            },
-            {'reportType': 'bivariateDistributionSyntheticData'},
-            
+            }                       
         ]
     }))
 
