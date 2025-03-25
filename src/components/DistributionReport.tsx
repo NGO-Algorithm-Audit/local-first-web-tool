@@ -59,6 +59,7 @@ function countCategory2ForCategory1(
 type additionalContent = {
     contentType: string;
     textKey?: string;
+    text?: string;
     params?: Record<string, string | number | boolean>;
 }[];
 
@@ -161,11 +162,12 @@ export const DistributionReport = (
                                                                 key={index}
                                                                 className="-mt-2 text-gray-800 markdown"
                                                             >
-                                                                {t(
-                                                                    content.textKey ??
-                                                                        '',
-                                                                    content.params
-                                                                )}
+                                                                {content.text ??
+                                                                    t(
+                                                                        content.textKey ??
+                                                                            '',
+                                                                        content.params
+                                                                    )}
                                                             </MarkdownWithTooltips>
                                                         );
                                                     }
@@ -190,11 +192,12 @@ export const DistributionReport = (
                                                                     key={index}
                                                                     className="-mt-2 text-gray-800 markdown"
                                                                 >
-                                                                    {t(
-                                                                        content.textKey ??
-                                                                            '',
-                                                                        content.params
-                                                                    )}
+                                                                    {content.text ??
+                                                                        t(
+                                                                            content.textKey ??
+                                                                                '',
+                                                                            content.params
+                                                                        )}
                                                                 </MarkdownWithTooltips>
                                                             );
                                                         } else if (

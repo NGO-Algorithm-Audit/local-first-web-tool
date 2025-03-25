@@ -189,6 +189,7 @@ For categorical (or boolean) columns the following metrics are computed:
 Green cells signify that the pairwise correlation was accurately captured, with 0 representing the best possible score. Red cells indicate poor capture of the pairwise correlation.`,
         efficacyMetricsTitle: 'Efficacy metrics',
         disclosureProtectionTitle: 'Privacy metrics',
+        disclosureProtectionDescription: `A class to compute the disclosure protection metric for synthetic data. This metric measures the proportion of synthetic records that are too similar (within a defined threshold) to real records, posing a disclosure risk.`,
         outputDataTitle: '5. Generated synthetic data',
         moreInfoTitle: '6. More information',
         correlationDifference:
