@@ -188,7 +188,18 @@ For categorical (or boolean) columns the following metrics are computed:
         correlationMatrixDescription: `The matrix below illustrates the differences in pairwise correlations between variables in the original and synthetic data. 
 Green cells signify that the pairwise correlation was accurately captured, with 0 representing the best possible score. Red cells indicate poor capture of the pairwise correlation.`,
         efficacyMetricsTitle: 'Efficacy metrics',
+        efficacyMetricsDescription: `Efficacy metrics comparing real and synthetic datasets for downstream predictive tasks. The idea is to train a predictive model on synthetic data and evaluate its performance on real data. The type of metrics computed depends on the task:
+
+For regression (when the target is numerical):
+- Mean Squared Error (MSE)
+- Mean Absolute Error (MAE)
+- R^2 Score
+
+For classification (when the target is categorical/boolean):
+- Accuracy Score
+- Weighted F1 Score`,
         disclosureProtectionTitle: 'Privacy metrics',
+        disclosureProtectionDescription: `A class to compute the disclosure protection metric for synthetic data. This metric measures the proportion of synthetic records that are too similar (within a defined threshold) to real records, posing a disclosure risk.`,
         outputDataTitle: '5. Generated synthetic data',
         moreInfoTitle: '6. More information',
         correlationDifference:

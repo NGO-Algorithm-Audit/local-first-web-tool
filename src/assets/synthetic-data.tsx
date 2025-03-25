@@ -386,12 +386,23 @@ def run():
                 'reportType': 'table',
                 'titleKey': 'syntheticData.efficacyMetricsTitle',
                 'showIndex' : False,
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.efficacyMetricsDescription'
+                }],
                 'data': metrics_df.to_json(orient="records"),                
             },
             {
                 'reportType': 'table',
                 'titleKey': 'syntheticData.disclosureProtectionTitle',
                 'showIndex' : False,
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.disclosureProtectionDescription'
+                },{
+                    'contentType': 'text',
+                    'text': f"Score: {dp_score:.3f}"
+                }],
                 'data': dp_report_df.to_json(orient="records"),                
             }                       
         ]
