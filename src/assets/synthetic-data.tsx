@@ -386,6 +386,10 @@ def run():
                 'reportType': 'table',
                 'titleKey': 'syntheticData.efficacyMetricsTitle',
                 'showIndex' : False,
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.efficacyMetricsDescription'
+                }],
                 'data': metrics_df.to_json(orient="records"),                
             },
             {
