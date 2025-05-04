@@ -3,7 +3,7 @@ export const en = {
         'Bienvenue à React et react-i18next',
     shareButton: 'Share',
     exportButton: 'Export to .json',
-    getStarted: "Let's get started! Fill out the form.",
+    getStarted: "Fill in the form to begin.",
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
     dropzoneLabel:
@@ -20,7 +20,7 @@ export const en = {
     loadingPackages: 'Loading core packages...',
     installingPackages: 'Installing additional packages...',
     biasSettings: {
-        exportToPDF: 'Download bias detection report as pdf',
+        exportToPDF: 'Download bias analysis report as pdf',
         exportToJSON: 'Export clusters as json',
         form: {
             fieldsets: {
@@ -42,7 +42,7 @@ export const en = {
             },
             errors: {
                 csvRequired: 'Please upload a csv file.',
-                targetColumnRequired: 'Please select a target column.',
+                targetColumnRequired: 'Please select a bias metric.',
                 dataTypeRequired: 'Please select a data type.',
                 noNumericColumns:
                     'No numeric columns found. Please upload a valid dataset.',
@@ -50,8 +50,8 @@ export const en = {
                 noData: 'No data loaded',
             },
             actions: {
-                tryItOut: 'Try it out',
-                runAnalysis: 'Run Analysis',
+                tryItOut: 'Demo dataset',
+                runAnalysis: 'Run analysis',
                 analyzing: 'Analyzing...',
                 initializing: 'Initialising...',
                 selectColumn: 'Select a column',
