@@ -7,7 +7,7 @@ export const nl = {
     fileUploadError: 'Upload een geldig csv-bestand.',
     removeButton: 'Verwijderen',
     dropzoneLabel:
-        'Sleep je csv-bestand hierheen of klik om een bestand te selecteren',
+        'Sleep een csv-bestand hierheen of klik om een bestand te selecteren',
     datasetPreview: 'Voorbeeld van dataset met de eerste 5 rijen.',
     error: 'Sorry, er is iets misgegaan.',
     loadingMessage: 'Omgeving instellen...',
@@ -24,18 +24,18 @@ export const nl = {
         form: {
             fieldsets: {
                 data: {
-                    title: 'Gegevens',
+                    title: 'Data',
                     dataSet: 'Dataset',
-                    performanceMetric: 'Prestatiemetingkolom',
+                    performanceMetric: 'Gelijkheidsmetriek',
                 },
                 parameters: {
                     title: 'Parameters',
                     iterations: 'Iteraties',
                     minClusterSize: 'Minimale clustergrootte',
                     performanceInterpretation: {
-                        title: 'Interpretatie van prestatiemeting',
-                        lower: 'Lagere waarde van prestatiemeting is beter, bijv. foutpercentage',
-                        higher: 'Hogere waarde van prestatiemeting is beter, bijv. nauwkeurigheid',
+                        title: 'Interpretatie van gelijkheidsmetriek',
+                        lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
+                        higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
                     },
                 },
             },
@@ -59,7 +59,7 @@ export const nl = {
         demoCard: {
             title: 'Probeer het uit!',
             description:
-                'Heeft u geen dataset bij de hand? Geen probleem, gebruik onze demoset.',
+                'Geen dataset bij de hand? Gebruik onze demoset.',
         },
     },
     syntheticData: {

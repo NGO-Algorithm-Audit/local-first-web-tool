@@ -27,16 +27,16 @@ export const en = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
-                    performanceMetric: 'Performance metric column',
+                    performanceMetric: 'Bias metric',
                 },
                 parameters: {
                     title: 'Parameters',
                     iterations: 'Iterations',
                     minClusterSize: 'Minimal cluster size',
                     performanceInterpretation: {
-                        title: 'Performance metric interpretation',
-                        lower: 'Lower value of performance metric is better, e.g., error rate',
-                        higher: 'Higher value of performance metric is better, e.g., accuracy',
+                        title: 'Bias metric interpretation',
+                        lower: 'Lower value of bias metric is better, e.g., error rate',
+                        higher: 'Higher value of bias metric is better, e.g., accuracy',
                     },
                 },
             },

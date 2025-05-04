@@ -20,7 +20,7 @@ export default function Navigation() {
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Search className="size-4 mr-2" />
-                        Bias detection tool
+                        Unsupervised bias detection tool
                     </a>
                     <hr />
                     <a
@@ -28,7 +28,7 @@ export default function Navigation() {
                         className="flex font-semibold rounded-lg p-2 text-sm items-center bg-muted [&.active]:text-white [&.active]:bg-aaRegular"
                     >
                         <Sheet className="size-5 mr-2" />
-                        Synthetic data generation
+                        Synthetic data generation tool
                     </a>
                 </nav>
             </div>
