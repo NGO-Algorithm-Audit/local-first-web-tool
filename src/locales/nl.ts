@@ -3,7 +3,7 @@ export const nl = {
         'Bienvenue à React et react-i18next',
     shareButton: 'Delen',
     exportButton: 'Exporteren naar .json',
-    getStarted: 'Laten we beginnen! Vul het formulier in.',
+    getStarted: 'Vul het formulier in om te beginnen.',
     fileUploadError: 'Upload een geldig csv-bestand.',
     removeButton: 'Verwijderen',
     dropzoneLabel:
@@ -14,11 +14,11 @@ export const nl = {
     mostBiasedCluster: 'Meest bevooroordeelde\n cluster',
     cluster: 'Cluster {{value}}',
     downloadButton: 'Download',
-    loadingPyodide: 'Pyodide laden...',
-    loadingPackages: 'Laden van belangrijke modules',
-    installingPackages: 'Extra modules installeren',
+    loadingPyodide: 'Python omgeving laden...',
+    loadingPackages: 'Laden van packages',
+    installingPackages: 'Aanvullende packages laden',
     biasSettings: {
-        exportToPDF: 'Download bias detection rapport als pdf',
+        exportToPDF: 'Download bias analyse rapport als pdf',
         exportToJSON: 'Export clusters als json',
 
         form: {
@@ -41,7 +41,7 @@ export const nl = {
             },
             errors: {
                 csvRequired: 'Upload een CSV-bestand.',
-                targetColumnRequired: 'Selecteer een doelkolom.',
+                targetColumnRequired: 'Selecteer een gelijkheidsmetriek.',
                 dataTypeRequired: 'Selecteer een gegevenstype.',
                 noNumericColumns:
                     'Geen numerieke kolommen gevonden. Upload een geldige dataset.',
@@ -49,7 +49,7 @@ export const nl = {
                 noData: 'Geen gegevens geladen',
             },
             actions: {
-                tryItOut: 'Probeer het uit',
+                tryItOut: 'Demo dataset',
                 runAnalysis: 'Start analyse',
                 analyzing: 'Analyseren...',
                 initializing: 'Initialiseren...',
