@@ -111,7 +111,7 @@ export const en = {
                         'By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.',
                 },
                 nanTreatment: {
-                    title: 'NaN Values Treatment',
+                    title: 'NaN values treatment',
                     drop: 'Drop rows with NaN values',
                     impute: 'Impute NaN values',
                     tooltip:
@@ -151,13 +151,57 @@ export const en = {
         cartModelDescription:
             'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.',
         evaluationOfGeneratedDataTitle: '4. Evaluation of generated data',
-        diagnosticsReportTitle: '5. Diagnostic Report',
+        distributionsTitle: '4.1 Distributions',
+        diagnosticsReportTitle: '4.2. Diagnostic Report',
         diagnosticsTitle: 'Diagnostic Results',
+        diagnosticsReportDescription: `For each column, diagnostic results are computed for the quality of the generated synthetic data. The computed metrics depend on the type of data.
+
+For numerical (or datetime) columns the following metrics are computed:
+- {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
+- {tooltip:syntheticData.rangeCoverage}Range coverage{/tooltip}
+- {tooltip:syntheticData.boundaryAdherenc}Boundary adherence{/tooltip}
+- {tooltip:syntheticData.statisticSimilarity}Statistic similarity{/tooltip}
+- {tooltip:syntheticData.kolmogorovSmirnovComplement}Kolmogorov–Smirnov (KS) complement{/tooltip}
+
+For categorical (or boolean) columns the following metrics are computed:
+- {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
+- {tooltip:syntheticData.categoryCoverage}Category coverage{/tooltip}
+- {tooltip:syntheticData.categoryAdherence}Category adherence{/tooltip}
+- {tooltip:syntheticData.totalVariationComplement}Total variation (TV) complement{/tooltip}`,
+        missingValueSimilarity:
+            'Compares whether the synthetic data has the same proportion of missing values as the real data for a given column',
+        rangeCoverage:
+            'Measures whether a synthetic column covers the full range of values that are present in a real column',
+        boundaryAdherenc:
+            'Measures whether a synthetic column respects the minimum and maximum values of the real column. It returns the percentage of synthetic rows that adhere to the real boundaries',
+        statisticSimilarity:
+            'Measures the similarity between real column and a synthetic column by comparing the mean, standard deviation and median',
+        kolmogorovSmirnovComplement:
+            'Computes the similarity of a real and synthetic numerical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
+        categoryCoverage:
+            'Measures whether a synthetic column covers all the possible categories that are present in a real column',
+        categoryAdherence:
+            'Measures whether a synthetic column adheres to the same category values as the real data',
+        totalVariationComplement:
+            'Computes the similarity of a real and synthetic categorical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
+        correlationMatrixTitle: 'Correlation matrix',
+        correlationMatrixDescription: `The matrix below illustrates the differences in pairwise correlations between variables in the original and synthetic data. 
+Green cells signify that the pairwise correlation was accurately captured, with 0 representing the best possible score. Red cells indicate poor capture of the pairwise correlation.`,
         efficacyMetricsTitle: 'Efficacy metrics',
-        disclosureProtectionTitle: 'Disclosure protection',
-        bivariateDistributionSyntheticDataTitle: '6. Bivariate distributions',
-        outputDataTitle: '7. Generated synthetic data',
-        moreInfoTitle: '8. More information',
+        efficacyMetricsDescription: `Efficacy metrics comparing real and synthetic datasets for downstream predictive tasks. The idea is to train a predictive model on synthetic data and evaluate its performance on real data. The type of metrics computed depends on the task:
+
+For regression (when the target is numerical):
+- Mean Squared Error (MSE)
+- Mean Absolute Error (MAE)
+- R^2 Score
+
+For classification (when the target is categorical/boolean):
+- Accuracy Score
+- Weighted F1 Score`,
+        disclosureProtectionTitle: 'Privacy metrics',
+        disclosureProtectionDescription: `A class to compute the disclosure protection metric for synthetic data. This metric measures the proportion of synthetic records that are too similar (within a defined threshold) to real records, posing a disclosure risk.`,
+        outputDataTitle: '5. Generated synthetic data',
+        moreInfoTitle: '6. More information',
         correlationDifference:
             'Correlation difference: {{correlationDifference}}',
         univariateText:

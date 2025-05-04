@@ -59,6 +59,7 @@ function countCategory2ForCategory1(
 type additionalContent = {
     contentType: string;
     textKey?: string;
+    text?: string;
     params?: Record<string, string | number | boolean>;
 }[];
 
@@ -108,6 +109,16 @@ export const DistributionReport = (
                             </h5>
                         );
                     }
+                    if (report.reportType === 'heading2' && report.headingKey) {
+                        return (
+                            <h6
+                                key={indexReport}
+                                className="text-gray-800 font-semibold mb-4"
+                            >
+                                {t(report.headingKey, report.params)}
+                            </h6>
+                        );
+                    }
                     if (report.reportType === 'text' && report.textKey) {
                         return (
                             <MarkdownWithTooltips
@@ -127,7 +138,7 @@ export const DistributionReport = (
                             return null;
                         }
                         const preContent: additionalContent = report.preContent
-                            ? JSON.parse(report.preContent)
+                            ? (report.preContent as unknown as additionalContent)
                             : [];
                         const postContent: additionalContent =
                             (report.postContent as unknown as additionalContent) ??
@@ -151,11 +162,12 @@ export const DistributionReport = (
                                                                 key={index}
                                                                 className="-mt-2 text-gray-800 markdown"
                                                             >
-                                                                {t(
-                                                                    content.textKey ??
-                                                                        '',
-                                                                    content.params
-                                                                )}
+                                                                {content.text ??
+                                                                    t(
+                                                                        content.textKey ??
+                                                                            '',
+                                                                        content.params
+                                                                    )}
                                                             </MarkdownWithTooltips>
                                                         );
                                                     }
@@ -180,11 +192,12 @@ export const DistributionReport = (
                                                                     key={index}
                                                                     className="-mt-2 text-gray-800 markdown"
                                                                 >
-                                                                    {t(
-                                                                        content.textKey ??
-                                                                            '',
-                                                                        content.params
-                                                                    )}
+                                                                    {content.text ??
+                                                                        t(
+                                                                            content.textKey ??
+                                                                                '',
+                                                                            content.params
+                                                                        )}
                                                                 </MarkdownWithTooltips>
                                                             );
                                                         } else if (
@@ -239,6 +252,104 @@ export const DistributionReport = (
                             </div>
                         );
                     }
+
+                    if (report.reportType === 'correlationSyntheticData') {
+                        if (!report.titleKey) {
+                            return null;
+                        }
+                        const preContent: additionalContent = report.preContent
+                            ? (report.preContent as unknown as additionalContent)
+                            : [];
+                        const postContent: additionalContent =
+                            (report.postContent as unknown as additionalContent) ??
+                            [];
+
+                        return (
+                            <div key={indexReport} className="mb-4">
+                                <Accordion
+                                    title={t(report.titleKey)}
+                                    content={
+                                        <div className="pt-[20px];">
+                                            <p>&nbsp;</p>
+                                            {preContent.map(
+                                                (content, index) => {
+                                                    if (
+                                                        content.contentType ===
+                                                        'text'
+                                                    ) {
+                                                        return (
+                                                            <MarkdownWithTooltips
+                                                                key={index}
+                                                                className="-mt-2 text-gray-800 markdown"
+                                                            >
+                                                                {t(
+                                                                    content.textKey ??
+                                                                        '',
+                                                                    content.params
+                                                                )}
+                                                            </MarkdownWithTooltips>
+                                                        );
+                                                    }
+                                                }
+                                            )}
+
+                                            <div
+                                                key={`index`}
+                                                className="grid lg:grid-cols-[50%_50%] grid-cols-[100%]"
+                                            >
+                                                <div className="col-[1] lg:col-[1]">
+                                                    <CorrelationMatrix
+                                                        title={t(
+                                                            'heatmap.realdata'
+                                                        )}
+                                                        heatmapData={createHeatmapdata(
+                                                            distributionReportProps.realCorrelations
+                                                        )}
+                                                        showLegend={false}
+                                                    />
+                                                </div>
+                                                <div className="col-[1] lg:col-[2]">
+                                                    <CorrelationMatrix
+                                                        title={t(
+                                                            'heatmap.synthData'
+                                                        )}
+                                                        heatmapData={createHeatmapdata(
+                                                            distributionReportProps.synthDataCorrelations
+                                                        )}
+                                                        showLegend={true}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {report.postContent &&
+                                                postContent.map(
+                                                    (content, index) => {
+                                                        if (
+                                                            content.contentType ===
+                                                            'text'
+                                                        ) {
+                                                            return (
+                                                                <MarkdownWithTooltips
+                                                                    key={index}
+                                                                    className="-mt-2 text-gray-800 markdown"
+                                                                >
+                                                                    {t(
+                                                                        content.textKey ??
+                                                                            '',
+                                                                        content.params
+                                                                    )}
+                                                                </MarkdownWithTooltips>
+                                                            );
+                                                        }
+                                                    }
+                                                )}
+                                        </div>
+                                    }
+                                />
+                            </div>
+                        );
+                    }
+
                     if (
                         report.reportType === 'univariateDistributionRealData'
                     ) {

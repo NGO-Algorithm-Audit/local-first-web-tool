@@ -7,7 +7,7 @@ import warnings
 import scipy.stats as stats
 from scipy.stats import norm, ks_2samp
 from sklearn.preprocessing import LabelEncoder
-from synthpop import MissingDataHandler, DataProcessor, CARTMethod
+from synthpop import MissingDataHandler, DataProcessor, CARTMethod, GaussianCopulaMethod
 from synthpop.metrics import (
     MetricsReport,
     EfficacyMetrics,
@@ -177,11 +177,16 @@ def run():
     # Preprocess the data: transforms raw data into a numerical format
     processed_data = processor.preprocess(df_imputed)    
 
-    cart = CARTMethod(metadata, smoothing=True, proper=True, minibucket=5, random_state=42)
-    cart.fit(processed_data)
-    
-    synthetic_processed = cart.sample(samples)
-    
+    if (sdgMethod == 'cart'):
+        cart = CARTMethod(metadata, smoothing=True, proper=True, minibucket=5, random_state=42)
+        cart.fit(processed_data)
+        synthetic_processed = cart.sample(samples)
+
+    if (sdgMethod == 'gc'):
+        gc = GaussianCopulaMethod(metadata)
+        gc.fit(processed_data)
+        synthetic_processed = gc.sample(samples)
+
     print("synthetic_processed (first 5 rows):", synthetic_processed.head())
 
     synthetic_data = processor.postprocess(synthetic_processed)
@@ -225,25 +230,25 @@ def run():
         # spop.fit(real_data, dtypes=dtypes_dict)
         # synthetic_data = spop.generate(k=samples)
 
-    if (sdgMethod == 'gc'):
+    # if (sdgMethod == 'gc'):
         # Initialize synthesizer and fit it to the data
-        synthesizer = GaussianCopulaSynthesizer()
+        # synthesizer = GaussianCopulaSynthesizer()
         
         # Handle NaN values based on the selected treatment method
-        if nanTreatment == 'drop':
-            df_imputed = df_imputed.dropna()
-        elif nanTreatment == 'impute':
+        # if nanTreatment == 'drop':
+        #    df_imputed = df_imputed.dropna()
+        # elif nanTreatment == 'impute':
             # Use mean imputation for numerical columns and mode imputation for categorical columns
-            for column in df_imputed.columns:
-                if column_dtypes[column] == 'categorical':
-                    df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mode()[0])
-                else:
-                    df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mean())
+        #    for column in df_imputed.columns:
+        #        if column_dtypes[column] == 'categorical':
+        #            df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mode()[0])
+        #        else:
+        #            df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mean())
         
-        synthesizer.fit(df_imputed)
+        #synthesizer.fit(df_imputed)
 
         # Generate synthetic data
-        synthetic_data = synthesizer.sample(samples)
+        # synthetic_data = synthesizer.sample(samples)
 
     synth_df_decoded = synthetic_data.copy()
 
@@ -349,38 +354,57 @@ def run():
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.evaluationOfGeneratedDataTitle'
             },
-            {'reportType': 'univariateDistributionSyntheticData'},
             {
-                'reportType': 'heading',
-                'headingKey': 'syntheticData.diagnosticsReportTitle'
+                'reportType': 'heading2',
+                'headingKey': 'syntheticData.distributionsTitle'
             },
+            {'reportType': 'univariateDistributionSyntheticData'},
+            {'reportType': 'bivariateDistributionSyntheticData'},
+            {
+                'reportType': 'heading2',
+                'headingKey': 'syntheticData.diagnosticsReportTitle'
+            },            
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.diagnosticsTitle',
-                'showIndex' : False,    
-                'data': report_df.to_json(orient="records"),                            
-                'postContent': [{
-                    'contentType' : 'correlationSyntheticData'
-                }]
+                'showIndex' : False,   
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.diagnosticsReportDescription'    
+                }],
+                'data': report_df.to_json(orient="records"),                                           
+            },
+            {            
+                'reportType': 'correlationSyntheticData',
+                'titleKey': 'syntheticData.correlationMatrixTitle',
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.correlationMatrixDescription'    
+                }],                    
             },
             {
                 'reportType': 'table',
                 'titleKey': 'syntheticData.efficacyMetricsTitle',
                 'showIndex' : False,
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.efficacyMetricsDescription'
+                }],
                 'data': metrics_df.to_json(orient="records"),                
             },
             {
                 'reportType': 'table',
                 'titleKey': 'syntheticData.disclosureProtectionTitle',
                 'showIndex' : False,
+                'preContent' : [{
+                    'contentType': 'text',
+                    'textKey': 'syntheticData.disclosureProtectionDescription'
+                },{
+                    'contentType': 'text',
+                    'text': f"Score: {dp_score:.3f}"
+                }],
                 'data': dp_report_df.to_json(orient="records"),                
-            },
-            {
-                'reportType': 'heading',
-                'headingKey': 'syntheticData.bivariateDistributionSyntheticDataTitle'
-            },
-            {'reportType': 'bivariateDistributionSyntheticData'},
-            
+            }                       
         ]
     }))
 
