@@ -3,7 +3,7 @@ export const en = {
         'Bienvenue à React et react-i18next',
     shareButton: 'Share',
     exportButton: 'Export to .json',
-    getStarted: "Fill in the form to begin.",
+    getStarted: 'Fill in the form to begin.',
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
     dropzoneLabel:
@@ -38,6 +38,10 @@ export const en = {
                         lower: 'Lower value of bias metric is better, e.g., error rate',
                         higher: 'Higher value of bias metric is better, e.g., accuracy',
                     },
+                    iterationsTooltip:
+                        'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
+                    minClusterSizeTooltip:
+                        'The minimum number of samples per cluster. By default set to 10% of the number of rows in the attached dataset.',
                 },
             },
             errors: {

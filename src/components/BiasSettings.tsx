@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import CSVReader, { csvReader } from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight, InfoIcon } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,6 +20,13 @@ import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import Papa from 'papaparse';
 import { BiasDetectionParameters } from './bias-detection-interfaces/BiasDetectionParameters';
 import { useTranslation } from 'react-i18next';
+import {
+    Tooltip,
+    TooltipProvider,
+    TooltipTrigger,
+    TooltipContent,
+} from './ui/touch-tooltip';
+import Markdown from 'react-markdown';
 
 const FormSchema = z.object({
     file: z.string({
@@ -250,11 +257,34 @@ export default function BiasSettings({
                             {t('biasSettings.form.fieldsets.parameters.title')}
                         </legend>
                         <div className="grid gap-3">
-                            <Label htmlFor="iterations">
+                            <Label
+                                htmlFor="iterations"
+                                className="flex flex-row items-center gap-1"
+                            >
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.iterations'
                                 )}{' '}
                                 ({iter})
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger
+                                            onClick={event => {
+                                                event.preventDefault();
+                                            }}
+                                        >
+                                            <InfoIcon className="size-3.5" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
+                                                <Markdown className="-mt-2 text-gray-800 markdown">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.parameters.iterationsTooltip'
+                                                    )}
+                                                </Markdown>
+                                            </div>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </Label>
                             <Slider
                                 id="iterations"
@@ -266,11 +296,34 @@ export default function BiasSettings({
                             />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="min-cluster-size">
+                            <Label
+                                htmlFor="min-cluster-size"
+                                className="flex flex-row items-center gap-1"
+                            >
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.minClusterSize'
                                 )}{' '}
                                 ({clusters})
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger
+                                            onClick={event => {
+                                                event.preventDefault();
+                                            }}
+                                        >
+                                            <InfoIcon className="size-3.5" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
+                                                <Markdown className="-mt-2 text-gray-800 markdown">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.parameters.minClusterSizeTooltip'
+                                                    )}
+                                                </Markdown>
+                                            </div>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </Label>
                             <Slider
                                 id="min-cluster-size"

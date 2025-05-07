@@ -37,6 +37,10 @@ export const nl = {
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
                     },
+                    iterationsTooltip:
+                        'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters totdat de minimale clustergrootte is bereikt.',
+                    minClusterSizeTooltip:
+                        'Het minimale aantal datapunten per cluster. Standaard ingesteld op 10% van het aantal rijen in de bijgevoegde dataset.',
                 },
             },
             errors: {
@@ -58,8 +62,7 @@ export const nl = {
         },
         demoCard: {
             title: 'Probeer het uit!',
-            description:
-                'Geen dataset bij de hand? Gebruik onze demoset.',
+            description: 'Geen dataset bij de hand? Gebruik onze demoset.',
         },
     },
     syntheticData: {
