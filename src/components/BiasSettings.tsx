@@ -278,7 +278,7 @@ export default function BiasSettings({
                                             <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
                                                 <Markdown className="-mt-2 text-gray-800 markdown">
                                                     {t(
-                                                        'biasSettings.form.fieldset.parameters.iterations.tooltip'
+                                                        'biasSettings.form.fieldsets.parameters.iterationsTooltip'
                                                     )}
                                                 </Markdown>
                                             </div>
@@ -317,7 +317,7 @@ export default function BiasSettings({
                                             <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
                                                 <Markdown className="-mt-2 text-gray-800 markdown">
                                                     {t(
-                                                        'biasSettings.form.fieldset.parameters.iterations.tooltip'
+                                                        'biasSettings.form.fieldsets.parameters.minClusterSizeTooltip'
                                                     )}
                                                 </Markdown>
                                             </div>
