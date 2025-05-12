@@ -171,7 +171,9 @@ For categorical (or boolean) columns the following metrics are computed:
 - {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
 - {tooltip:syntheticData.categoryCoverage}Category coverage{/tooltip}
 - {tooltip:syntheticData.categoryAdherence}Category adherence{/tooltip}
-- {tooltip:syntheticData.totalVariationComplement}Total variation (TV) complement{/tooltip}`,
+- {tooltip:syntheticData.totalVariationComplement}Total variation (TV) complement{/tooltip}
+
+💯 All values need to be close to 1.0 `,
         missingValueSimilarity:
             'Compares whether the synthetic data has the same proportion of missing values as the real data for a given column',
         rangeCoverage:
@@ -189,8 +191,7 @@ For categorical (or boolean) columns the following metrics are computed:
         totalVariationComplement:
             'Computes the similarity of a real and synthetic categorical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
         correlationMatrixTitle: 'Correlation matrix',
-        correlationMatrixDescription: `The matrix below illustrates the differences in pairwise correlations between variables in the original and synthetic data. 
-Green cells signify that the pairwise correlation was accurately captured, with 0 representing the best possible score. Red cells indicate poor capture of the pairwise correlation.`,
+        correlationMatrixDescription: `The matrices below display the pairwise correlations in the original and synthetic data. Green cells represent weak pairwise correlations, while red cells denote strong pairwise correlations. The color patterns in the two matrices should appear identical.`,
         efficacyMetricsTitle: 'Efficacy metrics',
         efficacyMetricsDescription: `Efficacy metrics comparing real and synthetic datasets for downstream predictive tasks. The idea is to train a predictive model on synthetic data and evaluate its performance on real data. The type of metrics computed depends on the task:
 
