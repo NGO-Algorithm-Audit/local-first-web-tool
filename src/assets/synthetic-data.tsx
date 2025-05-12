@@ -31,49 +31,6 @@ from js import setOutputData
 from js import nanTreatment
 
 
-class GaussianCopulaSynthesizer:
-    def __init__(self):
-        self.means = None
-        self.cov_matrix = None
-        self.scaler = None
-        self.data_marginals = None
-
-    def fit(self, data):
-        """
-        Fit the Gaussian Copula model to the given data.
-        """
-        # Step 1: Store data marginals (quantiles for each feature)
-        self.data_marginals = []
-        for col in data.columns:
-            sorted_data = np.sort(data[col])
-            quantiles = np.linspace(0, 1, len(sorted_data))
-            self.data_marginals.append((sorted_data, quantiles, col))
-
-        # Step 2: Convert data to normal distribution using CDF (Gaussianization)
-        uniform_data = data.rank(pct=True)  # Get percentile rank for each column (empirical CDF)
-        gaussian_data = norm.ppf(uniform_data)  # Convert uniform to standard normal
-
-        # Step 3: Fit a multivariate Gaussian to the normalized data
-        self.means = gaussian_data.mean(axis=0)
-        self.cov_matrix = np.cov(gaussian_data, rowvar=False)
-
-    def sample(self, n_samples):
-        """
-        Generate synthetic data using the fitted Gaussian Copula model.
-        """
-        # Step 1: Sample from the multivariate normal distribution
-        synthetic_gaussian = np.random.multivariate_normal(self.means, self.cov_matrix, n_samples)
-
-        # Step 2: Convert back to uniform distribution using CDF (normal -> uniform)
-        synthetic_uniform = norm.cdf(synthetic_gaussian)
-
-        # Step 3: Map uniform data back to the original marginals
-        synthetic_data = pd.DataFrame()
-        for i, (sorted_data, quantiles, col) in enumerate(self.data_marginals):
-            synthetic_data[col] = np.interp(synthetic_uniform[:, i], quantiles, sorted_data)
-
-        return synthetic_data
-
 def run():
     csv_data = StringIO(data)
 
@@ -140,9 +97,9 @@ def run():
     setResult(json.dumps(
         {'type': 'data-set-preview', 'data': ''}
     ))
+
     if isDemo:
         real_data['sex'] = real_data['sex'].replace({1: 'male', 2: 'female'})
-
 
     print(real_data.isnull().sum())
     
@@ -151,9 +108,6 @@ def run():
     # Check the data types
     column_dtypes = md_handler.get_column_dtypes(real_data)
 
-
-    # if isDemo:
-    #    column_dtypes['sex'] = 'categorical'
 
     print("Column Data Types:", column_dtypes)
 
@@ -223,33 +177,7 @@ def run():
     }))
 
     cloned_real_data = df_imputed.copy()
-
-    # if (sdgMethod == 'cart'):
-        # spop = Synthpop(method='cart')
-        # spop = Synthpop()
-        # spop.fit(real_data, dtypes=dtypes_dict)
-        # synthetic_data = spop.generate(k=samples)
-
-    # if (sdgMethod == 'gc'):
-        # Initialize synthesizer and fit it to the data
-        # synthesizer = GaussianCopulaSynthesizer()
-        
-        # Handle NaN values based on the selected treatment method
-        # if nanTreatment == 'drop':
-        #    df_imputed = df_imputed.dropna()
-        # elif nanTreatment == 'impute':
-            # Use mean imputation for numerical columns and mode imputation for categorical columns
-        #    for column in df_imputed.columns:
-        #        if column_dtypes[column] == 'categorical':
-        #            df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mode()[0])
-        #        else:
-        #            df_imputed[column] = df_imputed[column].fillna(df_imputed[column].mean())
-        
-        #synthesizer.fit(df_imputed)
-
-        # Generate synthetic data
-        # synthetic_data = synthesizer.sample(samples)
-
+ 
     synth_df_decoded = synthetic_data.copy()
 
     # Convert categorical variables to numerical values
