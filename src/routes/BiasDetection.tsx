@@ -1,13 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
-import { ChevronDown, Share } from 'lucide-react';
 import { csvReader } from '@/components/CSVReader';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
-import { downloadFile } from '@/lib/download-file';
 import { useReactToPrint } from 'react-to-print';
 import Measuring from '@/components/icons/measuring.svg?react';
 import { ClusterInfo } from '@/components/bias-detection-interfaces/cluster-export';
@@ -15,13 +12,8 @@ import { BiasDetectionParameters } from '@/components/bias-detection-interfaces/
 import { CSVData } from '@/components/bias-detection-interfaces/csv-data';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/languageSwitcher';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { LoadingState } from '@/components/LoadingState';
+import { ExportButton } from '@/components/bias-detection/export-button';
 
 const PAGE_STYLE = `
     @page {
@@ -166,47 +158,12 @@ export default function BiasDetection() {
             >
                 {initialised && data.data.length > 0 && result.length > 0 && (
                     <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="p-4 text-sm"
-                                >
-                                    {t('downloadButton')}
-                                    <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                    onClick={() => reactToPrintFn()}
-                                >
-                                    <Share className="size-3.5 mr-2" />
-                                    {t('biasSettings.exportToPDF')}
-                                </DropdownMenuItem>
-                                {clusterInfo && (
-                                    <DropdownMenuItem
-                                        onClick={() => {
-                                            downloadFile(
-                                                JSON.stringify(
-                                                    {
-                                                        fileName: data.fileName,
-                                                        ...clusterInfo,
-                                                    },
-                                                    null,
-                                                    2
-                                                ),
-                                                `${data.fileName.replace('.csv', '') || 'cluster-info'}-${clusterInfo.date.toISOString()}.json`,
-                                                'application/json'
-                                            );
-                                        }}
-                                    >
-                                        <Share className="size-3.5 mr-2" />
-                                        {t('biasSettings.exportToJSON')}
-                                    </DropdownMenuItem>
-                                )}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <ExportButton
+                            buttonAlign={'right'}
+                            clusterInfo={clusterInfo}
+                            reactToPrintFn={reactToPrintFn}
+                            data={data}
+                        />
                     </div>
                 )}
 
@@ -227,6 +184,17 @@ export default function BiasDetection() {
                         </h1>
                         <div className="flex-1" />
                     </>
+                )}
+
+                {initialised && data.data.length > 0 && result.length > 0 && (
+                    <div className="flex flex-row gap-2 hideonprint">
+                        <ExportButton
+                            buttonAlign={'center'}
+                            clusterInfo={clusterInfo}
+                            reactToPrintFn={reactToPrintFn}
+                            data={data}
+                        />
+                    </div>
                 )}
             </div>
         </main>
