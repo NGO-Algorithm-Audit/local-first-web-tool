@@ -17,7 +17,8 @@ export const en = {
     exportToJSON: 'Export synthetic data to json',
     downloadButton: 'Download',
     loadingPyodide: 'Loading Python environment...',
-    loadingPackages: 'Loading core packages...',
+    loadingPackages:
+        'Loading core packages. On average this takes 10-15 seconds.',
     installingPackages: 'Installing additional packages...',
     biasSettings: {
         exportToPDF: 'Download bias analysis report as pdf',

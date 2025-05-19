@@ -15,7 +15,7 @@ export const nl = {
     cluster: 'Cluster {{value}}',
     downloadButton: 'Download',
     loadingPyodide: 'Python omgeving laden...',
-    loadingPackages: 'Laden van packages',
+    loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
     biasSettings: {
         exportToPDF: 'Download bias analyse rapport als pdf',

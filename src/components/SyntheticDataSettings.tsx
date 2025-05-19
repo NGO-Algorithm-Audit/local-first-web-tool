@@ -137,6 +137,7 @@ export default function SyntheticDataSettings({
                             <FormField
                                 control={form.control}
                                 name="file"
+                                disabled={isLoading}
                                 render={() => (
                                     <CSVReader onChange={onFileLoad} />
                                 )}
@@ -182,6 +183,7 @@ export default function SyntheticDataSettings({
                             <FormField
                                 control={form.control}
                                 name="sdgMethod"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <RadioGroup
                                         onValueChange={field.onChange}
@@ -191,7 +193,10 @@ export default function SyntheticDataSettings({
                                     >
                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                             <FormControl>
-                                                <RadioGroupItem value="cart" />
+                                                <RadioGroupItem
+                                                    value="cart"
+                                                    disabled={isLoading}
+                                                />
                                             </FormControl>
                                             <FormLabel className="font-normal">
                                                 {t(
@@ -201,7 +206,10 @@ export default function SyntheticDataSettings({
                                         </FormItem>
                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                             <FormControl>
-                                                <RadioGroupItem value="gc" />
+                                                <RadioGroupItem
+                                                    value="gc"
+                                                    disabled={isLoading}
+                                                />
                                             </FormControl>
                                             <FormLabel className="font-normal">
                                                 {t(
@@ -243,6 +251,7 @@ export default function SyntheticDataSettings({
                                     <FormField
                                         control={form.control}
                                         name="nanTreatment"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <RadioGroup
                                                 onValueChange={field.onChange}
@@ -251,7 +260,10 @@ export default function SyntheticDataSettings({
                                             >
                                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                                     <FormControl>
-                                                        <RadioGroupItem value="drop" />
+                                                        <RadioGroupItem
+                                                            value="drop"
+                                                            disabled={isLoading}
+                                                        />
                                                     </FormControl>
                                                     <FormLabel className="font-normal">
                                                         {t(
@@ -261,7 +273,10 @@ export default function SyntheticDataSettings({
                                                 </FormItem>
                                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                                     <FormControl>
-                                                        <RadioGroupItem value="impute" />
+                                                        <RadioGroupItem
+                                                            value="impute"
+                                                            disabled={isLoading}
+                                                        />
                                                     </FormControl>
                                                     <FormLabel className="font-normal">
                                                         {t(
@@ -288,6 +303,7 @@ export default function SyntheticDataSettings({
                                 step={10}
                                 onValueChange={value => setOutputSamples(value)}
                                 className="cursor-pointer"
+                                disabled={isLoading}
                             />
                         </div>
                     </fieldset>

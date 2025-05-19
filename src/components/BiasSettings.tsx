@@ -170,6 +170,7 @@ export default function BiasSettings({
                             </div>
                             <FormField
                                 control={form.control}
+                                disabled={isLoading}
                                 name="file"
                                 render={() => (
                                     <CSVReader onChange={onFileLoad} />
@@ -185,6 +186,7 @@ export default function BiasSettings({
                             <FormField
                                 control={form.control}
                                 name="targetColumn"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>
@@ -289,10 +291,11 @@ export default function BiasSettings({
                             <Slider
                                 id="iterations"
                                 defaultValue={iter}
-                                max={100}
+                                max={50}
                                 step={1}
                                 onValueChange={value => setIter(value)}
                                 className="cursor-pointer"
+                                disabled={isLoading}
                             />
                         </div>
                         <div className="grid gap-3">
@@ -335,6 +338,7 @@ export default function BiasSettings({
                                 step={1}
                                 onValueChange={value => setClusters(value)}
                                 className="cursor-pointer"
+                                disabled={isLoading}
                             />
                         </div>
                         <div className="flex flex-col gap-3">
@@ -346,6 +350,7 @@ export default function BiasSettings({
                             <FormField
                                 control={form.control}
                                 name="whichPerformanceMetricValueIsBetter"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <RadioGroup
                                         onValueChange={field.onChange}
@@ -355,7 +360,10 @@ export default function BiasSettings({
                                     >
                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                             <FormControl>
-                                                <RadioGroupItem value="lower" />
+                                                <RadioGroupItem
+                                                    value="lower"
+                                                    disabled={isLoading}
+                                                />
                                             </FormControl>
                                             <FormLabel className="font-normal">
                                                 {t(
@@ -365,7 +373,10 @@ export default function BiasSettings({
                                         </FormItem>
                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                             <FormControl>
-                                                <RadioGroupItem value="higher" />
+                                                <RadioGroupItem
+                                                    value="higher"
+                                                    disabled={isLoading}
+                                                />
                                             </FormControl>
                                             <FormLabel className="font-normal">
                                                 {t(
