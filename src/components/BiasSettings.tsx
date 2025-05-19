@@ -289,7 +289,7 @@ export default function BiasSettings({
                             <Slider
                                 id="iterations"
                                 defaultValue={iter}
-                                max={100}
+                                max={50}
                                 step={1}
                                 onValueChange={value => setIter(value)}
                                 className="cursor-pointer"
