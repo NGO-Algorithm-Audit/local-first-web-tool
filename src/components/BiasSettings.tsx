@@ -44,6 +44,11 @@ const FormSchema = z.object({
             required_error: 'biasSettings.form.errors.dataTypeRequired',
         })
         .nonempty(),
+    selectedDataType: z
+        .string({
+            required_error: 'biasSettings.form.errors.dataTypeRequired',
+        })
+        .nonempty(),
 });
 
 export default function BiasSettings({
@@ -72,6 +77,7 @@ export default function BiasSettings({
 
     const [performanceMetricColumnError, setPerformanceMetricColumnError] =
         useState<string | null>(null);
+    const [dataTypeError, setDataTypeError] = useState<string | null>(null);
 
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
@@ -88,7 +94,7 @@ export default function BiasSettings({
         const isReset = stringified.length === 0;
         if (isReset) {
             form.reset();
-            //setDefaultDataType('numeric');
+            setDataTypeError(null);
         } else {
             form.setValue('file', stringified);
         }
@@ -98,6 +104,7 @@ export default function BiasSettings({
         setClusters([Math.round(dataLength / 4)]);
 
         setPerformanceMetricColumnError(null);
+        setDataTypeError(null);
         if (!isReset) {
             // Find numeric columns
             const numericColumns = Object.keys(data[0] || {})
@@ -116,10 +123,8 @@ export default function BiasSettings({
 
             if (numericColumns.length === Object.keys(data[0] || {}).length) {
                 form.setValue('dataType', 'numeric');
-                //setDefaultDataType('numeric');
             } else {
                 form.setValue('dataType', 'categorical');
-                //setDefaultDataType('categorical');
             }
         }
 
@@ -142,21 +147,18 @@ export default function BiasSettings({
         );
     };
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    const onSubmit = (formData: z.infer<typeof FormSchema>) => {
         // Check if data type matches the actual data
-        const isNumericData = data.data.every(row => {
-            return !isNaN(parseFloat(row[data.targetColumn]));
-        });
 
-        if (data.dataType === 'numeric' && !isNumericData) {
-            setPerformanceMetricColumnError(
-                t('biasSettings.form.errors.numericDataRequired')
-            );
+        const isNumericData = formData.dataType === 'numeric';
+
+        if (formData.selectedDataType === 'numeric' && !isNumericData) {
+            setDataTypeError(t('biasSettings.form.errors.numericDataRequired'));
             return;
         }
 
-        if (data.dataType === 'categorical' && isNumericData) {
-            setPerformanceMetricColumnError(
+        if (formData.dataType === 'categorical' && isNumericData) {
+            setDataTypeError(
                 t('biasSettings.form.errors.categoricalDataRequired')
             );
             return;
@@ -165,10 +167,10 @@ export default function BiasSettings({
         onRun({
             clusterSize: clusters[0],
             iterations: iter[0],
-            targetColumn: data.targetColumn,
-            dataType: data.dataType,
+            targetColumn: formData.targetColumn,
+            dataType: formData.dataType,
             higherIsBetter:
-                data.whichPerformanceMetricValueIsBetter === 'higher',
+                formData.whichPerformanceMetricValueIsBetter === 'higher',
             isDemo: false,
         });
     };
@@ -281,7 +283,7 @@ export default function BiasSettings({
                         <div className="grid gap-3">
                             <FormField
                                 control={form.control}
-                                name="dataType"
+                                name="selectedDataType"
                                 disabled={isLoading}
                                 render={({ field }) => (
                                     <FormItem>
@@ -291,9 +293,12 @@ export default function BiasSettings({
                                             )}
                                         </FormLabel>
                                         <RadioGroup
-                                            onValueChange={field.onChange}
+                                            onValueChange={value => {
+                                                setDataTypeError(null);
+                                                field.onChange(value);
+                                            }}
                                             defaultValue={field.value}
-                                            key={`${dataKey}_dataType`}
+                                            key={`${dataKey}_selecteddataType`}
                                             className="flex flex-col space-y-1"
                                         >
                                             <FormItem className="flex items-center space-x-3 space-y-0">
@@ -323,6 +328,11 @@ export default function BiasSettings({
                                                 </FormLabel>
                                             </FormItem>
                                         </RadioGroup>
+                                        {dataTypeError && (
+                                            <div className="text-red-500 text-sm mt-1">
+                                                {dataTypeError}
+                                            </div>
+                                        )}
                                     </FormItem>
                                 )}
                             />
