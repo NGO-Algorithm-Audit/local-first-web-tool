@@ -28,6 +28,9 @@ export const nl = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Data wordt als volgt behandeld: ...`,
                     performanceMetric: 'Gelijkheidsmetriek',
+                    dataType: 'Type data',
+                    categoricalData: 'Categorische data',
+                    numericalData: 'Numerieke data',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -54,6 +57,10 @@ export const nl = {
                     'Geen numerieke kolommen gevonden. Upload een geldige dataset.',
                 analysisError: 'Fout tijdens analyse',
                 noData: 'Geen gegevens geladen',
+                numericDataRequired:
+                    'Geselecteerde kolom moet numerieke data bevatten voor k-means clustering.',
+                categoricalDataRequired:
+                    'Geselecteerde kolom moet categorische data bevatten voor k-modes clustering.',
             },
             actions: {
                 tryItOut: 'Demo dataset',

@@ -143,6 +143,25 @@ export default function BiasSettings({
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        // Check if data type matches the actual data
+        const isNumericData = data.data.every(row => {
+            return !isNaN(parseFloat(row[data.targetColumn]));
+        });
+
+        if (data.dataType === 'numeric' && !isNumericData) {
+            setPerformanceMetricColumnError(
+                t('biasSettings.form.errors.numericDataRequired')
+            );
+            return;
+        }
+
+        if (data.dataType === 'categorical' && isNumericData) {
+            setPerformanceMetricColumnError(
+                t('biasSettings.form.errors.categoricalDataRequired')
+            );
+            return;
+        }
+
         onRun({
             clusterSize: clusters[0],
             iterations: iter[0],
@@ -255,6 +274,55 @@ export default function BiasSettings({
                                                 )}
                                             </SelectContent>
                                         </Select>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <FormField
+                                control={form.control}
+                                name="dataType"
+                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t(
+                                                'biasSettings.form.fieldsets.data.dataType'
+                                            )}
+                                        </FormLabel>
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            key={`${dataKey}_dataType`}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="categorical"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.categoricalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="numeric"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.numericalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
                                     </FormItem>
                                 )}
                             />

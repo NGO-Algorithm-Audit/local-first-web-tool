@@ -30,6 +30,9 @@ export const en = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Your data should be prepared as follows: ...`,
                     performanceMetric: 'Bias metric',
+                    dataType: 'Type of data',
+                    categoricalData: 'Categorical data',
+                    numericalData: 'Numerical data',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -55,6 +58,10 @@ export const en = {
                     'No numeric columns found. Please upload a valid dataset.',
                 analysisError: 'Error while analysing',
                 noData: 'No data loaded',
+                numericDataRequired:
+                    'Selected column must contain numerical data for k-means clustering.',
+                categoricalDataRequired:
+                    'Selected column must contain categorical data for k-modes clustering.',
             },
             actions: {
                 tryItOut: 'Demo dataset',
