@@ -28,7 +28,11 @@ export const en = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
+                    dataSetTooltip: `Your data should be prepared as follows: ...`,
                     performanceMetric: 'Bias metric',
+                    dataType: 'Type of data',
+                    categoricalData: 'Categorical data',
+                    numericalData: 'Numerical data',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -38,6 +42,7 @@ export const en = {
                         title: 'Bias metric interpretation',
                         lower: 'Lower value of bias metric is better, e.g., error rate',
                         higher: 'Higher value of bias metric is better, e.g., accuracy',
+                        tooltip: 'Clustering will be based on the bias metrics',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
@@ -53,6 +58,10 @@ export const en = {
                     'No numeric columns found. Please upload a valid dataset.',
                 analysisError: 'Error while analysing',
                 noData: 'No data loaded',
+                numericDataRequired:
+                    'Selected column must contain numerical data for k-means clustering.',
+                categoricalDataRequired:
+                    'Selected column must contain categorical data for k-modes clustering.',
             },
             actions: {
                 tryItOut: 'Demo dataset',

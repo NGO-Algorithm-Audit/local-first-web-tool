@@ -27,6 +27,7 @@ import {
     TooltipContent,
 } from './ui/touch-tooltip';
 import Markdown from 'react-markdown';
+import { IconInfoTooltip } from './ui/info-icon-tooltip';
 
 const FormSchema = z.object({
     file: z.string({
@@ -39,6 +40,11 @@ const FormSchema = z.object({
         })
         .nonempty(),
     dataType: z
+        .string({
+            required_error: 'biasSettings.form.errors.dataTypeRequired',
+        })
+        .nonempty(),
+    selectedDataType: z
         .string({
             required_error: 'biasSettings.form.errors.dataTypeRequired',
         })
@@ -71,6 +77,7 @@ export default function BiasSettings({
 
     const [performanceMetricColumnError, setPerformanceMetricColumnError] =
         useState<string | null>(null);
+    const [dataTypeError, setDataTypeError] = useState<string | null>(null);
 
     const [dataKey, setDataKey] = useState<string>(new Date().toISOString());
     const [data, setData] = useState<{
@@ -87,7 +94,7 @@ export default function BiasSettings({
         const isReset = stringified.length === 0;
         if (isReset) {
             form.reset();
-            //setDefaultDataType('numeric');
+            setDataTypeError(null);
         } else {
             form.setValue('file', stringified);
         }
@@ -97,6 +104,7 @@ export default function BiasSettings({
         setClusters([Math.round(dataLength / 4)]);
 
         setPerformanceMetricColumnError(null);
+        setDataTypeError(null);
         if (!isReset) {
             // Find numeric columns
             const numericColumns = Object.keys(data[0] || {})
@@ -115,10 +123,8 @@ export default function BiasSettings({
 
             if (numericColumns.length === Object.keys(data[0] || {}).length) {
                 form.setValue('dataType', 'numeric');
-                //setDefaultDataType('numeric');
             } else {
                 form.setValue('dataType', 'categorical');
-                //setDefaultDataType('categorical');
             }
         }
 
@@ -141,14 +147,30 @@ export default function BiasSettings({
         );
     };
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    const onSubmit = (formData: z.infer<typeof FormSchema>) => {
+        // Check if data type matches the actual data
+
+        const isNumericData = formData.dataType === 'numeric';
+
+        if (formData.selectedDataType === 'numeric' && !isNumericData) {
+            setDataTypeError(t('biasSettings.form.errors.numericDataRequired'));
+            return;
+        }
+
+        if (formData.dataType === 'categorical' && isNumericData) {
+            setDataTypeError(
+                t('biasSettings.form.errors.categoricalDataRequired')
+            );
+            return;
+        }
+
         onRun({
             clusterSize: clusters[0],
             iterations: iter[0],
-            targetColumn: data.targetColumn,
-            dataType: data.dataType,
+            targetColumn: formData.targetColumn,
+            dataType: formData.dataType,
             higherIsBetter:
-                data.whichPerformanceMetricValueIsBetter === 'higher',
+                formData.whichPerformanceMetricValueIsBetter === 'higher',
             isDemo: false,
         });
     };
@@ -165,8 +187,14 @@ export default function BiasSettings({
                             {t('biasSettings.form.fieldsets.data.title')}
                         </legend>
                         <div className="relative grid gap-3 select-none">
-                            <div className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
+                            <div className="flex flex-row items-center gap-1 absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
                                 {t('biasSettings.form.fieldsets.data.dataSet')}
+
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'biasSettings.form.fieldsets.data.dataSetTooltip'
+                                    )}
+                                />
                             </div>
                             <FormField
                                 control={form.control}
@@ -248,6 +276,63 @@ export default function BiasSettings({
                                                 )}
                                             </SelectContent>
                                         </Select>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <FormField
+                                control={form.control}
+                                name="selectedDataType"
+                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t(
+                                                'biasSettings.form.fieldsets.data.dataType'
+                                            )}
+                                        </FormLabel>
+                                        <RadioGroup
+                                            onValueChange={value => {
+                                                setDataTypeError(null);
+                                                field.onChange(value);
+                                            }}
+                                            defaultValue={field.value}
+                                            key={`${dataKey}_selecteddataType`}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="categorical"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.categoricalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="numeric"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.numericalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
+                                        {dataTypeError && (
+                                            <div className="text-red-500 text-sm mt-1">
+                                                {dataTypeError}
+                                            </div>
+                                        )}
                                     </FormItem>
                                 )}
                             />
@@ -342,10 +427,15 @@ export default function BiasSettings({
                             />
                         </div>
                         <div className="flex flex-col gap-3">
-                            <label className="text-sm font-medium">
+                            <label className="flex flex-row gap-1 items-center text-sm font-medium">
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.performanceInterpretation.title'
                                 )}
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'biasSettings.form.fieldsets.parameters.performanceInterpretation.tooltip'
+                                    )}
+                                />
                             </label>
                             <FormField
                                 control={form.control}
