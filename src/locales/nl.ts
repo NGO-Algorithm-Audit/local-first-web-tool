@@ -26,6 +26,7 @@ export const nl = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
+                    dataSetTooltip: `Data wordt als volgt behandeld: ...`,
                     performanceMetric: 'Gelijkheidsmetriek',
                 },
                 parameters: {
@@ -36,6 +37,8 @@ export const nl = {
                         title: 'Interpretatie van gelijkheidsmetriek',
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
+                        tooltip:
+                            'Clustering is gebaseerd op de gelijkheidsmetriek.',
                     },
                     iterationsTooltip:
                         'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters totdat de minimale clustergrootte is bereikt.',

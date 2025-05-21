@@ -27,6 +27,7 @@ import {
     TooltipContent,
 } from './ui/touch-tooltip';
 import Markdown from 'react-markdown';
+import { IconInfoTooltip } from './ui/info-icon-tooltip';
 
 const FormSchema = z.object({
     file: z.string({
@@ -165,8 +166,14 @@ export default function BiasSettings({
                             {t('biasSettings.form.fieldsets.data.title')}
                         </legend>
                         <div className="relative grid gap-3 select-none">
-                            <div className="absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
+                            <div className="flex flex-row items-center gap-1 absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
                                 {t('biasSettings.form.fieldsets.data.dataSet')}
+
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'biasSettings.form.fieldsets.data.dataSetTooltip'
+                                    )}
+                                />
                             </div>
                             <FormField
                                 control={form.control}
@@ -342,10 +349,15 @@ export default function BiasSettings({
                             />
                         </div>
                         <div className="flex flex-col gap-3">
-                            <label className="text-sm font-medium">
+                            <label className="flex flex-row gap-1 items-center text-sm font-medium">
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.performanceInterpretation.title'
                                 )}
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'biasSettings.form.fieldsets.parameters.performanceInterpretation.tooltip'
+                                    )}
+                                />
                             </label>
                             <FormField
                                 control={form.control}

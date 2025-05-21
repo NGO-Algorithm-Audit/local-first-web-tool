@@ -28,6 +28,7 @@ export const en = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
+                    dataSetTooltip: `Your data should be prepared as follows: ...`,
                     performanceMetric: 'Bias metric',
                 },
                 parameters: {
@@ -38,6 +39,7 @@ export const en = {
                         title: 'Bias metric interpretation',
                         lower: 'Lower value of bias metric is better, e.g., error rate',
                         higher: 'Higher value of bias metric is better, e.g., accuracy',
+                        tooltip: 'Clustering will be based on the bias metrics',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
