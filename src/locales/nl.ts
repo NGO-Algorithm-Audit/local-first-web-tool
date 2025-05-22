@@ -192,6 +192,8 @@ export const nl = {
             iterations: 'Aantal iteraties: {{value}}',
             minClusterSize: 'Minimale clustergrootte: {{value}}',
             performanceMetric: 'Prestatiemetingkolom: {{value}}',
+            performanceMetricTooltip:
+                'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
         },
         clusters: {

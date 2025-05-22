@@ -217,10 +217,15 @@ export default function BiasSettings({
                                 disabled={isLoading}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>
+                                        <FormLabel className="flex flex-row items-center gap-1">
                                             {t(
                                                 'biasSettings.form.fieldsets.data.performanceMetric'
                                             )}
+                                            <IconInfoTooltip
+                                                tooltipText={t(
+                                                    'biasSettings.form.fieldsets.data.performanceMetricTooltip'
+                                                )}
+                                            />
                                         </FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
@@ -431,11 +436,6 @@ export default function BiasSettings({
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.performanceInterpretation.title'
                                 )}
-                                <IconInfoTooltip
-                                    tooltipText={t(
-                                        'biasSettings.form.fieldsets.parameters.performanceInterpretation.tooltip'
-                                    )}
-                                />
                             </label>
                             <FormField
                                 control={form.control}
