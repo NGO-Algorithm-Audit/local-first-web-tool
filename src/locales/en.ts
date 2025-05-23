@@ -17,7 +17,8 @@ export const en = {
     exportToJSON: 'Export synthetic data to json',
     downloadButton: 'Download',
     loadingPyodide: 'Loading Python environment...',
-    loadingPackages: 'Loading core packages...',
+    loadingPackages:
+        'Loading core packages. On average this takes 10-15 seconds.',
     installingPackages: 'Installing additional packages...',
     biasSettings: {
         exportToPDF: 'Download bias analysis report as pdf',
@@ -27,7 +28,13 @@ export const en = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
+                    dataSetTooltip: `Your data should be prepared as follows: ...`,
                     performanceMetric: 'Bias metric',
+                    performanceMetricTooltip:
+                        'Clustering will be based on the bias metrics',
+                    dataType: 'Type of data',
+                    categoricalData: 'Categorical data',
+                    numericalData: 'Numerical data',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -52,6 +59,10 @@ export const en = {
                     'No numeric columns found. Please upload a valid dataset.',
                 analysisError: 'Error while analysing',
                 noData: 'No data loaded',
+                numericDataRequired:
+                    'Selected column must contain numerical data for k-means clustering.',
+                categoricalDataRequired:
+                    'Selected column must contain categorical data for k-modes clustering.',
             },
             actions: {
                 tryItOut: 'Demo dataset',

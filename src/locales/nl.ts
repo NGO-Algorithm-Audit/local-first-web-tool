@@ -15,7 +15,7 @@ export const nl = {
     cluster: 'Cluster {{value}}',
     downloadButton: 'Download',
     loadingPyodide: 'Python omgeving laden...',
-    loadingPackages: 'Laden van packages',
+    loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
     biasSettings: {
         exportToPDF: 'Download bias analyse rapport als pdf',
@@ -26,7 +26,11 @@ export const nl = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
+                    dataSetTooltip: `Data wordt als volgt behandeld: ...`,
                     performanceMetric: 'Gelijkheidsmetriek',
+                    dataType: 'Type data',
+                    categoricalData: 'Categorische data',
+                    numericalData: 'Numerieke data',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -36,6 +40,8 @@ export const nl = {
                         title: 'Interpretatie van gelijkheidsmetriek',
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
+                        tooltip:
+                            'Clustering is gebaseerd op de gelijkheidsmetriek.',
                     },
                     iterationsTooltip:
                         'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters totdat de minimale clustergrootte is bereikt.',
@@ -51,6 +57,10 @@ export const nl = {
                     'Geen numerieke kolommen gevonden. Upload een geldige dataset.',
                 analysisError: 'Fout tijdens analyse',
                 noData: 'Geen gegevens geladen',
+                numericDataRequired:
+                    'Geselecteerde kolom moet numerieke data bevatten voor k-means clustering.',
+                categoricalDataRequired:
+                    'Geselecteerde kolom moet categorische data bevatten voor k-modes clustering.',
             },
             actions: {
                 tryItOut: 'Demo dataset',
@@ -182,6 +192,8 @@ export const nl = {
             iterations: 'Aantal iteraties: {{value}}',
             minClusterSize: 'Minimale clustergrootte: {{value}}',
             performanceMetric: 'Prestatiemetingkolom: {{value}}',
+            performanceMetricTooltip:
+                'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
         },
         clusters: {
