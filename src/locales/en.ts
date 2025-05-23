@@ -6,8 +6,7 @@ export const en = {
     getStarted: 'Fill in the form to begin.',
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
-    dropzoneLabel:
-        'Drag and drop your csv file here, or click to select a file',
+    dropzoneLabel: 'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
     datasetPreview: 'Dataset preview showing the first 5 rows.',
     error: 'Sorry, something went wrong.',
     loadingMessage: 'Setting up environment...',
@@ -29,7 +28,7 @@ export const en = {
                     title: 'Data',
                     dataSet: 'Dataset',
                     dataSetTooltip: `Preprocess your data such that: 
-                    - missing values are removed;
+                    - missing values are removed or replaced;
                     - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
                     - the bias metric column is numerical`,
                     performanceMetric: 'Bias metric',
