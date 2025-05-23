@@ -157,7 +157,7 @@ export default function BiasSettings({
             return;
         }
 
-        if (formData.dataType === 'categorical' && isNumericData) {
+        if (formData.selectedDataType === 'categorical' && isNumericData) {
             setDataTypeError(
                 t('biasSettings.form.errors.categoricalDataRequired')
             );
