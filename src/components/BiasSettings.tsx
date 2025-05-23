@@ -213,6 +213,68 @@ export default function BiasSettings({
                         <div className="grid gap-3">
                             <FormField
                                 control={form.control}
+                                name="selectedDataType"
+                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="flex flex-row items-center gap-1">
+                                            {t(
+                                                'biasSettings.form.fieldsets.data.dataType'
+                                            )}
+                                            <IconInfoTooltip
+                                                tooltipText={t(
+                                                    'biasSettings.form.fieldsets.data.dataTypeTooltip'
+                                                )}
+                                            />
+                                        </FormLabel>
+                                        <RadioGroup
+                                            onValueChange={value => {
+                                                setDataTypeError(null);
+                                                field.onChange(value);
+                                            }}
+                                            defaultValue={field.value}
+                                            key={`${dataKey}_selecteddataType`}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="categorical"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.categoricalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem
+                                                        value="numeric"
+                                                        disabled={isLoading}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    {t(
+                                                        'biasSettings.form.fieldsets.data.numericalData'
+                                                    )}
+                                                </FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
+                                        {dataTypeError && (
+                                            <div className="text-red-500 text-sm mt-1">
+                                                {dataTypeError}
+                                            </div>
+                                        )}
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <FormField
+                                control={form.control}
                                 name="targetColumn"
                                 disabled={isLoading}
                                 render={({ field }) => (
@@ -281,63 +343,6 @@ export default function BiasSettings({
                                                 )}
                                             </SelectContent>
                                         </Select>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="selectedDataType"
-                                disabled={isLoading}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            {t(
-                                                'biasSettings.form.fieldsets.data.dataType'
-                                            )}
-                                        </FormLabel>
-                                        <RadioGroup
-                                            onValueChange={value => {
-                                                setDataTypeError(null);
-                                                field.onChange(value);
-                                            }}
-                                            defaultValue={field.value}
-                                            key={`${dataKey}_selecteddataType`}
-                                            className="flex flex-col space-y-1"
-                                        >
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <RadioGroupItem
-                                                        value="categorical"
-                                                        disabled={isLoading}
-                                                    />
-                                                </FormControl>
-                                                <FormLabel className="font-normal">
-                                                    {t(
-                                                        'biasSettings.form.fieldsets.data.categoricalData'
-                                                    )}
-                                                </FormLabel>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <RadioGroupItem
-                                                        value="numeric"
-                                                        disabled={isLoading}
-                                                    />
-                                                </FormControl>
-                                                <FormLabel className="font-normal">
-                                                    {t(
-                                                        'biasSettings.form.fieldsets.data.numericalData'
-                                                    )}
-                                                </FormLabel>
-                                            </FormItem>
-                                        </RadioGroup>
-                                        {dataTypeError && (
-                                            <div className="text-red-500 text-sm mt-1">
-                                                {dataTypeError}
-                                            </div>
-                                        )}
                                     </FormItem>
                                 )}
                             />
@@ -436,6 +441,11 @@ export default function BiasSettings({
                                 {t(
                                     'biasSettings.form.fieldsets.parameters.performanceInterpretation.title'
                                 )}
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'biasSettings.form.fieldsets.parameters.performanceInterpretation.tooltip'
+                                    )}
+                                />
                             </label>
                             <FormField
                                 control={form.control}
