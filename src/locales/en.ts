@@ -32,8 +32,7 @@ export const en = {
                     - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
                     - the bias metric column is numerical`,
                     performanceMetric: 'Bias metric',
-                    performanceMetricTooltip:
-                        'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
+                    performanceMetricTooltip: 'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
                     dataTypeTooltip: 'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
                     categoricalData: 'Categorical data',
