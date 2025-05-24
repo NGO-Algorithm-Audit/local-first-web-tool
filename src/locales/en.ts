@@ -6,8 +6,7 @@ export const en = {
     getStarted: 'Fill in the form to begin.',
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
-    dropzoneLabel:
-        'Drag and drop your csv file here, or click to select a file',
+    dropzoneLabel: 'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
     datasetPreview: 'Dataset preview showing the first 5 rows.',
     error: 'Sorry, something went wrong.',
     loadingMessage: 'Setting up environment...',
@@ -28,11 +27,15 @@ export const en = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
-                    dataSetTooltip: `Your data should be prepared as follows: ...`,
+                    dataSetTooltip: `Preprocess your data such that: 
+                    - missing values are removed or replaced;
+                    - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
+                    - the bias metric column is numerical`,
                     performanceMetric: 'Bias metric',
                     performanceMetricTooltip:
-                        'Clustering will be based on the bias metrics',
+                        'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
+                    dataTypeTooltip: 'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
                 },
@@ -42,8 +45,9 @@ export const en = {
                     minClusterSize: 'Minimal cluster size',
                     performanceInterpretation: {
                         title: 'Bias metric interpretation',
-                        lower: 'Lower value of bias metric is better, e.g., error rate',
-                        higher: 'Higher value of bias metric is better, e.g., accuracy',
+                        lower: 'Lower value of bias metric is better, such as error rate',
+                        higher: 'Higher value of bias metric is better, such as accuracy',
+                        tooltip: 'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.'
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',

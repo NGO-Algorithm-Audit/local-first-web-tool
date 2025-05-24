@@ -7,7 +7,7 @@ export const nl = {
     fileUploadError: 'Upload een geldig csv-bestand.',
     removeButton: 'Verwijderen',
     dropzoneLabel:
-        'Sleep een csv-bestand hierheen of klik om een bestand te selecteren',
+        'Sleep een csv-bestand hierheen, klik om een eigen bestand te selecteren of gebruik de "Demo dataset" knop',
     datasetPreview: 'Voorbeeld van dataset met de eerste 5 rijen.',
     error: 'Sorry, er is iets misgegaan.',
     loadingMessage: 'Omgeving instellen...',
@@ -26,9 +26,14 @@ export const nl = {
                 data: {
                     title: 'Data',
                     dataSet: 'Dataset',
-                    dataSetTooltip: `Data wordt als volgt behandeld: ...`,
+                    dataSetTooltip: `Bereid je data voor zodat: 
+                    - missende waarden zijn verwijderd of vervangen;
+                    - alle kolommen (behalve de gelijkheidsmetriek-kolom) dezelfde datatypes hebben, numeriek of categorisch;
+                    - de gelijkheidsmetriek-kolom numeriek is`,
                     performanceMetric: 'Gelijkheidsmetriek',
+                    performanceMetricTooltip: 'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
                     dataType: 'Type data',
+                    dataTypeTooltip: 'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
                 },
@@ -40,13 +45,12 @@ export const nl = {
                         title: 'Interpretatie van gelijkheidsmetriek',
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
-                        tooltip:
-                            'Clustering is gebaseerd op de gelijkheidsmetriek.',
+                        tooltip: 'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
                     },
                     iterationsTooltip:
-                        'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters totdat de minimale clustergrootte is bereikt.',
+                        'Aantal keren dat de dataset wordt opgesplitst in clusters totdat de minimale clustergrootte is bereikt',
                     minClusterSizeTooltip:
-                        'Het minimale aantal datapunten per cluster. Standaard ingesteld op 10% van het aantal rijen in de bijgevoegde dataset.',
+                        'Het minimale aantal datapunten per cluster. Standaard ingesteld op 10% van het aantal rijen in de onderzochte dataset',
                 },
             },
             errors: {
