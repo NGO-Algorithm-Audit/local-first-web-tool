@@ -151,7 +151,19 @@ export default function BiasSettings({
         // Check if data type matches the actual data
 
         const isNumericData = formData.dataType === 'numeric';
-
+        console.log(
+            'isNumericData',
+            formData.selectedDataType,
+            formData.dataType,
+            isNumericData,
+            Object.keys(data.data[0] || {})
+                .filter(column => column)
+                .filter(column =>
+                    data.data.every(row => {
+                        return !isNaN(parseFloat(row[column]));
+                    })
+                )
+        );
         if (formData.selectedDataType === 'numeric' && !isNumericData) {
             setDataTypeError(t('biasSettings.form.errors.numericDataRequired'));
             return;

@@ -123,7 +123,7 @@ self.onmessage = async (e: MessageData) => {
             'scikit-learn',
             'scipy',
             '/kmodes-0.12.2-py2.py3-none-any.whl',
-            '/unsupervised_bias_detection-0.2.1-py3-none-any.whl',
+            '/unsupervised_bias_detection-0.2.6-py3-none-any.whl',
             '/copulas-0.12.1-py3-none-any.whl',
             '/python_synthpop-0.1.1-py3-none-any.whl',
         ]);

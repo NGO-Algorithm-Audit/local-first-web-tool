@@ -9,8 +9,8 @@ import scipy.stats as stats
 warnings.filterwarnings('ignore')
 
 from io import StringIO
-from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKModes
-from unsupervised_bias_detection.clustering import BiasAwareHierarchicalKMeans
+from unsupervised_bias_detection.cluster import BiasAwareHierarchicalKModes
+from unsupervised_bias_detection.cluster import BiasAwareHierarchicalKMeans
 import time
 start = time.time()
 
@@ -91,9 +91,9 @@ def run():
     y = scaleY * df[targetColumn]
 
     if dataType == 'numeric':
-        hbac = BiasAwareHierarchicalKMeans(n_iter=iterations, min_cluster_size=clusterSize).fit(X, y)
+        hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
     else:
-        hbac = BiasAwareHierarchicalKModes(n_iter=iterations, min_cluster_size=clusterSize).fit(X, y)
+        hbac = BiasAwareHierarchicalKModes(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
 
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
