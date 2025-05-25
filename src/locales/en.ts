@@ -6,7 +6,8 @@ export const en = {
     getStarted: 'Fill in the form to begin.',
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
-    dropzoneLabel: 'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
+    dropzoneLabel:
+        'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
     datasetPreview: 'Dataset preview showing the first 5 rows.',
     error: 'Sorry, something went wrong.',
     loadingMessage: 'Setting up environment...',
@@ -32,9 +33,11 @@ export const en = {
                     - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
                     - the bias metric column is numerical`,
                     performanceMetric: 'Bias metric',
-                    performanceMetricTooltip: 'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
+                    performanceMetricTooltip:
+                        'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
-                    dataTypeTooltip: 'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
+                    dataTypeTooltip:
+                        'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
                 },
@@ -46,7 +49,8 @@ export const en = {
                         title: 'Bias metric interpretation',
                         lower: 'Lower value of bias metric is better, such as error rate',
                         higher: 'Higher value of bias metric is better, such as accuracy',
-                        tooltip: 'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.'
+                        tooltip:
+                            'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
@@ -251,8 +255,19 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     biasAnalysis: {
         demo: {
             heading: 'Information about demo dataset',
-            description:
-                'As a demo, the [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset is loaded below. The dataset contains features of tweets and the prediction of a BERT-based misinformation classifier whether the tweet is fake news or not. False positive classifications are marked as FP. The FP column indicates that a tweet is falsy accused by the misinformation detection algorithm to be fake news. The FP metric will be used as a performance metric to measure bias is this use case.\n  \n&nbsp;&nbsp;\n\n In this example, we will examine what type of tweets are more/less often classified by misinformation detection algorithm as fake news.',
+            description: `As a demo, the [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) is loaded. The dataset contains features about criminal defendants and their risk of recidivism as predicted by the COMPAS algorithm. It includes demographic details such as age, sex, and race, as well as criminal history, charge details, and the predicted risk label. This dataset is as a benchmark for studying algorithmic discrimination. A description of all variables can be found in the table below.
+
+**Variable description**
+| Variable name   | Description                                 | Values                                                                 |
+|-----------------|---------------------------------------------|------------------------------------------------------------------------|
+| age_cat         | Age category                                | Less than 25, 25-45, Greater than 45                                   |
+| sex             | Sex                                         | Male, Female                                                           |
+| race            | Race                                        | African-American, Asian, Caucasian,  Hispanic, Native American, Other  |
+| c_charge_degree | Severity level of the criminal charge       | M: Misdemeanor – Less severe offenses, F: Felony – More serious crimes |
+| is_recid        | If defendant reoffended                     | 0: No, 1: Yes                                                          |
+| score_text      | Predicted risk label of defendant           | 0: Not high risk, 1: High risk                                         |
+| false_positive  | Defendant predicted to reoffend, but didn't | 0: no FP, 1: FP                                                        |
+`,
         },
         parameters: {
             heading: 'Parameters selected for clustering',

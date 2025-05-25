@@ -3,6 +3,7 @@ import { remarkInfoTooltip } from './remark-info-tooltip';
 import { rehypeInfoTooltip } from './rehype-info-tooltip';
 import { TooltipWrapper } from './TooltipWrapper';
 import type { Element, ElementData } from 'hast';
+import remarkGfm from 'remark-gfm';
 
 interface MarkdownWithTooltipsProps {
     children: string;
@@ -26,7 +27,7 @@ export function MarkdownWithTooltips({
     return (
         <Markdown
             className={className}
-            remarkPlugins={[remarkInfoTooltip]}
+            remarkPlugins={[remarkInfoTooltip, remarkGfm]}
             rehypePlugins={[rehypeInfoTooltip]}
             components={{
                 // @ts-expect-error - TooltipWrapper is a custom component

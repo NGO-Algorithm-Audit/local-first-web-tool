@@ -32,6 +32,15 @@
     p:has(> div) {
         display: contents;
     }
+    table {
+        @apply w-full;
+    }
+    th {
+        @apply text-left font-bold p-2 bg-aaRegularLight text-black;
+    }
+    td {
+        @apply text-left p-2;
+    }
 }
 
 .tooltip-content {
