@@ -12,6 +12,7 @@ interface GroupBarChartProps {
     data: Data[];
     colorRange?: string[];
     showMeanLine: boolean;
+    isViridis?: boolean;
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -25,6 +26,7 @@ const GroupBarChart = ({
     yAxisLabel,
     colorRange,
     showMeanLine,
+    isViridis,
 }: GroupBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -62,12 +64,20 @@ const GroupBarChart = ({
         .rangeRound([0, fx.bandwidth()])
         .padding(0.05);
 
+    const colors = new Array(Math.max(Math.min(groupbarNames.size, 11), 3));
+    for (let i = 0; i < colors.length; i++) {
+        colors[i] = d3.interpolateViridis(i / colors.length);
+    }
     const color = d3
         .scaleOrdinal()
         .domain(groupbarNames)
         .range(
             colorRange ??
-                d3.schemeSpectral[Math.max(Math.min(groupbarNames.size, 11), 3)]
+                (isViridis
+                    ? colors
+                    : d3.schemeSpectral[
+                          Math.max(Math.min(groupbarNames.size, 11), 3)
+                      ])
         )
         .unknown('#ccc');
 
