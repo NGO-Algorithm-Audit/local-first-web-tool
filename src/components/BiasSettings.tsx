@@ -214,7 +214,10 @@ export default function BiasSettings({
                                 disabled={isLoading}
                                 name="file"
                                 render={() => (
-                                    <CSVReader onChange={onFileLoad} />
+                                    <CSVReader
+                                        disabled={isLoading}
+                                        onChange={onFileLoad}
+                                    />
                                 )}
                             />
                         </div>
@@ -303,6 +306,7 @@ export default function BiasSettings({
                                             />
                                         </FormLabel>
                                         <Select
+                                            disabled={isLoading}
                                             onValueChange={field.onChange}
                                             key={`${dataKey}_select`}
                                         >

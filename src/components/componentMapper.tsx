@@ -144,15 +144,17 @@ export default function ComponentMapper({
                             (x: Record<string, number>, index: number) => {
                                 const translationID = getLabel(index);
                                 return {
-                                    name: t(
-                                        translationID.key,
-                                        translationID.params
-                                    ),
+                                    name: resultItem.categories
+                                        ? resultItem.categories[index]
+                                        : t(
+                                              translationID.key,
+                                              translationID.params
+                                          ),
                                     values: createArrayFromPythonDictionary(x),
                                 };
                             }
                         );
-                        console.log('histogramData', histogramData);
+                        console.log('histogramData', resultItem, histogramData);
 
                         return (
                             <ErrorBoundary key={index}>
@@ -161,6 +163,9 @@ export default function ComponentMapper({
                                     data={histogramData}
                                     yAxisLabel={t('distribution.frequency')}
                                     title={resultItem.title ?? ''}
+                                    isViridis={
+                                        resultItem.categories !== undefined
+                                    }
                                 />
                             </ErrorBoundary>
                         );

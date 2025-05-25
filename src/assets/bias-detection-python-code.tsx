@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import numpy as np
 import warnings
+from scipy.stats import ttest_ind
 import scipy.stats as stats
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.model_selection import train_test_split
@@ -88,6 +89,8 @@ def run():
     if isDemo:
         targetColumn = "score_text"
         dataType = "categorical"
+        iterations = 20
+
         # Select relevant columns
         columns_of_interest = ["age_cat", "sex", "race", "c_charge_degree", "is_recid", "score_text"]
         filtered_df = df[columns_of_interest]
@@ -99,21 +102,34 @@ def run():
 
         filtered_df["score_text"] = filtered_df["score_text"].map(lambda x: 1 if x == "High" else 0)
         filtered_df["is_recid"] = filtered_df["is_recid"].astype("category")
+        
+        filtered_df["false_positive"] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
 
         encoder = OrdinalEncoder()
         filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df)
     else:
         filtered_df = df
     
+
+    df_no_bias_metric = filtered_df.drop(columns=["false_positive"])
+    if df_no_bias_metric.dtypes.nunique() == 1:
+        print('consistent data')
+    else:
+        print('not all columns in the provided dataset have the same data type')    
+
         
     # split the data into training and testing sets
     train_df, test_df = train_test_split(filtered_df, test_size=0.2, random_state=42)
-    X_train = train_df.drop(columns=[targetColumn])
-    y_train = train_df[targetColumn]
+    X_train = train_df.drop(columns=["false_positive"])
 
-    # remove the bias metric from the test set to prevent issues with decoding
-    X_test = test_df.drop(columns=[targetColumn])
+    # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
+    y_train = train_df["false_positive"] * -1
 
+    # remove the bias metric from the test set to prevent issues with decoding later
+    X_test = test_df.drop(columns=["false_positive"])
+
+    if isDemo:
+        clusterSize = X_train.shape[0]*0.01
 
     scaleY = 1
     if higherIsBetter == 1:
@@ -132,7 +148,7 @@ def run():
 
     num_zeros = np.sum(hbac.labels_ == 0)
     print(f"Number of datapoints in most deviating cluster: {num_zeros}/{train_df.shape[0]}")
-
+    print(f"Number of clusters: {hbac.n_clusters_}")
 
     # df['Cluster'] = hbac.labels_
 
@@ -151,10 +167,17 @@ def run():
 
     
 
+    # setResult(json.dumps({
+    #    'type': 'data-set-preview',
+    #    'data': ''
+    # }))
+
     setResult(json.dumps({
-        'type': 'data-set-preview',
-        'data': ''
+        'type': 'table', 
+        'showIndex': True,
+        'data': filtered_df.head().to_json(orient="records")
     }))
+    
 
     setResult(json.dumps({
         'type': 'heading',
@@ -193,11 +216,94 @@ def run():
     decoded_X_test = test_df.copy()
     decoded_X_test = encoder.inverse_transform(test_df)
 
+    
+
     # display the decoded DataFrame
     decoded_X_test = pd.DataFrame(decoded_X_test, columns=test_df.columns)
-    decoded_X_test
+    print(decoded_X_test)
 
     decoded_X_test["cluster_label"] = y_test
+    
+    setResult(json.dumps({
+        'type': 'table', 
+        'showIndex': True,
+        'data': decoded_X_test.head().to_json(orient="records")
+    }))
+    
+    decoded_X_test["cluster_label"] = y_test
+
+    setResult(json.dumps({
+        'type': 'table', 
+        'showIndex': True,
+        'data': decoded_X_test.head().to_json(orient="records")
+    }))
+    
+    most_biased_cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == 0]
+    rest_df = decoded_X_test[decoded_X_test["cluster_label"] != 0]
+
+    # Convert score_text to numeric
+    bias_metric_most_biased = pd.to_numeric(most_biased_cluster_df["false_positive"])
+    bias_metric_rest = pd.to_numeric(rest_df["false_positive"])
+
+    # Perform independent two-sample t-test (two-sided: average bias metric in most_biased_cluster_df ≠ average bias metric in rest_df)
+    t_stat, p_val = ttest_ind(bias_metric_most_biased, bias_metric_rest, alternative='two-sided')
+
+    print(f"T-statistic: {t_stat}")
+    print(f"p-value: {p_val}")
+
+    if p_val < 0.05:
+        print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
+    else:
+        print("No significant difference in average bias metric between the most biased cluster and the rest of the dataset.")
+
+
+    # TODO Show UI-text 7
+
+    
+    # visualize the clusters   
+    
+    # Group by cluster_label and count the occurrences
+    cluster_counts = decoded_X_test["cluster_label"].value_counts()
+    print(f"cluster_counts: {cluster_counts}")
+
+    # Create subplots for each column
+    columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
+    rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
+    print(f"rows: {rows}")
+
+    for i, column in enumerate(columns_to_analyze):
+        print(f"Analyzing column: {column}")
+
+        grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
+        percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
+           
+        print(percentages.T)
+        
+        print("------ grouped_data start ------")
+        print(grouped_data)
+
+        print("------ grouped_data columns ------")
+
+        # print category values
+        category_values = grouped_data.columns.tolist()
+        print(category_values)
+
+        print("------ grouped_data end ------")
+
+
+        setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'biasAnalysis.distribution.heading',            
+            'params': {'variable': column}
+        }))
+
+        setResult(json.dumps({
+            'type': 'histogram',
+            'title': column,
+            'categories': category_values,
+            'data': percentages.T.to_json(orient='records')
+        }))
+
     
     return
 

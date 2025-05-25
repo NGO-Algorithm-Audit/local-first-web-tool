@@ -7,6 +7,7 @@ import { FormItem, FormLabel } from './ui/form';
 import { useTranslation } from 'react-i18next';
 
 export interface csvReader {
+    disabled?: boolean;
     onChange: (
         data: Record<string, string>[],
         stringified: string,
@@ -16,7 +17,7 @@ export interface csvReader {
     ) => void;
 }
 
-export default function CSVReader({ onChange }: csvReader) {
+export default function CSVReader({ disabled, onChange }: csvReader) {
     const { t } = useTranslation();
     const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
         // Ensure there's only one file and it's a CSV
@@ -69,6 +70,7 @@ export default function CSVReader({ onChange }: csvReader) {
                             <File className="size-5" />
                             {file.name} - {(file.size / 1024).toFixed(2)} kB
                             <Button
+                                disabled={disabled}
                                 onClick={() => {
                                     acceptedFiles.splice(
                                         acceptedFiles.indexOf(file),
@@ -94,7 +96,12 @@ export default function CSVReader({ onChange }: csvReader) {
             {...getRootProps()}
             className="border-aaDark border-dashed border-2 cursor-pointer rounded-xl text-center p-10 lg:min-w-[400px]"
         >
-            <input {...getInputProps()} multiple={false} accept=".csv" />
+            <input
+                {...getInputProps()}
+                multiple={false}
+                accept=".csv"
+                disabled={disabled}
+            />
 
             <FormLabel>{t('dropzoneLabel')}</FormLabel>
         </FormItem>
