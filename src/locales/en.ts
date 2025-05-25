@@ -253,6 +253,9 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     },
 
     biasAnalysis: {
+        dataSetPreview: {
+            heading: '0. Preview of real data',
+        },
         demo: {
             heading: 'Information about demo dataset',
             description: `As a demo, the [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) is loaded. The dataset contains features about criminal defendants and their risk of recidivism as predicted by the COMPAS algorithm. It includes demographic details such as age, sex, and race, as well as criminal history, charge details, and the predicted risk label. This dataset is as a benchmark for studying algorithmic discrimination. A description of all variables can be found in the table below.
@@ -267,6 +270,9 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
 | is_recid        | If defendant reoffended                     | 0: No, 1: Yes                                                          |
 | score_text      | Predicted risk label of defendant           | 0: Not high risk, 1: High risk                                         |
 | false_positive  | Defendant predicted to reoffend, but didn't | 0: no FP, 1: FP                                                        |
+
+
+In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the "bias metric".
 `,
         },
         parameters: {
@@ -292,9 +298,24 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
                 equal: 'equal {{feature}} as in the rest of the dataset.',
             },
         },
+        nodifference: {
+            heading:
+                'No significant difference in average bias metric between the most biased cluster and the rest of the dataset.',
+        },
         distribution: {
             heading:
                 'The "{{variable}}" variable distribution across the different clusters:',
+        },
+        splittingDataset: {
+            heading: 'Splitting dataset',
+            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in deviating clusters is evaluated using the test dataset.`,
+        },
+        clusterinResults: {
+            heading: 'Clustering results',
+            description: `
+- Number of clusters detected: {{clusterCount}}
+- Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
+            `,
         },
     },
     heatmap: {

@@ -85,11 +85,14 @@ def run():
     
     emptycols = df.columns[df.isnull().any()].tolist()
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
-
+    
     if isDemo:
-        targetColumn = "score_text"
+        bias_metric = "false_positive"
+        targetColumn = "false_positive"
         dataType = "categorical"
         iterations = 20
+
+        print (f"Using demo parameters: bias_metric={bias_metric}, targetColumn={targetColumn}, dataType={dataType}, iterations={iterations}")
 
         # Select relevant columns
         columns_of_interest = ["age_cat", "sex", "race", "c_charge_degree", "is_recid", "score_text"]
@@ -103,42 +106,47 @@ def run():
         filtered_df["score_text"] = filtered_df["score_text"].map(lambda x: 1 if x == "High" else 0)
         filtered_df["is_recid"] = filtered_df["is_recid"].astype("category")
         
-        filtered_df["false_positive"] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
+        filtered_df[bias_metric] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
 
         encoder = OrdinalEncoder()
         filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df)
     else:
         filtered_df = df
+        bias_metric = targetColumn
+    
     
 
-    df_no_bias_metric = filtered_df.drop(columns=["false_positive"])
+    df_no_bias_metric = filtered_df.drop(columns=[bias_metric])
     if df_no_bias_metric.dtypes.nunique() == 1:
         print('consistent data')
     else:
         print('not all columns in the provided dataset have the same data type')    
-
+    
         
     # split the data into training and testing sets
     train_df, test_df = train_test_split(filtered_df, test_size=0.2, random_state=42)
-    X_train = train_df.drop(columns=["false_positive"])
+    X_train = train_df.drop(columns=[bias_metric])
 
     # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
-    y_train = train_df["false_positive"] * -1
+    y_train = train_df[bias_metric] * -1
 
     # remove the bias metric from the test set to prevent issues with decoding later
-    X_test = test_df.drop(columns=["false_positive"])
+    X_test = test_df.drop(columns=[bias_metric])
 
     if isDemo:
         clusterSize = X_train.shape[0]*0.01
 
+
+    
+
     scaleY = 1
     if higherIsBetter == 1:
         scaleY = -1;
-
-    X = df[features]
-    y = scaleY * df[targetColumn]
-
+   
+    
     if dataType == 'numeric':
+        X = df[features]
+        y = scaleY * df[bias_metric]
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
     else:
         hbac = BiasAwareHierarchicalKModes(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X_train, y_train)
@@ -150,10 +158,13 @@ def run():
     print(f"Number of datapoints in most deviating cluster: {num_zeros}/{train_df.shape[0]}")
     print(f"Number of clusters: {hbac.n_clusters_}")
 
+    clusterCount = hbac.n_clusters_
+    numZeros = num_zeros 
+    totalRecords = train_df.shape[0]
+
     # df['Cluster'] = hbac.labels_
 
     
-
 
     if isDemo:
         setResult(json.dumps({
@@ -165,18 +176,21 @@ def run():
             'key': 'biasAnalysis.demo.description'
         }))
 
-    
-
-    # setResult(json.dumps({
-    #    'type': 'data-set-preview',
-    #    'data': ''
-    # }))
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'biasAnalysis.dataSetPreview.heading'
+    }))
 
     setResult(json.dumps({
-        'type': 'table', 
-        'showIndex': True,
-        'data': filtered_df.head().to_json(orient="records")
+       'type': 'data-set-preview',
+       'data': ''
     }))
+
+    # setResult(json.dumps({
+    #    'type': 'table', 
+    #    'showIndex': True,
+    #    'data': filtered_df.head().to_json(orient="records")
+    # }))
     
 
     setResult(json.dumps({
@@ -199,12 +213,45 @@ def run():
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.performanceMetric',
-        'params': {'value': targetColumn}
+        'params': {'value': bias_metric}
     }))
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.dataType',
         'params': {'value': dataType}
+    }))
+    setResult(json.dumps({
+        'type': 'text',
+        'data': ''
+    }))
+
+
+    setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'biasAnalysis.splittingDataset.heading'
+        }))
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.splittingDataset.description'
+    }))
+    setResult(json.dumps({
+        'type': 'text',
+        'data': ''
+    }))
+
+
+    setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'biasAnalysis.clusterinResults.heading'
+        }))
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.clusterinResults.description',
+        'params': {
+            'numZeroes': int(numZeros),
+            'totalRecords': int(totalRecords),
+            'clusterCount': clusterCount
+        }
     }))
     setResult(json.dumps({
         'type': 'text',
@@ -224,26 +271,26 @@ def run():
 
     decoded_X_test["cluster_label"] = y_test
     
-    setResult(json.dumps({
-        'type': 'table', 
-        'showIndex': True,
-        'data': decoded_X_test.head().to_json(orient="records")
-    }))
+    # setResult(json.dumps({
+    #    'type': 'table', 
+    #    'showIndex': True,
+    #    'data': decoded_X_test.head().to_json(orient="records")
+    # }))
     
     decoded_X_test["cluster_label"] = y_test
 
-    setResult(json.dumps({
-        'type': 'table', 
-        'showIndex': True,
-        'data': decoded_X_test.head().to_json(orient="records")
-    }))
+    # setResult(json.dumps({
+    #    'type': 'table', 
+    #    'showIndex': True,
+    #    'data': decoded_X_test.head().to_json(orient="records")
+    # }))
     
     most_biased_cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == 0]
     rest_df = decoded_X_test[decoded_X_test["cluster_label"] != 0]
 
     # Convert score_text to numeric
-    bias_metric_most_biased = pd.to_numeric(most_biased_cluster_df["false_positive"])
-    bias_metric_rest = pd.to_numeric(rest_df["false_positive"])
+    bias_metric_most_biased = pd.to_numeric(most_biased_cluster_df[bias_metric])
+    bias_metric_rest = pd.to_numeric(rest_df[bias_metric])
 
     # Perform independent two-sample t-test (two-sided: average bias metric in most_biased_cluster_df ≠ average bias metric in rest_df)
     t_stat, p_val = ttest_ind(bias_metric_most_biased, bias_metric_rest, alternative='two-sided')
@@ -255,7 +302,10 @@ def run():
         print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
     else:
         print("No significant difference in average bias metric between the most biased cluster and the rest of the dataset.")
-
+        setResult(json.dumps({
+                'type': 'heading',
+                'headingKey': 'biasAnalysis.nodifference.heading',                            
+            }))    
 
     # TODO Show UI-text 7
 
@@ -266,43 +316,44 @@ def run():
     cluster_counts = decoded_X_test["cluster_label"].value_counts()
     print(f"cluster_counts: {cluster_counts}")
 
-    # Create subplots for each column
-    columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
-    rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
-    print(f"rows: {rows}")
+    if p_val < 0.05:
+        # Create subplots for each column
+        columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
+        rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
+        print(f"rows: {rows}")
 
-    for i, column in enumerate(columns_to_analyze):
-        print(f"Analyzing column: {column}")
+        for i, column in enumerate(columns_to_analyze):
+            print(f"Analyzing column: {column}")
 
-        grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
-        percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
-           
-        print(percentages.T)
-        
-        print("------ grouped_data start ------")
-        print(grouped_data)
+            grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
+            percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
+            
+            print(percentages.T)
+            
+            print("------ grouped_data start ------")
+            print(grouped_data)
 
-        print("------ grouped_data columns ------")
+            print("------ grouped_data columns ------")
 
-        # print category values
-        category_values = grouped_data.columns.tolist()
-        print(category_values)
+            # print category values
+            category_values = grouped_data.columns.tolist()
+            print(category_values)
 
-        print("------ grouped_data end ------")
+            print("------ grouped_data end ------")
 
 
-        setResult(json.dumps({
-            'type': 'heading',
-            'headingKey': 'biasAnalysis.distribution.heading',            
-            'params': {'variable': column}
-        }))
+            setResult(json.dumps({
+                'type': 'heading',
+                'headingKey': 'biasAnalysis.distribution.heading',            
+                'params': {'variable': column}
+            }))
 
-        setResult(json.dumps({
-            'type': 'histogram',
-            'title': column,
-            'categories': category_values,
-            'data': percentages.T.to_json(orient='records')
-        }))
+            setResult(json.dumps({
+                'type': 'histogram',
+                'title': column,
+                'categories': category_values,
+                'data': percentages.T.to_json(orient='records')
+            }))
 
     
     return

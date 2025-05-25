@@ -127,7 +127,7 @@ export default function BiasDetection() {
                 parameters: {
                     iterations: params.iterations,
                     clusterSize: params.clusterSize,
-                    targetColumn: params.targetColumn,
+                    targetColumn: params.targetColumn ?? '',
                     dataType: params.dataType,
                     higherIsBetter: params.higherIsBetter,
                     isDemo: params.isDemo,
