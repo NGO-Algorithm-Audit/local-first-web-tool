@@ -88,11 +88,10 @@ def run():
     
     if isDemo:
         bias_metric = "false_positive"
-        targetColumn = "false_positive"
-        dataType = "categorical"
-        iterations = 20
+        localDataType = "categorical"
+        localIterations = 20
 
-        print (f"Using demo parameters: bias_metric={bias_metric}, targetColumn={targetColumn}, dataType={dataType}, iterations={iterations}")
+        print (f"Using demo parameters: bias_metric={bias_metric}, targetColumn={targetColumn}, dataType={localDataType}, iterations={iterations}")
 
         # Select relevant columns
         columns_of_interest = ["age_cat", "sex", "race", "c_charge_degree", "is_recid", "score_text"]
@@ -113,6 +112,8 @@ def run():
     else:
         filtered_df = df
         bias_metric = targetColumn
+        localDataType = dataType
+        localIterations = iterations
     
     
 
@@ -134,8 +135,9 @@ def run():
     X_test = test_df.drop(columns=[bias_metric])
 
     if isDemo:
-        clusterSize = X_train.shape[0]*0.01
-
+        localClusterSize = X_train.shape[0]*0.01
+    else:
+        localClusterSize = clusterSize
 
     
 
@@ -144,12 +146,12 @@ def run():
         scaleY = -1;
    
     
-    if dataType == 'numeric':
-        X = df[features]
-        y = scaleY * df[bias_metric]
-        hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
+    if localDataType == 'numeric':
+        # X = df[features]
+        # y = scaleY * df[bias_metric]
+        hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
     else:
-        hbac = BiasAwareHierarchicalKModes(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X_train, y_train)
+        hbac = BiasAwareHierarchicalKModes(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
     
     
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
@@ -203,12 +205,12 @@ def run():
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.iterations',
-        'params': {'value': iterations}
+        'params': {'value': localIterations}
     }))
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.minClusterSize',
-        'params': {'value': clusterSize}
+        'params': {'value': localClusterSize}
     }))
     setResult(json.dumps({
         'type': 'text',
@@ -218,7 +220,7 @@ def run():
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.dataType',
-        'params': {'value': dataType}
+        'params': {'value': localDataType}
     }))
     setResult(json.dumps({
         'type': 'text',
@@ -259,10 +261,12 @@ def run():
     }))
 
     y_test = hbac.predict(X_test.to_numpy())
-    # decode X_test using the encoder
-    decoded_X_test = test_df.copy()
-    decoded_X_test = encoder.inverse_transform(test_df)
 
+    decoded_X_test = test_df.copy()
+    
+    if isDemo:
+        # decode X_test using the encoder
+        decoded_X_test = encoder.inverse_transform(test_df)
     
 
     # display the decoded DataFrame
