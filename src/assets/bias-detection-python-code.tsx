@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import warnings
 import scipy.stats as stats
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.model_selection import train_test_split
 
 warnings.filterwarnings('ignore')
 
@@ -83,6 +85,36 @@ def run():
     emptycols = df.columns[df.isnull().any()].tolist()
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
 
+    if isDemo:
+        targetColumn = "score_text"
+        dataType = "categorical"
+        # Select relevant columns
+        columns_of_interest = ["age_cat", "sex", "race", "c_charge_degree", "is_recid", "score_text"]
+        filtered_df = df[columns_of_interest]
+
+        features = columns_of_interest
+
+        # Drop rows with missing values
+        filtered_df = filtered_df.dropna()
+
+        filtered_df["score_text"] = filtered_df["score_text"].map(lambda x: 1 if x == "High" else 0)
+        filtered_df["is_recid"] = filtered_df["is_recid"].astype("category")
+
+        encoder = OrdinalEncoder()
+        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df)
+    else:
+        filtered_df = df
+    
+        
+    # split the data into training and testing sets
+    train_df, test_df = train_test_split(filtered_df, test_size=0.2, random_state=42)
+    X_train = train_df.drop(columns=[targetColumn])
+    y_train = train_df[targetColumn]
+
+    # remove the bias metric from the test set to prevent issues with decoding
+    X_test = test_df.drop(columns=[targetColumn])
+
+
     scaleY = 1
     if higherIsBetter == 1:
         scaleY = -1;
@@ -93,11 +125,19 @@ def run():
     if dataType == 'numeric':
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
     else:
-        hbac = BiasAwareHierarchicalKModes(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X, y)
-
+        hbac = BiasAwareHierarchicalKModes(bahc_max_iter=iterations, bahc_min_cluster_size=clusterSize).fit(X_train, y_train)
+    
+    
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
-    df['Cluster'] = hbac.labels_
+    num_zeros = np.sum(hbac.labels_ == 0)
+    print(f"Number of datapoints in most deviating cluster: {num_zeros}/{train_df.shape[0]}")
+
+
+    # df['Cluster'] = hbac.labels_
+
+    
+
 
     if isDemo:
         setResult(json.dumps({
@@ -109,6 +149,8 @@ def run():
             'key': 'biasAnalysis.demo.description'
         }))
 
+    
+
     setResult(json.dumps({
         'type': 'data-set-preview',
         'data': ''
@@ -118,6 +160,7 @@ def run():
         'type': 'heading',
         'headingKey': 'biasAnalysis.parameters.heading'
     }))
+
 
     # Parameter information
     setResult(json.dumps({
@@ -144,6 +187,19 @@ def run():
         'type': 'text',
         'data': ''
     }))
+
+    y_test = hbac.predict(X_test.to_numpy())
+    # decode X_test using the encoder
+    decoded_X_test = test_df.copy()
+    decoded_X_test = encoder.inverse_transform(test_df)
+
+    # display the decoded DataFrame
+    decoded_X_test = pd.DataFrame(decoded_X_test, columns=test_df.columns)
+    decoded_X_test
+
+    decoded_X_test["cluster_label"] = y_test
+    
+    return
 
     df_most_biased_cluster = df[hbac.labels_ == 0]
     df_other = df[hbac.labels_ != 0]

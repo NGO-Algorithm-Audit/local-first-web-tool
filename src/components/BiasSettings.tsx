@@ -107,13 +107,14 @@ export default function BiasSettings({
         setDataTypeError(null);
         if (!isReset) {
             // Find numeric columns
-            const numericColumns = Object.keys(data[0] || {})
-                .filter(column => column)
-                .filter(column =>
-                    data.every(row => {
-                        return !isNaN(parseFloat(row[column]));
-                    })
-                );
+            const numericColumns = Object.keys(data[0] || {}).filter(
+                column => column
+            );
+            // .filter(column =>
+            //     data.every(row => {
+            //         return !isNaN(parseFloat(row[column]));
+            //     })
+            // );
 
             if (numericColumns.length === 0) {
                 setPerformanceMetricColumnError(
@@ -136,7 +137,7 @@ export default function BiasSettings({
     }, [data]);
 
     const onDemoRun = async () => {
-        const file = await fetch('/FP-test-set.csv')
+        const file = await fetch('compas-scores-two-years.csv') //'/FP-test-set.csv')
             .then(response => response.text())
             .then(data => Papa.parse(data, { header: true }));
         onDataLoad(
@@ -322,19 +323,19 @@ export default function BiasSettings({
                                                         .filter(
                                                             column => column
                                                         )
-                                                        .filter(column =>
-                                                            data.data.every(
-                                                                row => {
-                                                                    return !isNaN(
-                                                                        parseFloat(
-                                                                            row[
-                                                                                column
-                                                                            ]
-                                                                        )
-                                                                    );
-                                                                }
-                                                            )
-                                                        )
+                                                        // .filter(column =>
+                                                        //     data.data.every(
+                                                        //         row => {
+                                                        //             return !isNaN(
+                                                        //                 parseFloat(
+                                                        //                     row[
+                                                        //                         column
+                                                        //                     ]
+                                                        //                 )
+                                                        //             );
+                                                        //         }
+                                                        //     )
+                                                        // )
                                                         .map(column => (
                                                             <SelectItem
                                                                 key={`${dataKey}${column}`}
