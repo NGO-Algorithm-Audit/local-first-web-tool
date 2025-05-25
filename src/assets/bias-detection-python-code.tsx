@@ -114,7 +114,10 @@ def run():
         bias_metric = targetColumn
         localDataType = dataType
         localIterations = iterations
-    
+
+        if (dataType == 'numeric'):
+            # Convert all columns to numeric
+            filtered_df = filtered_df.astype('float64')
     
 
     df_no_bias_metric = filtered_df.drop(columns=[bias_metric])
@@ -128,8 +131,14 @@ def run():
     train_df, test_df = train_test_split(filtered_df, test_size=0.2, random_state=42)
     X_train = train_df.drop(columns=[bias_metric])
 
+    scaleY = 1
+    if localDataType == 'numeric':
+        if higherIsBetter == 1:
+            scaleY = -1;
+
+
     # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
-    y_train = train_df[bias_metric] * -1
+    y_train = train_df[bias_metric] * higherIsBetter
 
     # remove the bias metric from the test set to prevent issues with decoding later
     X_test = test_df.drop(columns=[bias_metric])
@@ -139,12 +148,7 @@ def run():
     else:
         localClusterSize = clusterSize
 
-    
 
-    scaleY = 1
-    if higherIsBetter == 1:
-        scaleY = -1;
-   
     
     if localDataType == 'numeric':
         # X = df[features]
