@@ -107,8 +107,7 @@ def run():
         
         filtered_df[bias_metric] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
 
-        encoder = OrdinalEncoder()
-        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df)
+        
     else:
         filtered_df = df
         bias_metric = targetColumn
@@ -118,7 +117,10 @@ def run():
         if (dataType == 'numeric'):
             # Convert all columns to numeric
             filtered_df = filtered_df.astype('float64')
-    
+
+    if localDataType == 'categorical':
+        encoder = OrdinalEncoder()
+        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("uint32")
 
     df_no_bias_metric = filtered_df.drop(columns=[bias_metric])
     if df_no_bias_metric.dtypes.nunique() == 1:
@@ -151,8 +153,6 @@ def run():
 
     
     if localDataType == 'numeric':
-        # X = df[features]
-        # y = scaleY * df[bias_metric]
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
     else:
         hbac = BiasAwareHierarchicalKModes(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
@@ -268,7 +268,7 @@ def run():
 
     decoded_X_test = test_df.copy()
     
-    if isDemo:
+    if localDataType == 'categorical':
         # decode X_test using the encoder
         decoded_X_test = encoder.inverse_transform(test_df)
     

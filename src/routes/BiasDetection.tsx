@@ -114,7 +114,7 @@ export default function BiasDetection() {
                 clusterSize: 3,
                 targetColumn: 'FP',
                 dataType: 'numeric',
-                higherIsBetter: false,
+                higherIsBetter: true,
                 isDemo: true,
             });
         }
