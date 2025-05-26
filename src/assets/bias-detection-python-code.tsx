@@ -155,6 +155,8 @@ def run():
     else:
         localClusterSize = clusterSize
 
+    localClusterSize = int(localClusterSize)
+    
     print(f"Using local iterations: {localIterations}")
     print(f"Using cluster size: {localClusterSize}")
     print(f"Using bias metric: {bias_metric}")
