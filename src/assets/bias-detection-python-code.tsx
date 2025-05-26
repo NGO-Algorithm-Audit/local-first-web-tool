@@ -118,6 +118,7 @@ def run():
             # Convert all columns to numeric
             filtered_df = filtered_df.astype('float64')
 
+    preview_data = filtered_df.head(5)
     if localDataType == 'categorical':
         encoder = OrdinalEncoder()
         filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("int32")
@@ -193,16 +194,16 @@ def run():
         'headingKey': 'biasAnalysis.dataSetPreview.heading'
     }))
 
-    setResult(json.dumps({
-       'type': 'data-set-preview',
-       'data': ''
-    }))
-
     # setResult(json.dumps({
-    #    'type': 'table', 
-    #    'showIndex': True,
-    #    'data': filtered_df.head().to_json(orient="records")
+    #    'type': 'data-set-preview',
+    #    'data': ''
     # }))
+
+    setResult(json.dumps({
+        'type': 'table', 
+        'showIndex': True,
+        'data': preview_data.to_json(orient="records")
+    }))
     
 
     setResult(json.dumps({

@@ -308,7 +308,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         splittingDataset: {
             heading: 'Splitting dataset',
-            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in deviating clusters is evaluated using the test dataset.`,
+            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in the most deviating clusters is evaluated using the test dataset.`,
         },
         clusterinResults: {
             heading: 'Clustering results',
