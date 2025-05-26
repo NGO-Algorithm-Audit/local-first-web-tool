@@ -120,7 +120,7 @@ def run():
 
     if localDataType == 'categorical':
         encoder = OrdinalEncoder()
-        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("uint32")
+        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("int32")
 
     df_no_bias_metric = filtered_df.drop(columns=[bias_metric])
     if df_no_bias_metric.dtypes.nunique() == 1:
@@ -134,23 +134,29 @@ def run():
     X_train = train_df.drop(columns=[bias_metric])
 
     scaleY = 1
-    if localDataType == 'numeric':
-        if higherIsBetter == 1:
-            scaleY = -1;
+    if higherIsBetter == 1:
+        scaleY = -1;
 
 
     # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
-    y_train = train_df[bias_metric] * higherIsBetter
+    y_train = train_df[bias_metric] * scaleY
 
     # remove the bias metric from the test set to prevent issues with decoding later
     X_test = test_df.drop(columns=[bias_metric])
+
+    # display the shapes of the resulting datasets
+    print(f"Training set shape: {train_df.shape}")
+    print(f"Testing set shape: {test_df.shape}")
+    print(f"X_train shape: {X_train.shape}")
 
     if isDemo:
         localClusterSize = X_train.shape[0]*0.01
     else:
         localClusterSize = clusterSize
 
-
+    print(f"Using local iterations: {localIterations}")
+    print(f"Using cluster size: {localClusterSize}")
+    print(f"Using bias metric: {bias_metric}")
     
     if localDataType == 'numeric':
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
@@ -160,12 +166,12 @@ def run():
     
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
-    num_zeros = np.sum(hbac.labels_ == 0)
-    print(f"Number of datapoints in most deviating cluster: {num_zeros}/{train_df.shape[0]}")
+    n_most_bias = np.sum(hbac.labels_ == 0)
+    print(f"Number of datapoints in most deviating cluster: {n_most_bias}/{train_df.shape[0]}")
     print(f"Number of clusters: {hbac.n_clusters_}")
 
     clusterCount = hbac.n_clusters_
-    numZeros = num_zeros 
+    numZeros = n_most_bias
     totalRecords = train_df.shape[0]
 
     # df['Cluster'] = hbac.labels_
