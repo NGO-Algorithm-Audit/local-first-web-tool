@@ -288,19 +288,8 @@ def run():
 
     decoded_X_test["cluster_label"] = y_test
     
-    # setResult(json.dumps({
-    #    'type': 'table', 
-    #    'showIndex': True,
-    #    'data': decoded_X_test.head().to_json(orient="records")
-    # }))
     
     decoded_X_test["cluster_label"] = y_test
-
-    # setResult(json.dumps({
-    #    'type': 'table', 
-    #    'showIndex': True,
-    #    'data': decoded_X_test.head().to_json(orient="records")
-    # }))
     
     most_biased_cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == 0]
     rest_df = decoded_X_test[decoded_X_test["cluster_label"] != 0]
@@ -373,43 +362,54 @@ def run():
             }))
 
     
+    
+
+    df_most_biased_cluster = most_biased_cluster_df # df[hbac.labels_ == 0]
+    df_other = rest_df # df[hbac.labels_ != 0]
+    
+    setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
+    setOutputData("otherClusters", df_other.to_json(orient='records'))
+
+
     return
 
-    df_most_biased_cluster = df[hbac.labels_ == 0]
-    df_other = df[hbac.labels_ != 0]
-
     # Cluster summary
-    setResult(json.dumps({
-        'type': 'heading',
-        'key': 'biasAnalysis.clusters.summary',
-        'params': {
-            'clusterCount': hbac.n_clusters_,
-            'biasedCount': len(df_most_biased_cluster),
-            'totalCount': df.shape[0]
-        }
-    }))
+    # setResult(json.dumps({
+    #    'type': 'heading',
+    #    'key': 'biasAnalysis.clusters.summary',
+    #    'params': {
+    #        'clusterCount': hbac.n_clusters_,
+    #        'biasedCount': len(df_most_biased_cluster),
+    #        'totalCount': df.shape[0]
+    #    }
+    #}))
 
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.clusters.sizeHint'
-    }))
+    # setResult(json.dumps({
+    #    'type': 'text',
+    #    'key': 'biasAnalysis.clusters.sizeHint'
+    # }))
 
-    setResult(json.dumps({
-        'type': 'text',
-        'data': ''
-    }))
+    # setResult(json.dumps({
+    #    'type': 'text',
+    #    'data': ''
+    #}))
 
     clusters_array = []
     full_df = pd.DataFrame()
     for i in range(hbac.n_clusters_):
-        labels = df[hbac.labels_ == i]
+        labels = decoded_X_test[hbac.labels_ == i]
         labels['Cluster'] = f'{i}'
         clusters_array.append(labels)
     full_df = pd.concat(clusters_array, ignore_index=True)
     full_df.head()
 
+    
+
     setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
     setOutputData("otherClusters", df_other.to_json(orient='records'))
+    
+    
+
 
     setResult(json.dumps({
         'type': 'heading',
