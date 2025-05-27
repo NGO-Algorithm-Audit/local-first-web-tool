@@ -297,6 +297,9 @@ In this example, we analyze which group is most adversely affected by the risk p
                 more: '{{value}} more {{feature}} than in the rest of the dataset.',
                 equal: 'equal {{feature}} as in the rest of the dataset.',
             },
+            difference: {
+                appearance: '{{feature}} : {{value}}',
+            },
         },
         nodifference: {
             heading:

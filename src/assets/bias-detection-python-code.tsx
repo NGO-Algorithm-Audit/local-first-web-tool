@@ -156,7 +156,7 @@ def run():
         localClusterSize = clusterSize
 
     localClusterSize = int(localClusterSize)
-    
+
     print(f"Using local iterations: {localIterations}")
     print(f"Using cluster size: {localClusterSize}")
     print(f"Using bias metric: {bias_metric}")
@@ -370,7 +370,59 @@ def run():
     setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
     setOutputData("otherClusters", df_other.to_json(orient='records'))
 
+    # Calculate the difference in percentage for each category value between cluster 0 and the entire dataset
+    diff_percentages = {}
 
+    # Select only cluster 0
+    cluster_0 = decoded_X_test[decoded_X_test["cluster_label"] == 0]
+
+
+    comparisons = []
+
+    for column in decoded_X_test.columns:
+        if column != "cluster_label":
+            # Percentage in cluster 0
+            cluster_0_pct = cluster_0[column].value_counts(normalize=True) * 100
+            # Percentage in entire dataset
+            overall_pct = decoded_X_test[column].value_counts(normalize=True) * 100
+            # Align indexes and calculate difference
+            diff = cluster_0_pct.subtract(overall_pct, fill_value=0)
+            diff_percentages[column] = diff
+
+    # Add new columns to decoded_X_test for each category, showing the difference for cluster 0
+    for column, diff in diff_percentages.items():
+        col_name = f"{column}_cluster0_diff_pct"
+        # Map the difference only for cluster 0 rows, else set to NaN
+        decoded_X_test[col_name] = decoded_X_test.apply(
+            lambda row: diff.get(row[column], 0) if row["cluster_label"] == 0 else float('nan'),
+            axis=1
+        )
+
+    # print for cluster 0, per value of each category in columns of X_test, how much it appears more or less than average in that cluster
+    for column in X_test.columns:
+        print(f"{column}")
+        # Get the difference percentages for this column
+        diff = diff_percentages.get(column)
+        if diff is not None:
+            for cat_value, pct_diff in diff.items():
+                # only print if the difference between cluster and rest is dataset is larger than 2% 
+                if pct_diff > 2:
+                    print(f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset")
+
+                    formatted_string = f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset"
+                    comparisons.append({
+                        'key': 'biasAnalysis.biasedCluster.difference.appearance',
+                        'params': {
+                            'value': formatted_string,
+                            'feature': column,
+                        }
+                    })
+
+    setResult(json.dumps({
+        'type': 'accordion',
+        'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
+        'comparisons': comparisons
+    }))
     return
 
     # Cluster summary
