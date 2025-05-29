@@ -31,9 +31,11 @@ export const nl = {
                     - alle kolommen (behalve de gelijkheidsmetriek-kolom) dezelfde datatypes hebben, numeriek of categorisch;
                     - de gelijkheidsmetriek-kolom numeriek is`,
                     performanceMetric: 'Gelijkheidsmetriek',
-                    performanceMetricTooltip: 'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
+                    performanceMetricTooltip:
+                        'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
                     dataType: 'Type data',
-                    dataTypeTooltip: 'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
+                    dataTypeTooltip:
+                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
                 },
@@ -45,7 +47,8 @@ export const nl = {
                         title: 'Interpretatie van gelijkheidsmetriek',
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
-                        tooltip: 'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
+                        tooltip:
+                            'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
                     },
                     iterationsTooltip:
                         'Aantal keren dat de dataset wordt opgesplitst in clusters totdat de minimale clustergrootte is bereikt',
@@ -214,6 +217,19 @@ export const nl = {
                 less: '{{value}} minder {{feature}} dan in de rest van de dataset.',
                 more: '{{value}} meer {{feature}} dan in de rest van de dataset.',
                 equal: 'gelijke {{feature}} als in de rest van de dataset.',
+            },
+            difference: {
+                appearance: '{{feature}} : {{value}}',
+                deviatingMoreOften:
+                    '**{{value}}**: Komt **vaker** voor in de meest afwijkende cluster dan in de rest van de dataset.',
+                deviatingLessOften:
+                    '**{{value}}**: Komt **minder** voor in de meest afwijkende cluster dan in de rest van de dataset.',
+            },
+            differenceCategorical: {
+                deviatingMoreOften:
+                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.',
+                deviatingLessOften:
+                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.',
             },
         },
         distribution: {
