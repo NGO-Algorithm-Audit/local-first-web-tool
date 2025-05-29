@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import warnings
 from scipy.stats import ttest_ind
+from scipy.stats import chi2_contingency
 import scipy.stats as stats
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.model_selection import train_test_split
@@ -85,7 +86,79 @@ def t_test_on_cluster(test_df, bias_score, cluster_label):
                         })
         else:
             continue
+
+    return comparisons
+
+def chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label):
+
+    comparisons = []
+    # prepare results dictionary
+    chi2_results = {}
+
+    cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == cluster_label]
+    rest_df = decoded_X_test[decoded_X_test["cluster_label"] != cluster_label]
+
+    for column in decoded_X_test.drop(columns=[bias_score, "cluster_label"]).columns:
+        for value in list(decoded_X_test[column].unique()):
             
+            # create a 2x2 contingency table for this value: rows = [cluster_label, rest], columns = [value present, value absent]
+            cluster_count = (cluster_df[column] == value).sum()
+            rest_count = (rest_df[column] == value).sum()
+            cluster_not = (cluster_df[column] != value).sum()
+            rest_not = (rest_df[column] != value).sum()
+
+            # create the contingency table
+            contingency_table = np.array([[cluster_count, cluster_not],
+                                        [rest_count, rest_not]])
+            
+            # calculate the difference in proportions
+            cluster_perc = cluster_count / (cluster_df[column] == value).shape[0]
+            rest_perc = rest_count / (rest_df[column] == value).shape[0]
+            diff = cluster_perc - rest_perc
+
+            # perform Chi-squared test
+            chi2, p, dof, _ = chi2_contingency(contingency_table)
+            chi2_results[(column, value)] = {
+                "chi2": chi2,
+                "p_val": p,
+                "dof": dof,
+                "observed": contingency_table,
+                "diff": diff,
+                "direction": "higher" if diff > 0 else "lower",
+                "abs_perc_dev": np.abs(cluster_count / (cluster_count + rest_count) - rest_count / (cluster_count + rest_count)) * 100
+            }
+
+    # print if any statistically significant differences in most deviating cluster vs the rest of the dataset was found or not
+    if any(res['p_val'] < 0.05 for res in chi2_results.values()):
+        print(f"Statistically significant differences in frequency found:")
+    else:
+        print(f"91mNo statistically significant differences in means found.")
+
+    # if significant differences were found, print the variables with their differences
+    for var, res in chi2_results.items():
+        if res['p_val'] < 0.05:
+            direction = res['direction']
+            if direction == "higher":
+                print(f"{var[0]}: '{var[1]}' in the most deviating cluster occurs more often than in the rest of the dataset.")
+                comparisons.append({
+                    'key': 'biasAnalysis.biasedCluster.differenceCategorical.deviatingMoreOften',
+                    'params': {
+                        'value': var[1],
+                        'feature': var[0],
+                    }
+                })
+            else:
+                print(f"{var[0]}: '{var[1]}' in the most deviating cluster occurs less often than in the rest of the dataset.")
+                comparisons.append({
+                    'key': 'biasAnalysis.biasedCluster.differenceCategorical.deviatingLessOften',
+                    'params': {
+                        'value': var[1],
+                        'feature': var[0],
+                    }
+                })
+        else:
+            continue
+    
     return comparisons
 
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
@@ -516,47 +589,8 @@ def run():
             'comparisons': comparisons
         }))
     else:
-        comparisons = []
-
-        for column in decoded_X_test.columns:
-            if column != "cluster_label":
-                # Percentage in cluster 0
-                cluster_0_pct = cluster_0[column].value_counts(normalize=True) * 100
-                # Percentage in entire dataset
-                overall_pct = decoded_X_test[column].value_counts(normalize=True) * 100
-                # Align indexes and calculate difference
-                diff = cluster_0_pct.subtract(overall_pct, fill_value=0)
-                diff_percentages[column] = diff
-
-        # Add new columns to decoded_X_test for each category, showing the difference for cluster 0
-        for column, diff in diff_percentages.items():
-            col_name = f"{column}_cluster0_diff_pct"
-            # Map the difference only for cluster 0 rows, else set to NaN
-            decoded_X_test[col_name] = decoded_X_test.apply(
-                lambda row: diff.get(row[column], 0) if row["cluster_label"] == 0 else float('nan'),
-                axis=1
-            )
-
-        # print for cluster 0, per value of each category in columns of X_test, how much it appears more or less than average in that cluster
-        for column in X_test.columns:
-            print(f"{column}")
-            # Get the difference percentages for this column
-            diff = diff_percentages.get(column)
-            if diff is not None:
-                for cat_value, pct_diff in diff.items():
-                    # only print if the difference between cluster and rest is dataset is larger than 2% 
-                    if pct_diff > 2:
-                        print(f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset")
-
-                        formatted_string = f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset"
-                        comparisons.append({
-                            'key': 'biasAnalysis.biasedCluster.difference.appearance',
-                            'params': {
-                                'value': formatted_string,
-                                'feature': column,
-                            }
-                        })
-
+        comparisons = chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label=0)
+    
         setResult(json.dumps({
             'type': 'accordion',
             'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
