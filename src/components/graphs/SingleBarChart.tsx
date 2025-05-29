@@ -26,7 +26,6 @@ const SingleBarChart = ({ title, data, meanValue }: SingleBarChartProps) => {
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
     // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
-    console.log('SingleBarChart', title, data, meanValue);
     const x0 = useMemo(
         () =>
             d3
@@ -92,7 +91,6 @@ const SingleBarChart = ({ title, data, meanValue }: SingleBarChartProps) => {
             .attr('width', Math.max(x0.bandwidth(), barWidth) - barGap) // Set the width of each bar
             .attr('height', d => {
                 const barHeight = y(d.values);
-                console.log('barHeight', title, d.name, d.values, barHeight);
                 return height - barHeight;
             }) // Set the height of each bar based on the value
             .attr(
