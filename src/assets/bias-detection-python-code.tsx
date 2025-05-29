@@ -32,6 +32,8 @@ def t_test_on_cluster(test_df, bias_score, cluster_label):
     # Prepare results dictionary
     t_test_results = {}
 
+    comparisons = []
+
     cluster_df = test_df[test_df["cluster_label"] == cluster_label]
     rest_df = test_df[test_df["cluster_label"] != cluster_label]
 
@@ -65,10 +67,26 @@ def t_test_on_cluster(test_df, bias_score, cluster_label):
             direction = res['direction']
             if direction == "higher":
                 print(f"{var}: occur in the most deviating cluster more often than in the rest of the dataset.")
+                comparisons.append({
+                            'key': 'biasAnalysis.biasedCluster.difference.deviatingMoreOften',
+                            'params': {
+                                'value': var,
+                                'feature': "",
+                            }
+                        })
             else:
                 print(f"{var}: occur in the most deviating cluster less often than in the rest of the dataset.")
+                comparisons.append({
+                            'key': 'biasAnalysis.biasedCluster.difference.deviatingLessOften',
+                            'params': {
+                                'value': var,
+                                'feature': "",
+                            }
+                        })
         else:
             continue
+            
+    return comparisons
 
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
     '''
@@ -490,7 +508,13 @@ def run():
 
     if (localDataType == 'numeric'):
         
-        t_test_on_cluster(test_df, bias_score, cluster_label=0)
+        comparisons = t_test_on_cluster(test_df, bias_score, cluster_label=0)
+
+        setResult(json.dumps({
+            'type': 'accordion',
+            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
+            'comparisons': comparisons
+        }))
     else:
         comparisons = []
 

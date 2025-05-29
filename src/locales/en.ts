@@ -299,6 +299,10 @@ In this example, we analyze which group is most adversely affected by the risk p
             },
             difference: {
                 appearance: '{{feature}} : {{value}}',
+                deviatingMoreOften:
+                    '{{value}}: occur in the most deviating cluster more often than in the rest of the dataset.',
+                deviatingLessOften:
+                    '{{value}}: occur in the most deviating cluster less often than in the rest of the dataset.',
             },
         },
         nodifference: {
