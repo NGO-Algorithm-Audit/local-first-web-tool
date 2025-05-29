@@ -202,12 +202,18 @@ export default function ComponentMapper({
                                 };
                             }
                         );
-
+                        console.log(
+                            'barchartData',
+                            resultItem.title,
+                            barchartData,
+                            resultItem.meanValue
+                        );
                         return (
                             <SingleBarChart
                                 key={index}
                                 data={barchartData}
                                 title={resultItem.title ?? ''}
+                                meanValue={resultItem.meanValue}
                             />
                         );
                     }

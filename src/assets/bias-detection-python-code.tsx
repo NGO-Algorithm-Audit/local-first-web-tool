@@ -27,6 +27,49 @@ from js import dataType
 from js import higherIsBetter
 from js import isDemo
 
+def t_test_on_cluster(test_df, bias_score, cluster_label):
+
+    # Prepare results dictionary
+    t_test_results = {}
+
+    cluster_df = test_df[test_df["cluster_label"] == cluster_label]
+    rest_df = test_df[test_df["cluster_label"] != cluster_label]
+
+    for var in test_df.drop(columns=[bias_score, "cluster_label"]).columns:
+        # values in both partitions
+        values_cluster = cluster_df[var]
+        values_rest = rest_df[var]
+
+        # means per partition
+        mean_cluster = cluster_df[var].mean()
+        mean_rest = rest_df[var].mean()
+        diff = mean_cluster - mean_rest
+
+        # Perform two-sided t-test
+        t_stat, p_val = ttest_ind(values_cluster, values_rest, equal_var=False)
+        t_test_results[var] = {''
+            't_stat': t_stat, 
+            'p_val': p_val,
+            "direction": "higher" if diff > 0 else "lower"
+        }
+
+    # print if any statistically significant differences in means for most deviating cluster and the rest of the dataset was found or not
+    if any(res['p_val'] < 0.05 for res in t_test_results.values()):
+        print(f"Statistically significant differences in means found:")
+    else:
+        print(f"No statistically significant differences in means found.")
+
+    # if significant differences were found, print the variables with their differences
+    for var, res in t_test_results.items():
+        if res['p_val'] < 0.05:
+            direction = res['direction']
+            if direction == "higher":
+                print(f"{var}: occur in the most deviating cluster more often than in the rest of the dataset.")
+            else:
+                print(f"{var}: occur in the most deviating cluster less often than in the rest of the dataset.")
+        else:
+            continue
+
 def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
     '''
     Creates difference dataframe, for numerical and categorical 
@@ -87,11 +130,11 @@ def run():
     features = [col for col in df.columns if (col not in emptycols) and (col != targetColumn) and (not col.startswith('Unnamed'))]
     
     if isDemo:
-        bias_metric = "false_positive"
+        bias_score = "false_positive"
         localDataType = "categorical"
         localIterations = 20
 
-        print (f"Using demo parameters: bias_metric={bias_metric}, targetColumn={targetColumn}, dataType={localDataType}, iterations={iterations}")
+        print (f"Using demo parameters: bias_score={bias_score}, targetColumn={targetColumn}, dataType={localDataType}, iterations={iterations}")
 
         # Select relevant columns
         columns_of_interest = ["age_cat", "sex", "race", "c_charge_degree", "is_recid", "score_text"]
@@ -105,12 +148,12 @@ def run():
         filtered_df["score_text"] = filtered_df["score_text"].map(lambda x: 1 if x == "High" else 0)
         filtered_df["is_recid"] = filtered_df["is_recid"].astype("category")
         
-        filtered_df[bias_metric] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
+        filtered_df[bias_score] = ((filtered_df["is_recid"] == 0) & (filtered_df["score_text"] == 1)).astype(int)
 
         
     else:
         filtered_df = df
-        bias_metric = targetColumn
+        bias_score = targetColumn
         localDataType = dataType
         localIterations = iterations
 
@@ -121,10 +164,10 @@ def run():
     preview_data = filtered_df.head(5)
     if localDataType == 'categorical':
         encoder = OrdinalEncoder()
-        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("int32")
+        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype(int)
 
-    df_no_bias_metric = filtered_df.drop(columns=[bias_metric])
-    if df_no_bias_metric.dtypes.nunique() == 1:
+    df_no_bias_score = filtered_df.drop(columns=[bias_score])
+    if df_no_bias_score.dtypes.nunique() == 1:
         print('consistent data')
     else:
         print('not all columns in the provided dataset have the same data type')    
@@ -132,7 +175,7 @@ def run():
         
     # split the data into training and testing sets
     train_df, test_df = train_test_split(filtered_df, test_size=0.2, random_state=42)
-    X_train = train_df.drop(columns=[bias_metric])
+    X_train = train_df.drop(columns=[bias_score])
 
     scaleY = 1
     if higherIsBetter == 1:
@@ -140,10 +183,10 @@ def run():
 
 
     # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
-    y_train = train_df[bias_metric] * scaleY
+    y_train = train_df[bias_score] * scaleY
 
     # remove the bias metric from the test set to prevent issues with decoding later
-    X_test = test_df.drop(columns=[bias_metric])
+    X_test = test_df.drop(columns=[bias_score])
 
     # display the shapes of the resulting datasets
     print(f"Training set shape: {train_df.shape}")
@@ -159,7 +202,7 @@ def run():
 
     print(f"Using local iterations: {localIterations}")
     print(f"Using cluster size: {localClusterSize}")
-    print(f"Using bias metric: {bias_metric}")
+    print(f"Using bias metric: {bias_score}")
     
     if localDataType == 'numeric':
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
@@ -172,6 +215,8 @@ def run():
     n_most_bias = np.sum(hbac.labels_ == 0)
     print(f"Number of datapoints in most deviating cluster: {n_most_bias}/{train_df.shape[0]}")
     print(f"Number of clusters: {hbac.n_clusters_}")
+    print(f"Bias metric scores: {hbac.scores_}")
+
 
     clusterCount = hbac.n_clusters_
     numZeros = n_most_bias
@@ -228,7 +273,7 @@ def run():
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.parameters.performanceMetric',
-        'params': {'value': bias_metric}
+        'params': {'value': bias_score}
     }))
     setResult(json.dumps({
         'type': 'text',
@@ -291,15 +336,20 @@ def run():
     
     decoded_X_test["cluster_label"] = y_test
     
-    most_biased_cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == 0]
-    rest_df = decoded_X_test[decoded_X_test["cluster_label"] != 0]
+    if localDataType == 'numeric':
+        test_df["cluster_label"] = y_test
+        most_biased_cluster_df = test_df[test_df["cluster_label"] == 0]
+        rest_df = test_df[test_df["cluster_label"] != 0]
+    else:
+        most_biased_cluster_df = decoded_X_test[decoded_X_test["cluster_label"] == 0]
+        rest_df = decoded_X_test[decoded_X_test["cluster_label"] != 0]
 
     # Convert score_text to numeric
-    bias_metric_most_biased = pd.to_numeric(most_biased_cluster_df[bias_metric])
-    bias_metric_rest = pd.to_numeric(rest_df[bias_metric])
+    bias_score_most_biased = pd.to_numeric(most_biased_cluster_df[bias_score])
+    bias_score_rest = pd.to_numeric(rest_df[bias_score])
 
     # Perform independent two-sample t-test (two-sided: average bias metric in most_biased_cluster_df ≠ average bias metric in rest_df)
-    t_stat, p_val = ttest_ind(bias_metric_most_biased, bias_metric_rest, alternative='two-sided')
+    t_stat, p_val = ttest_ind(bias_score_most_biased, bias_score_rest, alternative='two-sided')
 
     print(f"T-statistic: {t_stat}")
     print(f"p-value: {p_val}")
@@ -322,50 +372,112 @@ def run():
     cluster_counts = decoded_X_test["cluster_label"].value_counts()
     print(f"cluster_counts: {cluster_counts}")
 
-    if p_val < 0.05:
-        # Create subplots for each column
-        columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
-        rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
-        print(f"rows: {rows}")
 
-        for i, column in enumerate(columns_to_analyze):
-            print(f"Analyzing column: {column}")
+    if localDataType == 'numeric':
+        # Calculate mean per cluster for each variable
+        means = test_df.groupby("cluster_label").mean()
 
-            grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
-            percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
+        # Calculate overall mean for each variable (excluding cluster_label)
+        variables = X_test.columns.tolist()
+        overall_means = test_df[variables].mean()
+
+        # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
+        n_vars = len(variables)
+        n_cols = 2
+        n_rows = int(np.ceil(n_vars / n_cols))
+
+        for i, var in enumerate(variables):
             
-            print(percentages.T)
-            
-            print("------ grouped_data start ------")
-            print(grouped_data)
-
-            print("------ grouped_data columns ------")
-
-            # print category values
-            category_values = grouped_data.columns.tolist()
-            print(category_values)
-
-            print("------ grouped_data end ------")
-
-
             setResult(json.dumps({
                 'type': 'heading',
                 'headingKey': 'biasAnalysis.distribution.heading',            
-                'params': {'variable': column}
+                'params': {'variable': var}
             }))
-
+            print(f"means: {var}")
+            print(overall_means[var])
+            print(means[var])
+            print(f"========================")
             setResult(json.dumps({
-                'type': 'histogram',
-                'title': column,
-                'categories': category_values,
-                'data': percentages.T.to_json(orient='records')
+                'type': 'barchart',
+                'title': var,
+                'meanValue': overall_means[var],
+                'data': means[var].to_json(orient='records')
             }))
+ 
+    if p_val < 0.05:
+
+        if localDataType == 'numeric':
+            # Calculate mean per cluster for each variable
+            means = test_df.groupby("cluster_label").mean()
+
+            # Calculate overall mean for each variable (excluding cluster_label)
+            variables = X_test.columns.tolist()
+            overall_means = test_df[variables].mean()
+
+            # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
+            n_vars = len(variables)
+            n_cols = 2
+            n_rows = int(np.ceil(n_vars / n_cols))
+
+            for i, var in enumerate(variables):
+                
+                setResult(json.dumps({
+                    'type': 'heading',
+                    'headingKey': 'biasAnalysis.distribution.heading',            
+                    'params': {'variable': var}
+                }))
+                
+                setResult(json.dumps({
+                    'type': 'barchart',
+                    'title': var,
+                    'data': means[var].to_json(orient='records'),
+                    'meanValue': overall_means[var]
+                }))
+
+
+        else:
+            # Create subplots for each column
+            columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
+            rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
+            print(f"rows: {rows}")
+
+            for i, column in enumerate(columns_to_analyze):
+                print(f"Analyzing column: {column}")
+
+                grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
+                percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
+                
+                print(percentages.T)
+                
+                print("------ grouped_data start ------")
+                print(grouped_data)
+
+                print("------ grouped_data columns ------")
+
+                # print category values
+                category_values = grouped_data.columns.tolist()
+                print(category_values)
+
+                print("------ grouped_data end ------")
+
+
+                setResult(json.dumps({
+                    'type': 'heading',
+                    'headingKey': 'biasAnalysis.distribution.heading',            
+                    'params': {'variable': column}
+                }))
+
+                setResult(json.dumps({
+                    'type': 'histogram',
+                    'title': column,
+                    'categories': category_values,
+                    'data': percentages.T.to_json(orient='records')
+                }))
 
     
-    
 
-    df_most_biased_cluster = most_biased_cluster_df # df[hbac.labels_ == 0]
-    df_other = rest_df # df[hbac.labels_ != 0]
+    df_most_biased_cluster = most_biased_cluster_df
+    df_other = rest_df
     
     setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
     setOutputData("otherClusters", df_other.to_json(orient='records'))
@@ -376,53 +488,56 @@ def run():
     # Select only cluster 0
     cluster_0 = decoded_X_test[decoded_X_test["cluster_label"] == 0]
 
+    if (localDataType == 'numeric'):
+        
+        t_test_on_cluster(test_df, bias_score, cluster_label=0)
+    else:
+        comparisons = []
 
-    comparisons = []
+        for column in decoded_X_test.columns:
+            if column != "cluster_label":
+                # Percentage in cluster 0
+                cluster_0_pct = cluster_0[column].value_counts(normalize=True) * 100
+                # Percentage in entire dataset
+                overall_pct = decoded_X_test[column].value_counts(normalize=True) * 100
+                # Align indexes and calculate difference
+                diff = cluster_0_pct.subtract(overall_pct, fill_value=0)
+                diff_percentages[column] = diff
 
-    for column in decoded_X_test.columns:
-        if column != "cluster_label":
-            # Percentage in cluster 0
-            cluster_0_pct = cluster_0[column].value_counts(normalize=True) * 100
-            # Percentage in entire dataset
-            overall_pct = decoded_X_test[column].value_counts(normalize=True) * 100
-            # Align indexes and calculate difference
-            diff = cluster_0_pct.subtract(overall_pct, fill_value=0)
-            diff_percentages[column] = diff
+        # Add new columns to decoded_X_test for each category, showing the difference for cluster 0
+        for column, diff in diff_percentages.items():
+            col_name = f"{column}_cluster0_diff_pct"
+            # Map the difference only for cluster 0 rows, else set to NaN
+            decoded_X_test[col_name] = decoded_X_test.apply(
+                lambda row: diff.get(row[column], 0) if row["cluster_label"] == 0 else float('nan'),
+                axis=1
+            )
 
-    # Add new columns to decoded_X_test for each category, showing the difference for cluster 0
-    for column, diff in diff_percentages.items():
-        col_name = f"{column}_cluster0_diff_pct"
-        # Map the difference only for cluster 0 rows, else set to NaN
-        decoded_X_test[col_name] = decoded_X_test.apply(
-            lambda row: diff.get(row[column], 0) if row["cluster_label"] == 0 else float('nan'),
-            axis=1
-        )
+        # print for cluster 0, per value of each category in columns of X_test, how much it appears more or less than average in that cluster
+        for column in X_test.columns:
+            print(f"{column}")
+            # Get the difference percentages for this column
+            diff = diff_percentages.get(column)
+            if diff is not None:
+                for cat_value, pct_diff in diff.items():
+                    # only print if the difference between cluster and rest is dataset is larger than 2% 
+                    if pct_diff > 2:
+                        print(f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset")
 
-    # print for cluster 0, per value of each category in columns of X_test, how much it appears more or less than average in that cluster
-    for column in X_test.columns:
-        print(f"{column}")
-        # Get the difference percentages for this column
-        diff = diff_percentages.get(column)
-        if diff is not None:
-            for cat_value, pct_diff in diff.items():
-                # only print if the difference between cluster and rest is dataset is larger than 2% 
-                if pct_diff > 2:
-                    print(f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset")
+                        formatted_string = f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset"
+                        comparisons.append({
+                            'key': 'biasAnalysis.biasedCluster.difference.appearance',
+                            'params': {
+                                'value': formatted_string,
+                                'feature': column,
+                            }
+                        })
 
-                    formatted_string = f"{cat_value}: {pct_diff:+.2f}% vs rest of dataset"
-                    comparisons.append({
-                        'key': 'biasAnalysis.biasedCluster.difference.appearance',
-                        'params': {
-                            'value': formatted_string,
-                            'feature': column,
-                        }
-                    })
-
-    setResult(json.dumps({
-        'type': 'accordion',
-        'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-        'comparisons': comparisons
-    }))
+        setResult(json.dumps({
+            'type': 'accordion',
+            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
+            'comparisons': comparisons
+        }))
     return
 
     # Cluster summary

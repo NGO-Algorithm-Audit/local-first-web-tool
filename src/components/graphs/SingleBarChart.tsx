@@ -9,6 +9,7 @@ interface Data extends DataLabel {
 interface SingleBarChartProps {
     title: string;
     data: Data[];
+    meanValue?: number;
 }
 
 // Define margins for the chart
@@ -20,11 +21,12 @@ const height = 300 - margin.top - margin.bottom;
 const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
 const barGap = 5;
 
-const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
+const SingleBarChart = ({ title, data, meanValue }: SingleBarChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null); // Reference to the SVG element
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
     const [containerWidth, setContainerWidth] = useState(800); // Default container width
     // Create x-axis scale using d3.scaleBand, with padding for spacing between bars
+    console.log('SingleBarChart', title, data, meanValue);
     const x0 = useMemo(
         () =>
             d3
@@ -47,7 +49,7 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             d3
                 .scaleLinear()
                 .domain([
-                    d3.min(data, d => d.values) ?? 0, // Minimum value in the dataset (or 0 if undefined)
+                    0, //d3.min(data, d => d.values) ?? 0, // Minimum value in the dataset (or 0 if undefined)
                     d3.max(data, d => d.values) ?? 0, // Maximum value in the dataset (or 0 if undefined)
                 ])
                 .nice() // Rounds the domain to nice round values
@@ -86,16 +88,20 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
             .data(data)
             .join('rect')
             .attr('x', d => x0(d.name) ?? 0) // Set the x position of each bar
-            .attr('y', d => height - y(d.values)) // Set the y position based on the value
+            .attr('y', d => y(d.values)) // Set the y position based on the value
             .attr('width', Math.max(x0.bandwidth(), barWidth) - barGap) // Set the width of each bar
-            .attr('height', d => y(d.values)) // Set the height of each bar based on the value
+            .attr('height', d => {
+                const barHeight = y(d.values);
+                console.log('barHeight', title, d.name, d.values, barHeight);
+                return height - barHeight;
+            }) // Set the height of each bar based on the value
             .attr(
                 'fill',
                 (_d, index) => (index === 0 ? '#fdf3d0' : 'steelblue') // Fill the first bar with a different color
             );
 
         // Calculate the mean of all bar values
-        const meanValue = d3.mean(data, d => d.values) ?? 0;
+        const meanValueForLine = meanValue ?? d3.mean(data, d => d.values) ?? 0;
 
         // Draw a dotted line representing the mean value
         svg.append('line')
@@ -107,8 +113,8 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
                     data.length * (barWidth + barGap)
                 )
             )
-            .attr('y1', y(meanValue))
-            .attr('y2', y(meanValue))
+            .attr('y1', y(meanValueForLine))
+            .attr('y2', y(meanValueForLine))
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
             .attr('stroke-dasharray', '4 4') // Make the line dotted
@@ -118,11 +124,11 @@ const SingleBarChart = ({ title, data }: SingleBarChartProps) => {
         // Add a label for the mean line
         svg.append('text')
             .attr('x', margin.left + 30)
-            .attr('y', y(meanValue) - 5)
+            .attr('y', y(meanValueForLine) - 5)
             .attr('text-anchor', 'end')
             .attr('fill', 'black')
             .style('font-size', '12px')
-            .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+            .text(`Mean: ${y.tickFormat(100, 's')(meanValueForLine)}`);
         // Append x-axis to the SVG container
         const xAxis = svg
             .append('g')
