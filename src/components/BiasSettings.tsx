@@ -165,12 +165,33 @@ export default function BiasSettings({
                     })
                 )
         );
-        if (formData.selectedDataType === 'numeric' && !isNumericData) {
+        const allColumns = Object.keys(data.data[0] || {}).filter(column => {
+            if (column === formData.targetColumn) {
+                return false;
+            }
+            return true;
+        });
+        const columns = Object.keys(data.data[0] || {}).filter(column =>
+            data.data.every(row => {
+                if (column === formData.targetColumn) {
+                    return false;
+                }
+                if (formData.selectedDataType === 'numeric') {
+                    return !isNaN(parseFloat(row[column]));
+                } else {
+                    return (
+                        typeof row[column] === 'string' || row[column] === ''
+                    );
+                }
+            })
+        );
+        const equal = allColumns.length === columns.length;
+        if (formData.selectedDataType === 'numeric' && !equal) {
             setDataTypeError(t('biasSettings.form.errors.numericDataRequired'));
             return;
         }
 
-        if (formData.selectedDataType === 'categorical' && isNumericData) {
+        if (formData.selectedDataType === 'categorical' && !equal) {
             setDataTypeError(
                 t('biasSettings.form.errors.categoricalDataRequired')
             );
@@ -181,7 +202,7 @@ export default function BiasSettings({
             clusterSize: clusters[0],
             iterations: iter[0],
             targetColumn: formData.targetColumn,
-            dataType: formData.dataType,
+            dataType: formData.selectedDataType,
             higherIsBetter:
                 formData.whichPerformanceMetricValueIsBetter === 'higher',
             isDemo: false,

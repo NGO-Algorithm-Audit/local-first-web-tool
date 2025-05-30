@@ -247,12 +247,17 @@ def run():
         bias_score = targetColumn
         localDataType = dataType
         localIterations = iterations
+        print (f"Using parameters: bias_score={bias_score}, targetColumn={targetColumn}, dataType={localDataType}, iterations={localIterations}")
+        # return
 
         if (dataType == 'numeric'):
             # Convert all columns to numeric
             filtered_df = filtered_df.astype('float64')
 
     preview_data = filtered_df.head(5)
+
+    print(f"localDataType: {localDataType}")
+
     if localDataType == 'categorical':
         encoder = OrdinalEncoder()
         filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype(int)
