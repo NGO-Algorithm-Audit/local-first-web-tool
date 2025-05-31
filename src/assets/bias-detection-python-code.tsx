@@ -108,25 +108,29 @@ def chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label):
             rest_not = (rest_df[column] != value).sum()
 
             # create the contingency table
-            contingency_table = np.array([[cluster_count, cluster_not],
-                                        [rest_count, rest_not]])
+            if cluster_count != 0 and rest_count != 0 and cluster_not != 0 and rest_not != 0:
+                contingency_table = np.array([[cluster_count, cluster_not],
+                                            [rest_count, rest_not]])
             
-            # calculate the difference in proportions
-            cluster_perc = cluster_count / (cluster_df[column] == value).shape[0]
-            rest_perc = rest_count / (rest_df[column] == value).shape[0]
-            diff = cluster_perc - rest_perc
+            
+                # calculate the difference in proportions
+                cluster_perc = cluster_count / (cluster_df[column] == value).shape[0]
+                rest_perc = rest_count / (rest_df[column] == value).shape[0]
+                diff = cluster_perc - rest_perc
 
-            # perform Chi-squared test
-            chi2, p, dof, _ = chi2_contingency(contingency_table)
-            chi2_results[(column, value)] = {
-                "chi2": chi2,
-                "p_val": p,
-                "dof": dof,
-                "observed": contingency_table,
-                "diff": diff,
-                "direction": "higher" if diff > 0 else "lower",
-                "abs_perc_dev": np.abs(cluster_count / (cluster_count + rest_count) - rest_count / (cluster_count + rest_count)) * 100
-            }
+                # perform Chi-squared test
+                chi2, p, dof, _ = chi2_contingency(contingency_table)
+                chi2_results[(column, value)] = {
+                    "chi2": chi2,
+                    "p_val": p,
+                    "dof": dof,
+                    "observed": contingency_table,
+                    "diff": diff,
+                    "direction": "higher" if diff > 0 else "lower",
+                    "abs_perc_dev": np.abs(cluster_count / (cluster_count + rest_count) - rest_count / (cluster_count + rest_count)) * 100
+                }
+            else:
+                print(f"Skipping Chi-squared test for {column} = {value} due to zero counts in contingency table.")
 
     # print if any statistically significant differences in most deviating cluster vs the rest of the dataset was found or not
     if any(res['p_val'] < 0.05 for res in chi2_results.values()):
@@ -248,7 +252,6 @@ def run():
         localDataType = dataType
         localIterations = iterations
         print (f"Using parameters: bias_score={bias_score}, targetColumn={targetColumn}, dataType={localDataType}, iterations={localIterations}")
-        # return
 
         if (dataType == 'numeric'):
             # Convert all columns to numeric
@@ -260,7 +263,10 @@ def run():
 
     if localDataType == 'categorical':
         encoder = OrdinalEncoder()
-        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype(int)
+        filtered_df[filtered_df.columns] = encoder.fit_transform(filtered_df).astype("int64")
+    
+    print("filtered_df.dtypes:")
+    print(filtered_df.dtypes)
 
     df_no_bias_score = filtered_df.drop(columns=[bias_score])
     if df_no_bias_score.dtypes.nunique() == 1:
@@ -277,6 +283,7 @@ def run():
     if higherIsBetter == 1:
         scaleY = -1;
 
+    
 
     # bias metric is negated because HBAC implementation in the package assumes that higher bias metric is better
     y_train = train_df[bias_score] * scaleY
@@ -300,6 +307,7 @@ def run():
     print(f"Using cluster size: {localClusterSize}")
     print(f"Using bias metric: {bias_score}")
     
+    
     if localDataType == 'numeric':
         hbac = BiasAwareHierarchicalKMeans(bahc_max_iter=localIterations, bahc_min_cluster_size=localClusterSize).fit(X_train, y_train)
     else:
@@ -321,6 +329,7 @@ def run():
     # df['Cluster'] = hbac.labels_
 
     
+    
 
     if isDemo:
         setResult(json.dumps({
@@ -337,10 +346,6 @@ def run():
         'headingKey': 'biasAnalysis.dataSetPreview.heading'
     }))
 
-    # setResult(json.dumps({
-    #    'type': 'data-set-preview',
-    #    'data': ''
-    # }))
 
     setResult(json.dumps({
         'type': 'table', 
@@ -417,7 +422,12 @@ def run():
     y_test = hbac.predict(X_test.to_numpy())
 
     decoded_X_test = test_df.copy()
-    
+
+    print("y_test:")
+    print(y_test)
+    print("test_df:")
+    print(test_df)
+
     if localDataType == 'categorical':
         # decode X_test using the encoder
         decoded_X_test = encoder.inverse_transform(test_df)
@@ -426,11 +436,11 @@ def run():
     # display the decoded DataFrame
     decoded_X_test = pd.DataFrame(decoded_X_test, columns=test_df.columns)
     print(decoded_X_test)
+    
+    
+    decoded_X_test["cluster_label"] = y_test
 
-    decoded_X_test["cluster_label"] = y_test
-    
-    
-    decoded_X_test["cluster_label"] = y_test
+    # ----
     
     if localDataType == 'numeric':
         test_df["cluster_label"] = y_test
@@ -443,6 +453,9 @@ def run():
     # Convert score_text to numeric
     bias_score_most_biased = pd.to_numeric(most_biased_cluster_df[bias_score])
     bias_score_rest = pd.to_numeric(rest_df[bias_score])
+
+    
+    
 
     # Perform independent two-sample t-test (two-sided: average bias metric in most_biased_cluster_df ≠ average bias metric in rest_df)
     t_stat, p_val = ttest_ind(bias_score_most_biased, bias_score_rest, alternative='two-sided')
@@ -570,7 +583,7 @@ def run():
                     'data': percentages.T.to_json(orient='records')
                 }))
 
-    
+    # return
 
     df_most_biased_cluster = most_biased_cluster_df
     df_other = rest_df
