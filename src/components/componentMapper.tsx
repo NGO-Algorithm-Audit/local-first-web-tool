@@ -151,7 +151,10 @@ export default function ComponentMapper({
                             resultItem.defaultValue
                         );
                         return (
-                            <div className="flex items-center justify-center">
+                            <div
+                                className="flex items-center justify-center"
+                                key={index}
+                            >
                                 <ErrorBoundary key={index}>
                                     <div>
                                         <FilterSelect
@@ -171,7 +174,10 @@ export default function ComponentMapper({
                     }
                     case 'cluster_legend': {
                         return (
-                            <div className="flex items-center justify-center">
+                            <div
+                                className="flex items-center justify-center"
+                                key={index}
+                            >
                                 <ErrorBoundary key={index}>
                                     <ClusterLegend
                                         clusterCount={

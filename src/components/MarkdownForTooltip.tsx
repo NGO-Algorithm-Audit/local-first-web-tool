@@ -14,7 +14,7 @@ export function MarkdownForTooltip({
 }: MarkdownForTooltipProps) {
     console.log('MarkdownForTooltip children:', children);
     return (
-        <MathJaxContext hideUntilTypeset="every">
+        <MathJaxContext hideUntilTypeset="first">
             <Markdown
                 className={className}
                 remarkPlugins={[remarkGfm, RemarkMath]}

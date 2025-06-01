@@ -27,7 +27,7 @@ export function MarkdownWithTooltips({
     className,
 }: MarkdownWithTooltipsProps) {
     return (
-        <MathJaxContext hideUntilTypeset="every">
+        <MathJaxContext hideUntilTypeset="first">
             <Markdown
                 className={className}
                 remarkPlugins={[remarkInfoTooltip, remarkGfm, RemarkMath]}
