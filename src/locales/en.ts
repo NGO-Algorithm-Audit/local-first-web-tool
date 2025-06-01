@@ -257,10 +257,10 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     biasAnalysis: {
         testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
 
-- \\\\( H_0 \\\\): no difference in bias between the most deviating cluster and the rest of the dataset
-- \\\\( H_1 \\\\): difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
 
-A two-sided t-test is performed to accept or reject \\\\( H_0 \\\\).
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
 
 T_statistic : {{t_stat}}
