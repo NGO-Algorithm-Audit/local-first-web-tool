@@ -63,9 +63,9 @@ export default function FilterSelect({
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue
-                                                        placeholder={t(
-                                                            'biasSettings.form.actions.filterSelect'
-                                                        )}
+                                                        placeholder={
+                                                            defaultValue
+                                                        }
                                                     />
                                                 </SelectTrigger>
                                             </FormControl>

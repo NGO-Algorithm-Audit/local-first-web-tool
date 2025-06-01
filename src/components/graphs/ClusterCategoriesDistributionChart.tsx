@@ -31,16 +31,17 @@ const ClusterCategoriesDistributionChart = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
 
+    const groupWidth = barWidth * (data?.[0]?.values?.length ?? 1);
+    const clusterGroupTotalWidth = data.length * groupWidth;
+    const groupGap = barWidth * 2;
+    const groupGapTotalWidth = data.length * groupGap; // Total Width of all gaps between groups
+
     const fx = useMemo(
         () =>
             d3
                 .scaleBand()
                 .domain(new Set(data.map(d => d.name)))
-                .range([
-                    0,
-                    data.length * barWidth * (data?.[0]?.values?.length ?? 1) +
-                        data.length * barWidth,
-                ]),
+                .range([0, clusterGroupTotalWidth + groupGapTotalWidth]),
         [containerWidth]
     );
     const flattenData = data.flatMap(d => d.values);
@@ -88,8 +89,8 @@ const ClusterCategoriesDistributionChart = ({
                 'width',
                 Math.max(
                     containerWidth,
-                    data.length * barWidth * (data?.[0]?.values?.length ?? 1) +
-                        data.length * barWidth +
+                    clusterGroupTotalWidth +
+                        groupGapTotalWidth +
                         margin.left +
                         margin.right
                 )
@@ -111,9 +112,7 @@ const ClusterCategoriesDistributionChart = ({
 
         const xPositions = data.map((d, i) => ({
             label: d.name,
-            x:
-                i * (barWidth * (data?.[0]?.values?.length ?? 1) + barWidth) +
-                (barWidth * (data?.[0]?.values?.length ?? 1)) / 2, // center of the bar
+            x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
         }));
 
         xAxis
@@ -135,14 +134,11 @@ const ClusterCategoriesDistributionChart = ({
             .attr('x', d => d.x)
             .attr('y', 20)
             .attr('title', d => d.label)
-            .attr(
-                'width',
-                barWidth * (data?.[0]?.values?.length ?? 1) + barWidth
-            )
+            .attr('width', groupWidth)
             .attr('text-anchor', 'middle')
             .text(d => d.label)
             .each(function () {
-                const width = barWidth * (data?.[0]?.values?.length ?? 1);
+                const width = groupWidth;
                 const self = d3.select(this);
                 const node = self.node();
                 if (!node) return;
@@ -184,11 +180,7 @@ const ClusterCategoriesDistributionChart = ({
             // Draw a dotted line representing the mean value
             svg.append('line')
                 .attr('x1', 0)
-                .attr(
-                    'x2',
-                    Math.max(containerWidth, data.length * barWidth) -
-                        margin.right
-                )
+                .attr('x2', Math.max(containerWidth, groupGap) - margin.right)
                 .attr('y1', y(meanValue))
                 .attr('y2', y(meanValue))
                 .attr('stroke', 'black')

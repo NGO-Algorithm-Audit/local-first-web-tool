@@ -40,6 +40,8 @@ export const en = {
                         'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
+                    filterSelect:
+                        'Select a column to show cluster distribution for',
                 },
                 parameters: {
                     title: 'Parameters',

@@ -38,6 +38,8 @@ export const nl = {
                         'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
+                    filterSelect:
+                        'Selecteer een kolom om cluster distributies te bekijken',
                 },
                 parameters: {
                     title: 'Parameters',
