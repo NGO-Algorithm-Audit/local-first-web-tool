@@ -140,6 +140,11 @@ export default function ComponentMapper({
                                 </MarkdownWithTooltips>
                             </TooltipProvider>
                         );
+                    case 'cluster_legend': {
+                        return (
+                            <div>Cluster count : {resultItem.clusterCount}</div>
+                        );
+                    }
                     case 'clusterCategorieDistribution': {
                         //
 

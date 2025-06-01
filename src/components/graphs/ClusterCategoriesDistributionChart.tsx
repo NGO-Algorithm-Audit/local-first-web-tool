@@ -17,7 +17,7 @@ interface ClusterCategoriesDistributionChartProps {
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
 const height = 300 - margin.top - margin.bottom;
-const barWidth = 20;
+const barWidth = 30;
 
 const ClusterCategoriesDistributionChart = ({
     title,
@@ -89,7 +89,9 @@ const ClusterCategoriesDistributionChart = ({
                 Math.max(
                     containerWidth,
                     data.length * barWidth * (data?.[0]?.values?.length ?? 1) +
-                        data.length * barWidth
+                        data.length * barWidth +
+                        margin.left +
+                        margin.right
                 )
             )
             .attr('height', height + margin.top + margin.bottom)
@@ -206,13 +208,6 @@ const ClusterCategoriesDistributionChart = ({
                 .style('font-size', '12px')
                 .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
         }
-        // Append legend
-        const legend = svg
-            .append('g')
-            .attr(
-                'transform',
-                `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right + 20}, 0)`
-            );
 
         // Append title to the svg
         svg.append('text')
@@ -231,36 +226,6 @@ const ClusterCategoriesDistributionChart = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', '12px')
             .text(yAxisLabel);
-
-        // Append legend color boxes and text labels
-        const legendItems = legend
-            .selectAll('.legend-item')
-            .data(groupbarNames)
-            .join('g')
-            .attr('class', 'legend-item')
-            .attr('transform', (_, i) => `translate(0, ${i * 20 + 20})`);
-
-        legendItems
-            .append('rect')
-            .attr('width', 15)
-            .attr('height', 15)
-            .attr('fill', d => color(d) as string);
-
-        legendItems
-            .append('text')
-            .attr('x', 20)
-            .attr('y', 12)
-            .text(d => d);
-
-        if (legend) {
-            const legendBBox = legend.node()?.getBBox();
-            if (legendBBox) {
-                legend.attr(
-                    'transform',
-                    `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right - legendBBox.width}, 10)`
-                );
-            }
-        }
 
         xAxis.selectAll('.tick text').call((text, width) => {
             text.each(function () {

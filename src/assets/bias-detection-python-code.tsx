@@ -571,6 +571,11 @@ def run():
                     'data': percentages.T.to_json(orient='records')
                 }))
 
+            setResult(json.dumps({
+                'type': 'cluster_legend',
+                'clusterCount': clusterCount,
+            }))
+
     df_most_biased_cluster = most_biased_cluster_df
     df_other = rest_df
     
@@ -600,7 +605,7 @@ def run():
             'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
             'comparisons': comparisons
         }))
-            
+
     return
 
 if data != 'INIT':
