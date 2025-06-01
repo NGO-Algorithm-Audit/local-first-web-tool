@@ -11,6 +11,7 @@ import { DistributionReport } from './DistributionReport';
 import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistributionChart';
+import ClusterLegend from './graphs/ClusterLegend';
 
 interface Comparison {
     key: string;
@@ -142,7 +143,15 @@ export default function ComponentMapper({
                         );
                     case 'cluster_legend': {
                         return (
-                            <div>Cluster count : {resultItem.clusterCount}</div>
+                            <div className="flex items-center justify-center">
+                                <ErrorBoundary key={index}>
+                                    <ClusterLegend
+                                        clusterCount={
+                                            resultItem.clusterCount ?? 0
+                                        }
+                                    />
+                                </ErrorBoundary>
+                            </div>
                         );
                     }
                     case 'clusterCategorieDistribution': {

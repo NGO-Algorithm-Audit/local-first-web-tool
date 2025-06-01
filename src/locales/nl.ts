@@ -204,6 +204,7 @@ export const nl = {
             dataType: 'Gegevenstype: {{value}}',
         },
         clusters: {
+            legendMostBiasedCluster: 'Meest bevooroordeelde cluster',
             summary:
                 'We hebben {{clusterCount}} clusters gevonden. Cluster met de meeste bias bestaat uit {{biasedCount}} datapunten. De geüploade dataset bestaat uit {{totalCount}} datapunten.',
             sizeHint:

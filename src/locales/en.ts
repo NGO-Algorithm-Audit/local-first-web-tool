@@ -283,6 +283,7 @@ In this example, we analyze which group is most adversely affected by the risk p
             dataType: 'Data type: {{value}}',
         },
         clusters: {
+            legendMostBiasedCluster: 'Most biased cluster',
             summary:
                 'We found {{clusterCount}} clusters. Cluster with most bias consists of {{biasedCount}} datapoints. The uploaded dataset consists of {{totalCount}} datapoints.',
             sizeHint:
