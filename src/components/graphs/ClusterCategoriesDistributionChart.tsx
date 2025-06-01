@@ -116,8 +116,6 @@ const ClusterCategoriesDistributionChart = ({
                 (barWidth * (data?.[0]?.values?.length ?? 1)) / 2, // center of the bar
         }));
 
-        console.log('xPositions', xPositions);
-
         xAxis
             .selectAll('line')
             .data(xPositions)

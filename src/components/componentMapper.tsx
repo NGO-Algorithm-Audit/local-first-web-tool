@@ -12,6 +12,8 @@ import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistributionChart';
 import ClusterLegend from './graphs/ClusterLegend';
+import FilterSelect from './ui/FilterSelect';
+import { useState } from 'react';
 
 interface Comparison {
     key: string;
@@ -38,6 +40,7 @@ export default function ComponentMapper({
     items: string[];
     data: CSVData;
 }) {
+    const [categorieFilter, setCategorieFilter] = useState<string | null>();
     const { t } = useTranslation();
     const components = items
         .map((r, index) => {
@@ -141,6 +144,31 @@ export default function ComponentMapper({
                                 </MarkdownWithTooltips>
                             </TooltipProvider>
                         );
+                    case 'clusterCategorieSelect': {
+                        console.log(
+                            'clusterCategorieSelect',
+                            resultItem.values,
+                            resultItem.defaultValue
+                        );
+                        return (
+                            <div className="flex items-center justify-center">
+                                <ErrorBoundary key={index}>
+                                    <div>
+                                        <FilterSelect
+                                            filterValues={resultItem.values}
+                                            defaultValue={
+                                                resultItem.defaultValue
+                                            }
+                                            onFilter={value => {
+                                                setCategorieFilter(value);
+                                                console.log('value', value);
+                                            }}
+                                        />
+                                    </div>
+                                </ErrorBoundary>
+                            </div>
+                        );
+                    }
                     case 'cluster_legend': {
                         return (
                             <div className="flex items-center justify-center">
@@ -175,15 +203,38 @@ export default function ComponentMapper({
 
                         return (
                             <ErrorBoundary key={index}>
-                                <ClusterCategoriesDistributionChart
-                                    showMeanLine={true}
-                                    data={distributionData}
-                                    yAxisLabel={t('distribution.frequency')}
-                                    title={resultItem.title ?? ''}
-                                    isViridis={
-                                        resultItem.categories !== undefined
-                                    }
-                                />
+                                {categorieFilter ===
+                                    resultItem.selectFilterGroup ||
+                                (!categorieFilter &&
+                                    resultItem.selectFilterGroup ===
+                                        resultItem.defaultFilter) ||
+                                !resultItem.selectFilterGroup ? (
+                                    <>
+                                        <h5
+                                            key={index}
+                                            className="text-gray-800 font-semibold"
+                                        >
+                                            {resultItem.headingKey
+                                                ? t(
+                                                      resultItem.headingKey,
+                                                      resultItem.params
+                                                  )
+                                                : resultItem.data}
+                                        </h5>
+                                        <ClusterCategoriesDistributionChart
+                                            showMeanLine={true}
+                                            data={distributionData}
+                                            yAxisLabel={t(
+                                                'distribution.frequency'
+                                            )}
+                                            title={resultItem.title ?? ''}
+                                            isViridis={
+                                                resultItem.categories !==
+                                                undefined
+                                            }
+                                        />
+                                    </>
+                                ) : null}
                             </ErrorBoundary>
                         );
                     }

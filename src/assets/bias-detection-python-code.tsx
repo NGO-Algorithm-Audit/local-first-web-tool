@@ -550,6 +550,16 @@ def run():
             rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
             print(f"rows: {rows}")
 
+            dropdownCategories = []
+            for i, column in enumerate(columns_to_analyze):
+                dropdownCategories.append(column)
+
+            setResult(json.dumps({
+                'type': 'clusterCategorieSelect',
+                'values': dropdownCategories,
+                'defaultValue': columns_to_analyze[0]
+            }))
+
             for i, column in enumerate(columns_to_analyze):
                 print(f"Analyzing column: {column}")
 
@@ -557,18 +567,17 @@ def run():
                 percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
                 
                 category_values = grouped_data.columns.tolist()
-
-                setResult(json.dumps({
-                    'type': 'heading',
-                    'headingKey': 'biasAnalysis.distribution.heading',            
-                    'params': {'variable': column}
-                }))
+                
 
                 setResult(json.dumps({
                     'type': 'clusterCategorieDistribution',
+                    'headingKey': 'biasAnalysis.distribution.heading',  
                     'title': column,
                     'categories': category_values,
-                    'data': percentages.T.to_json(orient='records')
+                    'data': percentages.T.to_json(orient='records'),
+                    'selectFilterGroup' : column,
+                    'params': {'variable': column},
+                    'defaultFilter': columns_to_analyze[0]
                 }))
 
             setResult(json.dumps({
