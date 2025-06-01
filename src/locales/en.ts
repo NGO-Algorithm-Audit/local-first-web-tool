@@ -255,7 +255,7 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     },
 
     biasAnalysis: {
-        testingStatisticalSignificance: `**Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
 
 - \\\\( H_0 \\\\): no difference in bias between the most deviating cluster and the rest of the dataset
 - \\\\( H_1 \\\\): difference in bias between the most deviating cluster and the rest of the dataset
@@ -290,7 +290,7 @@ In this example, we analyze which group is most adversely affected by the risk p
 `,
         },
         parameters: {
-            heading: 'Parameters selected for clustering',
+            heading: '1. Parameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
             minClusterSize: 'Minimal cluster size: {{value}}',
             performanceMetric: 'Performance metric column: {{value}}',
@@ -335,11 +335,11 @@ In this example, we analyze which group is most adversely affected by the risk p
                 'The "{{variable}}" variable distribution across the different clusters:',
         },
         splittingDataset: {
-            heading: 'Splitting dataset',
+            heading: '2. Splitting dataset',
             description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in the most deviating clusters is evaluated using the test dataset.`,
         },
         clusterinResults: {
-            heading: 'Clustering results',
+            heading: '3. Clustering results',
             description: `
 - Number of clusters detected: {{clusterCount}}
 - Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
