@@ -556,19 +556,7 @@ def run():
                 grouped_data = decoded_X_test.groupby(["cluster_label", column]).size().unstack(fill_value=0)
                 percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
                 
-                print(percentages.T)
-                
-                print("------ grouped_data start ------")
-                print(grouped_data)
-
-                print("------ grouped_data columns ------")
-
-                # print category values
                 category_values = grouped_data.columns.tolist()
-                print(category_values)
-
-                print("------ grouped_data end ------")
-
 
                 setResult(json.dumps({
                     'type': 'heading',
@@ -577,13 +565,11 @@ def run():
                 }))
 
                 setResult(json.dumps({
-                    'type': 'histogram',
+                    'type': 'clusterCategorieDistribution',
                     'title': column,
                     'categories': category_values,
                     'data': percentages.T.to_json(orient='records')
                 }))
-
-    # return
 
     df_most_biased_cluster = most_biased_cluster_df
     df_other = rest_df
@@ -614,155 +600,8 @@ def run():
             'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
             'comparisons': comparisons
         }))
+            
     return
-
-    # Cluster summary
-    # setResult(json.dumps({
-    #    'type': 'heading',
-    #    'key': 'biasAnalysis.clusters.summary',
-    #    'params': {
-    #        'clusterCount': hbac.n_clusters_,
-    #        'biasedCount': len(df_most_biased_cluster),
-    #        'totalCount': df.shape[0]
-    #    }
-    #}))
-
-    # setResult(json.dumps({
-    #    'type': 'text',
-    #    'key': 'biasAnalysis.clusters.sizeHint'
-    # }))
-
-    # setResult(json.dumps({
-    #    'type': 'text',
-    #    'data': ''
-    #}))
-
-    clusters_array = []
-    full_df = pd.DataFrame()
-    for i in range(hbac.n_clusters_):
-        labels = decoded_X_test[hbac.labels_ == i]
-        labels['Cluster'] = f'{i}'
-        clusters_array.append(labels)
-    full_df = pd.concat(clusters_array, ignore_index=True)
-    full_df.head()
-
-    
-
-    setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
-    setOutputData("otherClusters", df_other.to_json(orient='records'))
-    
-    
-
-
-    setResult(json.dumps({
-        'type': 'heading',
-        'headingKey': 'biasAnalysis.biasedCluster.heading'
-    }))
-
-    if dataType == 'numeric':
-        diff_df = diffDataframe(df, features, type='Numerical')
-        comparisons = []
-
-        for feat in features:
-            diff = diff_df.loc[feat,"Difference"].round(2)
-                
-            if diff < 0:
-                comparisons.append({
-                    'key': 'biasAnalysis.biasedCluster.comparison.less',
-                    'params': {
-                        'value': abs(diff),
-                        'feature': feat
-                    }
-                })
-            elif diff > 0:
-                comparisons.append({
-                    'key': 'biasAnalysis.biasedCluster.comparison.more',
-                    'params': {
-                        'value': diff,
-                        'feature': feat
-                    }
-                })
-            elif diff == 0:
-                comparisons.append({
-                    'key': 'biasAnalysis.biasedCluster.comparison.equal',
-                    'params': {
-                        'feature': feat
-                    }
-                })
-
-        setResult(json.dumps({
-            'type': 'accordion',
-            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-            'comparisons': comparisons
-        }))
-    else:
-        diff_df = diffDataframe(df, features, type='Categorical')
-        comparisons = []
-        
-        for feat in features:
-            values = df[feat].unique().tolist()
-            for value in values:
-                diff = diff_df.loc[value,"Difference"].round(2)     
-                         
-                if (isinstance(diff, float)):
-                    if diff < 0:
-                        comparisons.append({
-                            'key': 'biasAnalysis.biasedCluster.comparison.less',
-                            'params': {
-                                'value': abs(diff),
-                                'feature': value
-                            }
-                        })
-                    elif diff > 0:
-                        comparisons.append({
-                            'key': 'biasAnalysis.biasedCluster.comparison.more',
-                            'params': {
-                                'value': diff,
-                                'feature': value
-                            }
-                        })
-                    elif diff == 0:
-                        comparisons.append({
-                            'key': 'biasAnalysis.biasedCluster.comparison.equal',
-                            'params': {
-                                'feature': value
-                            }
-                        })
-
-        setResult(json.dumps({
-            'type': 'accordion',
-            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-            'comparisons': comparisons
-        }))
-
-    if dataType == 'numeric':
-        for col in full_df.columns:
-            if col != targetColumn and col != 'Cluster' and col != "":
-                setResult(json.dumps({
-                    'type': 'heading',
-                    'headingKey': 'biasAnalysis.distribution.heading',
-                    'params': {'variable': col}
-                }))
-
-                setResult(json.dumps({
-                    'type': 'barchart',
-                    'title': col,
-                    'data': full_df.groupby('Cluster')[col].mean().to_json(orient='records')
-                }))
-    else:
-        for col in full_df.columns:
-            if col != targetColumn and col != 'Cluster' and col != "" and col in features:
-                setResult(json.dumps({
-                    'type': 'heading',
-                    'headingKey': 'biasAnalysis.distribution.heading',
-                    'params': {'variable': col}
-                }))
-
-                setResult(json.dumps({
-                    'type': 'histogram',
-                    'title': col,
-                    'data': full_df.groupby('Cluster')[col].value_counts().unstack().to_json(orient='records')
-                }))
 
 if data != 'INIT':
     run()

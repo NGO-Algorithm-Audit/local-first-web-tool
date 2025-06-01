@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { DistributionReport } from './DistributionReport';
 import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
+import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistributionChart';
 
 interface Comparison {
     key: string;
@@ -139,6 +140,39 @@ export default function ComponentMapper({
                                 </MarkdownWithTooltips>
                             </TooltipProvider>
                         );
+                    case 'clusterCategorieDistribution': {
+                        //
+
+                        const distributionData = JSON.parse(
+                            resultItem.data
+                        )?.map((x: Record<string, number>, index: number) => {
+                            const translationID = getLabel(index);
+                            return {
+                                name: resultItem.categories
+                                    ? resultItem.categories[index]
+                                    : t(
+                                          translationID.key,
+                                          translationID.params
+                                      ),
+                                values: createArrayFromPythonDictionary(x),
+                            };
+                        });
+                        //console.log('cluster categories distribution', resultItem, distributionData);
+
+                        return (
+                            <ErrorBoundary key={index}>
+                                <ClusterCategoriesDistributionChart
+                                    showMeanLine={true}
+                                    data={distributionData}
+                                    yAxisLabel={t('distribution.frequency')}
+                                    title={resultItem.title ?? ''}
+                                    isViridis={
+                                        resultItem.categories !== undefined
+                                    }
+                                />
+                            </ErrorBoundary>
+                        );
+                    }
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
@@ -154,7 +188,7 @@ export default function ComponentMapper({
                                 };
                             }
                         );
-                        console.log('histogramData', resultItem, histogramData);
+                        //console.log('histogramData', resultItem, histogramData);
 
                         return (
                             <ErrorBoundary key={index}>
