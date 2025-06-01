@@ -15,7 +15,7 @@ export default function ClusterLegend({ clusterCount }: ClusterLegendProps) {
         }
     }
     return (
-        <div className="flex flex-row items-start gap-2">
+        <div className="flex flex-row items-start gap-2 w-100 flex-wrap justify-center">
             {Array.from({ length: clusterCount }, (_, i) => (
                 <div key={i} className="flex items-center mb-2">
                     <span
