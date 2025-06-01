@@ -4,6 +4,8 @@ import { rehypeInfoTooltip } from './rehype-info-tooltip';
 import { TooltipWrapper } from './TooltipWrapper';
 import type { Element, ElementData } from 'hast';
 import remarkGfm from 'remark-gfm';
+import RemarkMath from 'remark-math';
+import { MathJaxContext, MathJax } from 'better-react-mathjax';
 
 interface MarkdownWithTooltipsProps {
     children: string;
@@ -25,44 +27,51 @@ export function MarkdownWithTooltips({
     className,
 }: MarkdownWithTooltipsProps) {
     return (
-        <Markdown
-            className={className}
-            remarkPlugins={[remarkInfoTooltip, remarkGfm]}
-            rehypePlugins={[rehypeInfoTooltip]}
-            components={{
-                // @ts-expect-error - TooltipWrapper is a custom component
-                TooltipWrapper,
-                div: ({ node, children, ...props }) => {
-                    const element = node as CustomElement;
-                    const tooltipContent = element.data?.hProperties?.tooltip;
-                    if (tooltipContent) {
+        <MathJaxContext hideUntilTypeset="every">
+            <Markdown
+                className={className}
+                remarkPlugins={[remarkInfoTooltip, remarkGfm, RemarkMath]}
+                rehypePlugins={[rehypeInfoTooltip]}
+                components={{
+                    // @ts-expect-error - math is a custom components
+                    math: (props: any) => <MathJax>{props.value}</MathJax>,
+                    inlineMath: (props: any) => (
+                        <MathJax>{props.value}</MathJax>
+                    ),
+                    TooltipWrapper,
+                    div: ({ node, children, ...props }) => {
+                        const element = node as CustomElement;
+                        const tooltipContent =
+                            element.data?.hProperties?.tooltip;
+                        if (tooltipContent) {
+                            return (
+                                <>
+                                    <span {...props}>{children}</span>
+                                    <TooltipWrapper
+                                        tooltipContent={tooltipContent}
+                                        children={children}
+                                    />
+                                </>
+                            );
+                        }
+                        return <span {...props}>{children}</span>;
+                    },
+                    a: ({ children, href }) => {
                         return (
-                            <>
-                                <span {...props}>{children}</span>
-                                <TooltipWrapper
-                                    tooltipContent={tooltipContent}
-                                    children={children}
-                                />
-                            </>
+                            <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800 underline"
+                            >
+                                {children}
+                            </a>
                         );
-                    }
-                    return <span {...props}>{children}</span>;
-                },
-                a: ({ children, href }) => {
-                    return (
-                        <a
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 underline"
-                        >
-                            {children}
-                        </a>
-                    );
-                },
-            }}
-        >
-            {children}
-        </Markdown>
+                    },
+                }}
+            >
+                {children}
+            </Markdown>
+        </MathJaxContext>
     );
 }

@@ -463,6 +463,15 @@ def run():
     print(f"T-statistic: {t_stat}")
     print(f"p-value: {p_val}")
 
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.testingStatisticalSignificance',
+        'params': {
+            't_stat': t_stat,
+            'p_val': p_val
+        }
+    }))
+
     if p_val < 0.05:
         print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
     else:
@@ -472,11 +481,10 @@ def run():
                 'headingKey': 'biasAnalysis.nodifference.heading',                            
             }))    
 
-    # TODO Show UI-text 7
+   
 
-    
-    # visualize the clusters   
-    
+    # visualize the clusters
+
     # Group by cluster_label and count the occurrences
     cluster_counts = decoded_X_test["cluster_label"].value_counts()
     print(f"cluster_counts: {cluster_counts}")
