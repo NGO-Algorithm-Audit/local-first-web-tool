@@ -295,6 +295,11 @@ In this example, we analyze which group is most adversely affected by the risk p
             minClusterSize: 'Minimal cluster size: {{value}}',
             performanceMetric: 'Performance metric column: {{value}}',
             dataType: 'Data type: {{value}}',
+            description: `- Number of iterations: {{iterations}}
+- Minimal cluster size: {{minClusterSize}}
+- Performance metric column: {{performanceMetric}}
+- Data type: {{dataType}}
+`,
         },
         clusters: {
             legendMostBiasedCluster: 'Most biased cluster',

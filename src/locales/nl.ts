@@ -196,6 +196,18 @@ export const nl = {
             description:
                 'Als demo wordt de [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset hieronder geladen. De dataset bevat kenmerken van tweets en de voorspelling van een BERT-gebaseerd misinformatie detectie algoritme of een tweet nepnieuws is of niet. Fout-positieve classificaties zijn gemarkeerd als FP. Een FP geeft aan dat tweet ten onrechte door het misinformatie algoritme zijn geclassificeerd als nepnieuws. De FP-metriek wordt in dit voorbeeld gebruikt als metriek om bias te meten. \n  \n&nbsp;&nbsp;\n\n In dit voorbeeld onderzoeken we welk type tweets vaker/minder vaak door het misinformatie algoritme worden geclassificeerd als nepnieuws.',
         },
+        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+
+- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
+
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+
+
+T_statistic : {{t_stat}}
+
+p_value : {{p_val}}
+        `,
         parameters: {
             heading: 'Geselecteerde parameters',
             iterations: 'Aantal iteraties: {{value}}',
@@ -204,6 +216,11 @@ export const nl = {
             performanceMetricTooltip:
                 'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
+            description: `- Aantal iteraties: {{iterations}}
+- Minimale clustergrootte: {{minClusterSize}}
+- Prestatiemetingkolom: {{performanceMetric}}
+- Gegevenstype: {{dataType}}
+`,
         },
         clusters: {
             legendMostBiasedCluster: 'Meest bevooroordeelde cluster',

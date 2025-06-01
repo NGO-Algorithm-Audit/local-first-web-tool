@@ -360,26 +360,16 @@ def run():
     }))
 
 
-    # Parameter information
+    # Parameter information    
     setResult(json.dumps({
         'type': 'text',
-        'key': 'biasAnalysis.parameters.iterations',
-        'params': {'value': localIterations}
-    }))
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.parameters.minClusterSize',
-        'params': {'value': localClusterSize}
-    }))
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.parameters.performanceMetric',
-        'params': {'value': bias_score}
-    }))
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.parameters.dataType',
-        'params': {'value': localDataType}
+        'key': 'biasAnalysis.parameters.description',
+        'params': {
+            'iterations': localIterations,
+            'minClusterSize': localClusterSize,
+            'performanceMetric': bias_score,
+            'dataType': localDataType
+        }
     }))
     setResult(json.dumps({
         'type': 'text',
