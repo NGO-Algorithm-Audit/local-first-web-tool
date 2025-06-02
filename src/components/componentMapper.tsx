@@ -236,6 +236,9 @@ export default function ComponentMapper({
                                             )}
                                             title={resultItem.title ?? ''}
                                             means={resultItem.means ?? []}
+                                            categories={
+                                                resultItem.categories ?? []
+                                            }
                                             isViridis={
                                                 resultItem.categories !==
                                                 undefined

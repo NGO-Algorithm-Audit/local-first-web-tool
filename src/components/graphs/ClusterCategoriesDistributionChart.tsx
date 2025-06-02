@@ -13,7 +13,8 @@ interface ClusterCategoriesDistributionChartProps {
     colorRange?: string[];
     showMeanLine: boolean;
     isViridis?: boolean;
-    means: { mean: number }[];
+    means: { mean: number; category: string }[];
+    categories: string[];
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -28,6 +29,7 @@ const ClusterCategoriesDistributionChart = ({
     showMeanLine,
     isViridis,
     means,
+    categories,
 }: ClusterCategoriesDistributionChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -178,7 +180,11 @@ const ClusterCategoriesDistributionChart = ({
         if (showMeanLine) {
             // Calculate the mean of all bar values
             data.forEach((_d, index) => {
-                const meanValue = means[index].mean; // d3.mean(d.values.map(d => d.value)) ?? 0;
+                const category = categories[index];
+                const meansForCategory = means.find(
+                    m => m.category === category
+                );
+                const meanValue = meansForCategory?.mean ?? 0;
 
                 // Draw a dotted line representing the mean value
                 svg.append('line')
