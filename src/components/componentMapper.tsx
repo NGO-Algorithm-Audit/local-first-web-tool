@@ -202,7 +202,11 @@ export default function ComponentMapper({
                                 values: createArrayFromPythonDictionary(x),
                             };
                         });
-                        //console.log('cluster categories distribution', resultItem, distributionData);
+                        console.log(
+                            'cluster categories distribution',
+                            resultItem,
+                            distributionData
+                        );
 
                         return (
                             <ErrorBoundary key={index}>
@@ -231,6 +235,7 @@ export default function ComponentMapper({
                                                 'distribution.frequency'
                                             )}
                                             title={resultItem.title ?? ''}
+                                            means={resultItem.means ?? []}
                                             isViridis={
                                                 resultItem.categories !==
                                                 undefined

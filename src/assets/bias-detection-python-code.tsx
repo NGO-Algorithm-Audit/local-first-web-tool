@@ -533,36 +533,8 @@ def run():
     if p_val < 0.05:
 
         if localDataType == 'numeric':
-            # Calculate mean per cluster for each variable
-            means = test_df.groupby("cluster_label").mean()
-
-            # Calculate overall mean for each variable (excluding cluster_label)
-            variables = X_test.columns.tolist()
-            overall_means = test_df[variables].mean()
-
-            # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
-            n_vars = len(variables)
-            n_cols = 2
-            n_rows = int(np.ceil(n_vars / n_cols))
-
-            for i, var in enumerate(variables):
-                
-                #setResult(json.dumps({
-                #    'type': 'heading',
-                #    'headingKey': 'biasAnalysis.distribution.heading',            
-                #    'params': {'variable': var}
-                #}))
-                
-                setResult(json.dumps({
-                    'type': 'barchart',
-                    'headingKey': 'biasAnalysis.distribution.heading',  
-                    'title': var,
-                    'data': means[var].to_json(orient='records'),
-                    'meanValue': overall_means[var],
-                    'params': {'variable': var}
-                }))
-
-
+            # see above for the code 
+            print("Statistically significant differences in means found.")
         else:
             # Create subplots for each column
             columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
@@ -586,7 +558,14 @@ def run():
                 percentages = grouped_data.div(grouped_data.sum(axis=1), axis=0) * 100
                 
                 category_values = grouped_data.columns.tolist()
-                
+
+                means = []
+                overall_counts = decoded_X_test[column].value_counts(normalize=True) * 100
+                for cat_value, avg_pct in overall_counts.items():
+                    means.append({
+                        'category': cat_value,
+                        'mean': avg_pct
+                    })
 
                 setResult(json.dumps({
                     'type': 'clusterCategorieDistribution',
@@ -596,7 +575,8 @@ def run():
                     'data': percentages.T.to_json(orient='records'),
                     'selectFilterGroup' : column,
                     'params': {'variable': column},
-                    'defaultFilter': columns_to_analyze[0]
+                    'defaultFilter': columns_to_analyze[0],
+                    'means': means
                 }))
 
             setResult(json.dumps({

@@ -13,6 +13,7 @@ interface ClusterCategoriesDistributionChartProps {
     colorRange?: string[];
     showMeanLine: boolean;
     isViridis?: boolean;
+    means: { mean: number }[];
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -26,6 +27,7 @@ const ClusterCategoriesDistributionChart = ({
     colorRange,
     showMeanLine,
     isViridis,
+    means,
 }: ClusterCategoriesDistributionChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -115,6 +117,20 @@ const ClusterCategoriesDistributionChart = ({
             x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
         }));
 
+        // Draw bars
+        svg.selectAll('rect')
+            .data(data)
+            .join('g')
+            .attr('transform', d => `translate(${fx(d.name)},0)`)
+            .selectAll()
+            .data(d => d.values)
+            .join('rect')
+            .attr('x', (_d, index) => barWidth * index)
+            .attr('y', d => y(d.value) ?? 0)
+            .attr('width', barWidth)
+            .attr('height', d => y(0) - y(d.value))
+            .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
+
         xAxis
             .selectAll('line')
             .data(xPositions)
@@ -158,24 +174,11 @@ const ClusterCategoriesDistributionChart = ({
 
         // Append y-axis
         svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
-        // Draw bars
-        svg.selectAll('rect')
-            .data(data)
-            .join('g')
-            .attr('transform', d => `translate(${fx(d.name)},0)`)
-            .selectAll()
-            .data(d => d.values)
-            .join('rect')
-            .attr('x', (_d, index) => barWidth * index)
-            .attr('y', d => y(d.value) ?? 0)
-            .attr('width', barWidth)
-            .attr('height', d => y(0) - y(d.value))
-            .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
         if (showMeanLine) {
             // Calculate the mean of all bar values
-            data.forEach((d, index) => {
-                const meanValue = d3.mean(d.values.map(d => d.value)) ?? 0;
+            data.forEach((_d, index) => {
+                const meanValue = means[index].mean; // d3.mean(d.values.map(d => d.value)) ?? 0;
 
                 // Draw a dotted line representing the mean value
                 svg.append('line')
