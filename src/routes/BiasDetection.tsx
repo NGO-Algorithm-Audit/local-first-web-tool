@@ -114,7 +114,7 @@ export default function BiasDetection() {
                 clusterSize: 3,
                 targetColumn: 'FP',
                 dataType: 'numeric',
-                higherIsBetter: false,
+                higherIsBetter: true,
                 isDemo: true,
             });
         }
@@ -127,7 +127,7 @@ export default function BiasDetection() {
                 parameters: {
                     iterations: params.iterations,
                     clusterSize: params.clusterSize,
-                    targetColumn: params.targetColumn,
+                    targetColumn: params.targetColumn ?? '',
                     dataType: params.dataType,
                     higherIsBetter: params.higherIsBetter,
                     isDemo: params.isDemo,
@@ -169,7 +169,7 @@ export default function BiasDetection() {
 
                 {result.length > 0 ? (
                     <ComponentMapper items={result} data={data} />
-                ) : data.data.length > 0 ? null : loading ? (
+                ) : loading ? (
                     <LoadingState
                         loadingMessageKey={loadingMessage}
                         initializingKey={

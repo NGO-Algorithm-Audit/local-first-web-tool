@@ -6,7 +6,7 @@ interface Data extends DataLabel {
     values: { value: number; name: string }[];
 }
 
-interface GroupBarChartProps {
+interface ClusterCategoriesDistributionChartProps {
     yAxisLabel: string;
     title: string;
     data: Data[];
@@ -17,56 +17,44 @@ interface GroupBarChartProps {
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
 const height = 300 - margin.top - margin.bottom;
-const barWidth = 0.05 * window.innerWidth < 40 ? 40 : 0.05 * window.innerWidth;
-const barGap = 5;
+const barWidth = 30;
 
-const GroupBarChart = ({
+const ClusterCategoriesDistributionChart = ({
     title,
     data,
     yAxisLabel,
     colorRange,
     showMeanLine,
     isViridis,
-}: GroupBarChartProps) => {
+}: ClusterCategoriesDistributionChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(800); // Default width
 
-    //const legendWidth = 140;
-    // const plotWidth =
-    //     containerWidth -
-    //     margin.left -
-    //     margin.right ;
+    const groupWidth = barWidth * (data?.[0]?.values?.length ?? 1);
+    const clusterGroupTotalWidth = data.length * groupWidth;
+    const groupGap = barWidth * 2;
+    const groupGapTotalWidth = data.length * groupGap; // Total Width of all gaps between groups
 
     const fx = useMemo(
         () =>
             d3
                 .scaleBand()
                 .domain(new Set(data.map(d => d.name)))
-                .range([
-                    0,
-                    Math.max(
-                        containerWidth - margin.right - margin.left,
-                        data.length * (barWidth + barGap) -
-                            margin.right -
-                            margin.left
-                    ),
-                ])
-                .padding(0.2),
-        [data, containerWidth]
+                .range([0, clusterGroupTotalWidth + groupGapTotalWidth]),
+        [containerWidth]
     );
     const flattenData = data.flatMap(d => d.values);
 
     const groupbarNames = new Set(flattenData.map(d => d.name));
-    const x0 = d3
-        .scaleBand()
-        .domain(groupbarNames)
-        .rangeRound([0, fx.bandwidth()])
-        .padding(0.05);
 
     const colors = new Array(Math.max(Math.min(groupbarNames.size, 11), 3));
     for (let i = 0; i < colors.length; i++) {
-        colors[i] = d3.interpolateViridis(i / colors.length);
+        if (i == 0) {
+            colors[0] = d3.interpolateViridis(1);
+        } else {
+            colors[i] = d3.interpolateViridis((i - 1) / colors.length);
+        }
     }
     const color = d3
         .scaleOrdinal()
@@ -99,7 +87,13 @@ const GroupBarChart = ({
             .attr('class', `min-h-[${height}px]`)
             .attr(
                 'width',
-                Math.max(containerWidth, margin.left + data.length * barWidth)
+                Math.max(
+                    containerWidth,
+                    clusterGroupTotalWidth +
+                        groupGapTotalWidth +
+                        margin.left +
+                        margin.right
+                )
             )
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
@@ -112,18 +106,58 @@ const GroupBarChart = ({
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
 
-        // Append x-axis
         const xAxis = svg
             .append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(fx).tickSizeOuter(0));
+            .attr('transform', `translate(0, ${height})`);
+
+        const xPositions = data.map((d, i) => ({
+            label: d.name,
+            x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
+        }));
+
+        xAxis
+            .selectAll('line')
+            .data(xPositions)
+            .enter()
+            .append('line')
+            .attr('x1', d => d.x)
+            .attr('x2', d => d.x)
+            .attr('y1', 0)
+            .attr('y2', 6)
+            .attr('stroke', 'black');
+
+        xAxis
+            .selectAll('text')
+            .data(xPositions)
+            .enter()
+            .append('text')
+            .attr('x', d => d.x)
+            .attr('y', 20)
+            .attr('title', d => d.label)
+            .attr('width', groupWidth)
+            .attr('text-anchor', 'middle')
+            .text(d => d.label)
+            .each(function () {
+                const width = groupWidth;
+                const self = d3.select(this);
+                const node = self.node();
+                if (!node) return;
+                let textLength = node.getComputedTextLength(),
+                    text = self.text();
+                while (textLength > width && text.length > 0) {
+                    text = text.slice(0, -1);
+                    self.text(text + '...');
+                    textLength = node.getComputedTextLength();
+                }
+            })
+            .append('title')
+            .text(d => d.label);
 
         const xAxisFirstColumnLabel = xAxis.select('text');
         xAxisFirstColumnLabel.style('text-decoration', 'underline');
 
         // Append y-axis
         svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
-
         // Draw bars
         svg.selectAll('rect')
             .data(data)
@@ -132,9 +166,9 @@ const GroupBarChart = ({
             .selectAll()
             .data(d => d.values)
             .join('rect')
-            .attr('x', d => x0(d.name) ?? 0)
+            .attr('x', (_d, index) => barWidth * index)
             .attr('y', d => y(d.value) ?? 0)
-            .attr('width', x0.bandwidth())
+            .attr('width', barWidth)
             .attr('height', d => y(0) - y(d.value))
             .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
@@ -146,11 +180,7 @@ const GroupBarChart = ({
             // Draw a dotted line representing the mean value
             svg.append('line')
                 .attr('x1', 0)
-                .attr(
-                    'x2',
-                    Math.max(containerWidth, data.length * barWidth) -
-                        margin.right
-                )
+                .attr('x2', Math.max(containerWidth, groupGap) - margin.right)
                 .attr('y1', y(meanValue))
                 .attr('y2', y(meanValue))
                 .attr('stroke', 'black')
@@ -168,13 +198,6 @@ const GroupBarChart = ({
                 .style('font-size', '12px')
                 .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
         }
-        // Append legend
-        const legend = svg
-            .append('g')
-            .attr(
-                'transform',
-                `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right + 20}, 0)`
-            );
 
         // Append title to the svg
         svg.append('text')
@@ -193,36 +216,6 @@ const GroupBarChart = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', '12px')
             .text(yAxisLabel);
-
-        // Append legend color boxes and text labels
-        const legendItems = legend
-            .selectAll('.legend-item')
-            .data(groupbarNames)
-            .join('g')
-            .attr('class', 'legend-item')
-            .attr('transform', (_, i) => `translate(0, ${i * 20 + 20})`);
-
-        legendItems
-            .append('rect')
-            .attr('width', 15)
-            .attr('height', 15)
-            .attr('fill', d => color(d) as string);
-
-        legendItems
-            .append('text')
-            .attr('x', 20)
-            .attr('y', 12)
-            .text(d => d);
-
-        if (legend) {
-            const legendBBox = legend.node()?.getBBox();
-            if (legendBBox) {
-                legend.attr(
-                    'transform',
-                    `translate(${Math.max(containerWidth, data.length * barWidth) - margin.left - margin.right - legendBBox.width}, 10)`
-                );
-            }
-        }
 
         xAxis.selectAll('.tick text').call((text, width) => {
             text.each(function () {
@@ -261,7 +254,7 @@ const GroupBarChart = ({
                 }
             });
         }, barWidth);
-    }, [data, x0, y, color, title, containerWidth]);
+    }, [data, y, color, title, containerWidth]);
 
     useEffect(() => {
         // Set up the ResizeObserver to track changes in the container's size
@@ -292,4 +285,4 @@ const GroupBarChart = ({
     );
 };
 
-export default GroupBarChart;
+export default ClusterCategoriesDistributionChart;

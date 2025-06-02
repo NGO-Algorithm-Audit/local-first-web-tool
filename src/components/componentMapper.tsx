@@ -10,6 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { DistributionReport } from './DistributionReport';
 import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
+import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistributionChart';
+import ClusterLegend from './graphs/ClusterLegend';
+import FilterSelect from './ui/FilterSelect';
+import { useState } from 'react';
 
 interface Comparison {
     key: string;
@@ -36,6 +40,7 @@ export default function ComponentMapper({
     items: string[];
     data: CSVData;
 }) {
+    const [categorieFilter, setCategorieFilter] = useState<string | null>();
     const { t } = useTranslation();
     const components = items
         .map((r, index) => {
@@ -139,20 +144,119 @@ export default function ComponentMapper({
                                 </MarkdownWithTooltips>
                             </TooltipProvider>
                         );
+                    case 'clusterCategorieSelect': {
+                        console.log(
+                            'clusterCategorieSelect',
+                            resultItem.values,
+                            resultItem.defaultValue
+                        );
+                        return (
+                            <div className="flex items-center" key={index}>
+                                <ErrorBoundary key={index}>
+                                    <div>
+                                        <FilterSelect
+                                            filterValues={resultItem.values}
+                                            defaultValue={
+                                                resultItem.defaultValue
+                                            }
+                                            onFilter={value => {
+                                                setCategorieFilter(value);
+                                                console.log('value', value);
+                                            }}
+                                        />
+                                    </div>
+                                </ErrorBoundary>
+                            </div>
+                        );
+                    }
+                    case 'cluster_legend': {
+                        return (
+                            <div
+                                className="flex items-center justify-center"
+                                key={index}
+                            >
+                                <ErrorBoundary key={index}>
+                                    <ClusterLegend
+                                        clusterCount={
+                                            resultItem.clusterCount ?? 0
+                                        }
+                                    />
+                                </ErrorBoundary>
+                            </div>
+                        );
+                    }
+                    case 'clusterCategorieDistribution': {
+                        //
+
+                        const distributionData = JSON.parse(
+                            resultItem.data
+                        )?.map((x: Record<string, number>, index: number) => {
+                            const translationID = getLabel(index);
+                            return {
+                                name: resultItem.categories
+                                    ? resultItem.categories[index]
+                                    : t(
+                                          translationID.key,
+                                          translationID.params
+                                      ),
+                                values: createArrayFromPythonDictionary(x),
+                            };
+                        });
+                        //console.log('cluster categories distribution', resultItem, distributionData);
+
+                        return (
+                            <ErrorBoundary key={index}>
+                                {categorieFilter ===
+                                    resultItem.selectFilterGroup ||
+                                (!categorieFilter &&
+                                    resultItem.selectFilterGroup ===
+                                        resultItem.defaultFilter) ||
+                                !resultItem.selectFilterGroup ? (
+                                    <>
+                                        <h5
+                                            key={index}
+                                            className="text-gray-800 font-semibold"
+                                        >
+                                            {resultItem.headingKey
+                                                ? t(
+                                                      resultItem.headingKey,
+                                                      resultItem.params
+                                                  )
+                                                : resultItem.data}
+                                        </h5>
+                                        <ClusterCategoriesDistributionChart
+                                            showMeanLine={true}
+                                            data={distributionData}
+                                            yAxisLabel={t(
+                                                'distribution.frequency'
+                                            )}
+                                            title={resultItem.title ?? ''}
+                                            isViridis={
+                                                resultItem.categories !==
+                                                undefined
+                                            }
+                                        />
+                                    </>
+                                ) : null}
+                            </ErrorBoundary>
+                        );
+                    }
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
                                 const translationID = getLabel(index);
                                 return {
-                                    name: t(
-                                        translationID.key,
-                                        translationID.params
-                                    ),
+                                    name: resultItem.categories
+                                        ? resultItem.categories[index]
+                                        : t(
+                                              translationID.key,
+                                              translationID.params
+                                          ),
                                     values: createArrayFromPythonDictionary(x),
                                 };
                             }
                         );
-                        console.log('histogramData', histogramData);
+                        //console.log('histogramData', resultItem, histogramData);
 
                         return (
                             <ErrorBoundary key={index}>
@@ -161,6 +265,9 @@ export default function ComponentMapper({
                                     data={histogramData}
                                     yAxisLabel={t('distribution.frequency')}
                                     title={resultItem.title ?? ''}
+                                    isViridis={
+                                        resultItem.categories !== undefined
+                                    }
                                 />
                             </ErrorBoundary>
                         );
@@ -203,6 +310,7 @@ export default function ComponentMapper({
                                 key={index}
                                 data={barchartData}
                                 title={resultItem.title ?? ''}
+                                meanValue={resultItem.meanValue}
                             />
                         );
                     }

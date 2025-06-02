@@ -31,11 +31,15 @@ export const nl = {
                     - alle kolommen (behalve de gelijkheidsmetriek-kolom) dezelfde datatypes hebben, numeriek of categorisch;
                     - de gelijkheidsmetriek-kolom numeriek is`,
                     performanceMetric: 'Gelijkheidsmetriek',
-                    performanceMetricTooltip: 'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
+                    performanceMetricTooltip:
+                        'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
                     dataType: 'Type data',
-                    dataTypeTooltip: 'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
+                    dataTypeTooltip:
+                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
+                    filterSelect:
+                        'Selecteer een kolom om cluster distributies te bekijken',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -45,7 +49,8 @@ export const nl = {
                         title: 'Interpretatie van gelijkheidsmetriek',
                         lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
                         higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
-                        tooltip: 'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
+                        tooltip:
+                            'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
                     },
                     iterationsTooltip:
                         'Aantal keren dat de dataset wordt opgesplitst in clusters totdat de minimale clustergrootte is bereikt',
@@ -191,6 +196,18 @@ export const nl = {
             description:
                 'Als demo wordt de [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset hieronder geladen. De dataset bevat kenmerken van tweets en de voorspelling van een BERT-gebaseerd misinformatie detectie algoritme of een tweet nepnieuws is of niet. Fout-positieve classificaties zijn gemarkeerd als FP. Een FP geeft aan dat tweet ten onrechte door het misinformatie algoritme zijn geclassificeerd als nepnieuws. De FP-metriek wordt in dit voorbeeld gebruikt als metriek om bias te meten. \n  \n&nbsp;&nbsp;\n\n In dit voorbeeld onderzoeken we welk type tweets vaker/minder vaak door het misinformatie algoritme worden geclassificeerd als nepnieuws.',
         },
+        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+
+- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
+
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+
+
+T_statistic : {{t_stat}}
+
+p_value : {{p_val}}
+        `,
         parameters: {
             heading: 'Geselecteerde parameters',
             iterations: 'Aantal iteraties: {{value}}',
@@ -199,8 +216,14 @@ export const nl = {
             performanceMetricTooltip:
                 'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
+            description: `- Aantal iteraties: {{iterations}}
+- Minimale clustergrootte: {{minClusterSize}}
+- Prestatiemetingkolom: {{performanceMetric}}
+- Gegevenstype: {{dataType}}
+`,
         },
         clusters: {
+            legendMostBiasedCluster: 'Meest bevooroordeelde cluster',
             summary:
                 'We hebben {{clusterCount}} clusters gevonden. Cluster met de meeste bias bestaat uit {{biasedCount}} datapunten. De geüploade dataset bestaat uit {{totalCount}} datapunten.',
             sizeHint:
@@ -214,6 +237,19 @@ export const nl = {
                 less: '{{value}} minder {{feature}} dan in de rest van de dataset.',
                 more: '{{value}} meer {{feature}} dan in de rest van de dataset.',
                 equal: 'gelijke {{feature}} als in de rest van de dataset.',
+            },
+            difference: {
+                appearance: '{{feature}} : {{value}}',
+                deviatingMoreOften:
+                    '**{{value}}**: Komt **vaker** voor in de meest afwijkende cluster dan in de rest van de dataset.',
+                deviatingLessOften:
+                    '**{{value}}**: Komt **minder** voor in de meest afwijkende cluster dan in de rest van de dataset.',
+            },
+            differenceCategorical: {
+                deviatingMoreOften:
+                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.',
+                deviatingLessOften:
+                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.',
             },
         },
         distribution: {

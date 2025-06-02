@@ -5,7 +5,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from './touch-tooltip';
-import Markdown from 'react-markdown';
+import { MarkdownForTooltip } from '../MarkdownForTooltip';
 
 export const IconInfoTooltip = ({ tooltipText }: { tooltipText: string }) => {
     return (
@@ -20,9 +20,9 @@ export const IconInfoTooltip = ({ tooltipText }: { tooltipText: string }) => {
                 </TooltipTrigger>
                 <TooltipContent>
                     <div className="whitespace-pre-wrap max-w-full w-[400px] p-2">
-                        <Markdown className="-mt-2 text-gray-800 markdown">
+                        <MarkdownForTooltip className="-mt-2 text-gray-800 markdown">
                             {tooltipText}
-                        </Markdown>
+                        </MarkdownForTooltip>
                     </div>
                 </TooltipContent>
             </Tooltip>

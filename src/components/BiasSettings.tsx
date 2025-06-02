@@ -69,7 +69,7 @@ export default function BiasSettings({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             dataType: 'numeric',
-            whichPerformanceMetricValueIsBetter: 'lower',
+            whichPerformanceMetricValueIsBetter: 'higher',
         },
     });
     const [iter, setIter] = useState([10]);
@@ -107,13 +107,14 @@ export default function BiasSettings({
         setDataTypeError(null);
         if (!isReset) {
             // Find numeric columns
-            const numericColumns = Object.keys(data[0] || {})
-                .filter(column => column)
-                .filter(column =>
-                    data.every(row => {
-                        return !isNaN(parseFloat(row[column]));
-                    })
-                );
+            const numericColumns = Object.keys(data[0] || {}).filter(
+                column => column
+            );
+            // .filter(column =>
+            //     data.every(row => {
+            //         return !isNaN(parseFloat(row[column]));
+            //     })
+            // );
 
             if (numericColumns.length === 0) {
                 setPerformanceMetricColumnError(
@@ -136,7 +137,7 @@ export default function BiasSettings({
     }, [data]);
 
     const onDemoRun = async () => {
-        const file = await fetch('/FP-test-set.csv')
+        const file = await fetch('compas-scores-two-years.csv') //'/FP-test-set.csv')
             .then(response => response.text())
             .then(data => Papa.parse(data, { header: true }));
         onDataLoad(
@@ -151,13 +152,46 @@ export default function BiasSettings({
         // Check if data type matches the actual data
 
         const isNumericData = formData.dataType === 'numeric';
-
-        if (formData.selectedDataType === 'numeric' && !isNumericData) {
+        console.log(
+            'isNumericData',
+            formData.selectedDataType,
+            formData.dataType,
+            isNumericData,
+            Object.keys(data.data[0] || {})
+                .filter(column => column)
+                .filter(column =>
+                    data.data.every(row => {
+                        return !isNaN(parseFloat(row[column]));
+                    })
+                )
+        );
+        const allColumns = Object.keys(data.data[0] || {}).filter(column => {
+            if (column === formData.targetColumn) {
+                return false;
+            }
+            return true;
+        });
+        const columns = Object.keys(data.data[0] || {}).filter(column =>
+            data.data.every(row => {
+                if (column === formData.targetColumn) {
+                    return false;
+                }
+                if (formData.selectedDataType === 'numeric') {
+                    return !isNaN(parseFloat(row[column]));
+                } else {
+                    return (
+                        typeof row[column] === 'string' || row[column] === ''
+                    );
+                }
+            })
+        );
+        const equal = allColumns.length === columns.length;
+        if (formData.selectedDataType === 'numeric' && !equal) {
             setDataTypeError(t('biasSettings.form.errors.numericDataRequired'));
             return;
         }
 
-        if (formData.selectedDataType === 'categorical' && isNumericData) {
+        if (formData.selectedDataType === 'categorical' && !equal) {
             setDataTypeError(
                 t('biasSettings.form.errors.categoricalDataRequired')
             );
@@ -168,7 +202,7 @@ export default function BiasSettings({
             clusterSize: clusters[0],
             iterations: iter[0],
             targetColumn: formData.targetColumn,
-            dataType: formData.dataType,
+            dataType: formData.selectedDataType,
             higherIsBetter:
                 formData.whichPerformanceMetricValueIsBetter === 'higher',
             isDemo: false,
@@ -201,7 +235,10 @@ export default function BiasSettings({
                                 disabled={isLoading}
                                 name="file"
                                 render={() => (
-                                    <CSVReader onChange={onFileLoad} />
+                                    <CSVReader
+                                        disabled={isLoading}
+                                        onChange={onFileLoad}
+                                    />
                                 )}
                             />
                         </div>
@@ -290,6 +327,7 @@ export default function BiasSettings({
                                             />
                                         </FormLabel>
                                         <Select
+                                            disabled={isLoading}
                                             onValueChange={field.onChange}
                                             key={`${dataKey}_select`}
                                         >
@@ -310,19 +348,19 @@ export default function BiasSettings({
                                                         .filter(
                                                             column => column
                                                         )
-                                                        .filter(column =>
-                                                            data.data.every(
-                                                                row => {
-                                                                    return !isNaN(
-                                                                        parseFloat(
-                                                                            row[
-                                                                                column
-                                                                            ]
-                                                                        )
-                                                                    );
-                                                                }
-                                                            )
-                                                        )
+                                                        // .filter(column =>
+                                                        //     data.data.every(
+                                                        //         row => {
+                                                        //             return !isNaN(
+                                                        //                 parseFloat(
+                                                        //                     row[
+                                                        //                         column
+                                                        //                     ]
+                                                        //                 )
+                                                        //             );
+                                                        //         }
+                                                        //     )
+                                                        // )
                                                         .map(column => (
                                                             <SelectItem
                                                                 key={`${dataKey}${column}`}

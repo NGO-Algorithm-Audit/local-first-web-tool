@@ -6,7 +6,8 @@ export const en = {
     getStarted: 'Fill in the form to begin.',
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
-    dropzoneLabel: 'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
+    dropzoneLabel:
+        'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
     datasetPreview: 'Dataset preview showing the first 5 rows.',
     error: 'Sorry, something went wrong.',
     loadingMessage: 'Setting up environment...',
@@ -32,11 +33,15 @@ export const en = {
                     - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
                     - the bias metric column is numerical`,
                     performanceMetric: 'Bias metric',
-                    performanceMetricTooltip: 'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
+                    performanceMetricTooltip:
+                        'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
-                    dataTypeTooltip: 'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
+                    dataTypeTooltip:
+                        'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
+                    filterSelect:
+                        'Select a column to show cluster distribution for',
                 },
                 parameters: {
                     title: 'Parameters',
@@ -46,7 +51,8 @@ export const en = {
                         title: 'Bias metric interpretation',
                         lower: 'Lower value of bias metric is better, such as error rate',
                         higher: 'Higher value of bias metric is better, such as accuracy',
-                        tooltip: 'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.'
+                        tooltip:
+                            'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
@@ -249,19 +255,54 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     },
 
     biasAnalysis: {
+        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+
+- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
+
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+
+
+T_statistic : {{t_stat}}
+
+p_value : {{p_val}}
+        `,
+        dataSetPreview: {
+            heading: '0. Preview of real data',
+        },
         demo: {
             heading: 'Information about demo dataset',
-            description:
-                'As a demo, the [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset is loaded below. The dataset contains features of tweets and the prediction of a BERT-based misinformation classifier whether the tweet is fake news or not. False positive classifications are marked as FP. The FP column indicates that a tweet is falsy accused by the misinformation detection algorithm to be fake news. The FP metric will be used as a performance metric to measure bias is this use case.\n  \n&nbsp;&nbsp;\n\n In this example, we will examine what type of tweets are more/less often classified by misinformation detection algorithm as fake news.',
+            description: `As a demo, the [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) is loaded. The dataset contains features about criminal defendants and their risk of recidivism as predicted by the COMPAS algorithm. It includes demographic details such as age, sex, and race, as well as criminal history, charge details, and the predicted risk label. This dataset is as a benchmark for studying algorithmic discrimination. A description of all variables can be found in the table below.
+
+**Variable description**
+| Variable name   | Description                                 | Values                                                                 |
+|-----------------|---------------------------------------------|------------------------------------------------------------------------|
+| age_cat         | Age category                                | Less than 25, 25-45, Greater than 45                                   |
+| sex             | Sex                                         | Male, Female                                                           |
+| race            | Race                                        | African-American, Asian, Caucasian,  Hispanic, Native American, Other  |
+| c_charge_degree | Severity level of the criminal charge       | M: Misdemeanor – Less severe offenses, F: Felony – More serious crimes |
+| is_recid        | If defendant reoffended                     | 0: No, 1: Yes                                                          |
+| score_text      | Predicted risk label of defendant           | 0: Not high risk, 1: High risk                                         |
+| false_positive  | Defendant predicted to reoffend, but didn't | 0: no FP, 1: FP                                                        |
+
+
+In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the "bias metric".
+`,
         },
         parameters: {
-            heading: 'Parameters selected for clustering',
+            heading: '1. Parameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
             minClusterSize: 'Minimal cluster size: {{value}}',
             performanceMetric: 'Performance metric column: {{value}}',
             dataType: 'Data type: {{value}}',
+            description: `- Number of iterations: {{iterations}}
+- Minimal cluster size: {{minClusterSize}}
+- Performance metric column: {{performanceMetric}}
+- Data type: {{dataType}}
+`,
         },
         clusters: {
+            legendMostBiasedCluster: 'Most biased cluster',
             summary:
                 'We found {{clusterCount}} clusters. Cluster with most bias consists of {{biasedCount}} datapoints. The uploaded dataset consists of {{totalCount}} datapoints.',
             sizeHint:
@@ -269,18 +310,50 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
         },
         biasedCluster: {
             heading: 'In the most biased cluster datapoints have:',
-            accordionTitle:
-                'Open details to view feature comparisons to the rest of the dataset',
+            accordionTitle: 'Features of most biased cluster',
             comparison: {
                 less: '{{value}} less {{feature}} than in the rest of the dataset.',
                 more: '{{value}} more {{feature}} than in the rest of the dataset.',
                 equal: 'equal {{feature}} as in the rest of the dataset.',
             },
+            difference: {
+                appearance: '{{feature}} : {{value}}',
+                deviatingMoreOften:
+                    '**{{value}}**: occur in the most deviating cluster **more** often than in the rest of the dataset.',
+                deviatingLessOften:
+                    '**{{value}}**: occur in the most deviating cluster **less** often than in the rest of the dataset.',
+            },
+            differenceCategorical: {
+                deviatingMoreOften:
+                    '**{{feature}}: {{value}}** in the most deviating cluster occurs **more** often than in the rest of the dataset.',
+                deviatingLessOften:
+                    '**{{feature}}: {{value}}** in the most deviating cluster occurs **less** often than in the rest of the dataset.',
+            },
+        },
+        nodifference: {
+            heading:
+                'No significant difference in average bias metric between the most biased cluster and the rest of the dataset.',
         },
         distribution: {
+            mainHeading: '5. Cluster characteristics',
             heading:
                 'The "{{variable}}" variable distribution across the different clusters:',
         },
+        splittingDataset: {
+            heading: '2. Splitting dataset',
+            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in the most deviating clusters is evaluated using the test dataset.`,
+        },
+        clusterinResults: {
+            heading: '3. Clustering results',
+            description: `
+- Number of clusters detected: {{clusterCount}}
+- Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
+            `,
+        },
+        conclusion: `6. Conclusion and bias report`,
+        moreInformationHeading: `7. More information`,
+        moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
+- [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,
     },
     heatmap: {
         realdata: 'Correlation matrix of attached data',

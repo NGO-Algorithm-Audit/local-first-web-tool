@@ -139,7 +139,10 @@ export default function SyntheticDataSettings({
                                 name="file"
                                 disabled={isLoading}
                                 render={() => (
-                                    <CSVReader onChange={onFileLoad} />
+                                    <CSVReader
+                                        disabled={isLoading}
+                                        onChange={onFileLoad}
+                                    />
                                 )}
                             />
                         </div>
