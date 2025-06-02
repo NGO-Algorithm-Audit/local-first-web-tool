@@ -352,7 +352,8 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         conclusion: `6. Conclusion and bias report`,
         moreInformationHeading: `7. More information`,
-        moreInformationDescription: ``,
+        moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
+- [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,
     },
     heatmap: {
         realdata: 'Correlation matrix of attached data',
