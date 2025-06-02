@@ -452,7 +452,7 @@ def run():
 
     print(f"T-statistic: {t_stat}")
     print(f"p-value: {p_val}")
-
+   
     setResult(json.dumps({
         'type': 'text',
         'key': 'biasAnalysis.testingStatisticalSignificance',
@@ -471,7 +471,11 @@ def run():
                 'headingKey': 'biasAnalysis.nodifference.heading',                            
             }))    
 
-   
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'biasAnalysis.distribution.mainHeading'
+    }))
+        
 
     # visualize the clusters
 
@@ -612,6 +616,21 @@ def run():
             'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
             'comparisons': comparisons
         }))
+
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'biasAnalysis.conclusion'
+    }))
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'biasAnalysis.moreInformationHeading'
+    }))
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.moreInformationDescription'
+    }))
 
     return
 
