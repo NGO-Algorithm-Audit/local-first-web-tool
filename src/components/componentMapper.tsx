@@ -291,6 +291,9 @@ export default function ComponentMapper({
                             />
                         );
                     }
+                    case 'clusterNumericalVariableDistribution': {
+                        return <></>;
+                    }
                     case 'barchart': {
                         const barchartData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {

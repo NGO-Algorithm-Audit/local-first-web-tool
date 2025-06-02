@@ -492,6 +492,16 @@ def run():
         variables = X_test.columns.tolist()
         overall_means = test_df[variables].mean()
 
+        dropdownCategories = []
+        for i, column in enumerate(X_test.columns):
+            dropdownCategories.append(column)
+
+        setResult(json.dumps({
+            'type': 'clusterCategorieSelect',
+            'values': dropdownCategories,
+            'defaultValue': X_test.columns[0]
+        }))
+
         # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
         n_vars = len(variables)
         n_cols = 2
@@ -508,11 +518,16 @@ def run():
             print(overall_means[var])
             print(means[var])
             print(f"========================")
+            
             setResult(json.dumps({
-                'type': 'barchart',
+                'type': 'clusterNumericalVariableDistribution',
+                'headingKey': 'biasAnalysis.distribution.heading',  
                 'title': var,
                 'meanValue': overall_means[var],
-                'data': means[var].to_json(orient='records')
+                'data': means[var].to_json(orient='records'),
+                'params': {'variable': var},
+                'selectFilterGroup' : var,
+                'defaultFilter': X_test.columns[0]
             }))
  
     if p_val < 0.05:
@@ -532,17 +547,19 @@ def run():
 
             for i, var in enumerate(variables):
                 
-                setResult(json.dumps({
-                    'type': 'heading',
-                    'headingKey': 'biasAnalysis.distribution.heading',            
-                    'params': {'variable': var}
-                }))
+                #setResult(json.dumps({
+                #    'type': 'heading',
+                #    'headingKey': 'biasAnalysis.distribution.heading',            
+                #    'params': {'variable': var}
+                #}))
                 
                 setResult(json.dumps({
                     'type': 'barchart',
+                    'headingKey': 'biasAnalysis.distribution.heading',  
                     'title': var,
                     'data': means[var].to_json(orient='records'),
-                    'meanValue': overall_means[var]
+                    'meanValue': overall_means[var],
+                    'params': {'variable': var}
                 }))
 
 
