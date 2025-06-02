@@ -310,8 +310,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         biasedCluster: {
             heading: 'In the most biased cluster datapoints have:',
-            accordionTitle:
-                'Open details to view feature comparisons to the rest of the dataset',
+            accordionTitle: 'Features of most biased cluster',
             comparison: {
                 less: '{{value}} less {{feature}} than in the rest of the dataset.',
                 more: '{{value}} more {{feature}} than in the rest of the dataset.',
@@ -336,6 +335,7 @@ In this example, we analyze which group is most adversely affected by the risk p
                 'No significant difference in average bias metric between the most biased cluster and the rest of the dataset.',
         },
         distribution: {
+            mainHeading: '5. Cluster characteristics',
             heading:
                 'The "{{variable}}" variable distribution across the different clusters:',
         },
@@ -350,6 +350,9 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
             `,
         },
+        conclusion: `6. Conclusion and bias report`,
+        moreInformationHeading: `7. More information`,
+        moreInformationDescription: ``,
     },
     heatmap: {
         realdata: 'Correlation matrix of attached data',
