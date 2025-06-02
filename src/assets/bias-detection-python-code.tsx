@@ -509,11 +509,11 @@ def run():
 
         for i, var in enumerate(variables):
             
-            setResult(json.dumps({
-                'type': 'heading',
-                'headingKey': 'biasAnalysis.distribution.heading',            
-                'params': {'variable': var}
-            }))
+            #setResult(json.dumps({
+            #    'type': 'heading',
+            #    'headingKey': 'biasAnalysis.distribution.heading',            
+            #    'params': {'variable': var}
+            #}))
             print(f"means: {var}")
             print(overall_means[var])
             print(means[var])

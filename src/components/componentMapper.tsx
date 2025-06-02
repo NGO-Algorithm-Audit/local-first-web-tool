@@ -292,7 +292,49 @@ export default function ComponentMapper({
                         );
                     }
                     case 'clusterNumericalVariableDistribution': {
-                        return <></>;
+                        const barchartData = JSON.parse(resultItem.data)?.map(
+                            (x: Record<string, number>, index: number) => {
+                                const translationID = getLabel(index);
+                                return {
+                                    name: t(
+                                        translationID.key,
+                                        translationID.params
+                                    ),
+                                    values: x,
+                                };
+                            }
+                        );
+
+                        return (
+                            <ErrorBoundary key={index}>
+                                {categorieFilter ===
+                                    resultItem.selectFilterGroup ||
+                                (!categorieFilter &&
+                                    resultItem.selectFilterGroup ===
+                                        resultItem.defaultFilter) ||
+                                !resultItem.selectFilterGroup ? (
+                                    <>
+                                        <h5
+                                            key={index}
+                                            className="text-gray-800 font-semibold"
+                                        >
+                                            {resultItem.headingKey
+                                                ? t(
+                                                      resultItem.headingKey,
+                                                      resultItem.params
+                                                  )
+                                                : resultItem.data}
+                                        </h5>
+                                        <SingleBarChart
+                                            key={index}
+                                            data={barchartData}
+                                            title={resultItem.title ?? ''}
+                                            meanValue={resultItem.meanValue}
+                                        />
+                                    </>
+                                ) : null}
+                            </ErrorBoundary>
+                        );
                     }
                     case 'barchart': {
                         const barchartData = JSON.parse(resultItem.data)?.map(
