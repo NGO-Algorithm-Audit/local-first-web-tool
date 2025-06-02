@@ -174,29 +174,33 @@ const ClusterCategoriesDistributionChart = ({
 
         if (showMeanLine) {
             // Calculate the mean of all bar values
+            data.forEach((d, index) => {
+                const meanValue = d3.mean(d.values.map(d => d.value)) ?? 0;
 
-            const meanValue = d3.mean(flattenData, d => d.value) ?? 0;
+                // Draw a dotted line representing the mean value
+                svg.append('line')
+                    .attr('x1', (groupWidth + groupGap) * index)
+                    .attr(
+                        'x2',
+                        (groupWidth + groupGap) * index + groupWidth + groupGap
+                    )
+                    .attr('y1', y(meanValue))
+                    .attr('y2', y(meanValue))
+                    .attr('stroke', 'red')
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', '4 4')
+                    .attr('opacity', 0.8)
+                    .attr('class', 'mean-line');
 
-            // Draw a dotted line representing the mean value
-            svg.append('line')
-                .attr('x1', 0)
-                .attr('x2', Math.max(containerWidth, groupGap) - margin.right)
-                .attr('y1', y(meanValue))
-                .attr('y2', y(meanValue))
-                .attr('stroke', 'black')
-                .attr('stroke-width', 2)
-                .attr('stroke-dasharray', '4 4')
-                .attr('opacity', 0.8)
-                .attr('class', 'mean-line');
-
-            // Add a label for the mean line
-            svg.append('text')
-                .attr('x', margin.left + 30 + 50)
-                .attr('y', y(meanValue) - 5)
-                .attr('text-anchor', 'end')
-                .attr('fill', 'black')
-                .style('font-size', '12px')
-                .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+                // Add a label for the mean line
+                svg.append('text')
+                    .attr('x', (groupWidth + groupGap) * index)
+                    .attr('y', y(meanValue) - 5)
+                    .attr('text-anchor', 'start')
+                    .attr('fill', 'red')
+                    .style('font-size', '12px')
+                    .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}%`);
+            });
         }
 
         // Append title to the svg
