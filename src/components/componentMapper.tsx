@@ -151,10 +151,7 @@ export default function ComponentMapper({
                             resultItem.defaultValue
                         );
                         return (
-                            <div
-                                className="flex items-center justify-center"
-                                key={index}
-                            >
+                            <div className="flex items-center" key={index}>
                                 <ErrorBoundary key={index}>
                                     <div>
                                         <FilterSelect

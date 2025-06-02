@@ -316,7 +316,7 @@ def run():
     
     cluster_df = pd.DataFrame(hbac.scores_, columns=['Cluster scores'])
 
-    n_most_bias = np.sum(hbac.labels_ == 0)
+    n_most_bias = np.sum(hbac.labels_ == 0) # number of datapoints in the most deviating cluster ... user should be able to select the cluster to analyze
     print(f"Number of datapoints in most deviating cluster: {n_most_bias}/{train_df.shape[0]}")
     print(f"Number of clusters: {hbac.n_clusters_}")
     print(f"Bias metric scores: {hbac.scores_}")
