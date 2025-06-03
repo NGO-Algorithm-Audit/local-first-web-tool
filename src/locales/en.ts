@@ -349,6 +349,8 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Number of clusters detected: {{clusterCount}}
 - Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
             `,
+            label: 'Choose cluster to show number of datapoints for',
+            valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
         },
         conclusion: `6. Conclusion and bias report`,
         moreInformationHeading: `7. More information`,

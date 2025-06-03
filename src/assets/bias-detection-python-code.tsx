@@ -328,7 +328,9 @@ def run():
 
     # df['Cluster'] = hbac.labels_
 
-    
+    biasInClusters = []
+    for i in range(clusterCount):
+        biasInClusters.append( int(np.sum(hbac.labels_ == i)))    
     
 
     if isDemo:
@@ -403,6 +405,15 @@ def run():
             'totalRecords': int(totalRecords),
             'clusterCount': clusterCount
         }
+    }))
+
+    setResult(json.dumps({
+        'type': 'TextValueSelect',
+        'key': 'biasAnalysis.clusterinResults.description',
+        'defaultIndex': 0,
+        'labelKey': 'biasAnalysis.clusterinResults.label',
+        'valueKey' : 'biasAnalysis.clusterinResults.valueText',
+        'values': biasInClusters
     }))
     setResult(json.dumps({
         'type': 'text',

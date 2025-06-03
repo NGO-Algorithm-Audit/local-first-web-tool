@@ -14,6 +14,7 @@ import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistri
 import ClusterLegend from './graphs/ClusterLegend';
 import FilterSelect from './ui/FilterSelect';
 import { useState } from 'react';
+import TextValueSelect from './composed-components/TextValueSelect';
 
 interface Comparison {
     key: string;
@@ -145,11 +146,6 @@ export default function ComponentMapper({
                             </TooltipProvider>
                         );
                     case 'clusterCategorieSelect': {
-                        console.log(
-                            'clusterCategorieSelect',
-                            resultItem.values,
-                            resultItem.defaultValue
-                        );
                         return (
                             <div className="flex items-center" key={index}>
                                 <ErrorBoundary key={index}>
@@ -161,8 +157,8 @@ export default function ComponentMapper({
                                             }
                                             onFilter={value => {
                                                 setCategorieFilter(value);
-                                                console.log('value', value);
                                             }}
+                                            labelKey="biasSettings.form.fieldsets.data.filterSelect"
                                         />
                                     </div>
                                 </ErrorBoundary>
@@ -365,6 +361,20 @@ export default function ComponentMapper({
                                 title={resultItem.title ?? ''}
                                 meanValue={resultItem.meanValue}
                             />
+                        );
+                    }
+                    case 'TextValueSelect': {
+                        return (
+                            <ErrorBoundary key={index}>
+                                <TextValueSelect
+                                    data={{
+                                        values: resultItem.values,
+                                        defaultIndex: resultItem.defaultIndex,
+                                        labelKey: resultItem.labelKey,
+                                        valueKey: resultItem.valueKey,
+                                    }}
+                                />
+                            </ErrorBoundary>
                         );
                     }
                     default:
