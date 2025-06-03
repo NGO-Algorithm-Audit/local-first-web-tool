@@ -110,15 +110,6 @@ const ClusterCategoriesDistributionChart = ({
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
 
-        const xAxis = svg
-            .append('g')
-            .attr('transform', `translate(0, ${height})`);
-
-        const xPositions = data.map((d, i) => ({
-            label: d.name,
-            x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
-        }));
-
         // Draw bars
         svg.selectAll('rect')
             .data(data)
@@ -133,15 +124,24 @@ const ClusterCategoriesDistributionChart = ({
             .attr('height', d => y(0) - y(d.value))
             .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
+        const xAxis = svg
+            .append('g')
+            .attr('transform', `translate(0, ${height})`);
+
+        const xPositions = data.map((d, i) => ({
+            label: d.name,
+            x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
+        }));
+
         xAxis
             .selectAll('line')
             .data(xPositions)
             .enter()
             .append('line')
-            .attr('x1', d => d.x)
-            .attr('x2', d => d.x)
+            .attr('x1', 0)
+            .attr('x2', clusterGroupTotalWidth + groupGapTotalWidth)
             .attr('y1', 0)
-            .attr('y2', 6)
+            .attr('y2', 1)
             .attr('stroke', 'black');
 
         xAxis
