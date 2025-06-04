@@ -468,7 +468,6 @@ def run():
         'type': 'text',
         'key': 'biasAnalysis.testingStatisticalSignificance',
         'params': {
-            # 't_stat': t_stat,
             'p_val': "{:.3f}".format(p_val)
         }
     }))
