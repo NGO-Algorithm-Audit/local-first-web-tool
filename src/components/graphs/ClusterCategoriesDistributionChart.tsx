@@ -213,13 +213,13 @@ const ClusterCategoriesDistributionChart = ({
         }
 
         // Append title to the svg
-        svg.append('text')
-            .attr('x', (containerWidth - margin.left - margin.right) / 2)
-            .attr('y', -10)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .style('font-weight', 'bold')
-            .text(title);
+        // svg.append('text')
+        //     .attr('x', (containerWidth - margin.left - margin.right) / 2)
+        //     .attr('y', -10)
+        //     .attr('text-anchor', 'middle')
+        //     .style('font-size', '12px')
+        //     .style('font-weight', 'bold')
+        //     .text(title);
 
         // Add y-axis label
         svg.append('text')
