@@ -262,9 +262,6 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
-
-T_statistic : {{t_stat}}
-
 p_value : {{p_val}}
         `,
         dataSetPreview: {
@@ -347,7 +344,6 @@ In this example, we analyze which group is most adversely affected by the risk p
             heading: '3. Clustering results',
             description: `
 - Number of clusters detected: {{clusterCount}}
-- Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
             `,
             label: 'Choose cluster to show number of datapoints for',
             valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
