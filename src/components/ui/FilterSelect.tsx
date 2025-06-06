@@ -23,10 +23,12 @@ export default function FilterSelect({
     onFilter,
     defaultValue,
     filterValues,
+    labelKey,
 }: {
     onFilter: (value: string) => void;
     defaultValue: string;
     filterValues: string[];
+    labelKey: string;
 }) {
     const { t } = useTranslation();
 
@@ -49,9 +51,7 @@ export default function FilterSelect({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="flex flex-row items-center gap-1">
-                                            {t(
-                                                'biasSettings.form.fieldsets.data.filterSelect'
-                                            )}
+                                            {t(labelKey)}
                                         </FormLabel>
                                         <Select
                                             onValueChange={value => {

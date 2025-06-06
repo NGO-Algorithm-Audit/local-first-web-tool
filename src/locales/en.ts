@@ -262,9 +262,6 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
-
-T_statistic : {{t_stat}}
-
 p_value : {{p_val}}
         `,
         dataSetPreview: {
@@ -301,6 +298,10 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Data type: {{dataType}}
 `,
         },
+        distributionOfFeaturesAcrossClustersAccordeonTitle:
+            'Distribution of features across clusters',
+        numericalVariableDistributionAcrossClustersAccordeonTitle:
+            'Distribution of numerical variables across clusters',
         clusters: {
             legendMostBiasedCluster: 'Most biased cluster',
             summary:
@@ -311,6 +312,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         biasedCluster: {
             heading: 'In the most biased cluster datapoints have:',
             accordionTitle: 'Features of most biased cluster',
+
             comparison: {
                 less: '{{value}} less {{feature}} than in the rest of the dataset.',
                 more: '{{value}} more {{feature}} than in the rest of the dataset.',
@@ -347,10 +349,16 @@ In this example, we analyze which group is most adversely affected by the risk p
             heading: '3. Clustering results',
             description: `
 - Number of clusters detected: {{clusterCount}}
-- Number of datapoints in cluster with most bias: {{numZeroes}} / {{totalRecords}}
             `,
+            label: 'Choose cluster to show number of datapoints for',
+            valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
         },
+        higherAverage: `The most biased cluster has a statistically significant higher average bias score than the rest of the dataset.`,
+        noSignificance: `No statistically significant difference in average bias score between the most biased cluster and the rest of the dataset.`,
+
         conclusion: `6. Conclusion and bias report`,
+        conclusionDescription: `From the above figures and statistical tests, it can be concluded that:`,
+
         moreInformationHeading: `7. More information`,
         moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
 - [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,

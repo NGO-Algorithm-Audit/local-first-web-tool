@@ -10,37 +10,26 @@ import { useTranslation } from 'react-i18next';
 import { DistributionReport } from './DistributionReport';
 import { MarkdownWithTooltips } from './MarkdownWithTooltips';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
-import ClusterCategoriesDistributionChart from './graphs/ClusterCategoriesDistributionChart';
-import ClusterLegend from './graphs/ClusterLegend';
-import FilterSelect from './ui/FilterSelect';
-import { useState } from 'react';
+import TextValueSelect from './composed-components/TextValueSelect';
+import { createArrayFromPythonDictionary } from './createArrayFromPythonDictionary';
+import ClusterCategoriesDistributionAccordeonContent from './composed-components/ClusterCategoriesDistributionAccordeonContent';
+import ClusterNumericalVariableDistributionAccordeonContent from './composed-components/ClusterNumericalVariableDistributionAccordeonContent';
+import { ReactNode } from 'react';
 
 interface Comparison {
     key: string;
     params: Record<string, string | number | boolean>;
 }
 
-const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
-    const resultArray = [];
-    for (const [key, value] of Object.entries(dict)) {
-        if (typeof value === 'number') {
-            resultArray.push({
-                value: value,
-                name: key,
-            });
-        }
-    }
-    return resultArray;
-};
-
 export default function ComponentMapper({
     items,
     data,
+    exportButton,
 }: {
     items: string[];
     data: CSVData;
+    exportButton?: ReactNode;
 }) {
-    const [categorieFilter, setCategorieFilter] = useState<string | null>();
     const { t } = useTranslation();
     const components = items
         .map((r, index) => {
@@ -48,6 +37,14 @@ export default function ComponentMapper({
                 const resultItem = JSON.parse(r);
 
                 switch (resultItem.type) {
+                    case 'export-button': {
+                        if (exportButton) {
+                            return (
+                                <Fragment key={index}>{exportButton}</Fragment>
+                            );
+                        }
+                        return null;
+                    }
                     case 'data-set-preview':
                         return (
                             <Fragment key={index}>
@@ -144,103 +141,49 @@ export default function ComponentMapper({
                                 </MarkdownWithTooltips>
                             </TooltipProvider>
                         );
-                    case 'clusterCategorieSelect': {
+
+                    case 'clusterCategorieDistributionAccordeon': {
                         console.log(
-                            'clusterCategorieSelect',
-                            resultItem.values,
-                            resultItem.defaultValue
+                            'cluster categories distribution accordeon',
+                            resultItem
+                        );
+                        const content = (
+                            <ClusterCategoriesDistributionAccordeonContent
+                                categories={resultItem.values}
+                                defaultCategory={resultItem.defaultValue}
+                                clusterCount={resultItem.clusterCount}
+                                charts={resultItem.charts}
+                            />
                         );
                         return (
-                            <div className="flex items-center" key={index}>
-                                <ErrorBoundary key={index}>
-                                    <div>
-                                        <FilterSelect
-                                            filterValues={resultItem.values}
-                                            defaultValue={
-                                                resultItem.defaultValue
-                                            }
-                                            onFilter={value => {
-                                                setCategorieFilter(value);
-                                                console.log('value', value);
-                                            }}
-                                        />
-                                    </div>
-                                </ErrorBoundary>
-                            </div>
-                        );
-                    }
-                    case 'cluster_legend': {
-                        return (
-                            <div
-                                className="flex items-center justify-center"
+                            <Accordion
                                 key={index}
-                            >
-                                <ErrorBoundary key={index}>
-                                    <ClusterLegend
-                                        clusterCount={
-                                            resultItem.clusterCount ?? 0
-                                        }
-                                    />
-                                </ErrorBoundary>
-                            </div>
+                                title={t(resultItem.titleKey || '')}
+                                content={content}
+                            />
                         );
                     }
-                    case 'clusterCategorieDistribution': {
-                        //
-
-                        const distributionData = JSON.parse(
-                            resultItem.data
-                        )?.map((x: Record<string, number>, index: number) => {
-                            const translationID = getLabel(index);
-                            return {
-                                name: resultItem.categories
-                                    ? resultItem.categories[index]
-                                    : t(
-                                          translationID.key,
-                                          translationID.params
-                                      ),
-                                values: createArrayFromPythonDictionary(x),
-                            };
-                        });
-                        //console.log('cluster categories distribution', resultItem, distributionData);
-
+                    case 'clusterNumericalVariableDistributionAccordeon': {
+                        console.log(
+                            'cluster numerical variable accordeon',
+                            resultItem
+                        );
+                        const content = (
+                            <ClusterNumericalVariableDistributionAccordeonContent
+                                categories={resultItem.values}
+                                defaultCategory={resultItem.defaultValue}
+                                charts={resultItem.charts}
+                            />
+                        );
                         return (
-                            <ErrorBoundary key={index}>
-                                {categorieFilter ===
-                                    resultItem.selectFilterGroup ||
-                                (!categorieFilter &&
-                                    resultItem.selectFilterGroup ===
-                                        resultItem.defaultFilter) ||
-                                !resultItem.selectFilterGroup ? (
-                                    <>
-                                        <h5
-                                            key={index}
-                                            className="text-gray-800 font-semibold"
-                                        >
-                                            {resultItem.headingKey
-                                                ? t(
-                                                      resultItem.headingKey,
-                                                      resultItem.params
-                                                  )
-                                                : resultItem.data}
-                                        </h5>
-                                        <ClusterCategoriesDistributionChart
-                                            showMeanLine={true}
-                                            data={distributionData}
-                                            yAxisLabel={t(
-                                                'distribution.frequency'
-                                            )}
-                                            title={resultItem.title ?? ''}
-                                            isViridis={
-                                                resultItem.categories !==
-                                                undefined
-                                            }
-                                        />
-                                    </>
-                                ) : null}
-                            </ErrorBoundary>
+                            <Accordion
+                                key={index}
+                                title={t(resultItem.titleKey || '')}
+                                content={content}
+                            />
                         );
                     }
+
                     case 'histogram': {
                         const histogramData = JSON.parse(resultItem.data)?.map(
                             (x: Record<string, number>, index: number) => {
@@ -312,6 +255,20 @@ export default function ComponentMapper({
                                 title={resultItem.title ?? ''}
                                 meanValue={resultItem.meanValue}
                             />
+                        );
+                    }
+                    case 'TextValueSelect': {
+                        return (
+                            <ErrorBoundary key={index}>
+                                <TextValueSelect
+                                    data={{
+                                        values: resultItem.values,
+                                        defaultIndex: resultItem.defaultIndex,
+                                        labelKey: resultItem.labelKey,
+                                        valueKey: resultItem.valueKey,
+                                    }}
+                                />
+                            </ErrorBoundary>
                         );
                     }
                     default:

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { pythonCode } from '@/assets/bias-detection-python-code';
 import { usePython } from '@/components/pyodide/use-python';
 import BiasSettings from '@/components/BiasSettings';
-import { csvReader } from '@/components/CSVReader';
 import { cn } from '@/lib/utils';
 import ComponentMapper from '@/components/componentMapper';
 import { useReactToPrint } from 'react-to-print';
@@ -45,11 +44,14 @@ const PAGE_STYLE = `
 `;
 
 export default function BiasDetection() {
-    const [data, setData] = useState<CSVData>({
+    const [data, setData] = useState<
+        CSVData & { params?: BiasDetectionParameters }
+    >({
         data: [],
         stringified: '',
         fileName: '',
         demo: false,
+        params: undefined,
     });
     const { t, i18n } = useTranslation();
 
@@ -80,14 +82,15 @@ export default function BiasDetection() {
         higherIsBetter: false,
         isDemo: false,
     });
-
-    const onFileLoad: csvReader['onChange'] = (
-        data,
-        stringified,
-        fileName,
-        demo
-    ) => {
-        setData({ data, stringified, fileName, demo });
+    const onFileLoad: (
+        data: Record<string, string>[],
+        stringified: string,
+        fileName: string,
+        demo?: boolean,
+        columnsCount?: number,
+        params?: BiasDetectionParameters
+    ) => void = (data, stringified, fileName, demo, _columnsCount, params) => {
+        setData({ data, stringified, fileName, demo, params });
     };
 
     useEffect(() => {
@@ -108,15 +111,8 @@ export default function BiasDetection() {
         if (pythonCode && data.stringified.length >= 0 && initialised) {
             sendData(data.stringified);
         }
-        if (data.demo) {
-            onRun({
-                iterations: 3,
-                clusterSize: 3,
-                targetColumn: 'FP',
-                dataType: 'numeric',
-                higherIsBetter: true,
-                isDemo: true,
-            });
+        if (data.demo && data.params) {
+            onRun(data.params);
         }
     }, [initialised, data]);
 
@@ -156,19 +152,21 @@ export default function BiasDetection() {
                     loading && 'overflow-hidden'
                 )}
             >
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <ExportButton
-                            buttonAlign={'right'}
-                            clusterInfo={clusterInfo}
-                            reactToPrintFn={reactToPrintFn}
-                            data={data}
-                        />
-                    </div>
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} data={data} />
+                    <ComponentMapper
+                        items={result}
+                        data={data}
+                        exportButton={
+                            <div className="flex flex-row gap-2 hideonprint justify-start">
+                                <ExportButton
+                                    buttonAlign={'left'}
+                                    clusterInfo={clusterInfo}
+                                    reactToPrintFn={reactToPrintFn}
+                                    data={data}
+                                />
+                            </div>
+                        }
+                    />
                 ) : loading ? (
                     <LoadingState
                         loadingMessageKey={loadingMessage}
@@ -184,17 +182,6 @@ export default function BiasDetection() {
                         </h1>
                         <div className="flex-1" />
                     </>
-                )}
-
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <div className="flex flex-row gap-2 hideonprint">
-                        <ExportButton
-                            buttonAlign={'center'}
-                            clusterInfo={clusterInfo}
-                            reactToPrintFn={reactToPrintFn}
-                            data={data}
-                        />
-                    </div>
                 )}
             </div>
         </main>

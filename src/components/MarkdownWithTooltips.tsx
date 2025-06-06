@@ -29,7 +29,7 @@ export function MarkdownWithTooltips({
         <Markdown
             className={className}
             remarkPlugins={[remarkInfoTooltip, remarkGfm]}
-            rehypePlugins={[rehypeInfoTooltip, rehypeRaw]}
+            rehypePlugins={[rehypeRaw, rehypeInfoTooltip]}
             components={{
                 // @ts-expect-error - math is a custom components
                 TooltipWrapper,

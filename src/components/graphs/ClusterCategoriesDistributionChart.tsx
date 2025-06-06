@@ -13,6 +13,8 @@ interface ClusterCategoriesDistributionChartProps {
     colorRange?: string[];
     showMeanLine: boolean;
     isViridis?: boolean;
+    means: { mean: number; category: string }[];
+    categories: string[];
 }
 
 const margin = { top: 30, right: 50, bottom: 40, left: 80 };
@@ -26,6 +28,8 @@ const ClusterCategoriesDistributionChart = ({
     colorRange,
     showMeanLine,
     isViridis,
+    means,
+    categories,
 }: ClusterCategoriesDistributionChartProps) => {
     const svgRef = useRef<SVGSVGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -106,6 +110,20 @@ const ClusterCategoriesDistributionChart = ({
                 "@import url('https://fonts.googleapis.com/css2?family=Avenir:wght@600');"
             );
 
+        // Draw bars
+        svg.selectAll('rect')
+            .data(data)
+            .join('g')
+            .attr('transform', d => `translate(${fx(d.name)},0)`)
+            .selectAll()
+            .data(d => d.values)
+            .join('rect')
+            .attr('x', (_d, index) => barWidth * index)
+            .attr('y', d => y(d.value) ?? 0)
+            .attr('width', barWidth)
+            .attr('height', d => y(0) - y(d.value))
+            .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
+
         const xAxis = svg
             .append('g')
             .attr('transform', `translate(0, ${height})`);
@@ -115,15 +133,18 @@ const ClusterCategoriesDistributionChart = ({
             x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
         }));
 
+        function draw(context: d3.Path) {
+            context.moveTo(0, 0);
+            context.lineTo(clusterGroupTotalWidth + groupGapTotalWidth, 0);
+            return context.toString();
+        }
+
         xAxis
-            .selectAll('line')
-            .data(xPositions)
-            .enter()
-            .append('line')
-            .attr('x1', d => d.x)
-            .attr('x2', d => d.x)
-            .attr('y1', 0)
-            .attr('y2', 6)
+            .append('path')
+            .attr('transform', `translate(0, 0.5)`)
+            .attr('M', '0,0')
+            .attr('d', draw(d3.path())) // Initial path to avoid errors
+            .attr('fill', 'none')
             .attr('stroke', 'black');
 
         xAxis
@@ -158,55 +179,50 @@ const ClusterCategoriesDistributionChart = ({
 
         // Append y-axis
         svg.append('g').call(d3.axisLeft(y).ticks(10, 's'));
-        // Draw bars
-        svg.selectAll('rect')
-            .data(data)
-            .join('g')
-            .attr('transform', d => `translate(${fx(d.name)},0)`)
-            .selectAll()
-            .data(d => d.values)
-            .join('rect')
-            .attr('x', (_d, index) => barWidth * index)
-            .attr('y', d => y(d.value) ?? 0)
-            .attr('width', barWidth)
-            .attr('height', d => y(0) - y(d.value))
-            .attr('fill', d => color(d.name)?.toString() ?? '#ccc');
 
         if (showMeanLine) {
             // Calculate the mean of all bar values
+            data.forEach((_d, index) => {
+                const category = categories[index];
+                const meansForCategory = means.find(
+                    m => m.category === category
+                );
+                const meanValue = meansForCategory?.mean ?? 0;
 
-            const meanValue = d3.mean(flattenData, d => d.value) ?? 0;
+                // Draw a dotted line representing the mean value
+                svg.append('line')
+                    .attr('x1', (groupWidth + groupGap) * index)
+                    .attr(
+                        'x2',
+                        (groupWidth + groupGap) * index + groupWidth + groupGap
+                    )
+                    .attr('y1', y(meanValue))
+                    .attr('y2', y(meanValue))
+                    .attr('stroke', 'red')
+                    .attr('stroke-width', 2)
+                    .attr('stroke-dasharray', '4 4')
+                    .attr('opacity', 0.8)
+                    .attr('class', 'mean-line');
 
-            // Draw a dotted line representing the mean value
-            svg.append('line')
-                .attr('x1', 0)
-                .attr('x2', Math.max(containerWidth, groupGap) - margin.right)
-                .attr('y1', y(meanValue))
-                .attr('y2', y(meanValue))
-                .attr('stroke', 'black')
-                .attr('stroke-width', 2)
-                .attr('stroke-dasharray', '4 4')
-                .attr('opacity', 0.8)
-                .attr('class', 'mean-line');
-
-            // Add a label for the mean line
-            svg.append('text')
-                .attr('x', margin.left + 30 + 50)
-                .attr('y', y(meanValue) - 5)
-                .attr('text-anchor', 'end')
-                .attr('fill', 'black')
-                .style('font-size', '12px')
-                .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}`);
+                // Add a label for the mean line
+                svg.append('text')
+                    .attr('x', (groupWidth + groupGap) * index)
+                    .attr('y', y(meanValue) - 5)
+                    .attr('text-anchor', 'start')
+                    .attr('fill', 'red')
+                    .style('font-size', '12px')
+                    .text(`Mean: ${y.tickFormat(100, 's')(meanValue)}%`);
+            });
         }
 
         // Append title to the svg
-        svg.append('text')
-            .attr('x', (containerWidth - margin.left - margin.right) / 2)
-            .attr('y', -10)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .style('font-weight', 'bold')
-            .text(title);
+        // svg.append('text')
+        //     .attr('x', (containerWidth - margin.left - margin.right) / 2)
+        //     .attr('y', -10)
+        //     .attr('text-anchor', 'middle')
+        //     .style('font-size', '12px')
+        //     .style('font-weight', 'bold')
+        //     .text(title);
 
         // Add y-axis label
         svg.append('text')
