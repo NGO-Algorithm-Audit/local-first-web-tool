@@ -224,6 +224,8 @@ p_value : {{p_val}}
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
             'Verdeling van kenmerken over clusters',
+        numericalVariableDistributionAcrossClustersAccordeonTitle:
+            'Verdeling van numerieke variabelen over clusters',
         clusters: {
             legendMostBiasedCluster: 'Meest bevooroordeelde cluster',
             summary:

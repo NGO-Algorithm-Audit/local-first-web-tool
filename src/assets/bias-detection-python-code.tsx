@@ -506,16 +506,12 @@ def run():
         for i, column in enumerate(X_test.columns):
             dropdownCategories.append(column)
 
-        setResult(json.dumps({
-            'type': 'clusterCategorieSelect',
-            'values': dropdownCategories,
-            'defaultValue': X_test.columns[0]
-        }))
-
         # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
         n_vars = len(variables)
         n_cols = 2
         n_rows = int(np.ceil(n_vars / n_cols))
+
+        charts = []
 
         for i, var in enumerate(variables):
             
@@ -529,15 +525,26 @@ def run():
             print(means[var])
             print(f"========================")
             
-            setResult(json.dumps({
-                'type': 'clusterNumericalVariableDistribution',
-                'headingKey': 'biasAnalysis.distribution.heading',  
-                'title': var,
-                'meanValue': overall_means[var],
-                'data': means[var].to_json(orient='records'),
-                'params': {'variable': var},
-                'selectFilterGroup' : var,
-                'defaultFilter': X_test.columns[0]
+
+            charts.append({
+                    'yAxisLabel': 'distribution.frequency',
+                    'type': 'clusterNumericalVariableDistribution',
+                    'headingKey': 'biasAnalysis.distribution.heading',  
+                    'title': var,
+                    'meanValue': overall_means[var],
+                    'data': means[var].to_json(orient='records'),
+                    'params': {'variable': var},
+                    'selectFilterGroup' : var,
+                    'defaultFilter': X_test.columns[0]
+                })
+
+        setResult(json.dumps({
+                'type': 'clusterNumericalVariableDistributionAccordeon',
+                'clusterCount': clusterCount,
+                'charts': charts,
+                'values': dropdownCategories,
+                'titleKey': "biasAnalysis.numericalVariableDistributionAcrossClustersAccordeonTitle",
+                'defaultValue': X_test.columns[0]
             }))
  
     if p_val < 0.05:

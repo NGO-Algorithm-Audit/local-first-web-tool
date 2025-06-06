@@ -300,6 +300,8 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
             'Distribution of features across clusters',
+        numericalVariableDistributionAcrossClustersAccordeonTitle:
+            'Distribution of numerical variables across clusters',
         clusters: {
             legendMostBiasedCluster: 'Most biased cluster',
             summary:
