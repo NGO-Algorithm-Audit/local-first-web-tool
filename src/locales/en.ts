@@ -353,15 +353,12 @@ In this example, we analyze which group is most adversely affected by the risk p
             label: 'Choose cluster to show number of datapoints for',
             valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
         },
+        higherAverage: `The most biased cluster has a statistically significant higher average bias score than the rest of the dataset.`,
+        noSignificance: `No statistically significant difference in average bias score between the most biased cluster and the rest of the dataset.`,
+
         conclusion: `6. Conclusion and bias report`,
-        conclusionDescriptionHigherAverage: `From the above figures and statistical tests, it can be concluded that:
+        conclusionDescription: `From the above figures and statistical tests, it can be concluded that:`,
 
-The most biased cluster has a statistically significant higher average bias score than the rest of the dataset.        
-`,
-        conclusionNoSignificance: `From the above figures and statistical tests, it can be concluded that:
-
-No statistically significant difference in average bias score between the most biased cluster and the rest of the dataset.
-`,
         moreInformationHeading: `7. More information`,
         moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
 - [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,

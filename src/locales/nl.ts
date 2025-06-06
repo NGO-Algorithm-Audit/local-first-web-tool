@@ -260,6 +260,15 @@ p_value : {{p_val}}
             heading:
                 'De "{{variable}}" variabele verdeling over de verschillende clusters:',
         },
+        higherAverage: `De meest bevooroordeelde cluster heeft een statistisch significant hogere gemiddelde bias score dan de rest van de dataset.`,
+        noSignificance: `Geen statistisch significant verschil in gemiddelde bias score tussen de meest bevooroordeelde cluster en de rest van de dataset.`,
+
+        conclusion: `6. Conclusie en bias rapport`,
+        conclusionDescription: `Uit de bovenstaande figuren en statistische tests kan worden geconcludeerd dat:`,
+
+        moreInformationHeading: `7. Meer informatie`,
+        moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
+- [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,
     },
     heatmap: {
         realdata: 'Correlatie matrix van gekoppelde data',

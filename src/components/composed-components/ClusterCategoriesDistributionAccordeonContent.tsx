@@ -60,8 +60,8 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                         (x: Record<string, number>, index: number) => {
                             const translationID = getLabel(index);
                             return {
-                                name: categories
-                                    ? categories[index]
+                                name: chart.categories
+                                    ? chart.categories[index]
                                     : t(
                                           translationID.key,
                                           translationID.params

@@ -420,14 +420,19 @@ def run():
         }
     }))
 
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.higherAverage' if p_val < 0.05 else 'biasAnalysis.noSignificance'
+    }))
+
     if p_val < 0.05:
         print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
     else:
         print("No significant difference in average bias metric between the most biased cluster and the rest of the dataset.")
-        setResult(json.dumps({
-                'type': 'heading',
-                'headingKey': 'biasAnalysis.nodifference.heading',                            
-            }))    
+        # setResult(json.dumps({
+        #        'type': 'heading',
+        #        'headingKey': 'biasAnalysis.nodifference.heading',                            
+        #    }))    
 
     setResult(json.dumps({
         'type': 'heading',
@@ -592,7 +597,7 @@ def run():
 
     setResult(json.dumps({
         'type': 'text',
-        'key': 'biasAnalysis.conclusionDescriptionHigherAverage' if p_val < 0.05 else 'biasAnalysis.conclusionNoSignificance'
+        'key': 'biasAnalysis.conclusionDescription'
     }))
 
     setResult(json.dumps({
