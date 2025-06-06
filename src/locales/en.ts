@@ -298,6 +298,8 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Data type: {{dataType}}
 `,
         },
+        distributionOfFeaturesAcrossClustersAccordeonTitle:
+            'Distribution of features across clusters',
         clusters: {
             legendMostBiasedCluster: 'Most biased cluster',
             summary:
@@ -308,6 +310,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         biasedCluster: {
             heading: 'In the most biased cluster datapoints have:',
             accordionTitle: 'Features of most biased cluster',
+
             comparison: {
                 less: '{{value}} less {{feature}} than in the rest of the dataset.',
                 more: '{{value}} more {{feature}} than in the rest of the dataset.',

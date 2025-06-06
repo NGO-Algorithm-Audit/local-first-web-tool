@@ -133,15 +133,18 @@ const ClusterCategoriesDistributionChart = ({
             x: i * (groupWidth + groupGap) + groupWidth / 2, // center of the bar
         }));
 
+        function draw(context: d3.Path) {
+            context.moveTo(0, 0);
+            context.lineTo(clusterGroupTotalWidth + groupGapTotalWidth, 0);
+            return context.toString();
+        }
+
         xAxis
-            .selectAll('line')
-            .data(xPositions)
-            .enter()
-            .append('line')
-            .attr('x1', 0)
-            .attr('x2', clusterGroupTotalWidth + groupGapTotalWidth)
-            .attr('y1', 0)
-            .attr('y2', 1)
+            .append('path')
+            .attr('transform', `translate(0, 0.5)`)
+            .attr('M', '0,0')
+            .attr('d', draw(d3.path())) // Initial path to avoid errors
+            .attr('fill', 'none')
             .attr('stroke', 'black');
 
         xAxis

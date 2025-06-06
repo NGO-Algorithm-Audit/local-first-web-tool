@@ -555,11 +555,7 @@ def run():
             for i, column in enumerate(columns_to_analyze):
                 dropdownCategories.append(column)
 
-            setResult(json.dumps({
-                'type': 'clusterCategorieSelect',
-                'values': dropdownCategories,
-                'defaultValue': columns_to_analyze[0]
-            }))
+            charts = []    
 
             for i, column in enumerate(columns_to_analyze):
                 print(f"Analyzing column: {column}")
@@ -577,7 +573,8 @@ def run():
                         'mean': avg_pct
                     })
 
-                setResult(json.dumps({
+                
+                charts.append({
                     'type': 'clusterCategorieDistribution',
                     'headingKey': 'biasAnalysis.distribution.heading',  
                     'title': column,
@@ -586,12 +583,20 @@ def run():
                     'selectFilterGroup' : column,
                     'params': {'variable': column},
                     'defaultFilter': columns_to_analyze[0],
-                    'means': means
-                }))
+                    'means': means,
+                    'isViridis': True,
+                    'yAxisLabel': 'distribution.frequency'
+                })
+
+
 
             setResult(json.dumps({
-                'type': 'cluster_legend',
+                'type': 'clusterCategorieDistributionAccordeon',
                 'clusterCount': clusterCount,
+                'charts': charts,
+                'values': dropdownCategories,
+                'titleKey': "biasAnalysis.distributionOfFeaturesAcrossClustersAccordeonTitle",
+                'defaultValue': columns_to_analyze[0]                
             }))
 
     df_most_biased_cluster = most_biased_cluster_df

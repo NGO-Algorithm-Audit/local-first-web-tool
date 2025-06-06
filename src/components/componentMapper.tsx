@@ -15,24 +15,13 @@ import ClusterLegend from './graphs/ClusterLegend';
 import FilterSelect from './ui/FilterSelect';
 import { useState } from 'react';
 import TextValueSelect from './composed-components/TextValueSelect';
+import { createArrayFromPythonDictionary } from './createArrayFromPythonDictionary';
+import ClusterCategoriesDistributionAccordeonContent from './composed-components/ClusterCategoriesDistributionAccordeonContent';
 
 interface Comparison {
     key: string;
     params: Record<string, string | number | boolean>;
 }
-
-const createArrayFromPythonDictionary = (dict: Record<string, number>) => {
-    const resultArray = [];
-    for (const [key, value] of Object.entries(dict)) {
-        if (typeof value === 'number') {
-            resultArray.push({
-                value: value,
-                name: key,
-            });
-        }
-    }
-    return resultArray;
-};
 
 export default function ComponentMapper({
     items,
@@ -179,6 +168,27 @@ export default function ComponentMapper({
                                     />
                                 </ErrorBoundary>
                             </div>
+                        );
+                    }
+                    case 'clusterCategorieDistributionAccordeon': {
+                        console.log(
+                            'cluster categories distribution accordeon',
+                            resultItem
+                        );
+                        const content = (
+                            <ClusterCategoriesDistributionAccordeonContent
+                                categories={resultItem.values}
+                                defaultCategory={resultItem.defaultValue}
+                                clusterCount={resultItem.clusterCount}
+                                charts={resultItem.charts}
+                            />
+                        );
+                        return (
+                            <Accordion
+                                key={index}
+                                title={t(resultItem.titleKey || '')}
+                                content={content}
+                            />
                         );
                     }
                     case 'clusterCategorieDistribution': {
