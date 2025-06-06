@@ -165,58 +165,6 @@ def chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label):
     
     return comparisons
 
-def diffDataframe(df, features, type=None, cluster1=None, cluster2=None):
-    '''
-    Creates difference dataframe, for numerical and categorical 
-    data: Takes dataframe of two clusters of interest and 
-    computes difference in means. Default to analyze most deviating 
-    cluster vs rest of the dataset, except specified otherwise.
-    '''   
-    # Cluster comparison (optional)
-    if cluster1 != None and cluster2 != None:
-        df1 = df[df['Cluster'] == cluster1]
-        df2 = df[df['Cluster'] == cluster2]
-    else:
-        df1 = df[df['Cluster'] == 0]
-        df2 = df[df['Cluster'] != 0]
-
-    n_df1 = df1.shape[0]
-    n_df2 = df2.shape[0]
-
-    diff_dict = {}
-    CI_dict = {}
-
-    for feat in features:
-        sample1 = df1[feat]
-        sample2 = df2[feat]
-
-        if type == 'Numerical':
-            mean1 = np.mean(sample1)
-            mean2 = np.mean(sample2)
-            diff = mean1 - mean2
-            diff_dict[feat] = diff
-        else:
-            freq1 = sample1.value_counts()
-            freq2 = sample2.value_counts()
-            diff = freq1 - freq2
-            diff_dict[feat] = diff
-
-        if type == 'Numerical':
-            pd.set_option('display.float_format', lambda x: '%.5f' % x)
-            diff_df = pd.DataFrame.from_dict(diff_dict, orient='index', columns=['Difference'])
-        else:
-            diff_df = pd.DataFrame()
-            pd.set_option('display.float_format', lambda x: '%.5f' % x)
-
-            for _, value in diff_dict.items():
-                df_temp = pd.DataFrame(value)
-                diff_df = pd.concat([diff_df,df_temp], axis=0,)
-
-            diff_df = diff_df.fillna(0)
-            diff_df.columns = ['Difference']   
-
-    return(diff_df)
-
 def run():
     csv_data = StringIO(data)
     df = pd.read_csv(csv_data)
@@ -227,7 +175,7 @@ def run():
     if isDemo:
         bias_score = "false_positive"
         localDataType = "categorical"
-        localIterations = 20
+        localIterations = iterations # 20
 
         print (f"Using demo parameters: bias_score={bias_score}, targetColumn={targetColumn}, dataType={localDataType}, iterations={iterations}")
 
@@ -297,7 +245,7 @@ def run():
     print(f"X_train shape: {X_train.shape}")
 
     if isDemo:
-        localClusterSize = X_train.shape[0]*0.01
+        localClusterSize = clusterSize # X_train.shape[0]*0.01
     else:
         localClusterSize = clusterSize
 

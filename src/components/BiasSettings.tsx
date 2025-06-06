@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import CSVReader, { csvReader } from './CSVReader';
+import CSVReader from './CSVReader';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { ArrowDown, ArrowRight, InfoIcon } from 'lucide-react';
@@ -58,7 +58,14 @@ export default function BiasSettings({
     isErrorDuringAnalysis,
 }: {
     onRun: (params: BiasDetectionParameters) => void;
-    onDataLoad: csvReader['onChange'];
+    onDataLoad: (
+        data: Record<string, string>[],
+        stringified: string,
+        fileName: string,
+        demo?: boolean,
+        columnsCount?: number,
+        params?: BiasDetectionParameters
+    ) => void;
     isLoading: boolean;
     isErrorDuringAnalysis: boolean;
     isInitialised: boolean;
@@ -144,7 +151,18 @@ export default function BiasSettings({
             file.data as Record<string, string>[],
             Papa.unparse(file.data),
             'demo',
-            true
+            true,
+            undefined,
+            {
+                clusterSize: clusters[0],
+                iterations: iter[0],
+                targetColumn: '',
+                dataType: '',
+                higherIsBetter:
+                    form.getValues().whichPerformanceMetricValueIsBetter ===
+                    'higher',
+                isDemo: true,
+            }
         );
     };
 
