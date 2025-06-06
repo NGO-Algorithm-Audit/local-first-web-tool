@@ -156,19 +156,21 @@ export default function BiasDetection() {
                     loading && 'overflow-hidden'
                 )}
             >
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <div className="ml-auto flex flex-row gap-2 hideonprint">
-                        <ExportButton
-                            buttonAlign={'right'}
-                            clusterInfo={clusterInfo}
-                            reactToPrintFn={reactToPrintFn}
-                            data={data}
-                        />
-                    </div>
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} data={data} />
+                    <ComponentMapper
+                        items={result}
+                        data={data}
+                        exportButton={
+                            <div className="flex flex-row gap-2 hideonprint justify-start">
+                                <ExportButton
+                                    buttonAlign={'left'}
+                                    clusterInfo={clusterInfo}
+                                    reactToPrintFn={reactToPrintFn}
+                                    data={data}
+                                />
+                            </div>
+                        }
+                    />
                 ) : loading ? (
                     <LoadingState
                         loadingMessageKey={loadingMessage}
@@ -184,17 +186,6 @@ export default function BiasDetection() {
                         </h1>
                         <div className="flex-1" />
                     </>
-                )}
-
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <div className="flex flex-row gap-2 hideonprint">
-                        <ExportButton
-                            buttonAlign={'center'}
-                            clusterInfo={clusterInfo}
-                            reactToPrintFn={reactToPrintFn}
-                            data={data}
-                        />
-                    </div>
                 )}
             </div>
         </main>

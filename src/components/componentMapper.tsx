@@ -14,6 +14,7 @@ import TextValueSelect from './composed-components/TextValueSelect';
 import { createArrayFromPythonDictionary } from './createArrayFromPythonDictionary';
 import ClusterCategoriesDistributionAccordeonContent from './composed-components/ClusterCategoriesDistributionAccordeonContent';
 import ClusterNumericalVariableDistributionAccordeonContent from './composed-components/ClusterNumericalVariableDistributionAccordeonContent';
+import { ReactNode } from 'react';
 
 interface Comparison {
     key: string;
@@ -23,9 +24,11 @@ interface Comparison {
 export default function ComponentMapper({
     items,
     data,
+    exportButton,
 }: {
     items: string[];
     data: CSVData;
+    exportButton?: ReactNode;
 }) {
     const { t } = useTranslation();
     const components = items
@@ -34,6 +37,14 @@ export default function ComponentMapper({
                 const resultItem = JSON.parse(r);
 
                 switch (resultItem.type) {
+                    case 'export-button': {
+                        if (exportButton) {
+                            return (
+                                <Fragment key={index}>{exportButton}</Fragment>
+                            );
+                        }
+                        return null;
+                    }
                     case 'data-set-preview':
                         return (
                             <Fragment key={index}>

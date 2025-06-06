@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ErrorBoundary from '../ErrorBoundary';
 import FilterSelect from '../ui/FilterSelect';
@@ -71,7 +71,7 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                         }
                     );
                     return (
-                        <>
+                        <Fragment key={index}>
                             {categorieFilter === chart.selectFilterGroup ||
                             (!categorieFilter &&
                                 chart.selectFilterGroup === defaultCategory) ||
@@ -98,7 +98,7 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                                     />
                                 </>
                             ) : null}
-                        </>
+                        </Fragment>
                     );
                 })}
             </ErrorBoundary>

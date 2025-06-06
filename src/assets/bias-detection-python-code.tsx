@@ -647,6 +647,10 @@ def run():
         'key': 'biasAnalysis.conclusionDescriptionHigherAverage' if p_val < 0.05 else 'biasAnalysis.conclusionNoSignificance'
     }))
 
+    setResult(json.dumps({
+        'type': 'export-button',
+    }))
+
 
     setResult(json.dumps({
         'type': 'heading',
