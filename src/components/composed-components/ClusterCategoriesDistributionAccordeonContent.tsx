@@ -42,7 +42,7 @@ const ClusterCategoriesDistributionAccordeonContent = ({
     return (
         <div className="flex flex-col justify-start items-start gap-4 px-1 py-4 w-100">
             <ErrorBoundary>
-                <div>
+                <div className="hideonprint">
                     <FilterSelect
                         filterValues={categories}
                         defaultValue={defaultCategory}
@@ -72,11 +72,40 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                     );
                     return (
                         <Fragment key={index}>
-                            {categorieFilter === chart.selectFilterGroup ||
-                            (!categorieFilter &&
-                                chart.selectFilterGroup === defaultCategory) ||
-                            !chart.selectFilterGroup ? (
-                                <>
+                            <>
+                                {categorieFilter === chart.selectFilterGroup ||
+                                (!categorieFilter &&
+                                    chart.selectFilterGroup ===
+                                        defaultCategory) ||
+                                !chart.selectFilterGroup ? (
+                                    <div className="hideonprint">
+                                        <h5
+                                            key={index}
+                                            className="text-gray-800 font-semibold"
+                                        >
+                                            {chart.headingKey
+                                                ? t(
+                                                      chart.headingKey,
+                                                      chart.params
+                                                  )
+                                                : '-'}
+                                        </h5>
+                                        <ClusterCategoriesDistributionChart
+                                            showMeanLine={true}
+                                            data={distributionData}
+                                            yAxisLabel={t(
+                                                'distribution.frequency'
+                                            )}
+                                            title={chart.title ?? ''}
+                                            means={chart.means ?? []}
+                                            categories={chart.categories ?? []}
+                                            isViridis={
+                                                chart.categories !== undefined
+                                            }
+                                        />
+                                    </div>
+                                ) : null}
+                                <div className="hidden showonprint">
                                     <h5
                                         key={index}
                                         className="text-gray-800 font-semibold"
@@ -96,8 +125,8 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                                             chart.categories !== undefined
                                         }
                                     />
-                                </>
-                            ) : null}
+                                </div>
+                            </>
                         </Fragment>
                     );
                 })}
