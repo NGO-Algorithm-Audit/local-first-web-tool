@@ -244,16 +244,16 @@ p_value : {{p_val}}
             },
             difference: {
                 appearance: '{{feature}} : {{value}}',
-                deviatingMoreOften:
-                    '**{{value}}**: Komt **vaker** voor in de meest afwijkende cluster dan in de rest van de dataset.',
-                deviatingLessOften:
-                    '**{{value}}**: Komt **minder** voor in de meest afwijkende cluster dan in de rest van de dataset.',
+                deviatingMoreOften: `**{{value}}**: Komt **vaker** voor in de meest afwijkende cluster dan in de rest van de dataset.
+`,
+                deviatingLessOften: `**{{value}}**: Komt **minder** voor in de meest afwijkende cluster dan in de rest van de dataset.
+`,
             },
             differenceCategorical: {
-                deviatingMoreOften:
-                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.',
-                deviatingLessOften:
-                    '**{{feature}}: {{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.',
+                deviatingMoreOften: `**{{feature}}: {{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.
+`,
+                deviatingLessOften: `**{{feature}}: {{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.
+`,
             },
         },
         distribution: {
