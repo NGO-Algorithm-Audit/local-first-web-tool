@@ -93,7 +93,7 @@ export const en = {
             description:
                 'A subset of the [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset is used as a demo. Synthetic data will be generated for the following variables:',
             'post.description':
-                'The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)',
+                '<br> The CART method is used to generate the synthetic data. CART generally produces high quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.\n  \n*The original paper can be found [here](https://files.eric.ed.gov/fulltext/ED469370.pdf)',
             'data.column.Variable_name': 'Variable name',
             'data.sex': 'sex',
             'data.race1': 'race1',
@@ -127,25 +127,25 @@ export const en = {
                 columnsCountError: 'File may contain a maximum of 8 columns.',
             },
             fieldset: {
-                sourceDataset: 'Source data',
+                sourceDataset: 'Input',
                 sdgMethod: {
                     title: 'Method',
                     cart: 'CART',
                     gc: 'Gaussian Copula',
                     tooltip:
-                        'By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases.',
+                        'By default, the CART method is used to generate synthetic data. CART generally produces higher quality synthetic data, but might not work well on datasets with categorical variables with 20+ categories. Use Gaussian Copula in those cases',
                 },
                 nanTreatment: {
                     title: 'NaN values treatment',
                     drop: 'Drop rows with NaN values',
                     impute: 'Impute NaN values',
                     tooltip:
-                        'When using Gaussian Copula, you can choose how to handle missing values (NaN values) in your dataset. Dropping rows with NaN values removes them completely, while imputation replaces them with mean values for numerical columns and mode values for categorical columns.',
+                        "When using Gaussian Copula, you can choose how to handle missing values (NaN values) in your dataset. 'Drop rows with NaN values' removes them completely, while 'Imputate NaN values' replaces them with mean values for numerical columns and mode values for categorical columns",
                 },
                 samples: 'Number of synthetic datapoints',
             },
             actions: {
-                tryItOut: 'Try it out',
+                tryItOut: 'Demo dataset',
                 runGeneration: 'Run synthetic data generation',
                 analyzing: 'Analyzing...',
                 initializing: 'Initialising...',
@@ -153,7 +153,7 @@ export const en = {
         },
         demoCard: {
             title: 'Try it out!',
-            description: 'No dataset at hand? Use our demo dataset.',
+            description: 'No dataset at hand? Use our demo dataset',
         },
         columnsInDatasetInfo:
             'If the detected data types are incorrect, please change this locally in the source dataset before attaching it to the web app.',
@@ -164,7 +164,7 @@ export const en = {
         correlationRealdata: 'Correlation matrix',
         correlationSyntheticData: 'Correlation matrix',
         dataSetPreview: {
-            heading: '1. Preview of data',
+            heading: '0. Preview of data',
         },
         columnsInDataset: '1. Data types detection',
         handlingMissingDataTitle: '2. Handling missing data',
@@ -217,25 +217,35 @@ For categorical (or boolean) columns the following metrics are computed:
         efficacyMetricsDescription: `Efficacy metrics comparing real and synthetic datasets for downstream predictive tasks. The idea is to train a predictive model on synthetic data and evaluate its performance on real data. The type of metrics computed depends on the task:
 
 For regression (when the target is numerical):
-- Mean Squared Error (MSE)
-- Mean Absolute Error (MAE)
-- R^2 Score
+- {tooltip:syntheticData.meanSquaredError}Mean squared error (MSE){/tooltip}
+- {tooltip:syntheticData.meanAbsoluteError}Mean Absolute Error (MAE){/tooltip}
+- {tooltip:syntheticData.R2}R² Score{/tooltip}
 
-For classification (when the target is categorical/boolean):
-- Accuracy Score
-- Weighted F1 Score`,
+For classification (when the target is categorical):
+- {tooltip:syntheticData.accuracyScore}Accuracy Score{/tooltip}
+- {tooltip:syntheticData.weightedF1Score}Weighted F1 Score{/tooltip}`,
         disclosureProtectionTitle: 'Privacy metrics',
-        disclosureProtectionDescription: `A class to compute the disclosure protection metric for synthetic data. This metric measures the proportion of synthetic records that are too similar (within a defined threshold) to real records, posing a disclosure risk.`,
-        outputDataTitle: '5. Generated synthetic data',
+        disclosureProtectionDescription: `The disclosure protection metric measures the proportion of synthetic data points that closely resemble real data points (within a predefined threshold), posing a risk of traceability to personal data. A low 'risk\_rate' and a high 'disclosure\_protection\_rate' indicate effective protection against the unintentional exposure of personal data.`,
+        outputDataTitle: '5. Download synthetic data and evaluation report',
         moreInfoTitle: '6. More information',
+        meanSquaredError:
+                    'Average squared difference between predicted and actual values, quantifying the accuracy of a model’s predictions by penalizing larger errors more heavily',
+        meanAbsoluteError:
+                    'Average magnitude of the errors between predicted and actual values, providing a straightforward assessment of model accuracy without emphasizing large errors',
+        R2:
+                    'Quantifies how well a model’s predictions match the actual data by measuring the proportion of variance in the target variable explained by the model',
+        accuracyScore:
+                    'Measures the proportion of correctly predicted instances out of the total instances, providing an overall assessment of a model’s performance in classification tasks',
+        weightedF1Score:
+                    'Harmonic mean of precision and recall, calculated for each class and weighted by the class’s support (number of true instances), providing a balanced performance measure for imbalanced datasets',
         correlationDifference:
             'Correlation difference: {{correlationDifference}}',
         univariateText:
-            '{{samples}} synthetic data points are generated using CART. The figures below display the value frequency for each variable. The synthetic data is of high quality when the frequencies are approximately the same.',
+            '<br>{{samples}} synthetic data points are generated using CART. The figures below display the value frequency for each variable. The synthetic data is of high quality when the frequencies are approximately the same.',
         bivariateText:
             'The figures below display the differences in value frequency for a combination of variables. For comparing two categorical variables, bar charts are plotted. For comparing a numerical and a categorical variables, a so called [violin plot](https://en.wikipedia.org/wiki/Violin_plot) is shown. For comparing two numercial variables, a [LOESS plot](https://en.wikipedia.org/wiki/Local_regression) is created. For all plots holds: the synthetic data is of high quality when the shape of the distributions in the synthetic data equal the distributions in the real data.',
         moreInfo:
-            'Do you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
+            'Do you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
         missingData: `For {tooltip:syntheticData.missingDataMARTooltip}Missing At Random (MAR){/tooltip} and {tooltip:syntheticData.missingDataMNARTooltip}Missing Not At Random (MNAR){/tooltip} data, 
 we recommend to impute the missing data. For {tooltip:syntheticData.missingDataMCARTooltip}Missing Completely At Random (MCAR){/tooltip}, we recommend to remove the missing data.`,
         missingDataMARTooltip: `**MAR (Missing At Random)**:
