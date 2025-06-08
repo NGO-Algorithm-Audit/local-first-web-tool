@@ -226,8 +226,9 @@ In dit voorbeeld analyseren welke groepen het COMPAS risicotaxatie-algoritme afw
 
 Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0</sub> te aanvaarden of te verwerpen.
 
-p-waarde : {{p_val}}
+{tooltip:biasAnalysis.p_valueTooltip}p-waarde{/tooltip} : {{p_val}}
         `,
+        p_valueTooltip: `p-waarde tooltip`,
         parameters: {
             heading: '2. Geselecteerde parameters',
             iterations: 'Aantal iteraties: {{value}}',

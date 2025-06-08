@@ -267,8 +267,9 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
-p_value : {{p_val}}
+{tooltip:biasAnalysis.p_valueTooltip}p_value{/tooltip} : {{p_val}} 
         `,
+        p_valueTooltip: `p_value tooltip`,
         dataSetPreview: {
             heading: '1. Preview of data',
         },
