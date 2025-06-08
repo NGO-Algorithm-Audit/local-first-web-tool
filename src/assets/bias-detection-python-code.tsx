@@ -565,6 +565,17 @@ def run():
     setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
     setOutputData("otherClusters", df_other.to_json(orient='records'))
 
+
+    setResult(json.dumps({
+        'type': 'heading',
+        'headingKey': 'biasAnalysis.conclusion'
+    }))
+
+    setResult(json.dumps({
+        'type': 'text',
+        'key': 'biasAnalysis.conclusionDescription'
+    }))
+        
     # Calculate the difference in percentage for each category value between cluster 0 and the entire dataset
     diff_percentages = {}
 
@@ -590,15 +601,7 @@ def run():
         }))
 
 
-    setResult(json.dumps({
-        'type': 'heading',
-        'headingKey': 'biasAnalysis.conclusion'
-    }))
-
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.conclusionDescription'
-    }))
+    
 
     setResult(json.dumps({
         'type': 'export-button',

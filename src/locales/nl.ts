@@ -193,20 +193,33 @@ export const nl = {
     biasAnalysis: {
         demo: {
             heading: 'Informatie over de demodataset',
-            description:
-                'Als demo wordt de [Twitter15](https://www.dropbox.com/scl/fi/flgahafqckxtup2s9eez8/rumdetect2017.zip?dl=0&e=1&file_subpath=%2Frumor_detection_acl2017%2Ftwitter15&rlkey=b7v86v3q1dpvcutxqk0xi7oej) dataset hieronder geladen. De dataset bevat kenmerken van tweets en de voorspelling van een BERT-gebaseerd misinformatie detectie algoritme of een tweet nepnieuws is of niet. Fout-positieve classificaties zijn gemarkeerd als FP. Een FP geeft aan dat tweet ten onrechte door het misinformatie algoritme zijn geclassificeerd als nepnieuws. De FP-metriek wordt in dit voorbeeld gebruikt als metriek om bias te meten. \n  \n&nbsp;&nbsp;\n\n In dit voorbeeld onderzoeken we welk type tweets vaker/minder vaak door het misinformatie algoritme worden geclassificeerd als nepnieuws.',
+            description: `Als demonstratie wordt de [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) geladen. De dataset bevat kenmerken van criminele verdachten en hun risico op recidive, zoals voorspeld door het COMPAS-algoritme. De dataset bevat demografische gegevens zoals leeftijd, geslacht en ras, evenals strafblad, details over de aanklacht en het voorspelde risicolabel. Deze dataset wordt gebruikt als benchmark voor het bestuderen van algoritmische discriminatie. Een beschrijving van alle variabelen is te vinden in de onderstaande tabel.
+
+**Variabelebeschrijving**
+
+| Variabelenaam     | Beschrijving                                              | Waarden                                                                  |
+| ----------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| age_cat          | Leeftijdscategorie                                        | Jonger dan 25, 25-45, Ouder dan 45                                       |
+| sex               | Geslacht                                                  | Man, Vrouw                                                               |
+| race              | Ras                                                       | Afro-Amerikaans, Aziatisch, Blank, Spaans, Inheems-Amerikaans, Overig    |
+| c_charge_degree | Ernst van de strafrechtelijke aanklacht                   | M: Overtreding – Minder ernstige feiten, F: Misdrijf – Ernstigere feiten |
+| is_recid         | Of de verdachte opnieuw de fout in ging (recidive)        | 0: Nee, 1: Ja                                                            |
+| score_text       | Voorspeld risicolabel van de verdachte                    | 0: Geen hoog risico, 1: Hoog risico                                      |
+| false_positive   | Verdachte voorspeld om te recidiveren, maar deed dat niet | 0: geen valse positieve, 1: valse positieve                              |
+
+<br>
+
+In dit voorbeeld analyseren we welke groep het meest nadelig wordt beïnvloed door het risicovoorspellingsalgoritme. Dit doen we door het clusteralgoritme toe te passen op de onderstaande datasetweergave. De kolom "is_recid" geeft aan of een verdachte daadwerkelijk opnieuw de fout in ging (1: ja, 0: nee). De kolom "score_text" geeft aan of werd voorspeld dat een verdachte opnieuw de fout in zou gaan (1: ja, 0: nee). De kolom "false_positive" (FP) vertegenwoordigt gevallen waarin het algoritme voorspelde dat een verdachte opnieuw de fout in zou gaan, maar dit niet gebeurde (1: FP, 0: geen FP). Een voorbeeldweergave van de gegevens is hieronder te vinden. De kolom "false_positive" wordt gebruikt als uitkomstlabel.
+`,
         },
-        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+        testingStatisticalSignificance: `**5. Testen van clusterverschillen ten opzichte van uitkomstlabels**
 
-- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
-- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>0</sub>: er is geen verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
+- <i class="font-serif">H</i><sub>1</sub>: er is een verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
 
-A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0</sub> te aanvaarden of te verwerpen.
 
-
-T_statistic : {{t_stat}}
-
-p_value : {{p_val}}
+p-waarde : {{p_val}}
         `,
         parameters: {
             heading: 'Geselecteerde parameters',
@@ -221,6 +234,15 @@ p_value : {{p_val}}
 - Prestatiemetingkolom: {{performanceMetric}}
 - Gegevenstype: {{dataType}}
 `,
+        },
+        distribution: {
+            mainHeading:
+                '6. Testen van clusterverschillen ten opzichte van kenmerken',
+            heading: '"{{variable}}" verdeling over de verschillende clusters:',
+        },
+        splittingDataset: {
+            heading: '3. Splitsen dataset',
+            description: `Om de kans te verkleinen dat de clusteringmethode ruis detecteert, wordt de dataset opgesplitst in een trainingsset (80%) en een testset (20%). De clusteringmethode wordt eerst getraind op de trainingsset. Vervolgens wordt met behulp van de testset beoordeeld of er sprake is van een statistisch significant signaal in de meest afwijkende clusters.`,
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
             'Verdeling van kenmerken over clusters',
@@ -256,17 +278,21 @@ p_value : {{p_val}}
 `,
             },
         },
-        distribution: {
-            heading:
-                'De "{{variable}}" variabele verdeling over de verschillende clusters:',
+        clusterinResults: {
+            heading: '4. Cluster resultaten',
+            description: `
+- Aantal gevonden clusters: {{clusterCount}}
+            `,
+            label: 'Kies cluster om het aantal datapunten voor weer te geven',
+            valueText: 'Aantal datapunten in cluster {{index}}: {{value}}',
         },
         higherAverage: `De meest bevooroordeelde cluster heeft een statistisch significant hogere gemiddelde bias score dan de rest van de dataset.`,
         noSignificance: `Geen statistisch significant verschil in gemiddelde bias score tussen de meest bevooroordeelde cluster en de rest van de dataset.`,
 
-        conclusion: `6. Conclusie en bias rapport`,
+        conclusion: `7. Conclusie en bias rapport`,
         conclusionDescription: `Uit de bovenstaande figuren en statistische tests kan worden geconcludeerd dat:`,
 
-        moreInformationHeading: `7. Meer informatie`,
+        moreInformationHeading: `8. Meer informatie`,
         moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
 - [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,
     },

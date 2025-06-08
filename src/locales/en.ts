@@ -7,7 +7,7 @@ export const en = {
     fileUploadError: 'Please upload a valid csv file.',
     removeButton: 'Remove',
     dropzoneLabel:
-        'Drag and drop your csv file here, click to select one of your own files or use the "Demo dataset" button',
+        'Drag and drop your csv file here, click to select a local file or use the "Demo dataset" button',
     datasetPreview: 'Dataset preview showing the first 5 rows.',
     error: 'Sorry, something went wrong.',
     loadingMessage: 'Setting up environment...',
@@ -30,14 +30,14 @@ export const en = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Preprocess your data such that: 
                     - missing values are removed or replaced;
-                    - all columns (except your bias metric column) should have the same datatypes, e.g., numerical or categorical;
-                    - the bias metric column is numerical`,
-                    performanceMetric: 'Bias metric',
+                    - all columns (except your outcome label column) should have the same datatypes, e.g., numerical or categorical;
+                    - the outcome label column is numerical`,
+                    performanceMetric: 'Outcome label',
                     performanceMetricTooltip:
-                        'Clustering will be performed on the bias metrics. The bias metric should be numerical. Examples of bias metrics are "being classified as high risk" or "selected for an investigation"',
+                        'Clustering will be performed on the outcome labels. The outcome label should be numerical. Examples of outcome labels are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
                     dataTypeTooltip:
-                        'Specify whether the data are categorical or numerical. All columns (except your bias metric column) should have the same data type',
+                        'Specify whether the data are categorical or numerical. All columns (except your outcome label column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
                     filterSelect:
@@ -48,11 +48,11 @@ export const en = {
                     iterations: 'Iterations',
                     minClusterSize: 'Minimal cluster size',
                     performanceInterpretation: {
-                        title: 'Bias metric interpretation',
-                        lower: 'Lower value of bias metric is better, such as error rate',
-                        higher: 'Higher value of bias metric is better, such as accuracy',
+                        title: 'Outcome label interpretation',
+                        lower: 'Lower value of outcome label is better, such as error rate',
+                        higher: 'Higher value of outcome label is better, such as accuracy',
                         tooltip:
-                            'When error rate or misclassifications are chosen as the bias metric, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias metric, a higher value is preferred, reflecting the aim to maximize performance.',
+                            'When error rate or misclassifications are chosen as the outcome label, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the outcome label, a higher value is preferred, reflecting the aim to maximize performance.',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
@@ -62,7 +62,7 @@ export const en = {
             },
             errors: {
                 csvRequired: 'Please upload a csv file.',
-                targetColumnRequired: 'Please select a bias metric.',
+                targetColumnRequired: 'Please select a outcome label.',
                 dataTypeRequired: 'Please select a data type.',
                 noNumericColumns:
                     'No numeric columns found. Please upload a valid dataset.',
@@ -83,7 +83,8 @@ export const en = {
         },
         demoCard: {
             title: 'Try it out!',
-            description: 'Alternatively, use our demo dataset.',
+            description:
+                "Use our demo dataset if you don't have a dataset at hand",
         },
     },
     syntheticData: {
@@ -163,7 +164,7 @@ export const en = {
         correlationRealdata: 'Correlation matrix',
         correlationSyntheticData: 'Correlation matrix',
         dataSetPreview: {
-            heading: '0. Preview of real data',
+            heading: '1. Preview of data',
         },
         columnsInDataset: '1. Data types detection',
         handlingMissingDataTitle: '2. Handling missing data',
@@ -255,17 +256,17 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
     },
 
     biasAnalysis: {
-        testingStatisticalSignificance: `**4. Testing statistical significance for the bias score difference between the most deviating cluster and the rest of the dataset**
+        testingStatisticalSignificance: `**5. Testing cluster differences wrt. outcome labels**
 
-- <i class="font-serif">H</i><sub>0</sub>: no difference in bias between the most deviating cluster and the rest of the dataset
-- <i class="font-serif">H</i><sub>1</sub>: difference in bias between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>0</sub>: no difference in outcome labels between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in outcome labels between the most deviating cluster and the rest of the dataset
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
 p_value : {{p_val}}
         `,
         dataSetPreview: {
-            heading: '0. Preview of real data',
+            heading: '1. Preview of data',
         },
         demo: {
             heading: 'Information about demo dataset',
@@ -283,18 +284,20 @@ p_value : {{p_val}}
 | false_positive  | Defendant predicted to reoffend, but didn't | 0: no FP, 1: FP                                                        |
 
 
-In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the "bias metric".
+<br>
+
+In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the outcome label.
 `,
         },
         parameters: {
-            heading: '1. Parameters selected for clustering',
+            heading: '2. Parameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
             minClusterSize: 'Minimal cluster size: {{value}}',
-            performanceMetric: 'Performance metric column: {{value}}',
+            performanceMetric: 'Outcome label: {{value}}',
             dataType: 'Data type: {{value}}',
             description: `- Number of iterations: {{iterations}}
 - Minimal cluster size: {{minClusterSize}}
-- Performance metric column: {{performanceMetric}}
+- Outcome label: {{performanceMetric}}
 - Data type: {{dataType}}
 `,
         },
@@ -334,32 +337,32 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         nodifference: {
             heading:
-                'No significant difference in average bias metric between the most biased cluster and the rest of the dataset.',
+                'No significant difference in average uitkomstlabel between the most biased cluster and the rest of the dataset.',
         },
         distribution: {
-            mainHeading: '5. Cluster characteristics',
+            mainHeading: '6. Testing cluster differences wrt. features',
             heading:
-                'The "{{variable}}" variable distribution across the different clusters:',
+                '"{{variable}}" distribution across the different clusters:',
         },
         splittingDataset: {
-            heading: '2. Splitting dataset',
-            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant bias in the most deviating clusters is evaluated using the test dataset.`,
+            heading: '3. Splitting dataset',
+            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant signal in the most deviating clusters is evaluated using the test dataset.`,
         },
         clusterinResults: {
-            heading: '3. Clustering results',
+            heading: '4. Clustering results',
             description: `
 - Number of clusters detected: {{clusterCount}}
             `,
             label: 'Choose cluster to show number of datapoints for',
             valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
         },
-        higherAverage: `The most biased cluster has a statistically significant higher average bias score than the rest of the dataset.`,
-        noSignificance: `No statistically significant difference in average bias score between the most biased cluster and the rest of the dataset.`,
+        higherAverage: `The most deviating cluster has statistically significant different outcome labels than the rest of the dataset.`,
+        noSignificance: `No statistically significant difference in outcome labels between the most biased cluster and the rest of the dataset.`,
 
-        conclusion: `6. Conclusion and bias report`,
+        conclusion: `7. Conclusion and bias report`,
         conclusionDescription: `From the above figures and statistical tests, it can be concluded that:`,
 
-        moreInformationHeading: `7. More information`,
+        moreInformationHeading: `8. More information`,
         moreInformationDescription: `- [Scientific article](https://arxiv.org/pdf/2502.01713)
 - [Github repository](https://github.com/NGO-Algorithm-Audit/unsupervised-bias-detection)`,
     },
