@@ -83,7 +83,8 @@ export const en = {
         },
         demoCard: {
             title: 'Try it out!',
-            description: "Use our demo dataset if you don't have a dataset at hand",
+            description:
+                "Use our demo dataset if you don't have a dataset at hand",
         },
     },
     syntheticData: {
@@ -339,7 +340,7 @@ In this example, we analyze which group is most adversely affected by the risk p
                 'No significant difference in average uitkomstlabel between the most biased cluster and the rest of the dataset.',
         },
         distribution: {
-            mainHeading: '5. Testing cluster differences wrt. features',
+            mainHeading: '6. Testing cluster differences wrt. features',
             heading:
                 '"{{variable}}" distribution across the different clusters:',
         },
