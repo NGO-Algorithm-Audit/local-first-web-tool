@@ -52,12 +52,12 @@ export const en = {
                         lower: 'Lower value of outcome label is better, such as error rate',
                         higher: 'Higher value of outcome label is better, such as accuracy',
                         tooltip:
-                            'When error rate or misclassifications are chosen as the outcome label, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the outcome label, a higher value is preferred, reflecting the aim to maximize performance.',
+                            'When error rate or misclassifications are chosen as the outcome label, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the outcome label, a higher value is preferred, reflecting the aim to maximize performance. Selected for an investigation or a false positive is consiered as disadvantageous, so for this outcome label a lower value is preferred',
                     },
                     iterationsTooltip:
-                        'Number of times the dataset is split in smaller clusters until the minimal cluster size is reached',
+                        'Number of times the dataset is split in smaller clusters. Can terminate early if the minimum cluster size is reached',
                     minClusterSizeTooltip:
-                        'The minimum number of samples per cluster. By default set to 10% of the number of rows in the attached dataset.',
+                        'The minimum number of samples per cluster. By default set to 1% of the number of rows in the attached dataset.',
                 },
             },
             errors: {
@@ -302,7 +302,7 @@ In this example, we analyze which group is most adversely affected by the risk p
 `,
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
-            'Distribution of features across clusters',
+            'Features per cluster',
         numericalVariableDistributionAcrossClustersAccordeonTitle:
             'Distribution of numerical variables across clusters',
         clusters: {
@@ -339,13 +339,13 @@ In this example, we analyze which group is most adversely affected by the risk p
                 'No significant difference in average uitkomstlabel between the most biased cluster and the rest of the dataset.',
         },
         distribution: {
-            mainHeading: '6. Testing cluster differences wrt. features',
+            mainHeading: '6. Cluster differences wrt. features',
             heading:
-                '"{{variable}}" distribution across the different clusters:',
+                '"{{variable}}" distribution per cluster:',
         },
         splittingDataset: {
             heading: '3. Splitting dataset',
-            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant signal in the most deviating clusters is evaluated using the test dataset.`,
+            description: `To reduce the possibility that the clustering method detects noise, the dataset is split in a train (80%) and test dataset (20%). The clustering method is first fitted on the train dataset. Then, the presence of statistically significant signal in the most deviating cluster is evaluated using the test dataset.`,
         },
         clusterinResults: {
             heading: '4. Clustering results',
