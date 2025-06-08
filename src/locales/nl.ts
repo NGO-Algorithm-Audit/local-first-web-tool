@@ -94,7 +94,7 @@ export const nl = {
             description:
                 'Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende variablen:\n  \n&nbsp;&nbsp;\n\n',
             'post.description':
-                'De CART-methode wordt gebruikt om synthetische gegevens te genereren.\n CART produceert doorgaan een goede kwaliteit synthetische data, maar werkt minder goed voor data met categorische data met meer dan 20 categorieën. Gebruik in dit geval Gaussian Copula. \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.',
+                '<br>De CART-methode wordt gebruikt om synthetische gegevens te genereren.\n CART produceert doorgaan een goede kwaliteit synthetische data, maar werkt minder goed voor data met categorische data met meer dan 20 categorieën. Gebruik in dit geval Gaussian Copula. \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.',
             'data.column.Variable_name': 'Variabele name',
             'data.sex': 'sex',
             'data.race1': 'race1',
@@ -131,7 +131,7 @@ export const nl = {
                 columnsCountError: 'File mag maximaal 8 kolommen bevatten.',
             },
             fieldset: {
-                sourceDataset: 'Brondata',
+                sourceDataset: 'Input',
                 sdgMethod: {
                     title: 'Methode',
                     cart: 'CART',
@@ -149,17 +149,17 @@ export const nl = {
                 samples: 'Aantal synthetische datapunten',
             },
             actions: {
-                tryItOut: 'Uitproberen',
+                tryItOut: 'Demo dataset',
                 runGeneration: 'Start synthetische data generatie',
                 analyzing: 'Analyseren...',
                 initializing: 'Initialiseren...',
             },
             univariateText:
-                '{{samples}} synthetic datapunten via de CART-methode gegeneerd. De grafieken tonen de frequentie waarmee een variabele een bepaalde waarde aanneemt. De synthetische data is van hoge kwaliteit als de frequenties ongeveer gelijke zijn.',
+                '<br> {{samples}} synthetic datapunten via de CART-methode gegeneerd. De grafieken tonen de frequentie waarmee een variabele een bepaalde waarde aanneemt. De synthetische data is van hoge kwaliteit als de frequenties ongeveer gelijke zijn.',
         },
         demoCard: {
             title: 'Probeer het uit!',
-            description: 'Geen dataset bij de hand? Gebruik onze demodata.',
+            description: 'Geen dataset bij de hand? Gebruik onze demo dataset',
         },
         columnsInDatasetInfo:
             'Als de gedetecteerd data types niet correct zijn, pas dit dan lokaal aan in de dataset voordat u deze opnieuw aan de app koppelt.',
@@ -188,11 +188,22 @@ export const nl = {
         correlationMatrixTitle: 'Correlatie matrix',
         efficacyMetricsTitle: 'Doeltreffendheid metrieken',
         disclosureProtectionTitle: 'Privacy metrieken',
-        outputDataTitle: '5. Output data',
+        disclosureProtectionDescription: `De onthullings beschermings metriek meet het aandeel synthetische datapunten die te veel lijkt op echte datapunten (binnen een vooraf gedefinieerde drempelwaarde), wat een risico op herleidbaarheid naar persoonsgegevens vormt. Een lage 'risk_rate' en hoge 'disclosure_protection_rate' duidt op een goede bescherming tegen het onbedoeld prijsgeven van persoonsgegevens.`,
+        outputDataTitle: '5. Download synthetische data en evaluatierapport',
         moreInfoTitle: '6. Meer informatie',
+        meanSquaredError:
+                    'Gemiddeld kwadraatverschil tussen voorspelde en werkelijke waarden, dat de nauwkeurigheid van de voorspellingen van een model kwantificeert door grotere fouten zwaarder te bestraffen',
+        meanAbsoluteError:
+                    'Gemiddelde grootte van de fouten tussen voorspelde en werkelijke waarden, die een eenvoudige beoordeling van de nauwkeurigheid van het model biedt zonder de nadruk te leggen op grote fouten',
+        R2:
+                    'Kwantificeert hoe goed de voorspellingen van een model overeenkomen met de werkelijke gegevens door het aandeel van de variantie in de doelvariabele te meten dat door het model wordt verklaard',
+        accuracyScore:
+                    'Meet het aandeel correct voorspelde gevallen ten opzichte van het totaal, en geeft zo een algemene beoordeling van de prestaties van het classificatiemodel',
+        weightedF1Score:
+                    'Het harmonisch gemiddelde van precisie en recall, berekend per klasse en gewogen naar het aantal echte gevallen per klasse, wat een metriek biedt voor datasets met ongelijke klassenverdeling',
         correlationDifference: 'Correlatie verschil: {{correlationDifference}}',
         moreInfo:
-            '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
+            '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (Nederlandse organisaties)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
     },
     biasAnalysis: {
         dataSetPreview: {
