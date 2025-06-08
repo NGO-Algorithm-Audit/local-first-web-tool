@@ -21,6 +21,10 @@ export const en = {
         'Loading core packages. On average this takes 10-15 seconds.',
     installingPackages: 'Installing additional packages...',
     biasSettings: {
+        dataType: {
+            numeric: 'Numeric',
+            categorical: 'Categorical',
+        },
         exportToPDF: 'Download bias analysis report as pdf',
         exportToJSON: 'Export clusters as json',
         form: {
@@ -340,8 +344,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         distribution: {
             mainHeading: '6. Cluster differences wrt. features',
-            heading:
-                '"{{variable}}" distribution per cluster:',
+            heading: '"{{variable}}" distribution per cluster:',
         },
         splittingDataset: {
             heading: '3. Splitting dataset',

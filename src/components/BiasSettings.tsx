@@ -162,6 +162,7 @@ export default function BiasSettings({
                     form.getValues().whichPerformanceMetricValueIsBetter ===
                     'higher',
                 isDemo: true,
+                dataTypeText: t(`biasSettings.dataType.categorical`),
             }
         );
     };
@@ -224,6 +225,9 @@ export default function BiasSettings({
             higherIsBetter:
                 formData.whichPerformanceMetricValueIsBetter === 'higher',
             isDemo: false,
+            dataTypeText: t(
+                `biasSettings.dataType.${formData.selectedDataType}`
+            ),
         });
     };
 

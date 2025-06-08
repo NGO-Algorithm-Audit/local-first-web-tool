@@ -5,4 +5,5 @@ export interface BiasDetectionParameters {
     dataType: string;
     higherIsBetter: boolean;
     isDemo: boolean;
+    dataTypeText: string;
 }

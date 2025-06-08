@@ -27,6 +27,7 @@ from js import targetColumn
 from js import dataType
 from js import higherIsBetter
 from js import isDemo
+from js import dataTypeText
 
 def t_test_on_cluster(test_df, bias_score, cluster_label):
 
@@ -331,7 +332,7 @@ def run():
             'iterations': localIterations,
             'minClusterSize': localClusterSize,
             'performanceMetric': bias_score,
-            'dataType': localDataType
+            'dataType': dataTypeText
         }
     }))
     setResult(json.dumps({

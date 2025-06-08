@@ -18,6 +18,10 @@ export const nl = {
     loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
     biasSettings: {
+        dataType: {
+            numeric: 'Numeriek',
+            categorical: 'Categorisch',
+        },
         exportToPDF: 'Download bias analyse rapport als pdf',
         exportToJSON: 'Export clusters als json',
 
@@ -239,8 +243,7 @@ p-waarde : {{p_val}}
 `,
         },
         distribution: {
-            mainHeading:
-                '6. Verschil clusters mbt. eigenschappen',
+            mainHeading: '6. Verschil clusters mbt. eigenschappen',
             heading: '"{{variable}}" verdeling per cluster:',
         },
         splittingDataset: {
