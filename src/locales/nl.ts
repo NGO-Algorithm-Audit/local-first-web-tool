@@ -191,6 +191,9 @@ export const nl = {
             '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
     },
     biasAnalysis: {
+        dataSetPreview: {
+            heading: '1. Preview van de data',
+        },
         demo: {
             heading: 'Informatie over de demodataset',
             description: `Als demonstratie wordt de [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) geladen. De dataset bevat kenmerken van criminele verdachten en hun risico op recidive, zoals voorspeld door het COMPAS-algoritme. De dataset bevat demografische gegevens zoals leeftijd, geslacht en ras, evenals strafblad, details over de aanklacht en het voorspelde risicolabel. Deze dataset wordt gebruikt als benchmark voor het bestuderen van algoritmische discriminatie. Een beschrijving van alle variabelen is te vinden in de onderstaande tabel.

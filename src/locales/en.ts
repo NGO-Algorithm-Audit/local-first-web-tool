@@ -329,10 +329,9 @@ In this example, we analyze which group is most adversely affected by the risk p
 `,
             },
             differenceCategorical: {
-                deviatingMoreOften: `**{{feature}}: {{value}}** in the most deviating cluster occurs **more** often than in the rest of the dataset.
-`,
-                deviatingLessOften: `**{{feature}}: {{value}}** in the most deviating cluster occurs **less** often than in the rest of the dataset.
-`,
+                feature: '- {{feature}}',
+                deviatingMoreOften: `  - **{{value}}** in the most deviating cluster occurs **more** often than in the rest of the dataset.`,
+                deviatingLessOften: `  - **{{value}}** in the most deviating cluster occurs **less** often than in the rest of the dataset.`,
             },
         },
         nodifference: {

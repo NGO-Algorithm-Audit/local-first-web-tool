@@ -108,6 +108,7 @@ export default function ComponentMapper({
                                     key={index}
                                     title={t(resultItem.titleKey || '')}
                                     content={content}
+                                    className={resultItem?.className ?? ''}
                                 />
                             );
                         }

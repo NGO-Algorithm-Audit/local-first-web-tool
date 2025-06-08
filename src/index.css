@@ -43,6 +43,22 @@
     }
 }
 
+.biasAnalysis-biasedClusterAccordion {
+    .content-list,
+    .markdown {
+        ul li {
+            line-height: 1;
+        }
+
+        ul {
+            @apply mb-0;
+        }
+        span:has(> ul) {
+            @apply block;
+        }
+    }
+}
+
 .tooltip-content {
     @apply p-4;
 }
