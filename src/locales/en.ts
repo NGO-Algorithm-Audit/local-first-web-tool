@@ -21,6 +21,10 @@ export const en = {
         'Loading core packages. On average this takes 10-15 seconds.',
     installingPackages: 'Installing additional packages...',
     biasSettings: {
+        dataType: {
+            numeric: 'Numeric',
+            categorical: 'Categorical',
+        },
         exportToPDF: 'Download bias analysis report as pdf',
         exportToJSON: 'Export clusters as json',
         form: {
@@ -263,8 +267,9 @@ we recommend to impute the missing data. For {tooltip:syntheticData.missingDataM
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
-p_value : {{p_val}}
+{tooltip:biasAnalysis.p_valueTooltip}p_value{/tooltip} : {{p_val}} 
         `,
+        p_valueTooltip: `p_value tooltip`,
         dataSetPreview: {
             heading: '1. Preview of data',
         },
@@ -329,10 +334,9 @@ In this example, we analyze which group is most adversely affected by the risk p
 `,
             },
             differenceCategorical: {
-                deviatingMoreOften: `**{{feature}}: {{value}}** in the most deviating cluster occurs **more** often than in the rest of the dataset.
-`,
-                deviatingLessOften: `**{{feature}}: {{value}}** in the most deviating cluster occurs **less** often than in the rest of the dataset.
-`,
+                feature: '- {{feature}}',
+                deviatingMoreOften: `  - **{{value}}** in the most deviating cluster occurs **more** often than in the rest of the dataset.`,
+                deviatingLessOften: `  - **{{value}}** in the most deviating cluster occurs **less** often than in the rest of the dataset.`,
             },
         },
         nodifference: {
@@ -341,8 +345,7 @@ In this example, we analyze which group is most adversely affected by the risk p
         },
         distribution: {
             mainHeading: '6. Cluster differences wrt. features',
-            heading:
-                '"{{variable}}" distribution per cluster:',
+            heading: '"{{variable}}" distribution per cluster:',
         },
         splittingDataset: {
             heading: '3. Splitting dataset',

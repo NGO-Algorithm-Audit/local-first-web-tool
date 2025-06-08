@@ -18,6 +18,10 @@ export const nl = {
     loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
     biasSettings: {
+        dataType: {
+            numeric: 'Numeriek',
+            categorical: 'Categorisch',
+        },
         exportToPDF: 'Download bias analyse rapport als pdf',
         exportToJSON: 'Export clusters als json',
 
@@ -191,6 +195,9 @@ export const nl = {
             '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (for Dutch public organizations)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
     },
     biasAnalysis: {
+        dataSetPreview: {
+            heading: '1. Preview van de data',
+        },
         demo: {
             heading: 'Informatie over de demodataset',
             description: `Als voorbeeld wordt de [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) gebruikt. De dataset bevat kenmerken van criminele verdachten en hun risico op recidive, zoals voorspeld door het COMPAS-algoritme. De dataset bevat demografische gegevens zoals leeftijd, geslacht en ras, evenals strafblad, details over de aanklacht en het voorspelde risicolabel. Deze dataset wordt gebruikt als benchmark voor onderzoek naar eerlijke algoritmes. Een beschrijving van alle variabelen is te vinden in onderstaande tabel.
@@ -219,8 +226,9 @@ In dit voorbeeld analyseren welke groepen het COMPAS risicotaxatie-algoritme afw
 
 Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0</sub> te aanvaarden of te verwerpen.
 
-p-waarde : {{p_val}}
+{tooltip:biasAnalysis.p_valueTooltip}p-waarde{/tooltip} : {{p_val}}
         `,
+        p_valueTooltip: `p-waarde tooltip`,
         parameters: {
             heading: '2. Geselecteerde parameters',
             iterations: 'Aantal iteraties: {{value}}',
@@ -236,8 +244,7 @@ p-waarde : {{p_val}}
 `,
         },
         distribution: {
-            mainHeading:
-                '6. Verschil clusters mbt. eigenschappen',
+            mainHeading: '6. Verschil clusters mbt. eigenschappen',
             heading: '"{{variable}}" verdeling per cluster:',
         },
         splittingDataset: {

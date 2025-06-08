@@ -27,6 +27,7 @@ from js import targetColumn
 from js import dataType
 from js import higherIsBetter
 from js import isDemo
+from js import dataTypeText
 
 def t_test_on_cluster(test_df, bias_score, cluster_label):
 
@@ -64,6 +65,7 @@ def t_test_on_cluster(test_df, bias_score, cluster_label):
 
     # if significant differences were found, print the variables with their differences
     for var, res in t_test_results.items():
+        
         if res['p_val'] < 0.05:
             direction = res['direction']
             if direction == "higher":
@@ -139,7 +141,19 @@ def chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label):
         print(f"91mNo statistically significant differences in means found.")
 
     # if significant differences were found, print the variables with their differences
+    current_column = ""
+
     for var, res in chi2_results.items():
+        if (current_column != var[0]):
+            current_column = var[0]
+            if res['p_val'] < 0.05:
+                comparisons.append({
+                        'key': 'biasAnalysis.biasedCluster.differenceCategorical.feature',
+                        'params': {
+                            'feature': var[0],
+                        }
+                    })
+
         if res['p_val'] < 0.05:
             direction = res['direction']
             if direction == "higher":
@@ -318,7 +332,7 @@ def run():
             'iterations': localIterations,
             'minClusterSize': localClusterSize,
             'performanceMetric': bias_score,
-            'dataType': localDataType
+            'dataType': dataTypeText
         }
     }))
     setResult(json.dumps({
@@ -597,7 +611,8 @@ def run():
         setResult(json.dumps({
             'type': 'accordion',
             'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-            'comparisons': comparisons
+            'comparisons': comparisons,
+            'className': 'biasAnalysis-biasedClusterAccordion'
         }))
 
 

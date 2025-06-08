@@ -81,6 +81,7 @@ export default function BiasDetection() {
         dataType: 'numeric',
         higherIsBetter: false,
         isDemo: false,
+        dataTypeText: t(`biasSettings.dataType.numeric`),
     });
     const onFileLoad: (
         data: Record<string, string>[],
@@ -127,6 +128,7 @@ export default function BiasDetection() {
                     dataType: params.dataType,
                     higherIsBetter: params.higherIsBetter,
                     isDemo: params.isDemo,
+                    dataTypeText: params.dataTypeText,
                 },
             },
         });
