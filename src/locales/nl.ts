@@ -7,7 +7,7 @@ export const nl = {
     fileUploadError: 'Upload een geldig csv-bestand.',
     removeButton: 'Verwijderen',
     dropzoneLabel:
-        'Sleep een csv-bestand hierheen, klik om een eigen bestand te selecteren of gebruik de "Demo dataset" knop',
+        'Sleep een csv-bestand hierheen, klik om een lokaal bestand te selecteren of gebruik de "Demo dataset" knop',
     datasetPreview: 'Voorbeeld van dataset met de eerste 5 rijen.',
     error: 'Sorry, er is iets misgegaan.',
     loadingMessage: 'Omgeving instellen...',
@@ -28,39 +28,39 @@ export const nl = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Bereid je data voor zodat: 
                     - missende waarden zijn verwijderd of vervangen;
-                    - alle kolommen (behalve de gelijkheidsmetriek-kolom) dezelfde datatypes hebben, numeriek of categorisch;
-                    - de gelijkheidsmetriek-kolom numeriek is`,
-                    performanceMetric: 'Gelijkheidsmetriek',
+                    - alle kolommen (behalve de uitkomstlabel-kolom) dezelfde datatypes hebben, numeriek of categorisch;
+                    - de uitkomstlabel-kolom numeriek is`,
+                    performanceMetric: 'Uitkomstlabel',
                     performanceMetricTooltip:
-                        'Clustering vindt plaats aan de hand van de gelijkheidsmetriek. De gelijkheidsmetriek moet een numerieke waarde zijn. Voorbeelden van een gelijkheidsmetriek is "geclassificeerd worden als hoog risico" of "geselecteerd worden voor een controle"',
+                        'Clustering vindt plaats aan de hand van het uitkomstlabel, welk een numerieke waarde moet zijn. Voorbeelden van een uitkomstlabel is "geclassificeerd als hoog risico" of "geselecteerd voor controle"',
                     dataType: 'Type data',
                     dataTypeTooltip:
-                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de gelijkheidsmetriek-kolom) moeten hetzelfde datatype hebben',
+                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de uitkomstlabel-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
                     filterSelect:
-                        'Selecteer een kolom om cluster distributies te bekijken',
+                        'Selecteer een kolom om de verdeling per cluster te bekijken',
                 },
                 parameters: {
                     title: 'Parameters',
                     iterations: 'Iteraties',
                     minClusterSize: 'Minimale clustergrootte',
                     performanceInterpretation: {
-                        title: 'Interpretatie van gelijkheidsmetriek',
-                        lower: 'Lagere waarde van gelijkheidsmetriek is beter, bijv. foutpercentage',
-                        higher: 'Hogere waarde van gelijkheidsmetriek is beter, bijv. nauwkeurigheid',
+                        title: 'Interpretatie van uitkomstlabel',
+                        lower: 'Lagere waarde van uitkomstlabel is beter, bijv. foutpercentage',
+                        higher: 'Hogere waarde van uitkomstlabel is beter, bijv. nauwkeurigheid',
                         tooltip:
-                            'Wanneer foutpercentage of misclassificaties worden gekozen als gelijkheidsmetriek geniet een lagere waarde de voorkeur omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de gelijkheidsmetriek geniet een hogere waarde de voorkeur met oog op het nastreven van maximale prestaties',
+                            'Wanneer foutpercentage of misclassificaties worden gekozen als uitkomstlabel wordt een lagere waarde als beter beschouwd omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als het uitkomstlabel wordt een hogere waarde de voorkeur als beter beschouwd met oog op het nastreven van maximale prestaties. Geselecteerd worden voor controle of een valspositieve wordt als nadeling worden beschouwd, dus voor dat uitkomstlabel is een lagere waarde beter',
                     },
                     iterationsTooltip:
-                        'Aantal keren dat de dataset wordt opgesplitst in clusters totdat de minimale clustergrootte is bereikt',
+                        'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters. Kan voortijdig worden gestopt als de minimale clustergrootte bereikt is',
                     minClusterSizeTooltip:
-                        'Het minimale aantal datapunten per cluster. Standaard ingesteld op 10% van het aantal rijen in de onderzochte dataset',
+                        'Het minimale aantal datapunten per cluster. Standaard ingesteld op 1% van het aantal rijen in de onderzochte dataset',
                 },
             },
             errors: {
                 csvRequired: 'Upload een CSV-bestand.',
-                targetColumnRequired: 'Selecteer een gelijkheidsmetriek.',
+                targetColumnRequired: 'Selecteer een uitkomstlabel.',
                 dataTypeRequired: 'Selecteer een gegevenstype.',
                 noNumericColumns:
                     'Geen numerieke kolommen gevonden. Upload een geldige dataset.',
@@ -166,7 +166,7 @@ export const nl = {
         correlationRealdata: 'Correlatie matrix',
         correlationSyntheticData: 'Correlatie matrix',
         dataSetPreview: {
-            heading: '0. Preview van de data',
+            heading: '0. Voorbeeld van de data',
         },
         columnsInDataset: '1. Detectie van datatypes',
         handlingMissingDataTitle: '2. Handling missing data',
@@ -193,26 +193,26 @@ export const nl = {
     biasAnalysis: {
         demo: {
             heading: 'Informatie over de demodataset',
-            description: `Als demonstratie wordt de [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) geladen. De dataset bevat kenmerken van criminele verdachten en hun risico op recidive, zoals voorspeld door het COMPAS-algoritme. De dataset bevat demografische gegevens zoals leeftijd, geslacht en ras, evenals strafblad, details over de aanklacht en het voorspelde risicolabel. Deze dataset wordt gebruikt als benchmark voor het bestuderen van algoritmische discriminatie. Een beschrijving van alle variabelen is te vinden in de onderstaande tabel.
+            description: `Als voorbeeld wordt de [COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset](https://github.com/propublica/compas-analysis/tree/master) gebruikt. De dataset bevat kenmerken van criminele verdachten en hun risico op recidive, zoals voorspeld door het COMPAS-algoritme. De dataset bevat demografische gegevens zoals leeftijd, geslacht en ras, evenals strafblad, details over de aanklacht en het voorspelde risicolabel. Deze dataset wordt gebruikt als benchmark voor onderzoek naar eerlijke algoritmes. Een beschrijving van alle variabelen is te vinden in onderstaande tabel.
 
-**Variabelebeschrijving**
+**Beschrijving variabelen**
 
 | Variabelenaam     | Beschrijving                                              | Waarden                                                                  |
 | ----------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
 | age_cat          | Leeftijdscategorie                                        | Jonger dan 25, 25-45, Ouder dan 45                                       |
 | sex               | Geslacht                                                  | Man, Vrouw                                                               |
-| race              | Ras                                                       | Afro-Amerikaans, Aziatisch, Blank, Spaans, Inheems-Amerikaans, Overig    |
+| race              | Ras                                                       | Afro-Amerikaans, Aziatisch, Kaukasisch, Latijns-Amerikaans, Inheems-Amerikaans, Overig    |
 | c_charge_degree | Ernst van de strafrechtelijke aanklacht                   | M: Overtreding – Minder ernstige feiten, F: Misdrijf – Ernstigere feiten |
 | is_recid         | Of de verdachte opnieuw de fout in ging (recidive)        | 0: Nee, 1: Ja                                                            |
 | score_text       | Voorspeld risicolabel van de verdachte                    | 0: Geen hoog risico, 1: Hoog risico                                      |
-| false_positive   | Verdachte voorspeld om te recidiveren, maar deed dat niet | 0: geen valse positieve, 1: valse positieve                              |
+| false_positive   | Verdachte voorspeld om te recidiveren, maar deed dat niet | 0: geen valspositieve, 1: valspositieve                              |
 
 <br>
 
-In dit voorbeeld analyseren we welke groep het meest nadelig wordt beïnvloed door het risicovoorspellingsalgoritme. Dit doen we door het clusteralgoritme toe te passen op de onderstaande datasetweergave. De kolom "is_recid" geeft aan of een verdachte daadwerkelijk opnieuw de fout in ging (1: ja, 0: nee). De kolom "score_text" geeft aan of werd voorspeld dat een verdachte opnieuw de fout in zou gaan (1: ja, 0: nee). De kolom "false_positive" (FP) vertegenwoordigt gevallen waarin het algoritme voorspelde dat een verdachte opnieuw de fout in zou gaan, maar dit niet gebeurde (1: FP, 0: geen FP). Een voorbeeldweergave van de gegevens is hieronder te vinden. De kolom "false_positive" wordt gebruikt als uitkomstlabel.
+In dit voorbeeld analyseren welke groepen het COMPAS risicotaxatie-algoritme afwijkend presteert. Dit doen we door het clusteralgoritme toe te passen op de onderstaande dataset. De kolom "is_recid" geeft aan of een verdachte daadwerkelijk opnieuw de fout in ging (1: ja, 0: nee). De kolom "score_text" geeft aan of werd voorspeld dat een verdachte opnieuw de fout in zou gaan (1: ja, 0: nee). De kolom "false_positive" (FP) vertegenwoordigt gevallen waarin het algoritme voorspelde dat een verdachte opnieuw de fout in zou gaan, maar dit niet gebeurde (1: FP, 0: geen FP). Een voorbeeld van de data wordt hieronder gegeven. De kolom "false_positive" wordt gebruikt als uitkomstlabel.
 `,
         },
-        testingStatisticalSignificance: `**5. Testen van clusterverschillen ten opzichte van uitkomstlabels**
+        testingStatisticalSignificance: `**5. Toetsen verschil cluster mbt. uitkomstlabels**
 
 - <i class="font-serif">H</i><sub>0</sub>: er is geen verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
 - <i class="font-serif">H</i><sub>1</sub>: er is een verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
@@ -222,30 +222,30 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 p-waarde : {{p_val}}
         `,
         parameters: {
-            heading: 'Geselecteerde parameters',
+            heading: '2. Geselecteerde parameters',
             iterations: 'Aantal iteraties: {{value}}',
             minClusterSize: 'Minimale clustergrootte: {{value}}',
-            performanceMetric: 'Prestatiemetingkolom: {{value}}',
+            performanceMetric: 'Uitkomstlabel: {{value}}',
             performanceMetricTooltip:
                 'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
             description: `- Aantal iteraties: {{iterations}}
 - Minimale clustergrootte: {{minClusterSize}}
-- Prestatiemetingkolom: {{performanceMetric}}
+- Uitkomstlabel: {{performanceMetric}}
 - Gegevenstype: {{dataType}}
 `,
         },
         distribution: {
             mainHeading:
-                '6. Testen van clusterverschillen ten opzichte van kenmerken',
-            heading: '"{{variable}}" verdeling over de verschillende clusters:',
+                '6. Verschil clusters mbt. eigenschappen',
+            heading: '"{{variable}}" verdeling per cluster:',
         },
         splittingDataset: {
             heading: '3. Splitsen dataset',
-            description: `Om de kans te verkleinen dat de clusteringmethode ruis detecteert, wordt de dataset opgesplitst in een trainingsset (80%) en een testset (20%). De clusteringmethode wordt eerst getraind op de trainingsset. Vervolgens wordt met behulp van de testset beoordeeld of er sprake is van een statistisch significant signaal in de meest afwijkende clusters.`,
+            description: `Om de kans te verkleinen dat de clusteringmethode ruis detecteert, wordt de dataset opgesplitst in een trainingsset (80%) en een testset (20%). De clusteringmethode wordt eerst getraind op de trainingsset. Vervolgens wordt met behulp van de testset beoordeeld of er sprake is van een statistisch significant signaal in het meest afwijkende cluster.`,
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
-            'Verdeling van kenmerken over clusters',
+            'Eigenschappen per cluster',
         numericalVariableDistributionAcrossClustersAccordeonTitle:
             'Verdeling van numerieke variabelen over clusters',
         clusters: {
@@ -258,7 +258,7 @@ p-waarde : {{p_val}}
         biasedCluster: {
             heading: 'In het cluster met de meeste bias hebben datapunten:',
             accordionTitle:
-                'Open details om vergelijkingen van kenmerken met de rest van de dataset te bekijken',
+                'Eigenschappen meest afwijkende cluster ten opzichte van de rest van de dataset',
             comparison: {
                 less: '{{value}} minder {{feature}} dan in de rest van de dataset.',
                 more: '{{value}} meer {{feature}} dan in de rest van de dataset.',
@@ -286,8 +286,8 @@ p-waarde : {{p_val}}
             label: 'Kies cluster om het aantal datapunten voor weer te geven',
             valueText: 'Aantal datapunten in cluster {{index}}: {{value}}',
         },
-        higherAverage: `De meest bevooroordeelde cluster heeft een statistisch significant hogere gemiddelde bias score dan de rest van de dataset.`,
-        noSignificance: `Geen statistisch significant verschil in gemiddelde bias score tussen de meest bevooroordeelde cluster en de rest van de dataset.`,
+        higherAverage: `Het meest afwijkende cluster heeft statistisch significant andere uitkomstlabels dan de rest van de dataset.`,
+        noSignificance: `Het meest afwijkende cluster heeft statistisch significant geen andere uitkomstlabels dan de rest van de dataset.`,
 
         conclusion: `7. Conclusie en bias rapport`,
         conclusionDescription: `Uit de bovenstaande figuren en statistische tests kan worden geconcludeerd dat:`,
