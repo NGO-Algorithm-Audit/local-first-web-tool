@@ -14,11 +14,13 @@ export default function SimpleTable({
     data,
     showIndex,
     translate,
+    noTableBelowTable,
 }: {
     showIndex: boolean;
     title?: string;
     data: Record<string, string | number>[];
     translate?: boolean;
+    noTableBelowTable?: boolean;
 }) {
     const { t } = useTranslation();
     // limit data to the first 100 rows.
@@ -27,7 +29,9 @@ export default function SimpleTable({
     return (
         <div className={`bg-white border border-gray-200 ${title && 'mb-4'}`}>
             <Table className={`text-xs ${title && 'mb-4'}`}>
-                {title && <TableCaption>{t(title)}</TableCaption>}
+                {!noTableBelowTable && title && (
+                    <TableCaption>{t(title)}</TableCaption>
+                )}
                 <TableHeader>
                     <TableRow className="bg-aaLight">
                         {showIndex && <TableHead></TableHead>}

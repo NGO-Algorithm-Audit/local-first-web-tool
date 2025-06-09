@@ -73,6 +73,7 @@ interface DistributionReport {
     showIndex?: boolean;
     preContent?: string;
     postContent?: string;
+    noTableBelowTable?: boolean;
 }
 export interface DistributionReportProps {
     dataTypes: string;
@@ -178,6 +179,9 @@ export const DistributionReport = (
                                                 title={t(report.titleKey)}
                                                 showIndex={
                                                     report.showIndex ?? false
+                                                }
+                                                noTableBelowTable={
+                                                    report.noTableBelowTable
                                                 }
                                             />
                                             {report.postContent &&

@@ -264,7 +264,8 @@ def run():
                 'reportType': 'table',
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
                 'showIndex' : False,    
-                'data': missingness_dict_df.to_json(orient="records"),                                            
+                'data': missingness_dict_df.to_json(orient="records"),
+                'noTableBelowTable': True                                            
             },
             {
                 'reportType': 'text',
