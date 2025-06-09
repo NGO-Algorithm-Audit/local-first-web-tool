@@ -269,7 +269,8 @@ def run():
             },
             {
                 'reportType': 'text',
-                'textKey': 'syntheticData.missingData'
+                'textKey': 'syntheticData.missingData',
+                'noHTML': True
             },
             {
                 'reportType': 'heading',
