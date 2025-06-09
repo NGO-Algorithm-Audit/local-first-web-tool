@@ -255,11 +255,7 @@ def run():
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.handlingMissingDataTitle' 
-            },
-            {
-                'reportType': 'text',
-                'textKey': 'syntheticData.handlingMissingDataDescription'
-            },            
+            },         
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
