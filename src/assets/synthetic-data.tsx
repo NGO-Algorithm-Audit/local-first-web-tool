@@ -354,6 +354,9 @@ def run():
         'data': synthetic_data.head().to_json(orient="records")
     }))
 
+    setResult(json.dumps({
+        'type': 'export-button',
+    }))
 
     setResult(json.dumps({
         'type': 'heading',

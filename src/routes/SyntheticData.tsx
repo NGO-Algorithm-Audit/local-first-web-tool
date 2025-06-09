@@ -161,18 +161,22 @@ export default function SyntheticDataGeneration() {
                     loading && 'overflow-hidden'
                 )}
             >
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <ExportButton
-                        buttonAlign="right"
-                        clusterInfo={clusterInfo}
-                        data={data}
-                        handleExport={handleExport}
-                        reactToPrintFn={reactToPrintFn}
-                    />
-                )}
-
                 {result.length > 0 ? (
-                    <ComponentMapper items={result} data={data} />
+                    <ComponentMapper
+                        items={result}
+                        data={data}
+                        exportButton={
+                            <div className="flex flex-row gap-2 hideonprint justify-start">
+                                <ExportButton
+                                    buttonAlign={'left'}
+                                    clusterInfo={clusterInfo}
+                                    reactToPrintFn={reactToPrintFn}
+                                    data={data}
+                                    handleExport={handleExport}
+                                />
+                            </div>
+                        }
+                    />
                 ) : loading ? (
                     <LoadingState
                         loadingMessageKey={loadingMessage}
@@ -188,16 +192,6 @@ export default function SyntheticDataGeneration() {
                         </h1>
                         <div className="flex-1" />
                     </>
-                )}
-
-                {initialised && data.data.length > 0 && result.length > 0 && (
-                    <ExportButton
-                        buttonAlign="center"
-                        clusterInfo={clusterInfo}
-                        data={data}
-                        handleExport={handleExport}
-                        reactToPrintFn={reactToPrintFn}
-                    />
                 )}
             </div>
         </main>
