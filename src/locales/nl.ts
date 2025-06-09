@@ -46,7 +46,7 @@ export const nl = {
                         'Selecteer een kolom om de verdeling per cluster te bekijken',
                 },
                 parameters: {
-                    title: 'Parameters',
+                    title: 'Hyperparameters',
                     iterations: 'Iteraties',
                     minClusterSize: 'Minimale clustergrootte',
                     performanceInterpretation: {
@@ -304,7 +304,7 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
         `,
         p_valueTooltip: `p-waarde tooltip`,
         parameters: {
-            heading: '2. Geselecteerde parameters',
+            heading: '2. Geselecteerde hyperparameters',
             iterations: 'Aantal iteraties: {{value}}',
             minClusterSize: 'Minimale clustergrootte: {{value}}',
             performanceMetric: 'Uitkomstlabel: {{value}}',

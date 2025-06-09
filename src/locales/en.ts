@@ -48,7 +48,7 @@ export const en = {
                         'Select a column to show cluster distribution for',
                 },
                 parameters: {
-                    title: 'Parameters',
+                    title: 'Hyperparameters',
                     iterations: 'Iterations',
                     minClusterSize: 'Minimal cluster size',
                     performanceInterpretation: {
@@ -304,7 +304,7 @@ In this example, we analyze which group is most adversely affected by the risk p
 `,
         },
         parameters: {
-            heading: '2. Parameters selected for clustering',
+            heading: '2. Hyperparameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
             minClusterSize: 'Minimal cluster size: {{value}}',
             performanceMetric: 'Outcome label: {{value}}',
