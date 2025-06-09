@@ -20,6 +20,7 @@ import {
     TooltipContent,
 } from './ui/touch-tooltip';
 import Markdown from 'react-markdown';
+import { IconInfoTooltip } from './ui/info-icon-tooltip';
 
 const createFormSchema = (t: (key: string) => string) =>
     z.object({
@@ -133,7 +134,16 @@ export default function SyntheticDataSettings({
                         <legend className="-ml-1 px-1 text-sm font-medium">
                             {t('syntheticData.form.fieldset.sourceDataset')}
                         </legend>
-                        <div className="grid gap-3">
+                        <div className="relative grid gap-3 select-none">
+                            <div className="flex flex-row items-center gap-1 absolute -top-[10px] leading-0 left-4 px-1 bg-white text-sm font-medium">
+                                {t('syntheticData.form.fieldset.dataSet')}
+
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'syntheticData.form.fieldset.dataSetTooltip'
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="file"

@@ -264,11 +264,13 @@ def run():
                 'reportType': 'table',
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
                 'showIndex' : False,    
-                'data': missingness_dict_df.to_json(orient="records"),                                            
+                'data': missingness_dict_df.to_json(orient="records"),
+                'noTableBelowTable': True                                            
             },
             {
                 'reportType': 'text',
-                'textKey': 'syntheticData.missingData'
+                'textKey': 'syntheticData.missingData',
+                'noHTML': True
             },
             {
                 'reportType': 'heading',
@@ -342,11 +344,19 @@ def run():
     }))
 
     setResult(json.dumps({
+        'type': 'text', 
+        'key': 'syntheticData.outputDataDescription'        
+    }))
+
+    setResult(json.dumps({
         'type': 'table', 
         'showIndex': True,
         'data': synthetic_data.head().to_json(orient="records")
     }))
 
+    setResult(json.dumps({
+        'type': 'export-button',
+    }))
 
     setResult(json.dumps({
         'type': 'heading',

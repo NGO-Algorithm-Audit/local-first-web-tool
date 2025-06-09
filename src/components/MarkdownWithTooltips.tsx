@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 interface MarkdownWithTooltipsProps {
     children: string;
     className?: string;
+    noHTML?: boolean;
 }
 
 interface CustomElementData extends ElementData {
@@ -24,12 +25,16 @@ interface CustomElement extends Element {
 export function MarkdownWithTooltips({
     children,
     className,
+    noHTML,
 }: MarkdownWithTooltipsProps) {
+    const rehypePlugins = noHTML
+        ? [rehypeInfoTooltip]
+        : [rehypeRaw, rehypeInfoTooltip];
     return (
         <Markdown
             className={className}
             remarkPlugins={[remarkInfoTooltip, remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeInfoTooltip]}
+            rehypePlugins={rehypePlugins}
             components={{
                 // @ts-expect-error - math is a custom components
                 TooltipWrapper,

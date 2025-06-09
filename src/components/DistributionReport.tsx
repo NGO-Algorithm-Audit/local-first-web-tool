@@ -73,6 +73,8 @@ interface DistributionReport {
     showIndex?: boolean;
     preContent?: string;
     postContent?: string;
+    noTableBelowTable?: boolean;
+    noHTML?: boolean;
 }
 export interface DistributionReportProps {
     dataTypes: string;
@@ -124,6 +126,7 @@ export const DistributionReport = (
                             <MarkdownWithTooltips
                                 key={indexReport}
                                 className="-mt-2 text-gray-800 markdown"
+                                noHTML={report.noHTML ?? false}
                             >
                                 {t(report.textKey, report.params)}
                             </MarkdownWithTooltips>
@@ -178,6 +181,9 @@ export const DistributionReport = (
                                                 title={t(report.titleKey)}
                                                 showIndex={
                                                     report.showIndex ?? false
+                                                }
+                                                noTableBelowTable={
+                                                    report.noTableBelowTable
                                                 }
                                             />
                                             {report.postContent &&

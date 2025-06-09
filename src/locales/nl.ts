@@ -132,6 +132,11 @@ export const nl = {
             },
             fieldset: {
                 sourceDataset: 'Input',
+                dataSet: 'Dataset',
+                dataSetTooltip: `Bereid je data voor zodat: 
+                    - missende waarden zijn verwijderd of vervangen;
+                    - alle kolommen (behalve de uitkomstlabel-kolom) dezelfde datatypes hebben, numeriek of categorisch;
+                    - de uitkomstlabel-kolom numeriek is`,
                 sdgMethod: {
                     title: 'Methode',
                     cart: 'CART',
@@ -190,17 +195,17 @@ export const nl = {
         disclosureProtectionTitle: 'Privacy metrieken',
         disclosureProtectionDescription: `De onthullings beschermings metriek meet het aandeel synthetische datapunten die te veel lijkt op echte datapunten (binnen een vooraf gedefinieerde drempelwaarde), wat een risico op herleidbaarheid naar persoonsgegevens vormt. Een lage 'risk_rate' en hoge 'disclosure_protection_rate' duidt op een goede bescherming tegen het onbedoeld prijsgeven van persoonsgegevens.`,
         outputDataTitle: '5. Download synthetische data en evaluatierapport',
+        outputDataDescription: 'Preview van gegenereerde synthetische data',
         moreInfoTitle: '6. Meer informatie',
         meanSquaredError:
-                    'Gemiddeld kwadraatverschil tussen voorspelde en werkelijke waarden, dat de nauwkeurigheid van de voorspellingen van een model kwantificeert door grotere fouten zwaarder te bestraffen',
+            'Gemiddeld kwadraatverschil tussen voorspelde en werkelijke waarden, dat de nauwkeurigheid van de voorspellingen van een model kwantificeert door grotere fouten zwaarder te bestraffen',
         meanAbsoluteError:
-                    'Gemiddelde grootte van de fouten tussen voorspelde en werkelijke waarden, die een eenvoudige beoordeling van de nauwkeurigheid van het model biedt zonder de nadruk te leggen op grote fouten',
-        R2:
-                    'Kwantificeert hoe goed de voorspellingen van een model overeenkomen met de werkelijke gegevens door het aandeel van de variantie in de doelvariabele te meten dat door het model wordt verklaard',
+            'Gemiddelde grootte van de fouten tussen voorspelde en werkelijke waarden, die een eenvoudige beoordeling van de nauwkeurigheid van het model biedt zonder de nadruk te leggen op grote fouten',
+        R2: 'Kwantificeert hoe goed de voorspellingen van een model overeenkomen met de werkelijke gegevens door het aandeel van de variantie in de doelvariabele te meten dat door het model wordt verklaard',
         accuracyScore:
-                    'Meet het aandeel correct voorspelde gevallen ten opzichte van het totaal, en geeft zo een algemene beoordeling van de prestaties van het classificatiemodel',
+            'Meet het aandeel correct voorspelde gevallen ten opzichte van het totaal, en geeft zo een algemene beoordeling van de prestaties van het classificatiemodel',
         weightedF1Score:
-                    'Het harmonisch gemiddelde van precisie en recall, berekend per klasse en gewogen naar het aantal echte gevallen per klasse, wat een metriek biedt voor datasets met ongelijke klassenverdeling',
+            'Het harmonisch gemiddelde van precisie en recall, berekend per klasse en gewogen naar het aantal echte gevallen per klasse, wat een metriek biedt voor datasets met ongelijke klassenverdeling',
         correlationDifference: 'Correlatie verschil: {{correlationDifference}}',
         moreInfo:
             '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (Nederlandse organisaties)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',

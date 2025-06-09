@@ -132,6 +132,11 @@ export const en = {
             },
             fieldset: {
                 sourceDataset: 'Input',
+                dataSet: 'Dataset',
+                dataSetTooltip: `Preprocess your data such that: 
+                    - missing values are removed or replaced;
+                    - all columns (except your outcome label column) should have the same datatypes, e.g., numerical or categorical;
+                    - the outcome label column is numerical`,
                 sdgMethod: {
                     title: 'Method',
                     cart: 'CART',
@@ -231,17 +236,17 @@ For classification (when the target is categorical):
         disclosureProtectionTitle: 'Privacy metrics',
         disclosureProtectionDescription: `The disclosure protection metric measures the proportion of synthetic data points that closely resemble real data points (within a predefined threshold), posing a risk of traceability to personal data. A low 'risk\_rate' and a high 'disclosure\_protection\_rate' indicate effective protection against the unintentional exposure of personal data.`,
         outputDataTitle: '5. Download synthetic data and evaluation report',
+        outputDataDescription: 'Preview of generated synthetic data',
         moreInfoTitle: '6. More information',
         meanSquaredError:
-                    'Average squared difference between predicted and actual values, quantifying the accuracy of a model’s predictions by penalizing larger errors more heavily',
+            'Average squared difference between predicted and actual values, quantifying the accuracy of a model’s predictions by penalizing larger errors more heavily',
         meanAbsoluteError:
-                    'Average magnitude of the errors between predicted and actual values, providing a straightforward assessment of model accuracy without emphasizing large errors',
-        R2:
-                    'Quantifies how well a model’s predictions match the actual data by measuring the proportion of variance in the target variable explained by the model',
+            'Average magnitude of the errors between predicted and actual values, providing a straightforward assessment of model accuracy without emphasizing large errors',
+        R2: 'Quantifies how well a model’s predictions match the actual data by measuring the proportion of variance in the target variable explained by the model',
         accuracyScore:
-                    'Measures the proportion of correctly predicted instances out of the total instances, providing an overall assessment of a model’s performance in classification tasks',
+            'Measures the proportion of correctly predicted instances out of the total instances, providing an overall assessment of a model’s performance in classification tasks',
         weightedF1Score:
-                    'Harmonic mean of precision and recall, calculated for each class and weighted by the class’s support (number of true instances), providing a balanced performance measure for imbalanced datasets',
+            'Harmonic mean of precision and recall, calculated for each class and weighted by the class’s support (number of true instances), providing a balanced performance measure for imbalanced datasets',
         correlationDifference:
             'Correlation difference: {{correlationDifference}}',
         univariateText:
