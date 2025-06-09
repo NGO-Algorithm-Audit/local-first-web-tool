@@ -195,6 +195,7 @@ export const nl = {
         disclosureProtectionTitle: 'Privacy metrieken',
         disclosureProtectionDescription: `De onthullings beschermings metriek meet het aandeel synthetische datapunten die te veel lijkt op echte datapunten (binnen een vooraf gedefinieerde drempelwaarde), wat een risico op herleidbaarheid naar persoonsgegevens vormt. Een lage 'risk_rate' en hoge 'disclosure_protection_rate' duidt op een goede bescherming tegen het onbedoeld prijsgeven van persoonsgegevens.`,
         outputDataTitle: '5. Download synthetische data en evaluatierapport',
+        outputDataDescription: 'Preview van gegenereerde synthetische data',
         moreInfoTitle: '6. Meer informatie',
         meanSquaredError:
             'Gemiddeld kwadraatverschil tussen voorspelde en werkelijke waarden, dat de nauwkeurigheid van de voorspellingen van een model kwantificeert door grotere fouten zwaarder te bestraffen',

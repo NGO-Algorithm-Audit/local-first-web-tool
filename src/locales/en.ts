@@ -236,6 +236,7 @@ For classification (when the target is categorical):
         disclosureProtectionTitle: 'Privacy metrics',
         disclosureProtectionDescription: `The disclosure protection metric measures the proportion of synthetic data points that closely resemble real data points (within a predefined threshold), posing a risk of traceability to personal data. A low 'risk\_rate' and a high 'disclosure\_protection\_rate' indicate effective protection against the unintentional exposure of personal data.`,
         outputDataTitle: '5. Download synthetic data and evaluation report',
+        outputDataDescription: 'Preview of generated synthetic data',
         moreInfoTitle: '6. More information',
         meanSquaredError:
             'Average squared difference between predicted and actual values, quantifying the accuracy of a model’s predictions by penalizing larger errors more heavily',

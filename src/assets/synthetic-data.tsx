@@ -344,6 +344,11 @@ def run():
     }))
 
     setResult(json.dumps({
+        'type': 'text', 
+        'key': 'syntheticData.outputDataDescription'        
+    }))
+
+    setResult(json.dumps({
         'type': 'table', 
         'showIndex': True,
         'data': synthetic_data.head().to_json(orient="records")
