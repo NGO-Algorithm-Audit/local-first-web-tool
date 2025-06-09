@@ -92,10 +92,10 @@ export const nl = {
         demo: {
             heading: 'Informatie over demodataset',
             description:
-                'Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende variablen:\n  \n&nbsp;&nbsp;\n\n',
+                'Een subset van de [Law School Admission Bar](https://www.kaggle.com/datasets/danofer/law-school-admissions-bar-passage)* dataset wordt gebruikt als demo. Synthetische data worden gegenereerd voor de volgende variablen:',
             'post.description':
-                '<br>De CART-methode wordt gebruikt om synthetische gegevens te genereren.\n CART produceert doorgaan een goede kwaliteit synthetische data, maar werkt minder goed voor data met categorische data met meer dan 20 categorieën. Gebruik in dit geval Gaussian Copula. \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.',
-            'data.column.Variable_name': 'Variabele name',
+                '<br>De CART-methode wordt gebruikt om synthetische gegevens te genereren.\n CART produceert doorgaan een goede kwaliteit synthetische data, maar werkt minder goed voor categorische data met meer dan 20 categorieën. Gebruik in dit geval Gaussian Copula. \n&nbsp;&nbsp;\n\n*Het oorspronkelijke artikel is [hier](https://files.eric.ed.gov/fulltext/ED469370.pdf) te vinden.',
+            'data.column.Variable_name': 'Naam variabele',
             'data.sex': 'sex',
             'data.race1': 'race1',
             'data.ugpa': 'ugpa',
@@ -121,7 +121,7 @@ export const nl = {
             'data.column.Values.bar':
                 'geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd',
         },
-        exportToPDF: 'Download evulatie rapport als pdf',
+        exportToPDF: 'Download evaluatierapport als pdf',
         exportToJSON: 'Download synthetische data als json',
         exportToCSV: 'Download synthetische data als csv',
         form: {
@@ -133,23 +133,20 @@ export const nl = {
             fieldset: {
                 sourceDataset: 'Input',
                 dataSet: 'Dataset',
-                dataSetTooltip: `Bereid je data voor zodat: 
-                    - missende waarden zijn verwijderd of vervangen;
-                    - alle kolommen (behalve de uitkomstlabel-kolom) dezelfde datatypes hebben, numeriek of categorisch;
-                    - de uitkomstlabel-kolom numeriek is`,
+                dataSetTooltip: `Alleen categorische, numerieke of tijdsdata kunnen worden verwerkt. Datasets mogen maximaal 8 kolommen bevatten, dienen een header te hebben met kolomnamen en hoeven geen index-kolom te hebben`,
                 sdgMethod: {
                     title: 'Methode',
                     cart: 'CART',
                     gc: 'Gaussian Copula',
                     tooltip:
-                        'In principe wordt de CART-methode gebruikt om synthetische data te genereren. CART levert over het algemeen synthetische data van hoge kwaliteit, maar werkt mogelijk niet goed bij datasets met categorische variabelen met meer dan 20 categorieën. Gebruik in die gevallen de Gaussian Copula.',
+                        'Standaard wordt de CART-methode gebruikt om synthetische data te genereren. CART levert over het algemeen synthetische data van hoge kwaliteit, maar werkt mogelijk niet goed bij datasets met categorische variabelen met meer dan 20 categorieën. Gebruik in die gevallen de Gaussian Copula',
                 },
                 nanTreatment: {
                     title: 'NaN Waarden Behandeling',
                     drop: 'Verwijder rijen met NaN waarden',
                     impute: 'Vervang NaN waarden',
                     tooltip:
-                        'Bij gebruik van Gaussian Copula kunt u kiezen hoe u omgaat met ontbrekende waarden (NaN waarden) in uw dataset. Het verwijderen van rijen met NaN waarden verwijdert deze volledig, terwijl imputatie deze vervangt door gemiddelde waarden voor numerieke kolommen en modus waarden voor categorische kolommen.',
+                        'Bij gebruik van Gaussian Copula kunt u kiezen hoe u omgaat met ontbrekende waarden (NaN waarden) in uw dataset. Het verwijderen van rijen met NaN waarden verwijdert deze volledig, terwijl imputatie deze vervangt door gemiddelde waarden voor numerieke kolommen en modus waarden voor categorische kolommen',
                 },
                 samples: 'Aantal synthetische datapunten',
             },
@@ -172,30 +169,73 @@ export const nl = {
         bivariateDistributionRealData: 'Bivariate distributies',
         univariateDistributionSyntheticData: 'Univariate distributies',
         bivariateDistributionSyntheticData: 'Bivariate distributies',
-        correlationRealdata: 'Correlatie matrix',
-        correlationSyntheticData: 'Correlatie matrix',
+        correlationRealdata: 'Correlatiematrix',
+        correlationSyntheticData: 'Correlatiematrix',
         dataSetPreview: {
             heading: '0. Voorbeeld van de data',
         },
         columnsInDataset: '1. Detectie van datatypes',
-        handlingMissingDataTitle: '2. Handling missing data',
-        handlingMissingDataDescription: 'Handling missing data description',
-        handlingMissingDataTableTitle: 'Columns with missing data',
+        handlingMissingDataTitle: '2. Omgang missende data',
+        handlingMissingDataDescription: 'Beschrijving omgang missende data',
+        handlingMissingDataTableTitle: 'Kolommen met missende data',
         _explanatoryDataAnalysisTitle: '3. Explanatory data analyse',
-        cartModelTitle: '2. Methode: CART model',
+        cartModelTitle: '3. Methode: CART model',
         gaussianCopulaModelTitle: '3. Methode: Gaussian Copula model',
         cartModelDescription:
-            'De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerkwaarden. Voor numerieke data voorspelt de methode gemiddelden, en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om nieuwe synthetische gegevenspunten te creëren.',
-        evaluationOfGeneratedDataTitle: '4. Evaluatie van gegenereerde data',
-        distributionsTitle: '4.1 Distributie',
+            'De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerken. Voor numerieke data voorspelt de methode gemiddelden en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om synthetische datapunten te creëren.\n \n {{samples}} synthetische datapunten zijn gegenereerd.',
+        evaluationOfGeneratedDataTitle: '4. Evaluatie van gegenereerde synthetische data',
+        distributionsTitle: '4.1 Distributies',
         diagnosticsReportTitle: '4.2. Diagnostisch rapport',
-        diagnosticsTitle: 'Diagnostische Resultaten',
-        correlationMatrixTitle: 'Correlatie matrix',
-        efficacyMetricsTitle: 'Doeltreffendheid metrieken',
+        diagnosticsTitle: 'Diagnostische resultaten',
+        diagnosticsReportDescription: `Voor iedere kolom worden diagnostische resultaten berekend voor de kwaliteit van de gegenereerde synthetische data. De berekende statistieken zijn afhankelijk van het type data.
+
+Voor numerieke- of tijddata worden de volgende metrieken berekend:
+- {tooltip:syntheticData.missingValueSimilarity}Overeenkomst ontbrekende waarden{/tooltip}
+- {tooltip:syntheticData.rangeCoverage}Bereik dekkend{/tooltip}
+- {tooltip:syntheticData.boundaryAdherenc}Grens eerbiediging{/tooltip}
+- {tooltip:syntheticData.statisticSimilarity}Statistische overeenkomst{/tooltip}
+- {tooltip:syntheticData.kolmogorovSmirnovComplement}Kolmogorov–Smirnov (KS) complement{/tooltip}
+
+Voor categorische data worden de volgende metrieken berekend:
+- {tooltip:syntheticData.missingValueSimilarity}Overeenkomst ontbrekende waarden{/tooltip}
+- {tooltip:syntheticData.categoryCoverage}Categorie dekking{/tooltip}
+- {tooltip:syntheticData.categoryAdherence}Categorie eerbiediging{/tooltip}
+- {tooltip:syntheticData.totalVariationComplement}Totale variatie (TV) complement{/tooltip}
+
+💯 Bij goede kwaliteit synthetische data liggen alle waarden in de buurt van de 1.0, maar zeker hoger dan 0.85.`,
+        missingValueSimilarity:
+            'Vergelijkt of het aandeel missende waarden in de synthetische data gelijk is aan dat in de echte data',
+        rangeCoverage:
+            'Bepaalt per kolom of synthetische data het volledige bereik van waarden uit de echte data dekt',
+        boundaryAdherenc:
+            'Bepaalt per kolom of synthetische data binnen de minimum- en maximumwaarden van de echte data blijven. Geeft het percentage rijen synthetische data dat binnen de grenzen valt',
+        statisticSimilarity:
+            'Vergelijkt per kolom gemiddelde, standaarddeviatie en mediaan tussen echte en synthetische data',
+        kolmogorovSmirnovComplement:
+            'Meet het maximale verschil tussen de cumulatieve distributiefuncties (CDF’s) van numerieke kolommen in de synthetische en echte dataset',
+        categoryCoverage:
+            'Bepaalt per kolom of de synthetische data alle categorieën uit de echte data bevat',
+        categoryAdherence:
+            'Bepaalt per kolom of synthetische data dezelfde categorieën bevat als de echte data',
+        totalVariationComplement:
+            'Meet het maximale verschil tussen de cumulatieve distributiefuncties (CDF’s) van categorische kolommen in de synthetische en echte dataset',
+        correlationMatrixTitle: 'Correlatiematrix',
+        correlationMatrixDescription: `De onderstaande matrices tonen één-op-één correlaties tussen variabelen in de echte en synthetische data. Groene cellen vertegenwoordigen zwakke lineaire relaties, terwijl rode cellen sterke lineaire relaties aangeven. De kleurpatronen in beide matrices zouden grote overeenkomsten moeten hebben.`,
+        efficacyMetricsTitle: 'Doeltreffendheid-metrieken',
+        efficacyMetricsDescription: `Doeltreffendheid-metrieken vergelijken de echte en synthetische datasets voor voorspellende taken. Het idee is om een voorspellend model te trainen op synthetische data en de prestaties van het model te evalueren op de echte data. Het type doeltreffendheid-metriek hangt af van de taak:
+
+Voor regressie (doelvariabele is numeriek):
+- {tooltip:syntheticData.meanSquaredError}Mean squared error (MSE){/tooltip}
+- {tooltip:syntheticData.meanAbsoluteError}Mean Absolute Error (MAE){/tooltip}
+- {tooltip:syntheticData.R2}R² Score{/tooltip}
+
+Voor classificatie (doelvariabele is categorisch):
+- {tooltip:syntheticData.accuracyScore}Accuracy Score{/tooltip}
+- {tooltip:syntheticData.weightedF1Score}Weighted F1 Score{/tooltip}`,
         disclosureProtectionTitle: 'Privacy metrieken',
-        disclosureProtectionDescription: `De onthullings beschermings metriek meet het aandeel synthetische datapunten die te veel lijkt op echte datapunten (binnen een vooraf gedefinieerde drempelwaarde), wat een risico op herleidbaarheid naar persoonsgegevens vormt. Een lage 'risk_rate' en hoge 'disclosure_protection_rate' duidt op een goede bescherming tegen het onbedoeld prijsgeven van persoonsgegevens.`,
+        disclosureProtectionDescription: `De *onthullings beschermings metriek* meet het aandeel synthetische datapunten die te veel lijkt op echte datapunten (binnen een vooraf gedefinieerde drempelwaarde), wat een risico op herleidbaarheid naar persoonsgegevens vormt. Een lage 'risk_rate' en hoge 'disclosure_protection_rate' duidt op een goede bescherming tegen het onbedoeld prijsgeven van persoonsgegevens.`,
         outputDataTitle: '5. Download synthetische data en evaluatierapport',
-        outputDataDescription: 'Preview van gegenereerde synthetische data',
+        outputDataDescription: 'Preview van gegenereerde synthetische data:',
         moreInfoTitle: '6. Meer informatie',
         meanSquaredError:
             'Gemiddeld kwadraatverschil tussen voorspelde en werkelijke waarden, dat de nauwkeurigheid van de voorspellingen van een model kwantificeert door grotere fouten zwaarder te bestraffen',
@@ -207,8 +247,26 @@ export const nl = {
         weightedF1Score:
             'Het harmonisch gemiddelde van precisie en recall, berekend per klasse en gewogen naar het aantal echte gevallen per klasse, wat een metriek biedt voor datasets met ongelijke klassenverdeling',
         correlationDifference: 'Correlatie verschil: {{correlationDifference}}',
+        univariateText:
+            '<br>Onderstaande figuren tonen de verdeling voor iedere variabele. De synthetische data is van hoge kwaliteit wanneer de verdelingen nagenoeg gelijk zijn.',
+        bivariateText:
+            'Onderstaande figuren tonen de verschillen distributies voor een combinatie van twee variabelen. Voor de vergelijking van twee categorische variabelen worden staafdiagrammen getoond. Voor de vergelijking van een numerieke en een categorische variabele wordt een zogenaamd [violin plot](https://en.wikipedia.org/wiki/Violin_plot) gebruikt. Voor de vergelijking van twee numerieke variabelen wordt een [LOESS-plot](https://en.wikipedia.org/wiki/Local_regression) gemaakt. Voor alle plots geldt: de synthetische data zijn van hoge kwaliteit wanneer de vormen van de distributies nagenoeg overeenkomen.',
         moreInfo:
             '&nbsp;&nbsp;\n  \n  \n  \nWil je meer weten over synthetische data?\n  \n  \n  \n- [python-synthpop op Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app op Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetische Data: wat, waarom en hoe?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Kennis Netwerk Synthetische Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (Nederlandse organisaties)\n- [Synthetische data portaal van DUO](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
+        missingData: `Voor {tooltip:syntheticData.missingDataMARTooltip}Missing At Random (MAR){/tooltip} en {tooltip:syntheticData.missingDataMNARTooltip}Missing Not At Random (MNAR){/tooltip} data, 
+worden missende data vervangen voor schattingen. Voor {tooltip:syntheticData.missingDataMCARTooltip}Missing Completely At Random (MCAR){/tooltip} worden missende data verwijderd.\n \n Meer informatie over concepten MCAR, MAR en MNAR kan worden gevonden in het boek [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/sec-MCAR.html) van prof. Stef van Buuren, Universiteit Utrecht.`,
+        missingDataMARTooltip: `**MAR (Missing At Random)**:
+- De kans dat data ontbreken is gerelateerd aan de waargenomen gegevens, maar niet aan de ontbrekende gegevens zelf. Het ontbreken kan worden voorspeld door andere variabelen in de dataset;
+- Voorbeeld: de testresultaten van studenten ontbreken, maar het ontbreken hangt samen met hun aanwezigheid;
+- MAR data worden geschat`,
+        missingDataMNARTooltip: `**MNAR (Missing Not At Random)**:
+- De kans dat gegevens ontbreken is gerelateerd aan de ontbrekende gegevens zelf. Er is een systematisch patroon in het ontbreken dat verband houdt met de niet-waargenomen gegevens;
+- Voorbeeld: patiënten met ernstigere symptomen rapporteren hun symptomen minder vaak, wat leidt tot ontbrekende gegevens die verband houden met de ernst van de symptomen;
+- MNAR data worden geschat`,
+        missingDataMCARTooltip: `**MCAR (Missing Completely At Random)**:
+- De kans dat gegevens ontbreken is volledig onafhankelijk van zowel waargenomen als niet-waargenomen gegevens. Er is geen systematisch patroon in het ontbreken van de data;
+- Voorbeeld: een enquêterespondent slaat een vraag over door een drukfout;
+- MCAR data worden verwijderd`,
     },
     biasAnalysis: {
         dataSetPreview: {

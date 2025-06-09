@@ -133,10 +133,7 @@ export const en = {
             fieldset: {
                 sourceDataset: 'Input',
                 dataSet: 'Dataset',
-                dataSetTooltip: `Preprocess your data such that: 
-                    - missing values are removed or replaced;
-                    - all columns (except your outcome label column) should have the same datatypes, e.g., numerical or categorical;
-                    - the outcome label column is numerical`,
+                dataSetTooltip: `Only categorical, numerical, or time series data can be processed. Datasets may contain a maximum of 8 columns, must have a header with column names and don't require an index column`,
                 sdgMethod: {
                     title: 'Method',
                     cart: 'CART',
@@ -155,7 +152,7 @@ export const en = {
             },
             actions: {
                 tryItOut: 'Demo dataset',
-                runGeneration: 'Run synthetic data generation',
+                runGeneration: 'Start synthetic data generation',
                 analyzing: 'Analyzing...',
                 initializing: 'Initialising...',
             },
@@ -183,27 +180,27 @@ export const en = {
         cartModelTitle: '3. Method: CART model',
         gaussianCopulaModelTitle: '3. Method: Gaussian Copula model',
         cartModelDescription:
-            'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.',
-        evaluationOfGeneratedDataTitle: '4. Evaluation of generated data',
+            'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.\n \n {{samples}} synthetic data points are generated.',
+        evaluationOfGeneratedDataTitle: '4. Evaluation of generated synthetic data',
         distributionsTitle: '4.1 Distributions',
-        diagnosticsReportTitle: '4.2. Diagnostic Report',
+        diagnosticsReportTitle: '4.2. Diagnostic report',
         diagnosticsTitle: 'Diagnostic Results',
         diagnosticsReportDescription: `For each column, diagnostic results are computed for the quality of the generated synthetic data. The computed metrics depend on the type of data.
 
-For numerical (or datetime) columns the following metrics are computed:
+For numerical or datetime columns the following metrics are computed:
 - {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
 - {tooltip:syntheticData.rangeCoverage}Range coverage{/tooltip}
 - {tooltip:syntheticData.boundaryAdherenc}Boundary adherence{/tooltip}
 - {tooltip:syntheticData.statisticSimilarity}Statistic similarity{/tooltip}
 - {tooltip:syntheticData.kolmogorovSmirnovComplement}Kolmogorov–Smirnov (KS) complement{/tooltip}
 
-For categorical (or boolean) columns the following metrics are computed:
+For categorical columns the following metrics are computed:
 - {tooltip:syntheticData.missingValueSimilarity}Missing value similarity{/tooltip}
 - {tooltip:syntheticData.categoryCoverage}Category coverage{/tooltip}
 - {tooltip:syntheticData.categoryAdherence}Category adherence{/tooltip}
 - {tooltip:syntheticData.totalVariationComplement}Total variation (TV) complement{/tooltip}
 
-💯 All values need to be close to 1.0 `,
+💯 For high-quality synthetic data, all values should be close to 1.0, but at least higher than 0.85.`,
         missingValueSimilarity:
             'Compares whether the synthetic data has the same proportion of missing values as the real data for a given column',
         rangeCoverage:
@@ -221,9 +218,9 @@ For categorical (or boolean) columns the following metrics are computed:
         totalVariationComplement:
             'Computes the similarity of a real and synthetic categorical column in terms of the column shapes, i.e., the marginal distribution or 1D histogram of the column.',
         correlationMatrixTitle: 'Correlation matrix',
-        correlationMatrixDescription: `The matrices below display the pairwise correlations in the original and synthetic data. Green cells represent weak pairwise correlations, while red cells denote strong pairwise correlations. The color patterns in the two matrices should appear identical.`,
+        correlationMatrixDescription: `The matrices below display the pairwise correlations in the original and synthetic data. Green cells represent weak pairwise correlations, while red cells denote strong pairwise correlations. The color patterns in the two matrices should appear roughly similar.`,
         efficacyMetricsTitle: 'Efficacy metrics',
-        efficacyMetricsDescription: `Efficacy metrics comparing real and synthetic datasets for downstream predictive tasks. The idea is to train a predictive model on synthetic data and evaluate its performance on real data. The type of metrics computed depends on the task:
+        efficacyMetricsDescription: `Efficacy metrics compare real and synthetic datasets for predictive tasks. The idea is to train a predictive model on synthetic data and evaluate the model's performance on real data. The type of efficacy metric depends on the task:
 
 For regression (when the target is numerical):
 - {tooltip:syntheticData.meanSquaredError}Mean squared error (MSE){/tooltip}
@@ -234,9 +231,9 @@ For classification (when the target is categorical):
 - {tooltip:syntheticData.accuracyScore}Accuracy Score{/tooltip}
 - {tooltip:syntheticData.weightedF1Score}Weighted F1 Score{/tooltip}`,
         disclosureProtectionTitle: 'Privacy metrics',
-        disclosureProtectionDescription: `The disclosure protection metric measures the proportion of synthetic data points that closely resemble real data points (within a predefined threshold), posing a risk of traceability to personal data. A low 'risk\_rate' and a high 'disclosure\_protection\_rate' indicate effective protection against the unintentional exposure of personal data.`,
+        disclosureProtectionDescription: `The *disclosure protection metric* measures the proportion of synthetic data points that closely resemble real data points (within a predefined threshold), posing a risk of traceability to personal data. A low 'risk\_rate' and a high 'disclosure\_protection\_rate' indicate effective protection against the unintentional exposure of personal data.`,
         outputDataTitle: '5. Download synthetic data and evaluation report',
-        outputDataDescription: 'Preview of generated synthetic data',
+        outputDataDescription: 'Preview of generated synthetic data:',
         moreInfoTitle: '6. More information',
         meanSquaredError:
             'Average squared difference between predicted and actual values, quantifying the accuracy of a model’s predictions by penalizing larger errors more heavily',
@@ -250,28 +247,25 @@ For classification (when the target is categorical):
         correlationDifference:
             'Correlation difference: {{correlationDifference}}',
         univariateText:
-            '<br>{{samples}} synthetic data points are generated using CART. The figures below display the value frequency for each variable. The synthetic data is of high quality when the frequencies are approximately the same.',
+            '<br>The figures below display the distribution for each variable. The synthetic data are of high quality when the distributions are roughly the same.',
         bivariateText:
-            'The figures below display the differences in value frequency for a combination of variables. For comparing two categorical variables, bar charts are plotted. For comparing a numerical and a categorical variables, a so called [violin plot](https://en.wikipedia.org/wiki/Violin_plot) is shown. For comparing two numercial variables, a [LOESS plot](https://en.wikipedia.org/wiki/Local_regression) is created. For all plots holds: the synthetic data is of high quality when the shape of the distributions in the synthetic data equal the distributions in the real data.',
+            'The figures below display the differences in distributions for a combination of two variables. For comparing two categorical variables, bar charts are plotted. For comparing a numerical and a categorical variables, a so called [violin plot](https://en.wikipedia.org/wiki/Violin_plot) is shown. For comparing two numercial variables, a [LOESS plot](https://en.wikipedia.org/wiki/Local_regression) is created. For all plots holds: the synthetic data is of high quality when the shape of the distributions are roughly the same.',
         moreInfo:
             'Do you want to learn more about synthetic data?\n  \n  \n  \n- [python-synthpop on Github](https://github.com/NGO-Algorithm-Audit/python-synthpop)\n- [local-first web app on Github](https://github.com/NGO-Algorithm-Audit/local-first-web-tool/tree/main)\n- [Synthetic Data: what, why and how?](https://royalsociety.org/-/media/policy/projects/privacy-enhancing-technologies/Synthetic_Data_Survey-24.pdf)\n- [Knowledge Network Synthetic Data](https://online.rijksinnovatiecommunity.nl/groups/399-kennisnetwerk-synthetischedata/welcome) (Dutch public organizations)\n- [Synthetic data portal of Dutch Executive Agency for Education](https://duo.nl/open_onderwijsdata/footer/synthetische-data.jsp) (DUO)\n- [CART: synthpop resources](https://synthpop.org.uk/resources.html)\n- [Gaussian Copula - Synthetic Data Vault](https://docs.sdv.dev/sdv)',
         missingData: `For {tooltip:syntheticData.missingDataMARTooltip}Missing At Random (MAR){/tooltip} and {tooltip:syntheticData.missingDataMNARTooltip}Missing Not At Random (MNAR){/tooltip} data, 
-we recommend to impute the missing data. For {tooltip:syntheticData.missingDataMCARTooltip}Missing Completely At Random (MCAR){/tooltip}, we recommend to remove the missing data.`,
+missing data are imputed. For {tooltip:syntheticData.missingDataMCARTooltip}Missing Completely At Random (MCAR){/tooltip}, missing data is removed.\n \n More information about the concepts MCAR, MAR en MNAR can be found in the book [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/sec-MCAR.html) by prof. Stef van Buuren, Utrecht University.`,
         missingDataMARTooltip: `**MAR (Missing At Random)**:
-- The probability of data being missing is related to the observed data but not the missing data itself.
-- The missingness can be predicted by other variables in the dataset.
-- Example: Students' test scores are missing, but the missingness is related to their attendance records.
-- Recommendation: impute missing data.`,
+- The probability of data being missing is related to the observed data but not the missing data itself. The missingness can be predicted by other variables in the dataset;
+- Example: students' test scores are missing, but the missingness is related to their attendance records;
+- MAR data are imputed`,
         missingDataMNARTooltip: `**MNAR (Missing Not At Random)**:
-- The probability of data being missing is related to the missing data itself. 
-- There is a systematic pattern to the missingness that is related to the unobserved data.
-- Example: Patients with more severe symptoms are less likely to report their symptoms, leading to missing data that is related to the severity of the symptoms.
-- Recommendation: impute missing data.`,
+- The probability of data being missing is related to the missing data itself. There is a systematic pattern to the missingness that is related to the unobserved data;
+- Example: patients with more severe symptoms are less likely to report their symptoms, leading to missing data that is related to the severity of the symptoms;
+- MNAR data are imputed`,
         missingDataMCARTooltip: `**MCAR (Missing Completely At Random)**:
-- The probability of data being missing is completely independent of both observed and unobserved data. 
-- There is no systematic pattern to the missingness.
-- Example: A survey respondent accidentally skips a question due to a printing error.
-- Recommendation: remove missing data.`,
+- The probability of data being missing is completely independent of both observed and unobserved data. There is no systematic pattern to the missingness;
+- Example: a survey respondent accidentally skips a question due to a printing error;
+- MCAR data are removed`,
     },
 
     biasAnalysis: {
