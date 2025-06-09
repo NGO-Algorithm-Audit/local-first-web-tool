@@ -116,10 +116,10 @@ export const nl = {
 
             'data.column.Values.sex': '1 (man), 2 (vrouw)',
             'data.column.Values.race':
-                'aziatisch, afrikaans, latino, westers, anders',
+                'Aziatisch, Afro-amerikaans, Latijs-amerikaans, Westers, anders',
             'data.column.Values.ugpa': '1-4',
             'data.column.Values.bar':
-                'geslaagd 1e keer, geslaagd 2e keer, gezakt, niet-afgestudeerd',
+                'Geslaagd 1e keer, Geslaagd 2e keer, Gezakt, Niet-afgestudeerd',
         },
         exportToPDF: 'Download evaluatierapport als pdf',
         exportToJSON: 'Download synthetische data als json',
