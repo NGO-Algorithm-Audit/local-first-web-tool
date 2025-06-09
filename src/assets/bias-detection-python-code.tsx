@@ -471,7 +471,8 @@ def run():
 
         dropdownCategories = []
         for i, column in enumerate(X_test.columns):
-            dropdownCategories.append(column)
+            if column != bias_score:
+                dropdownCategories.append(column)
 
         # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
         n_vars = len(variables)
@@ -521,7 +522,9 @@ def run():
             print("Statistically significant differences in means found.")
         else:
             # Create subplots for each column
-            columns_to_analyze = decoded_X_test.columns[:-1]  # Exclude 'cluster_label' column
+            columns_to_analyze = [col for col in decoded_X_test.columns if col not in [bias_score, "cluster_label"]]
+
+
             rows = (len(columns_to_analyze) + 2) // 3  # Calculate the number of rows needed
             print(f"rows: {rows}")
 
