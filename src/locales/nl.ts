@@ -221,8 +221,8 @@ Voor categorische data worden de volgende metrieken berekend:
             'Meet het maximale verschil tussen de cumulatieve distributiefuncties (CDF’s) van categorische kolommen in de synthetische en echte dataset',
         correlationMatrixTitle: 'Correlatiematrix',
         correlationMatrixDescription: `De onderstaande matrices tonen één-op-één correlaties tussen variabelen in de echte en synthetische data. Groene cellen vertegenwoordigen zwakke lineaire relaties, terwijl rode cellen sterke lineaire relaties aangeven. De kleurpatronen in beide matrices zouden grote overeenkomsten moeten hebben.`,
-        efficacyMetricsTitle: 'Doeltreffendheid-metrieken',
-        efficacyMetricsDescription: `Doeltreffendheid-metrieken vergelijken de echte en synthetische datasets voor voorspellende taken. Het idee is om een voorspellend model te trainen op synthetische data en de prestaties van het model te evalueren op de echte data. Het type doeltreffendheid-metriek hangt af van de taak:
+        efficacyMetricsTitle: 'Effectiviteitsmetrieken',
+        efficacyMetricsDescription: `Effectiviteitsmetrieken vergelijken de echte en synthetische datasets voor voorspellende taken. Het idee is om een voorspellend model te trainen op synthetische data en de prestaties van het model te evalueren op de echte data. Het type effectiviteitsmetriek hangt af van de taak:
 
 Voor regressie (doelvariabele is numeriek):
 - {tooltip:syntheticData.meanSquaredError}Mean squared error (MSE){/tooltip}
