@@ -32,14 +32,14 @@ export const nl = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Bereid je data voor zodat: 
                     - missende waarden zijn verwijderd of vervangen;
-                    - alle kolommen (behalve de uitkomstlabel-kolom) dezelfde datatypes hebben, numeriek of categorisch;
-                    - de uitkomstlabel-kolom numeriek is`,
-                    performanceMetric: 'Uitkomstlabel',
+                    - alle kolommen (behalve de bias variabele-kolom) dezelfde datatypes hebben, numeriek of categorisch;
+                    - de bias variabele-kolom numeriek is`,
+                    performanceMetric: 'Bias variabele',
                     performanceMetricTooltip:
-                        'Clustering vindt plaats aan de hand van het uitkomstlabel, welk een numerieke waarde moet zijn. Voorbeelden van een uitkomstlabel is "geclassificeerd als hoog risico" of "geselecteerd voor controle"',
+                        'Clustering vindt plaats aan de hand van de bias variabele, welk een numerieke waarde moet zijn. Voorbeelden van een bias variabele zijn "geclassificeerd als hoog risico" of "geselecteerd voor controle"',
                     dataType: 'Type data',
                     dataTypeTooltip:
-                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de uitkomstlabel-kolom) moeten hetzelfde datatype hebben',
+                        'Geef aan of de data categorisch of numeriek zijn. Alle kolommen (behalve de bias variabele-kolom) moeten hetzelfde datatype hebben',
                     categoricalData: 'Categorische data',
                     numericalData: 'Numerieke data',
                     filterSelect:
@@ -50,11 +50,11 @@ export const nl = {
                     iterations: 'Iteraties',
                     minClusterSize: 'Minimale clustergrootte',
                     performanceInterpretation: {
-                        title: 'Interpretatie van uitkomstlabel',
-                        lower: 'Lagere waarde van uitkomstlabel is beter, bijv. foutpercentage',
-                        higher: 'Hogere waarde van uitkomstlabel is beter, bijv. nauwkeurigheid',
+                        title: 'Interpretatie van bias variabele',
+                        lower: 'Lagere waarde van bias variabele is beter, bijv. foutpercentage',
+                        higher: 'Hogere waarde van bias variabele is beter, bijv. nauwkeurigheid',
                         tooltip:
-                            'Wanneer foutpercentage of misclassificaties worden gekozen als uitkomstlabel wordt een lagere waarde als beter beschouwd omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als het uitkomstlabel wordt een hogere waarde de voorkeur als beter beschouwd met oog op het nastreven van maximale prestaties. Geselecteerd worden voor controle of een valspositieve wordt als nadeling worden beschouwd, dus voor dat uitkomstlabel is een lagere waarde beter',
+                            'Wanneer foutpercentage of misclassificaties worden gekozen als bias variabele wordt een lagere waarde als beter beschouwd omdat het doel is om fouten te minimaliseren. Andersom: wanneer nauwkeurigheid of precisie wordt geselecteerd als de bias variabele wordt een hogere waarde als beter beschouwd met oog op het nastreven van maximale prestaties. Geselecteerd worden voor controle of een valspositieve wordt als nadeling beschouwd, voor deze gevallen is een lagere waarde dus beter',
                     },
                     iterationsTooltip:
                         'Aantal keren dat de dataset wordt opgesplitst in kleinere clusters. Kan voortijdig worden gestopt als de minimale clustergrootte bereikt is',
@@ -64,7 +64,7 @@ export const nl = {
             },
             errors: {
                 csvRequired: 'Upload een CSV-bestand.',
-                targetColumnRequired: 'Selecteer een uitkomstlabel.',
+                targetColumnRequired: 'Selecteer een bias variabele.',
                 dataTypeRequired: 'Selecteer een gegevenstype.',
                 noNumericColumns:
                     'Geen numerieke kolommen gevonden. Upload een geldige dataset.',
@@ -290,13 +290,13 @@ worden missende data vervangen voor schattingen. Voor {tooltip:syntheticData.mis
 
 <br>
 
-In dit voorbeeld analyseren welke groepen het COMPAS risicotaxatie-algoritme afwijkend presteert. Dit doen we door het clusteralgoritme toe te passen op de onderstaande dataset. De kolom "is_recid" geeft aan of een verdachte daadwerkelijk opnieuw de fout in ging (1: ja, 0: nee). De kolom "score_text" geeft aan of werd voorspeld dat een verdachte opnieuw de fout in zou gaan (1: ja, 0: nee). De kolom "false_positive" (FP) vertegenwoordigt gevallen waarin het algoritme voorspelde dat een verdachte opnieuw de fout in zou gaan, maar dit niet gebeurde (1: FP, 0: geen FP). Een voorbeeld van de data wordt hieronder gegeven. De kolom "false_positive" wordt gebruikt als uitkomstlabel.
+In dit voorbeeld analyseren welke groepen het COMPAS risicotaxatie-algoritme afwijkend presteert. Dit doen we door het clusteralgoritme toe te passen op de onderstaande dataset. De kolom "is_recid" geeft aan of een verdachte daadwerkelijk opnieuw de fout in ging (1: ja, 0: nee). De kolom "score_text" geeft aan of werd voorspeld dat een verdachte opnieuw de fout in zou gaan (1: ja, 0: nee). De kolom "false_positive" (FP) vertegenwoordigt gevallen waarin het algoritme voorspelde dat een verdachte opnieuw de fout in zou gaan, maar dit niet gebeurde (1: FP, 0: geen FP). Een voorbeeld van de data wordt hieronder gegeven. De kolom "false_positive" wordt gebruikt als bias variabele.
 `,
         },
-        testingStatisticalSignificance: `**5. Toetsen verschil cluster mbt. uitkomstlabels**
+        testingStatisticalSignificance: `**5. Toetsen verschil cluster mbt. bias variabele**
 
-- <i class="font-serif">H</i><sub>0</sub>: er is geen verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
-- <i class="font-serif">H</i><sub>1</sub>: er is een verschil in uitkomstlabels tussen het meest afwijkende cluster en de rest van de dataset
+- <i class="font-serif">H</i><sub>0</sub>: er is geen verschil in bias variabele tussen het meest afwijkende cluster en de rest van de dataset
+- <i class="font-serif">H</i><sub>1</sub>: er is een verschil in bias variabele tussen het meest afwijkende cluster en de rest van de dataset
 
 Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0</sub> te aanvaarden of te verwerpen.
 
@@ -307,13 +307,13 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
             heading: '2. Geselecteerde hyperparameters',
             iterations: 'Aantal iteraties: {{value}}',
             minClusterSize: 'Minimale clustergrootte: {{value}}',
-            performanceMetric: 'Uitkomstlabel: {{value}}',
+            performanceMetric: 'Bias variabele: {{value}}',
             performanceMetricTooltip:
                 'De geselecteerde kolom wordt gebruikt om de bias te meten.',
             dataType: 'Gegevenstype: {{value}}',
             description: `- Aantal iteraties: {{iterations}}
 - Minimale clustergrootte: {{minClusterSize}}
-- Uitkomstlabel: {{performanceMetric}}
+- Bias variabele: {{performanceMetric}}
 - Gegevenstype: {{dataType}}
 `,
         },
@@ -367,8 +367,8 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
             label: 'Kies cluster om het aantal datapunten voor weer te geven',
             valueText: 'Aantal datapunten in cluster {{index}}: {{value}}',
         },
-        higherAverage: `Het meest afwijkende cluster heeft statistisch significant andere uitkomstlabels dan de rest van de dataset.`,
-        noSignificance: `Het meest afwijkende cluster heeft statistisch significant geen andere uitkomstlabels dan de rest van de dataset.`,
+        higherAverage: `Het meest afwijkende cluster heeft statistisch significant andere bias variabele dan de rest van de dataset.`,
+        noSignificance: `Het meest afwijkende cluster heeft statistisch significant geen andere bias variabele dan de rest van de dataset.`,
 
         conclusion: `7. Conclusie en bias rapport`,
         conclusionDescription: `Uit de bovenstaande figuren en statistische tests kan worden geconcludeerd dat:`,
