@@ -242,7 +242,7 @@ def run():
     X_train = train_df.drop(columns=[bias_score])
 
     scaleY = 1
-    if higherIsBetter == 1:
+    if higherIsBetter == 0:
         scaleY = -1;
 
     

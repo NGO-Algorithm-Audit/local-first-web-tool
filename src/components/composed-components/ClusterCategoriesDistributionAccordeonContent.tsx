@@ -71,7 +71,9 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                         }
                     );
                     return (
-                        <Fragment key={index}>
+                        <Fragment
+                            key={`ClusterCategoriesDistributionAccordeonContent-${index}`}
+                        >
                             <>
                                 {categorieFilter === chart.selectFilterGroup ||
                                 (!categorieFilter &&
