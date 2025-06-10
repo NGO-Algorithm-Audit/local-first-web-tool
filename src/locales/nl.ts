@@ -183,7 +183,8 @@ export const nl = {
         gaussianCopulaModelTitle: '3. Methode: Gaussian Copula model',
         cartModelDescription:
             'De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerken. Voor numerieke data voorspelt de methode gemiddelden en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om synthetische datapunten te creëren.\n \n {{samples}} synthetische datapunten zijn gegenereerd.',
-        evaluationOfGeneratedDataTitle: '4. Evaluatie van gegenereerde synthetische data',
+        evaluationOfGeneratedDataTitle:
+            '4. Evaluatie van gegenereerde synthetische data',
         distributionsTitle: '4.1 Distributies',
         diagnosticsReportTitle: '4.2. Diagnostisch rapport',
         diagnosticsTitle: 'Diagnostische resultaten',
@@ -353,10 +354,9 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 `,
             },
             differenceCategorical: {
-                deviatingMoreOften: `**{{feature}}: {{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.
-`,
-                deviatingLessOften: `**{{feature}}: {{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.
-`,
+                feature: '- {{feature}}',
+                deviatingMoreOften: `  - **{{value}}** komt in de meest afwijkende cluster **vaker** voor dan in de rest van de dataset.`,
+                deviatingLessOften: `  - **{{value}}** komt in de meest afwijkende cluster **minder** voor dan in de rest van de dataset.`,
             },
         },
         clusterinResults: {
