@@ -34,14 +34,14 @@ export const en = {
                     dataSet: 'Dataset',
                     dataSetTooltip: `Preprocess your data such that: 
                     - missing values are removed or replaced;
-                    - all columns (except your outcome label column) should have the same datatypes, e.g., numerical or categorical;
-                    - the outcome label column is numerical`,
-                    performanceMetric: 'Outcome label',
+                    - all columns (except your bias variable column) should have the same datatypes, e.g., numerical or categorical;
+                    - the bias variable column is numerical`,
+                    performanceMetric: 'Bias variable',
                     performanceMetricTooltip:
-                        'Clustering will be performed on the outcome labels. The outcome label should be numerical. Examples of outcome labels are "being classified as high risk" or "selected for an investigation"',
+                        'Clustering will be performed on the bias variable. The bias variable should be numerical. Examples of bias variables are "being classified as high risk" or "selected for an investigation"',
                     dataType: 'Type of data',
                     dataTypeTooltip:
-                        'Specify whether the data are categorical or numerical. All columns (except your outcome label column) should have the same data type',
+                        'Specify whether the data are categorical or numerical. All columns (except your bias variable column) should have the same data type',
                     categoricalData: 'Categorical data',
                     numericalData: 'Numerical data',
                     filterSelect:
@@ -52,11 +52,11 @@ export const en = {
                     iterations: 'Iterations',
                     minClusterSize: 'Minimal cluster size',
                     performanceInterpretation: {
-                        title: 'Outcome label interpretation',
-                        lower: 'Lower value of outcome label is better, such as error rate',
-                        higher: 'Higher value of outcome label is better, such as accuracy',
+                        title: 'Bias variable interpretation',
+                        lower: 'Lower value of bias variable is better, such as error rate',
+                        higher: 'Higher value of bias variable is better, such as accuracy',
                         tooltip:
-                            'When error rate or misclassifications are chosen as the outcome label, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the outcome label, a higher value is preferred, reflecting the aim to maximize performance. Selected for an investigation or a false positive is consiered as disadvantageous, so for this outcome label a lower value is preferred',
+                            'When error rate or misclassifications are chosen as the bias variable, a lower value is preferred, as the goal is to minimize errors. Conversely, when accuracy or precision is selected as the bias variable, a higher value is preferred, reflecting the aim to maximize performance. Selected for an investigation or a false positive is consiered as disadvantageous, so for this bias variable a lower value is preferred',
                     },
                     iterationsTooltip:
                         'Number of times the dataset is split in smaller clusters. Can terminate early if the minimum cluster size is reached',
@@ -66,7 +66,7 @@ export const en = {
             },
             errors: {
                 csvRequired: 'Please upload a csv file.',
-                targetColumnRequired: 'Please select a outcome label.',
+                targetColumnRequired: 'Please select a bias variable.',
                 dataTypeRequired: 'Please select a data type.',
                 noNumericColumns:
                     'No numeric columns found. Please upload a valid dataset.',
@@ -269,10 +269,10 @@ missing data are imputed. For {tooltip:syntheticData.missingDataMCARTooltip}Miss
     },
 
     biasAnalysis: {
-        testingStatisticalSignificance: `**5. Testing cluster differences wrt. outcome labels**
+        testingStatisticalSignificance: `**5. Testing cluster differences wrt. bias variable**
 
-- <i class="font-serif">H</i><sub>0</sub>: no difference in outcome labels between the most deviating cluster and the rest of the dataset
-- <i class="font-serif">H</i><sub>1</sub>: difference in outcome labels between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>0</sub>: no difference in bias variable between the most deviating cluster and the rest of the dataset
+- <i class="font-serif">H</i><sub>1</sub>: difference in bias variable between the most deviating cluster and the rest of the dataset
 
 A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
 
@@ -300,18 +300,18 @@ A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><
 
 <br>
 
-In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the outcome label.
+In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the bias variable.
 `,
         },
         parameters: {
             heading: '2. Hyperparameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
             minClusterSize: 'Minimal cluster size: {{value}}',
-            performanceMetric: 'Outcome label: {{value}}',
+            performanceMetric: 'Bias variable: {{value}}',
             dataType: 'Data type: {{value}}',
             description: `- Number of iterations: {{iterations}}
 - Minimal cluster size: {{minClusterSize}}
-- Outcome label: {{performanceMetric}}
+- Bias variable: {{performanceMetric}}
 - Data type: {{dataType}}
 `,
         },
@@ -368,8 +368,8 @@ In this example, we analyze which group is most adversely affected by the risk p
             label: 'Choose cluster to show number of datapoints for',
             valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
         },
-        higherAverage: `The most deviating cluster has statistically significant different outcome labels than the rest of the dataset.`,
-        noSignificance: `No statistically significant difference in outcome labels between the most biased cluster and the rest of the dataset.`,
+        higherAverage: `The most deviating cluster has statistically significant different bias variable than the rest of the dataset.`,
+        noSignificance: `No statistically significant difference in bias variable between the most biased cluster and the rest of the dataset.`,
 
         conclusion: `7. Conclusion and bias report`,
         conclusionDescription: `From the above figures and statistical tests, it can be concluded that:`,
