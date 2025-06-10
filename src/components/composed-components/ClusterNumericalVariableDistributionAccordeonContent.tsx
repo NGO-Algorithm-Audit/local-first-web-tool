@@ -62,7 +62,9 @@ const ClusterNumericalVariableDistributionAccordeonContent = ({
                     );
 
                     return (
-                        <ErrorBoundary key={chartIndex}>
+                        <ErrorBoundary
+                            key={`ClusterNumericalVariableDistributionAccordeonContent-${chartIndex}`}
+                        >
                             <>
                                 {categorieFilter === chart.selectFilterGroup ||
                                 (!categorieFilter &&
@@ -82,7 +84,7 @@ const ClusterNumericalVariableDistributionAccordeonContent = ({
                                                 : '-'}
                                         </h5>
                                         <SingleBarChart
-                                            key={chartIndex}
+                                            key={`SingleBarChart-${chartIndex}`}
                                             data={barchartData}
                                             title={chart.title ?? ''}
                                             meanValue={chart.meanValue}
@@ -91,7 +93,7 @@ const ClusterNumericalVariableDistributionAccordeonContent = ({
                                 ) : null}
                                 <div className="hidden showonprint">
                                     <h5
-                                        key={chartIndex}
+                                        key={`SingleBarChart-print-${chartIndex}`}
                                         className="text-gray-800 font-semibold"
                                     >
                                         {chart.headingKey
