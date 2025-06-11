@@ -149,6 +149,8 @@ export const nl = {
                         'Bij gebruik van Gaussian Copula kunt u kiezen hoe u omgaat met ontbrekende waarden (NaN waarden) in uw dataset. Het verwijderen van rijen met NaN waarden verwijdert deze volledig, terwijl imputatie deze vervangt door gemiddelde waarden voor numerieke kolommen en modus waarden voor categorische kolommen',
                 },
                 samples: 'Aantal synthetische datapunten',
+                outputSamplesTooltip:
+                    'Aantal synthetische datapunten die door de tool worden gegenereerd. Vanwege de rekencapaciteit van browser-gebaseerde datageneratie is het maximum ingesteld op 5.000.',
             },
             actions: {
                 tryItOut: 'Demo dataset',

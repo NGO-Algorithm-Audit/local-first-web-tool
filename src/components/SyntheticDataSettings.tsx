@@ -305,9 +305,17 @@ export default function SyntheticDataSettings({
                         </div>
 
                         <div className="grid gap-3">
-                            <Label htmlFor="samples">
+                            <Label
+                                htmlFor="samples"
+                                className="flex flex-row items-center gap-1"
+                            >
                                 {t('syntheticData.form.fieldset.samples')} (
                                 {outputSamples})
+                                <IconInfoTooltip
+                                    tooltipText={t(
+                                        'syntheticData.form.fieldset.outputSamplesTooltip'
+                                    )}
+                                />
                             </Label>
                             <Slider
                                 id="samples"
