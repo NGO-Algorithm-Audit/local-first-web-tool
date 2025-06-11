@@ -71,7 +71,7 @@ const ClusterNumericalVariableDistributionAccordeonContent = ({
                                     chart.selectFilterGroup ===
                                         defaultCategory) ||
                                 !chart.selectFilterGroup ? (
-                                    <div className="hideonprint">
+                                    <div className="hideonprint w-full">
                                         <h5
                                             key={chartIndex}
                                             className="text-gray-800 font-semibold"
@@ -91,7 +91,7 @@ const ClusterNumericalVariableDistributionAccordeonContent = ({
                                         />
                                     </div>
                                 ) : null}
-                                <div className="hidden showonprint">
+                                <div className="hidden showonprint overflow-x-hidden">
                                     <h5
                                         key={`SingleBarChart-print-${chartIndex}`}
                                         className="text-gray-800 font-semibold"
