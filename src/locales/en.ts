@@ -73,9 +73,9 @@ export const en = {
                 analysisError: 'Error while analysing',
                 noData: 'No data loaded',
                 numericDataRequired:
-                    'Selected column must contain numerical data for k-means clustering.',
+                    'Not all data have same format, please change locally before attaching the data',
                 categoricalDataRequired:
-                    'Selected column must contain categorical data for k-modes clustering.',
+                    'Not all data have same format, please change locally before attaching the data.',
             },
             actions: {
                 tryItOut: 'Demo dataset',

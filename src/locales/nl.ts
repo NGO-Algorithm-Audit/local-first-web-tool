@@ -71,9 +71,9 @@ export const nl = {
                 analysisError: 'Fout tijdens analyse',
                 noData: 'Geen gegevens geladen',
                 numericDataRequired:
-                    'Geselecteerde kolom moet numerieke data bevatten voor k-means clustering.',
+                    'Niet alle data hebben hetzelfde formaat, pas dit lokaal aan voordat je de data toevoegt.',
                 categoricalDataRequired:
-                    'Geselecteerde kolom moet categorische data bevatten voor k-modes clustering.',
+                    'Niet alle data hebben hetzelfde formaat, pas dit lokaal aan voordat je de data toevoegt.',
             },
             actions: {
                 tryItOut: 'Demo dataset',
