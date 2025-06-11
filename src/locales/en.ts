@@ -275,11 +275,11 @@ missing data are imputed. For {tooltip:syntheticData.missingDataMCARTooltip}Miss
 - <i class="font-serif">H</i><sub>0</sub>: no difference in bias variable between the most deviating cluster and the rest of the dataset
 - <i class="font-serif">H</i><sub>1</sub>: difference in bias variable between the most deviating cluster and the rest of the dataset
 
-A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:
 
 {tooltip:biasAnalysis.p_valueTooltip}p_value{/tooltip} : {{p_val}} 
         `,
-        p_valueTooltip: `p_value tooltip`,
+        p_valueTooltip: `The p-value represents the probability of incorrectly rejecting the null hypothesis (H<sub>0</sub>) when it is actually true. A commonly used threshold is p≤0.05, which is the probability deemed sufficiently low to reject H<sub>0</sub> in favor of the alternative hypothesis (H<sub>1</sub>).`,
         dataSetPreview: {
             heading: '1. Preview of data',
         },
@@ -316,7 +316,7 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Minimal cluster size: {{minClusterSize}}
 - Bias variable: {{performanceMetric}}
 - Data type: {{dataType}}
-- Bias variable interpretation: $t({{higherIsBetter}}) is better
+- Bias variable interpretation: $t({{higherIsBetter}})
 `,
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
