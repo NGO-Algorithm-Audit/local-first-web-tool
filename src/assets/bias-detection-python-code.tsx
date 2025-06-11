@@ -332,7 +332,8 @@ def run():
             'iterations': localIterations,
             'minClusterSize': localClusterSize,
             'performanceMetric': bias_score,
-            'dataType': dataTypeText
+            'dataType': dataTypeText,
+            'higherIsBetter': 'biasAnalysis.higherIsBetter' if higherIsBetter else 'biasAnalysis.lowerIsBetter'
         }
     }))
     setResult(json.dumps({

@@ -76,7 +76,7 @@ export default function BiasSettings({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             dataType: 'numeric',
-            whichPerformanceMetricValueIsBetter: 'higher',
+            whichPerformanceMetricValueIsBetter: 'lower',
         },
     });
     const [iter, setIter] = useState([10]);

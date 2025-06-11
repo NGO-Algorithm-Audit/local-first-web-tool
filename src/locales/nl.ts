@@ -304,6 +304,8 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 {tooltip:biasAnalysis.p_valueTooltip}p-waarde{/tooltip} : {{p_val}}
         `,
         p_valueTooltip: `p-waarde tooltip`,
+        higherIsBetter: 'Hogere waarde van bias variabele is beter',
+        lowerIsBetter: 'Lagere waarde van bias variabele is beter',
         parameters: {
             heading: '2. Geselecteerde hyperparameters',
             iterations: 'Aantal iteraties: {{value}}',
@@ -316,6 +318,7 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 - Minimale clustergrootte: {{minClusterSize}}
 - Bias variabele: {{performanceMetric}}
 - Gegevenstype: {{dataType}}
+- Interpretatie van bias variabele: $t({{higherIsBetter}}) is better
 `,
         },
         distribution: {
