@@ -332,7 +332,8 @@ def run():
             'iterations': localIterations,
             'minClusterSize': localClusterSize,
             'performanceMetric': bias_score,
-            'dataType': dataTypeText
+            'dataType': dataTypeText,
+            'higherIsBetter': 'biasAnalysis.higherIsBetter' if higherIsBetter else 'biasAnalysis.lowerIsBetter'
         }
     }))
     setResult(json.dumps({
@@ -375,7 +376,12 @@ def run():
         'defaultIndex': 0,
         'labelKey': 'biasAnalysis.clusterinResults.label',
         'valueKey' : 'biasAnalysis.clusterinResults.valueText',
-        'values': biasInClusters
+        'values': biasInClusters,
+        'params': {
+            'numZeroes': int(numZeros),
+            'totalRecords': int(totalRecords),
+            'clusterCount': clusterCount
+        }
     }))
     setResult(json.dumps({
         'type': 'text',
@@ -402,8 +408,6 @@ def run():
     
     
     decoded_X_test["cluster_label"] = y_test
-
-    # ----
     
     if localDataType == 'numeric':
         test_df["cluster_label"] = y_test
@@ -443,10 +447,6 @@ def run():
         print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
     else:
         print("No significant difference in average bias metric between the most biased cluster and the rest of the dataset.")
-        # setResult(json.dumps({
-        #        'type': 'heading',
-        #        'headingKey': 'biasAnalysis.nodifference.heading',                            
-        #    }))    
 
     setResult(json.dumps({
         'type': 'heading',
@@ -482,12 +482,7 @@ def run():
         charts = []
 
         for i, var in enumerate(variables):
-            
-            #setResult(json.dumps({
-            #    'type': 'heading',
-            #    'headingKey': 'biasAnalysis.distribution.heading',            
-            #    'params': {'variable': var}
-            #}))
+                        
             print(f"means: {var}")
             print(overall_means[var])
             print(means[var])

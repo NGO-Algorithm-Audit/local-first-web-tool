@@ -11,6 +11,7 @@ const TextValueSelect = ({
         defaultIndex: number;
         labelKey: string;
         valueKey: string;
+        params: Record<string, string>;
     };
 }) => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>();
@@ -39,6 +40,7 @@ const TextValueSelect = ({
                     <div>
                         <label className="text-sm font-semibold">
                             {t(data.valueKey, {
+                                ...data.params,
                                 index: selectedIndex ?? data.defaultIndex,
                                 value,
                             })}

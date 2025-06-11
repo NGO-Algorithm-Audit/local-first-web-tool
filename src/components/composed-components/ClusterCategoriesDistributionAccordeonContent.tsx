@@ -80,7 +80,7 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                                     chart.selectFilterGroup ===
                                         defaultCategory) ||
                                 !chart.selectFilterGroup ? (
-                                    <div className="hideonprint">
+                                    <div className="hideonprint w-full">
                                         <h5
                                             key={index}
                                             className="text-gray-800 font-semibold"
@@ -107,7 +107,7 @@ const ClusterCategoriesDistributionAccordeonContent = ({
                                         />
                                     </div>
                                 ) : null}
-                                <div className="hidden showonprint">
+                                <div className="hidden showonprint overflow-x-hidden">
                                     <h5
                                         key={index}
                                         className="text-gray-800 font-semibold"

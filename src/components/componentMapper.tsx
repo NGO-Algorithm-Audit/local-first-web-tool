@@ -267,6 +267,7 @@ export default function ComponentMapper({
                                         defaultIndex: resultItem.defaultIndex,
                                         labelKey: resultItem.labelKey,
                                         valueKey: resultItem.valueKey,
+                                        params: resultItem.params || {},
                                     }}
                                 />
                             </ErrorBoundary>
