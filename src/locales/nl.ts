@@ -368,7 +368,8 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 - Aantal gevonden clusters: {{clusterCount}}
             `,
             label: 'Kies cluster om het aantal datapunten voor weer te geven',
-            valueText: 'Aantal datapunten in cluster {{index}}: {{value}}',
+            valueText:
+                'Aantal datapunten in cluster {{index}}: {{value}} / {{totalRecords}}',
         },
         higherAverage: `Het meest afwijkende cluster heeft statistisch significant andere bias variabele dan de rest van de dataset.`,
         noSignificance: `Het meest afwijkende cluster heeft statistisch significant geen andere bias variabele dan de rest van de dataset.`,

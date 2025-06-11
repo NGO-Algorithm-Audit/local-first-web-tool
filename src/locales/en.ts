@@ -370,7 +370,8 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Number of clusters detected: {{clusterCount}}
             `,
             label: 'Choose cluster to show number of datapoints for',
-            valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
+            valueText:
+                'Number of datapoints in cluster {{index}}: {{value}} / {{totalRecords}}',
         },
         higherAverage: `The most deviating cluster has statistically significant different bias variable than the rest of the dataset.`,
         noSignificance: `No statistically significant difference in bias variable between the most biased cluster and the rest of the dataset.`,
