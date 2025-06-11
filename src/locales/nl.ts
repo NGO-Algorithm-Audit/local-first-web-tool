@@ -17,6 +17,7 @@ export const nl = {
     loadingPyodide: 'Python omgeving laden...',
     loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
+    runningAnalysis: 'Analyse uitvoeren...',
     biasSettings: {
         dataType: {
             numeric: 'Numeriek',

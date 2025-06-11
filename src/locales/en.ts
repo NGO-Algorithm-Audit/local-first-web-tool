@@ -20,6 +20,7 @@ export const en = {
     loadingPackages:
         'Loading core packages. On average this takes 10-15 seconds.',
     installingPackages: 'Installing additional packages...',
+    runningAnalysis: 'Running analysis...',
     biasSettings: {
         dataType: {
             numeric: 'Numeric',
