@@ -181,7 +181,8 @@ export const en = {
         gaussianCopulaModelTitle: '3. Method: Gaussian Copula model',
         cartModelDescription:
             'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.\n \n {{samples}} synthetic data points are generated.',
-        evaluationOfGeneratedDataTitle: '4. Evaluation of generated synthetic data',
+        evaluationOfGeneratedDataTitle:
+            '4. Evaluation of generated synthetic data',
         distributionsTitle: '4.1 Distributions',
         diagnosticsReportTitle: '4.2. Diagnostic report',
         diagnosticsTitle: 'Diagnostic Results',
@@ -274,11 +275,11 @@ missing data are imputed. For {tooltip:syntheticData.missingDataMCARTooltip}Miss
 - <i class="font-serif">H</i><sub>0</sub>: no difference in bias variable between the most deviating cluster and the rest of the dataset
 - <i class="font-serif">H</i><sub>1</sub>: difference in bias variable between the most deviating cluster and the rest of the dataset
 
-A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:.
+A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><sub>0</sub>:
 
 {tooltip:biasAnalysis.p_valueTooltip}p_value{/tooltip} : {{p_val}} 
         `,
-        p_valueTooltip: `p_value tooltip`,
+        p_valueTooltip: `The p-value represents the probability of incorrectly rejecting the null hypothesis (H<sub>0</sub>) when it is actually true. A commonly used threshold is p≤0.05, which is the probability deemed sufficiently low to reject H<sub>0</sub> in favor of the alternative hypothesis (H<sub>1</sub>).`,
         dataSetPreview: {
             heading: '1. Preview of data',
         },
@@ -303,6 +304,8 @@ A two-sided t-test is performed to accept or reject <i class="font-serif">H</i><
 In this example, we analyze which group is most adversely affected by the risk prediction algorithm. We do this by applying the clustering algorithm on the dataset previewed below. The column "is_recid" indicates whether a defendant reoffended or not (1: yes, 0: no). The "score_text" column indicates whether a defendant was predicted to reoffend (1: yes, 0: no). The column "false_positive" (FP) represents cases where a defendant was predicted to reoffended by the algorithm, but didn't do so (1: FP, 0: no FP). A preview of the data can be found below. The column "false_positive" is used as the bias variable.
 `,
         },
+        higherIsBetter: 'Higher value of bias variable is better',
+        lowerIsBetter: 'Lower value of bias variable is better',
         parameters: {
             heading: '2. Hyperparameters selected for clustering',
             iterations: 'Number of iterations: {{value}}',
@@ -313,6 +316,7 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Minimal cluster size: {{minClusterSize}}
 - Bias variable: {{performanceMetric}}
 - Data type: {{dataType}}
+- Bias variable interpretation: $t({{higherIsBetter}})
 `,
         },
         distributionOfFeaturesAcrossClustersAccordeonTitle:
@@ -366,7 +370,8 @@ In this example, we analyze which group is most adversely affected by the risk p
 - Number of clusters detected: {{clusterCount}}
             `,
             label: 'Choose cluster to show number of datapoints for',
-            valueText: 'Number of datapoints in cluster {{index}}: {{value}}',
+            valueText:
+                'Number of datapoints in cluster {{index}}: {{value}} / {{totalRecords}}',
         },
         higherAverage: `The most deviating cluster has statistically significant different bias variable than the rest of the dataset.`,
         noSignificance: `No statistically significant difference in bias variable between the most biased cluster and the rest of the dataset.`,

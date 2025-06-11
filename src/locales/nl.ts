@@ -303,7 +303,9 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 
 {tooltip:biasAnalysis.p_valueTooltip}p-waarde{/tooltip} : {{p_val}}
         `,
-        p_valueTooltip: `p-waarde tooltip`,
+        p_valueTooltip: `De p-waarde is de kans om de nulhypothese (H<sub>0</sub>) onterecht te verwerpen wanneer deze in werkelijkheid waar is. Een veelgebruikte drempelwaarde is p≤0,05, wat wordt beschouwd als een voldoende lage kans om H<sub>0</sub> te verwerpen en de alternatieve hypothese (H<sub>1</sub>) te accepteren.`,
+        higherIsBetter: 'Hogere waarde van bias variabele is beter',
+        lowerIsBetter: 'Lagere waarde van bias variabele is beter',
         parameters: {
             heading: '2. Geselecteerde hyperparameters',
             iterations: 'Aantal iteraties: {{value}}',
@@ -316,6 +318,7 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 - Minimale clustergrootte: {{minClusterSize}}
 - Bias variabele: {{performanceMetric}}
 - Gegevenstype: {{dataType}}
+- Interpretatie van bias variabele: $t({{higherIsBetter}}) is better
 `,
         },
         distribution: {
@@ -365,7 +368,8 @@ Er wordt een tweezijdige t-toets uitgevoerd om <i class="font-serif">H</i><sub>0
 - Aantal gevonden clusters: {{clusterCount}}
             `,
             label: 'Kies cluster om het aantal datapunten voor weer te geven',
-            valueText: 'Aantal datapunten in cluster {{index}}: {{value}}',
+            valueText:
+                'Aantal datapunten in cluster {{index}}: {{value}} / {{totalRecords}}',
         },
         higherAverage: `Het meest afwijkende cluster heeft statistisch significant andere bias variabele dan de rest van de dataset.`,
         noSignificance: `Het meest afwijkende cluster heeft statistisch significant geen andere bias variabele dan de rest van de dataset.`,
