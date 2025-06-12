@@ -275,7 +275,7 @@ def run():
             },           
             {
                 'reportType': 'text',
-                'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelDescription',
+                'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gcModelDescription',
                 'params': {
                     'samples': samples,
                 }

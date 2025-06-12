@@ -186,6 +186,7 @@ export const en = {
         gaussianCopulaModelTitle: '3. Method: Gaussian Copula model',
         cartModelDescription:
             'The CART (Classification and Regression Trees) method generates synthetic data by learning patterns from real data through a decision tree that splits data into homogeneous groups based on feature values. It predicts averages for numerical data and assigns the most common category for categorical data, using these predictions to create new synthetic points.\n \n {{samples}} synthetic data points are generated.',
+        gcModelDescription: `Gaussian Copula works in two main steps: 1. The real data is transformed into a uniform distribution. Correlations between variables are modeled using a multivariate normal distribution (the Gaussian copula); and 2. Synthetic data is created by sampling from this Gaussian copula and transforming the samples back to the original data distributions.\n \n {{samples}} synthetic data points are generated.`,
         evaluationOfGeneratedDataTitle:
             '4. Evaluation of generated synthetic data',
         distributionsTitle: '4.1 Distributions',

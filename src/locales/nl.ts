@@ -188,6 +188,7 @@ export const nl = {
         gaussianCopulaModelTitle: '3. Methode: Gaussian Copula model',
         cartModelDescription:
             'De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerken. Voor numerieke data voorspelt de methode gemiddelden en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om synthetische datapunten te creëren.\n \n {{samples}} synthetische datapunten zijn gegenereerd.',
+        gcModelDescription: `Gaussian Copula werkt in twee stappen: 1. De echte data worden getransformeerd naar een uniforme verdeling. Correlaties tussen variabelen worden gemodelleerd met een multivariate normale verdeling (de Gaussian copula); en 2. Synthetische data worden gegenereerd door te sampelen uit deze copula en de samples terug te transformeren naar de oorspronkelijke verdelingen.\n \n {{samples}} synthetische datapunten zijn gegenereerd.`,
         evaluationOfGeneratedDataTitle:
             '4. Evaluatie van gegenereerde synthetische data',
         distributionsTitle: '4.1 Distributies',
