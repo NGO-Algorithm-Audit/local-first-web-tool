@@ -82,7 +82,7 @@ export default function ComponentMapper({
                                 ) => (
                                     <li key={`list-${index}`}>
                                         <span className="font-bold">{`${listItem.key}`}</span>
-                                        {`: ${listItem.value}`}
+                                        {`: ${resultItem.translateValue ? t(listItem.value) : listItem.value}`}
                                     </li>
                                 )
                             );

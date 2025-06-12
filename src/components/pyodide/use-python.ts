@@ -52,7 +52,7 @@ export const usePython = <T, TExport>(emptyParams: T) => {
     const runPython = useCallback(
         (message: { type: 'start'; params: { parameters: T } }) => {
             setLoading(true);
-            setLoadingMessage('running analysis');
+            setLoadingMessage('runningAnalysis');
 
             setClusterInfo(undefined);
             setResult([]);

@@ -447,74 +447,69 @@ def run():
         print("The most biased cluster has a significantly higher average bias metric than the rest of the dataset.")
     else:
         print("No significant difference in average bias metric between the most biased cluster and the rest of the dataset.")
-
-    setResult(json.dumps({
-        'type': 'heading',
-        'headingKey': 'biasAnalysis.distribution.mainHeading'
-    }))
-        
-
+    
     # visualize the clusters
 
     # Group by cluster_label and count the occurrences
     cluster_counts = decoded_X_test["cluster_label"].value_counts()
     print(f"cluster_counts: {cluster_counts}")
 
-
-    if localDataType == 'numeric':
-        # Calculate mean per cluster for each variable
-        means = test_df.groupby("cluster_label").mean()
-
-        # Calculate overall mean for each variable (excluding cluster_label)
-        variables = X_test.columns.tolist()
-        overall_means = test_df[variables].mean()
-
-        dropdownCategories = []
-        for i, column in enumerate(X_test.columns):
-            if column != bias_score:
-                dropdownCategories.append(column)
-
-        # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
-        n_vars = len(variables)
-        n_cols = 2
-        n_rows = int(np.ceil(n_vars / n_cols))
-
-        charts = []
-
-        for i, var in enumerate(variables):
-                        
-            print(f"means: {var}")
-            print(overall_means[var])
-            print(means[var])
-            print(f"========================")
-            
-
-            charts.append({
-                    'yAxisLabel': 'distribution.frequency',
-                    'type': 'clusterNumericalVariableDistribution',
-                    'headingKey': 'biasAnalysis.distribution.heading',  
-                    'title': var,
-                    'meanValue': overall_means[var],
-                    'data': means[var].to_json(orient='records'),
-                    'params': {'variable': var},
-                    'selectFilterGroup' : var,
-                    'defaultFilter': X_test.columns[0]
-                })
-
-        setResult(json.dumps({
-                'type': 'clusterNumericalVariableDistributionAccordeon',
-                'clusterCount': clusterCount,
-                'charts': charts,
-                'values': dropdownCategories,
-                'titleKey': "biasAnalysis.numericalVariableDistributionAcrossClustersAccordeonTitle",
-                'defaultValue': X_test.columns[0]
-            }))
- 
     if p_val < 0.05:
 
+        setResult(json.dumps({
+            'type': 'heading',
+            'headingKey': 'biasAnalysis.distribution.mainHeading'
+        }))
+        
         if localDataType == 'numeric':
-            # see above for the code 
-            print("Statistically significant differences in means found.")
+            # Calculate mean per cluster for each variable
+            means = test_df.groupby("cluster_label").mean()
+
+            # Calculate overall mean for each variable (excluding cluster_label)
+            variables = X_test.columns.tolist()
+            overall_means = test_df[variables].mean()
+
+            dropdownCategories = []
+            for i, column in enumerate(X_test.columns):
+                if column != bias_score:
+                    dropdownCategories.append(column)
+
+            # Plot bar charts for each variable, showing means for each cluster and overall mean as red line
+            n_vars = len(variables)
+            n_cols = 2
+            n_rows = int(np.ceil(n_vars / n_cols))
+
+            charts = []
+
+            for i, var in enumerate(variables):
+                            
+                print(f"means: {var}")
+                print(overall_means[var])
+                print(means[var])
+                print(f"========================")
+                
+
+                charts.append({
+                        'yAxisLabel': 'distribution.frequency',
+                        'type': 'clusterNumericalVariableDistribution',
+                        'headingKey': 'biasAnalysis.distribution.heading',  
+                        'title': var,
+                        'meanValue': overall_means[var],
+                        'data': means[var].to_json(orient='records'),
+                        'params': {'variable': var},
+                        'selectFilterGroup' : var,
+                        'defaultFilter': X_test.columns[0]
+                    })
+
+            setResult(json.dumps({
+                    'type': 'clusterNumericalVariableDistributionAccordeon',
+                    'clusterCount': clusterCount,
+                    'charts': charts,
+                    'values': dropdownCategories,
+                    'titleKey': "biasAnalysis.numericalVariableDistributionAcrossClustersAccordeonTitle",
+                    'defaultValue': X_test.columns[0]
+                }))
+        
         else:
             # Create subplots for each column
             columns_to_analyze = [col for col in decoded_X_test.columns if col not in [bias_score, "cluster_label"]]
@@ -577,16 +572,13 @@ def run():
     setOutputData("mostBiasedCluster", df_most_biased_cluster.to_json(orient='records'))
     setOutputData("otherClusters", df_other.to_json(orient='records'))
 
-
+    
     setResult(json.dumps({
         'type': 'heading',
         'headingKey': 'biasAnalysis.conclusion'
     }))
 
-    setResult(json.dumps({
-        'type': 'text',
-        'key': 'biasAnalysis.conclusionDescription'
-    }))
+    
         
     # Calculate the difference in percentage for each category value between cluster 0 and the entire dataset
     diff_percentages = {}
@@ -594,26 +586,30 @@ def run():
     # Select only cluster 0
     cluster_0 = decoded_X_test[decoded_X_test["cluster_label"] == 0]
 
-    if (localDataType == 'numeric'):
-        
-        comparisons = t_test_on_cluster(test_df, bias_score, cluster_label=0)
-
+    if p_val < 0.05:
         setResult(json.dumps({
-            'type': 'accordion',
-            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-            'comparisons': comparisons
+            'type': 'text',
+            'key': 'biasAnalysis.conclusionDescription'
         }))
-    else:
-        comparisons = chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label=0)
     
-        setResult(json.dumps({
-            'type': 'accordion',
-            'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
-            'comparisons': comparisons,
-            'className': 'biasAnalysis-biasedClusterAccordion'
-        }))
+        if (localDataType == 'numeric'):
+            
+            comparisons = t_test_on_cluster(test_df, bias_score, cluster_label=0)
 
-
+            setResult(json.dumps({
+                'type': 'accordion',
+                'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
+                'comparisons': comparisons
+            }))
+        else:
+            comparisons = chi2_test_on_cluster(decoded_X_test, bias_score, cluster_label=0)
+        
+            setResult(json.dumps({
+                'type': 'accordion',
+                'titleKey': 'biasAnalysis.biasedCluster.accordionTitle',
+                'comparisons': comparisons,
+                'className': 'biasAnalysis-biasedClusterAccordion'
+            }))
     
 
     setResult(json.dumps({

@@ -17,6 +17,9 @@ export const nl = {
     loadingPyodide: 'Python omgeving laden...',
     loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
+    runningAnalysis: 'Analyse uitvoeren...',
+    categorical: 'Categorisch',
+    numerical: 'Numeriek',
     biasSettings: {
         dataType: {
             numeric: 'Numeriek',
@@ -71,9 +74,9 @@ export const nl = {
                 analysisError: 'Fout tijdens analyse',
                 noData: 'Geen gegevens geladen',
                 numericDataRequired:
-                    'Geselecteerde kolom moet numerieke data bevatten voor k-means clustering.',
+                    'Niet alle data hebben hetzelfde formaat, pas dit lokaal aan voordat je de data toevoegt.',
                 categoricalDataRequired:
-                    'Geselecteerde kolom moet categorische data bevatten voor k-modes clustering.',
+                    'Niet alle data hebben hetzelfde formaat, pas dit lokaal aan voordat je de data toevoegt.',
             },
             actions: {
                 tryItOut: 'Demo dataset',
@@ -149,6 +152,8 @@ export const nl = {
                         'Bij gebruik van Gaussian Copula kunt u kiezen hoe u omgaat met ontbrekende waarden (NaN waarden) in uw dataset. Het verwijderen van rijen met NaN waarden verwijdert deze volledig, terwijl imputatie deze vervangt door gemiddelde waarden voor numerieke kolommen en modus waarden voor categorische kolommen',
                 },
                 samples: 'Aantal synthetische datapunten',
+                outputSamplesTooltip:
+                    'Aantal synthetische datapunten die door de tool worden gegenereerd. Vanwege de rekencapaciteit van browser-gebaseerde datageneratie is het maximum ingesteld op 5.000.',
             },
             actions: {
                 tryItOut: 'Demo dataset',
@@ -183,6 +188,7 @@ export const nl = {
         gaussianCopulaModelTitle: '3. Methode: Gaussian Copula model',
         cartModelDescription:
             'De CART-methode (Classification and Regression Trees) genereert synthetische data door patronen uit echte data te leren via een beslisboom die de data opdeelt in homogene groepen op basis van kenmerken. Voor numerieke data voorspelt de methode gemiddelden en voor categorische data wijst het de meest voorkomende categorie toe. Deze voorspellingen worden vervolgens gebruikt om synthetische datapunten te creëren.\n \n {{samples}} synthetische datapunten zijn gegenereerd.',
+        gcModelDescription: `Gaussian Copula werkt in twee stappen: 1. De echte data worden getransformeerd naar een uniforme verdeling. Correlaties tussen variabelen worden gemodelleerd met een multivariate normale verdeling (de Gaussian copula); en 2. Synthetische data worden gegenereerd door te sampelen uit deze copula en de samples terug te transformeren naar de oorspronkelijke verdelingen.\n \n {{samples}} synthetische datapunten zijn gegenereerd.`,
         evaluationOfGeneratedDataTitle:
             '4. Evaluatie van gegenereerde synthetische data',
         distributionsTitle: '4.1 Distributies',

@@ -168,7 +168,8 @@ def run():
 
     setResult(json.dumps({
         'type': 'list',
-        'list': dataInfo
+        'list': dataInfo,
+        'translateValue' : True,
     }))
         
     setResult(json.dumps({
@@ -255,11 +256,7 @@ def run():
             {
                 'reportType': 'heading',
                 'headingKey': 'syntheticData.handlingMissingDataTitle' 
-            },
-            {
-                'reportType': 'text',
-                'textKey': 'syntheticData.handlingMissingDataDescription'
-            },            
+            },                       
             {            
                 'reportType': 'table',
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
@@ -278,7 +275,7 @@ def run():
             },           
             {
                 'reportType': 'text',
-                'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gaussianCopulaModelDescription',
+                'textKey': 'syntheticData.cartModelDescription' if sdgMethod == 'cart' else 'syntheticData.gcModelDescription',
                 'params': {
                     'samples': samples,
                 }
