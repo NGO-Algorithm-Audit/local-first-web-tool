@@ -18,6 +18,8 @@ export const nl = {
     loadingPackages: 'Laden van packages. Dit duurt gemiddeld 10-15 seconden.',
     installingPackages: 'Aanvullende packages laden',
     runningAnalysis: 'Analyse uitvoeren...',
+    categorical: 'Categorisch',
+    numerical: 'Numeriek',
     biasSettings: {
         dataType: {
             numeric: 'Numeriek',

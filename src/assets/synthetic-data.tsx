@@ -168,7 +168,8 @@ def run():
 
     setResult(json.dumps({
         'type': 'list',
-        'list': dataInfo
+        'list': dataInfo,
+        'translateValue' : True,
     }))
         
     setResult(json.dumps({
