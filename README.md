@@ -112,3 +112,5 @@ The project uses Pyodide v0.27.3 for running Python code in the browser. To upgr
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
+
+.
