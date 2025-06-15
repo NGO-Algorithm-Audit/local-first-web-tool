@@ -75,6 +75,8 @@ interface DistributionReport {
     postContent?: string;
     noTableBelowTable?: boolean;
     noHTML?: boolean;
+    translateColumnHeaders?: boolean;
+    translatePrefix?: string;
 }
 export interface DistributionReportProps {
     dataTypes: string;
@@ -184,6 +186,12 @@ export const DistributionReport = (
                                                 }
                                                 noTableBelowTable={
                                                     report.noTableBelowTable
+                                                }
+                                                translateColumnHeaders={
+                                                    report.translateColumnHeaders
+                                                }
+                                                translatePrefix={
+                                                    report.translatePrefix
                                                 }
                                             />
                                             {report.postContent &&

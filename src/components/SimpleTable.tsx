@@ -15,12 +15,16 @@ export default function SimpleTable({
     showIndex,
     translate,
     noTableBelowTable,
+    translateColumnHeaders,
+    translatePrefix,
 }: {
     showIndex: boolean;
     title?: string;
     data: Record<string, string | number>[];
     translate?: boolean;
     noTableBelowTable?: boolean;
+    translateColumnHeaders?: boolean;
+    translatePrefix?: string;
 }) {
     const { t } = useTranslation();
     // limit data to the first 100 rows.
@@ -37,7 +41,9 @@ export default function SimpleTable({
                         {showIndex && <TableHead></TableHead>}
                         {Object.keys(data[0]).map(key => (
                             <TableHead key={key} className="text-black">
-                                {translate ? t(key) : key}
+                                {translate || translateColumnHeaders
+                                    ? t(`${translatePrefix ?? ''}${key}`)
+                                    : key}
                             </TableHead>
                         ))}
                     </TableRow>
