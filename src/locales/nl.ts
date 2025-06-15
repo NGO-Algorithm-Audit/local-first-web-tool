@@ -20,6 +20,13 @@ export const nl = {
     runningAnalysis: 'Analyse uitvoeren...',
     categorical: 'Categorisch',
     numerical: 'Numeriek',
+    threshold: 'drempelwaarde',
+    risk_rate: 'risk_rate',
+    disclosure_protection_score: 'disclosure_protection_score',
+    missingData: {
+        Column: 'Kolom',
+        'Missing data type': 'Type missende data',
+    },
     biasSettings: {
         dataType: {
             numeric: 'Numeriek',

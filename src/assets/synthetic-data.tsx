@@ -262,7 +262,9 @@ def run():
                 'titleKey': 'syntheticData.handlingMissingDataTableTitle',
                 'showIndex' : False,    
                 'data': missingness_dict_df.to_json(orient="records"),
-                'noTableBelowTable': True                                            
+                'noTableBelowTable': True,
+                'translateColumnHeaders': True,
+                'translatePrefix': 'missingData.'                                            
             },
             {
                 'reportType': 'text',
@@ -333,7 +335,8 @@ def run():
                     'contentType': 'text',
                     'text': f"Score: {dp_score:.3f}"
                 }],
-                'data': dp_report_df.to_json(orient="records"),                
+                'data': dp_report_df.to_json(orient="records"),
+                'translateColumnHeaders': True                
             }                       
         ]
     }))

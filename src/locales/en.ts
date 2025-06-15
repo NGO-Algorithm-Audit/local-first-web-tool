@@ -22,7 +22,14 @@ export const en = {
     installingPackages: 'Installing additional packages...',
     runningAnalysis: 'Running analysis...',
     categorical: 'Categorical',
-    numerical: 'Numerical',
+    numerical: 'numerical',
+    threshold: 'threshold',
+    risk_rate: 'risk_rate',
+    disclosure_protection_score: 'disclosure_protection_score',
+    missingData: {
+        Column: 'Column',
+        'Missing data type': 'Missing data type',
+    },
     biasSettings: {
         dataType: {
             numeric: 'Numeric',
